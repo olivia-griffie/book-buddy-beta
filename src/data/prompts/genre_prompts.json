@@ -1,0 +1,4466 @@
+[
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What aspects of the narrator’s present life reveal their emotional wound?",
+                          "How does the narrator describe their current worldview?",
+                          "What tension or contradiction is already visible beneath the surface?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What event forces the narrator to revisit a past they’ve avoided?",
+                          "How does this moment disrupt their emotional equilibrium?",
+                          "What fear or memory resurfaces because of this event?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What internal contradictions does the narrator begin to confront?",
+                          "How do memories challenge the narrator’s current identity?",
+                          "What truth does the narrator resist acknowledging?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What memories or revelations complicate the narrator’s understanding of their past?",
+                          "How do family members or old friends challenge the narrator’s story?",
+                          "What emotional patterns begin to reappear?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What major truth reframes the narrator’s understanding of their past?",
+                          "How does this revelation contradict what they believed?",
+                          "What emotional or moral dilemma does this create?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator choose to face or deny?",
+                          "How does this choice threaten their sense of self?",
+                          "What relationship or belief is at risk of breaking?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession forces the narrator to accept the truth?",
+                          "How does the narrator express vulnerability or accountability?",
+                          "What emotional shift occurs in this moment?"
+                      ]
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How does the narrator integrate the past into their present identity?",
+                          "What healing or acceptance emerges from the journey?",
+                          "What unresolved threads remain for the future?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What details of normal life feel slightly off or unsettling?",
+                          "How does the protagonist react to early signs of dread?",
+                          "What fear or flaw makes them vulnerable to the coming horror?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What disturbing event reveals the presence of a threat?",
+                          "How does the protagonist rationalize or deny what happened?",
+                          "What boundary between normal and supernatural is crossed?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What attempts to escape or explain the threat fail?",
+                          "How does the horror begin to target the protagonist personally?",
+                          "What emotional or psychological weakness does the horror exploit?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What new rules or patterns of the horror become clear?",
+                          "How does the threat escalate in intensity or proximity?",
+                          "What allies or resources fail the protagonist?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth about the horror’s origin or nature is revealed?",
+                          "How does this revelation raise the stakes?",
+                          "What connection does the protagonist have to the horror?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What terrifying choice must the protagonist make to survive?",
+                          "How does fear overwhelm their rational thinking?",
+                          "What sacrifice or risk becomes unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final confrontation forces the protagonist to face the horror?",
+                          "How does the protagonist use knowledge or desperation to fight back?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or physical scars remain?",
+                          "How has the protagonist’s worldview changed?",
+                          "What lingering sign suggests the horror may not be gone?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What aspects of the magical world define the hero’s daily life?",
+                          "How does the hero’s flaw or fear shape their role in the realm?",
+                          "What early hints of prophecy, politics, or magic appear?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What threat or betrayal forces the hero onto a quest?",
+                          "How does this event disrupt the balance of the realm?",
+                          "What choice does the hero make that sets the journey in motion?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What tensions arise between the hero and their allies?",
+                          "How does the hero struggle with their destiny or abilities?",
+                          "What enemy or obstacle becomes the primary threat?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials or political conflicts escalate the stakes?",
+                          "How do alliances shift or fracture?",
+                          "What new dangers emerge from the world’s lore?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, lineage, or hidden truth reshapes the quest?",
+                          "How does this revelation challenge the hero’s beliefs?",
+                          "What new direction does the journey take?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What impossible choice must the hero make between duty and desire?",
+                          "How does the hero confront their deepest fear?",
+                          "What loss or sacrifice seems inevitable?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive battle or magical confrontation determines the realm’s fate?",
+                          "How does the hero use their growth to overcome the antagonist?",
+                          "What turning point seals victory or defeat?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world transformed after the conflict?",
+                          "What becomes of the hero’s relationships and role?",
+                          "What seeds of future adventures remain?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What skills and flaws define the protagonist’s everyday life?",
+                          "How does the environment establish danger or urgency?",
+                          "What personal stake motivates the protagonist?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What mission, disaster, or attack forces immediate action?",
+                          "How does the protagonist react under pressure?",
+                          "What new threat becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What enemy or obstacle challenges the protagonist directly?",
+                          "How does the protagonist’s flaw complicate the mission?",
+                          "What tension arises within the team or environment?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What chases, traps, or confrontations escalate the danger?",
+                          "How do alliances shift or break?",
+                          "What new information raises the stakes?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals the mission was compromised or misunderstood?",
+                          "How does this revelation change the protagonist’s objective?",
+                          "What emotional or moral conflict emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or impossible choice must the protagonist make?",
+                          "How does the protagonist confront their greatest fear or weakness?",
+                          "What loss seems unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final showdown tests the protagonist’s skills and resolve?",
+                          "How does the protagonist outmaneuver the antagonist?",
+                          "What decisive action determines success or failure?"
+                      ]
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What consequences follow the mission’s outcome?",
+                          "How has the protagonist changed?",
+                          "What unresolved threats or opportunities remain?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What personal stake draws the sleuth into the world of the case?",
+                          "How does the setting establish tension or secrecy?",
+                          "What early clues hint at deeper layers?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What crime or disappearance demands investigation?",
+                          "How does the sleuth become involved?",
+                          "What initial assumptions are formed?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What suspects, clues, or red herrings complicate the case?",
+                          "How does the sleuth’s flaw interfere with progress?",
+                          "What danger or pressure increases?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What new evidence deepens the mystery?",
+                          "How do suspects contradict themselves?",
+                          "What obstacles hinder the investigation?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden motive or incorrect assumption?",
+                          "How does this shift the direction of the investigation?",
+                          "What new suspect or theory emerges?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the sleuth’s progress or life?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial clue seems lost?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the culprit?",
+                          "How does the sleuth piece together the final truth?",
+                          "What emotional or moral resolution occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What justice or consequences follow the reveal?",
+                          "How does the sleuth reflect on the case?",
+                          "What lingering questions remain?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What instability or tension defines the protagonist’s world?",
+                          "How does the protagonist’s perception seem unreliable?",
+                          "What early signs of manipulation or distortion appear?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What event contradicts the protagonist’s memory or reality?",
+                          "How does this moment destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the protagonist’s perception?",
+                          "How does the protagonist question their own mind?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hallucinations, lies, or contradictions escalate tension?",
+                          "How does paranoia affect the protagonist’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the protagonist’s identity or situation?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the protagonist to confront their own mind?",
+                          "How does fear or confusion overwhelm them?",
+                          "What relationship or belief collapses?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s reality changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does their daily life reveal unmet needs?",
+                          "What first impression sets the tone for the love story?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What meet‑cute or collision sparks attraction?",
+                          "How does this moment disrupt the protagonist’s emotional routine?",
+                          "What tension or curiosity forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What fears, misunderstandings, or external pressures complicate the relationship?",
+                          "How do the protagonists challenge each other emotionally?",
+                          "What flaw threatens their connection?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What shared moments deepen chemistry?",
+                          "How does tension build through vulnerability or conflict?",
+                          "What obstacles intensify longing?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What secret or vulnerability shifts the relationship dynamic?",
+                          "How does this revelation deepen or threaten trust?",
+                          "What emotional truth surfaces?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What breakup, betrayal, or misunderstanding fractures the relationship?",
+                          "How does the protagonist’s flaw contribute?",
+                          "What seems impossible to repair?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confession, gesture, or realization resolves the conflict?",
+                          "How does the protagonist grow emotionally?",
+                          "What truth brings them back together?"
+                      ]
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What does the relationship look like after reconciliation?",
+                          "How have both characters changed?",
+                          "What future do they begin to build?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the protagonist’s emotional world?",
+                          "How does destiny or enchantment influence their life?",
+                          "What early signs hint at a fated bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event binds the love interests together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical, political, or emotional forces threaten their bond?",
+                          "How do their powers or destinies clash?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the world’s magic intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology defines the protagonist’s world?",
+                          "How does the protagonist’s role reveal societal tensions?",
+                          "What flaw or fear shapes their relationship with technology?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly, discovery, or threat disrupts the status quo?",
+                          "How does the protagonist react to this disruption?",
+                          "What new possibility or danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces challenge humanity, identity, or reality?",
+                          "How does technology complicate the protagonist’s goal?",
+                          "What moral or ethical dilemma arises?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech failures, conspiracies, or alien forces escalate the conflict?",
+                          "How do alliances shift under pressure?",
+                          "What new information raises the stakes?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What hidden truth about the world, mission, or protagonist is revealed?",
+                          "How does this change the protagonist’s understanding of reality?",
+                          "What new direction does the story take?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does technology or science push them to the brink?",
+                          "What sacrifice seems inevitable?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive act reshapes the future of humanity or the universe?",
+                          "How does the protagonist use knowledge or innovation to prevail?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What new equilibrium emerges after the conflict?",
+                          "How has the protagonist changed?",
+                          "What future possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What elements of the magical world create natural danger or urgency?",
+                          "How does the hero’s skillset reflect both combat readiness and magical heritage?",
+                          "What early hints of conflict foreshadow the action-heavy journey ahead?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What violent or chaotic event forces the hero into immediate action?",
+                          "How does magic complicate or escalate the threat?",
+                          "What choice does the hero make that commits them to the mission?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical and physical obstacles challenge the hero simultaneously?",
+                          "How do allies or rivals intensify the conflict?",
+                          "What internal flaw makes the action more dangerous?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What battles, chases, or magical confrontations escalate the stakes?",
+                          "How does the hero adapt their fighting style to magical threats?",
+                          "What new information reveals the true scale of the conflict?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals the mission was misunderstood or sabotaged?",
+                          "How does this revelation change the hero’s strategy?",
+                          "What emotional or moral conflict emerges from the truth?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or impossible choice must the hero make?",
+                          "How does the hero confront their deepest fear in the heat of battle?",
+                          "What loss seems unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive magical and physical confrontation determines the realm’s fate?",
+                          "How does the hero use both skill and growth to prevail?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world reshaped after the conflict?",
+                          "What scars or triumphs remain for the hero?",
+                          "What future threats or opportunities linger?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What unsettling elements lurk beneath the beauty of the magical world?",
+                          "How does the hero’s flaw make them vulnerable to supernatural dread?",
+                          "What early signs hint at ancient or monstrous forces?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What dark magical event reveals the presence of a terrifying threat?",
+                          "How does the hero react to the first encounter with horror?",
+                          "What boundary between magic and nightmare is crossed?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What ancient evil or cursed magic targets the hero?",
+                          "How does fear distort the hero’s judgment?",
+                          "What personal weakness does the horror exploit?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What monstrous creatures, cursed lands, or forbidden spells escalate the terror?",
+                          "How do allies falter or fall under the horror’s influence?",
+                          "What new rules of the supernatural threat become clear?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth about the horror’s origin or purpose is revealed?",
+                          "How is the hero connected to the darkness?",
+                          "What new danger emerges from this revelation?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What terrifying choice must the hero make to survive or protect others?",
+                          "How does fear overwhelm their rational thinking?",
+                          "What sacrifice becomes unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final confrontation forces the hero to face the ancient evil?",
+                          "How does the hero use magic or courage to fight back?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or physical scars remain?",
+                          "How has the magical world changed after the horror?",
+                          "What lingering sign suggests the darkness may return?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical or political secrets define the realm?",
+                          "How does the hero’s background prepare or hinder them as an investigator?",
+                          "What early clues hint at deeper mysteries?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical crime or disappearance disrupts the kingdom?",
+                          "How does the hero become involved in the investigation?",
+                          "What assumptions form immediately?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What suspects, factions, or magical forces complicate the case?",
+                          "How does the hero’s flaw interfere with uncovering the truth?",
+                          "What danger or pressure increases?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What new evidence deepens the magical mystery?",
+                          "How do spells, artifacts, or prophecies complicate clues?",
+                          "What obstacles hinder the investigation?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden motive, prophecy, or betrayal?",
+                          "How does this shift the direction of the investigation?",
+                          "What new suspect or theory emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the hero’s progress or life?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial magical clue seems lost?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the culprit or truth?",
+                          "How does the hero piece together the final magical puzzle?",
+                          "What emotional or political resolution occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What justice or consequences follow the reveal?",
+                          "How does the truth reshape the realm?",
+                          "What lingering mysteries remain?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What instability or tension exists beneath the magical world’s surface?",
+                          "How does the hero’s perception seem unreliable from the start?",
+                          "What early signs of magical manipulation appear?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event contradicts the hero’s memory or reality?",
+                          "How does this destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the hero’s perception?",
+                          "How does the hero question their own mind or magic?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What illusions, enchantments, or contradictions escalate tension?",
+                          "How does paranoia affect the hero’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the hero’s identity or destiny?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the hero to confront their own mind?",
+                          "How does fear or confusion overwhelm them?",
+                          "What belief or relationship collapses?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or magical truth?",
+                          "How does the hero reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the hero’s reality changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past events shaped the hero’s magical identity?",
+                          "How does the hero reflect on their early life in the realm?",
+                          "What emotional wound still influences them?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What relic, memory, or magical event forces the hero to revisit the past?",
+                          "How does this disrupt their current life?",
+                          "What fear resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth?",
+                          "How do past choices shape present dangers?",
+                          "What emotional patterns reappear?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden magical truths?",
+                          "How do old allies or enemies complicate the present?",
+                          "What emotional or magical tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the hero’s identity?",
+                          "How does this revelation challenge their beliefs?",
+                          "What new direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the hero confront?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure?",
+                          "How does the hero integrate past and present?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the hero’s identity evolved?",
+                          "What legacy remains?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the hero’s emotional world?",
+                          "How does destiny or prophecy influence their love life?",
+                          "What early signs hint at a fated bond?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical encounter sparks attraction?",
+                          "How does this moment disrupt the hero’s life?",
+                          "What tension or curiosity forms?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or political forces threaten the relationship?",
+                          "How do their destinies clash?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the world’s magic intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical forces shape the lovers’ fated connection?",
+                          "How does the world’s enchantment influence their emotional lives?",
+                          "What early signs hint at destiny?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event binds the lovers together?",
+                          "How does this disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical, political, or emotional forces threaten their bond?",
+                          "How do their powers or destinies clash?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the world’s magic intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy or curse threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What elements of magic and technology coexist or clash?",
+                          "How does the hero navigate a world shaped by both?",
+                          "What early hints suggest a coming collision of systems?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What futuristic anomaly disrupts ancient magic?",
+                          "How does this event force the hero into action?",
+                          "What new possibility or threat emerges?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces of magic and technology challenge the hero?",
+                          "How does the hero struggle to reconcile the two?",
+                          "What moral or ethical dilemma arises?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech failures, magical surges, or hybrid threats escalate the conflict?",
+                          "How do alliances shift under pressure?",
+                          "What new information raises the stakes?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What hidden truth reveals the connection between magic and technology?",
+                          "How does this change the hero’s understanding of the world?",
+                          "What new direction does the story take?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the hero make between magic and science?",
+                          "How does this decision threaten the realm?",
+                          "What sacrifice seems inevitable?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive act fuses or divides magic and technology?",
+                          "How does the hero use both to prevail?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What new equilibrium emerges between magic and technology?",
+                          "How has the hero changed?",
+                          "What future possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What dangerous environment or mission sets the tone for fear?",
+                          "How does the protagonist’s skillset contrast with their hidden vulnerabilities?",
+                          "What early signs hint at a monstrous or supernatural threat?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What violent or terrifying event reveals the horror?",
+                          "How does the protagonist react under sudden fear?",
+                          "What boundary between action and terror is crossed?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What monstrous force or cursed entity becomes the main threat?",
+                          "How does fear complicate the protagonist’s ability to fight?",
+                          "What emotional weakness does the horror exploit?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What attacks, chases, or confrontations escalate the terror?",
+                          "How do allies fall or falter under the horror’s influence?",
+                          "What new rules of the threat become clear?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth about the horror’s origin or purpose is revealed?",
+                          "How does this revelation raise the stakes?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What terrifying choice must the protagonist make to survive?",
+                          "How does fear overwhelm their rational thinking?",
+                          "What sacrifice becomes unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final confrontation forces the protagonist to face the horror?",
+                          "How does the protagonist use both skill and desperation to fight back?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or physical scars remain?",
+                          "How has the protagonist’s worldview changed?",
+                          "What lingering sign suggests the horror may return?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What personal stake draws the protagonist into a dangerous world?",
+                          "How does the setting establish tension or secrecy?",
+                          "What early clues hint at deeper layers?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What crime or conspiracy forces the protagonist into action?",
+                          "How does the protagonist become involved?",
+                          "What initial assumptions form?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What suspects, clues, or red herrings complicate the mission?",
+                          "How does the protagonist’s flaw interfere with uncovering the truth?",
+                          "What danger or pressure increases?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What chases, interrogations, or confrontations escalate the stakes?",
+                          "How do suspects contradict themselves?",
+                          "What obstacles hinder the investigation?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden motive or incorrect assumption?",
+                          "How does this shift the direction of the investigation?",
+                          "What new suspect or theory emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the protagonist’s progress or life?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial clue seems lost?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the culprit or truth?",
+                          "How does the protagonist piece together the final puzzle?",
+                          "What emotional or moral resolution occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What justice or consequences follow the reveal?",
+                          "How does the protagonist reflect on the mission?",
+                          "What lingering threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What instability or tension defines the protagonist’s world?",
+                          "How does the protagonist’s perception seem unreliable?",
+                          "What early signs of manipulation appear?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What event contradicts the protagonist’s memory or reality?",
+                          "How does this destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the protagonist’s perception?",
+                          "How does the protagonist question their own mind?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hallucinations, lies, or contradictions escalate tension?",
+                          "How does paranoia affect the protagonist’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the protagonist’s identity or mission?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the protagonist to confront their own mind?",
+                          "How does fear or confusion overwhelm them?",
+                          "What belief or relationship collapses?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s reality changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past missions shaped the protagonist’s identity?",
+                          "How does the protagonist reflect on their early life or training?",
+                          "What emotional wound still influences them?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What new threat echoes an old trauma?",
+                          "How does this disrupt the protagonist’s current life?",
+                          "What fear resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth?",
+                          "How do past choices shape present dangers?",
+                          "What emotional patterns reappear?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about past missions?",
+                          "How do old allies or enemies complicate the present?",
+                          "What emotional or physical tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the protagonist’s identity?",
+                          "How does this revelation challenge their beliefs?",
+                          "What new direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the protagonist confront?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure?",
+                          "How does the protagonist integrate past and present?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the protagonist’s identity evolved?",
+                          "What legacy remains?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does their dangerous lifestyle complicate relationships?",
+                          "What first impression sets the tone for the romance?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What mission or disaster forces the love interests together?",
+                          "How does this moment disrupt their emotional routine?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What fears, misunderstandings, or external pressures complicate the relationship?",
+                          "How do the protagonists challenge each other emotionally?",
+                          "What flaw threatens their connection?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What shared dangers deepen chemistry?",
+                          "How does tension build through vulnerability or conflict?",
+                          "What obstacles intensify longing?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What secret or vulnerability shifts the relationship dynamic?",
+                          "How does this revelation deepen or threaten trust?",
+                          "What emotional truth surfaces?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What breakup, betrayal, or misunderstanding fractures the relationship?",
+                          "How does the protagonist’s flaw contribute?",
+                          "What seems impossible to repair?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confession, gesture, or realization resolves the conflict?",
+                          "How does the protagonist grow emotionally?",
+                          "What truth brings them back together?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What does the relationship look like after reconciliation?",
+                          "How have both characters changed?",
+                          "What future do they begin to build?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the protagonist’s emotional world?",
+                          "How does danger intertwine with enchantment?",
+                          "What early signs hint at a fated bond?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event forces the love interests together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces threaten the relationship?",
+                          "How do their destinies clash?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the world’s magic intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology defines the protagonist’s skillset?",
+                          "How does the environment establish danger or urgency?",
+                          "What personal stake motivates the protagonist?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What mission, anomaly, or attack forces immediate action?",
+                          "How does the protagonist react under pressure?",
+                          "What new threat becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien forces challenge the protagonist?",
+                          "How does the protagonist’s flaw complicate the mission?",
+                          "What tension arises within the team or system?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech failures, chases, or confrontations escalate the stakes?",
+                          "How do alliances shift under pressure?",
+                          "What new information raises the stakes?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals the mission was compromised or misunderstood?",
+                          "How does this revelation change the protagonist’s objective?",
+                          "What emotional or moral conflict emerges?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does technology push them to the brink?",
+                          "What sacrifice seems inevitable?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive act reshapes the future of humanity or the mission?",
+                          "How does the protagonist use innovation to prevail?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What new equilibrium emerges after the conflict?",
+                          "How has the protagonist changed?",
+                          "What future possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What unsettling elements hint at a deeper secret beneath the horror?",
+                          "How does the protagonist’s environment create both fear and curiosity?",
+                          "What early clues suggest something is being hidden?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What horrifying event demands investigation?",
+                          "How does the protagonist react to the blend of terror and mystery?",
+                          "What initial assumptions form about the cause?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What suspects, supernatural forces, or hidden motives complicate the case?",
+                          "How does fear distort the protagonist’s interpretation of clues?",
+                          "What danger escalates as they search for answers?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What new evidence deepens both the horror and the mystery?",
+                          "How do supernatural elements interfere with the investigation?",
+                          "What contradictions or red herrings appear?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden truth about the horror’s origin?",
+                          "How does this revelation shift the investigation’s direction?",
+                          "What new threat emerges from the truth?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the protagonist’s life or sanity?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial clue seems lost or corrupted?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true cause of the horror?",
+                          "How does the protagonist piece together the final truth?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What consequences follow the reveal of the horror’s source?",
+                          "How does the protagonist cope with the truth?",
+                          "What lingering dread remains?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What instability or tension defines the protagonist’s world?",
+                          "How does the horror subtly distort their perception?",
+                          "What early signs suggest manipulation or mental unraveling?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What terrifying event contradicts the protagonist’s memory or reality?",
+                          "How does this destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What supernatural or psychological forces manipulate the protagonist?",
+                          "How does the protagonist question their own mind?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hallucinations, hauntings, or contradictions escalate tension?",
+                          "How does paranoia affect the protagonist’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the protagonist’s identity or situation?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the protagonist to confront their own mind?",
+                          "How does fear or confusion overwhelm them?",
+                          "What belief or relationship collapses?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or horror?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s reality changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past trauma or haunting shapes the narrator’s worldview?",
+                          "How does the narrator describe early signs of dread?",
+                          "What emotional wound still influences them?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What memory or event reawakens the horror?",
+                          "How does this disrupt the narrator’s present life?",
+                          "What fear resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth?",
+                          "How do past horrors bleed into the present?",
+                          "What emotional patterns reappear?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about the haunting?",
+                          "How do old relationships complicate the present?",
+                          "What emotional or supernatural tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of the horror?",
+                          "How does this revelation challenge their beliefs?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure?",
+                          "How does the narrator face the horror directly?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or haunting remains?",
+                          "How has the narrator’s identity evolved?",
+                          "What lingering fear or acceptance remains?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does the setting create both intimacy and dread?",
+                          "What early signs hint at a supernatural threat?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What terrifying event binds the love interests together?",
+                          "How does fear intensify their connection?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What supernatural forces threaten the relationship?",
+                          "How do fear and love clash?",
+                          "What secret or flaw complicates trust?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What horrifying encounters deepen both danger and desire?",
+                          "How does the threat escalate as the romance grows?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth reveals one lover’s connection to the horror?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does fear challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What act of love confronts the horror?",
+                          "How do they overcome or succumb to the darkness?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the relationship after the horror?",
+                          "How has love changed them?",
+                          "What bittersweet or hopeful note lingers?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the lovers’ emotional world?",
+                          "How does enchantment intertwine with dread?",
+                          "What early signs hint at a cursed bond?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical and terrifying event binds the lovers together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or supernatural forces threaten the relationship?",
+                          "How do their destinies clash with the horror?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the horror escalate as the romance grows?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy or curse reveals the horror’s connection to the lovers?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical act confronts the horror?",
+                          "How do they overcome or succumb to the darkness?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the world after the horror?",
+                          "How has love changed them?",
+                          "What magic lingers as a symbol of survival?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or scientific elements create unease?",
+                          "How does the protagonist’s environment hint at unknown dangers?",
+                          "What early signs suggest a technological or alien horror?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly or experiment unleashes the horror?",
+                          "How does the protagonist react to the first encounter?",
+                          "What boundary between science and terror is crossed?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien force becomes the main threat?",
+                          "How does fear complicate the protagonist’s ability to survive?",
+                          "What emotional weakness does the horror exploit?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What mutations, malfunctions, or attacks escalate the terror?",
+                          "How do allies fall or falter under the horror’s influence?",
+                          "What new rules of the threat become clear?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth reveals the horror’s origin or purpose?",
+                          "How does this revelation raise the stakes?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does fear overwhelm their rational thinking?",
+                          "What sacrifice becomes unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final confrontation forces the protagonist to face the horror?",
+                          "How does the protagonist use science or desperation to fight back?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or physical scars remain?",
+                          "How has the world changed after the horror?",
+                          "What lingering sign suggests the threat may return?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What personal instability or flaw shapes the sleuth’s perspective?",
+                          "How does the environment create both tension and uncertainty?",
+                          "What early contradictions hint that perception may be unreliable?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What crime or event contradicts the sleuth’s memory or expectations?",
+                          "How does this destabilize their sense of reality?",
+                          "What fear or suspicion emerges immediately?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the sleuth’s perception?",
+                          "How does paranoia interfere with interpreting clues?",
+                          "What relationships become suspect as the case deepens?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hallucinations, lies, or contradictions escalate tension?",
+                          "How do clues begin to conflict with each other?",
+                          "What truths become harder for the sleuth to trust?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the sleuth’s identity or involvement in the case?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the sleuth to confront their own mind?",
+                          "How does fear or confusion overwhelm their reasoning?",
+                          "What belief or relationship collapses under pressure?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or culprit?",
+                          "How does the sleuth piece together the final truth despite psychological strain?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains after the reveal?",
+                          "How has the sleuth’s reality changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past case or unresolved event shaped the narrator’s life?",
+                          "How does the narrator describe early signs of mystery or tension?",
+                          "What emotional wound still influences them?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What new evidence or memory reopens the old case?",
+                          "How does this disrupt the narrator’s present life?",
+                          "What fear or regret resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth?",
+                          "How do past choices shape present dangers?",
+                          "What emotional patterns reappear as the investigation continues?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden details about the case?",
+                          "How do old allies or enemies complicate the present?",
+                          "What emotional or investigative tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of the case?",
+                          "How does this revelation challenge their beliefs?",
+                          "What new direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure to the case?",
+                          "How does the narrator integrate past and present?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s identity evolved?",
+                          "What lingering questions remain?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the sleuth’s approach to love?",
+                          "How does the setting create both intimacy and secrecy?",
+                          "What early clues hint at deeper layers in both the case and the romance?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What crime or secret forces the love interests together?",
+                          "How does this moment disrupt their emotional routines?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What fears, misunderstandings, or external pressures complicate the relationship?",
+                          "How do clues and emotions intertwine?",
+                          "What flaw threatens their connection?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What shared discoveries deepen chemistry?",
+                          "How does danger intensify longing or mistrust?",
+                          "What obstacles push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What secret or revelation threatens the relationship?",
+                          "How does this shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What betrayal, misunderstanding, or danger fractures the relationship?",
+                          "How does the sleuth’s flaw contribute?",
+                          "What seems impossible to repair?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confession, gesture, or realization resolves both the case and the relationship?",
+                          "How does the protagonist grow emotionally?",
+                          "What truth brings them back together?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What does the relationship look like after the case is solved?",
+                          "How have both characters changed?",
+                          "What future do they begin to build?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the emotional and investigative world?",
+                          "How does enchantment influence the sleuth’s perspective?",
+                          "What early signs hint at a fated or magical bond?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical crime or event binds the love interests together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces complicate the investigation?",
+                          "How do their destinies clash with the case?",
+                          "What fear or secret threatens trust?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical clues deepen both danger and desire?",
+                          "How does the world’s enchantment intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship and the case?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act resolves both the case and the relationship?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love and the solved mystery?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology shapes the investigative world?",
+                          "How does the protagonist’s role reveal systemic tension?",
+                          "What early clues hint at a deeper conspiracy?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly, crime, or malfunction demands investigation?",
+                          "How does the protagonist become involved?",
+                          "What initial assumptions form?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien forces complicate the case?",
+                          "How does the protagonist’s flaw interfere with uncovering the truth?",
+                          "What danger or pressure increases?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech twists, conspiracies, or contradictions escalate the stakes?",
+                          "How do suspects contradict themselves?",
+                          "What obstacles hinder the investigation?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden motive or systemic corruption?",
+                          "How does this shift the direction of the investigation?",
+                          "What new suspect or theory emerges?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the protagonist’s progress or life?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial clue seems lost or corrupted?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the culprit or truth?",
+                          "How does the protagonist piece together the final puzzle?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What justice or consequences follow the reveal?",
+                          "How does the protagonist reflect on the case?",
+                          "What lingering threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past trauma or instability shapes the narrator’s worldview?",
+                          "How does the narrator describe early signs of psychological tension?",
+                          "What emotional wound still influences their perception?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What memory or event contradicts the narrator’s understanding of their past?",
+                          "How does this destabilize their present life?",
+                          "What fear or suspicion resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and reality?",
+                          "How does the narrator begin to question their own mind?",
+                          "What emotional patterns reappear as the truth unravels?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden or distorted truths?",
+                          "How do old relationships complicate the narrator’s sense of self?",
+                          "What emotional or psychological tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reframes the narrator’s identity?",
+                          "How does this revelation challenge their beliefs?",
+                          "What new danger or emotional crisis emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about themselves?",
+                          "How does fear or confusion overwhelm their reasoning?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession forces the narrator to face the truth?",
+                          "How do they integrate or reject their past?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the narrator’s identity evolved?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does instability or tension appear in their early interactions?",
+                          "What subtle signs hint at manipulation or distortion?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What event contradicts the protagonist’s perception of their partner?",
+                          "How does this destabilize their sense of trust?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the relationship?",
+                          "How does paranoia interfere with emotional connection?",
+                          "What secrets or lies complicate trust?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What contradictions or red flags escalate tension?",
+                          "How does the protagonist question their partner’s intentions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the partner’s identity or motives?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the protagonist to confront the truth about the relationship?",
+                          "How does fear or confusion overwhelm them?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s view of love changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements distort or influence perception?",
+                          "How does enchantment intertwine with emotional instability?",
+                          "What early signs hint at a dangerous or fated bond?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event contradicts the protagonist’s understanding of reality?",
+                          "How does this destabilize their emotional world?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces manipulate the relationship?",
+                          "How does the protagonist question their own mind or magic?",
+                          "What secrets complicate trust?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What illusions, enchantments, or contradictions escalate tension?",
+                          "How does magic blur truth and emotion?",
+                          "What forces push the lovers together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret reframes the relationship?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny or magic challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical confrontation reveals the truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the relationship after the truth is revealed?",
+                          "How has magic reshaped their emotional world?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology influences or distorts perception?",
+                          "How does the protagonist’s environment create tension or uncertainty?",
+                          "What early signs hint at manipulation or malfunction?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly or glitch contradicts the protagonist’s memory or reality?",
+                          "How does this destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or systemic forces manipulate the protagonist?",
+                          "How does the protagonist question their own mind or identity?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What malfunctions, contradictions, or conspiracies escalate tension?",
+                          "How does paranoia affect the protagonist’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reveals the protagonist’s compromised identity or role?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does fear or confusion overwhelm them?",
+                          "What belief or relationship collapses?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or system?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s reality changed?",
+                          "What future uncertainty lingers?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past relationship shaped the narrator’s emotional worldview?",
+                          "How does the narrator describe their early understanding of love?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What memory, letter, or reunion reopens old feelings?",
+                          "How does this disrupt the narrator’s emotional stability?",
+                          "What fear or longing resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth about the relationship?",
+                          "How do past choices shape present emotional challenges?",
+                          "What unresolved feelings complicate the narrator’s journey?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about the relationship?",
+                          "How do old emotions resurface in unexpected ways?",
+                          "What emotional or interpersonal tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of the relationship?",
+                          "How does this revelation challenge their beliefs about love?",
+                          "What new emotional direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in the relationship?",
+                          "How does the past threaten their present emotional stability?",
+                          "What breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings emotional closure?",
+                          "How does the narrator integrate past love with present identity?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s understanding of love evolved?",
+                          "What emotional legacy remains?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical or symbolic elements shaped the narrator’s past love?",
+                          "How does the narrator describe early signs of enchantment or destiny?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What relic, spell, or magical memory reawakens the past?",
+                          "How does this disrupt the narrator’s emotional world?",
+                          "What fear or longing resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between magical memory and truth?",
+                          "How do past enchantments shape present emotional challenges?",
+                          "What unresolved feelings complicate the narrator’s journey?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical flashbacks reveal hidden truths about the relationship?",
+                          "How do old emotions resurface through enchantment?",
+                          "What emotional or supernatural tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten magical truth reshapes the narrator’s understanding of the relationship?",
+                          "How does this revelation challenge their beliefs about love and destiny?",
+                          "What new emotional direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in the magical bond?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical confrontation or confession brings closure?",
+                          "How does the narrator integrate past enchantment with present identity?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s understanding of love and magic evolved?",
+                          "What symbolic magic remains?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or technological elements shaped the narrator’s past?",
+                          "How does the narrator describe early signs of innovation or danger?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly, device, or discovery reawakens old memories?",
+                          "How does this disrupt the narrator’s present?",
+                          "What fear or curiosity resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and technological truth?",
+                          "How do past innovations or disasters shape present challenges?",
+                          "What emotional patterns reappear?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about past experiments or missions?",
+                          "How do old allies or enemies complicate the present?",
+                          "What emotional or scientific tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of their past?",
+                          "How does this revelation challenge their beliefs about technology or humanity?",
+                          "What new direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in past events?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure?",
+                          "How does the narrator integrate past and present?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s identity evolved?",
+                          "What future possibilities or warnings remain?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does magic or destiny influence their early worldview?",
+                          "What subtle signs hint at a fated or enchanted bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event sparks attraction between the love interests?",
+                          "How does this moment disrupt their emotional routine?",
+                          "What tension or curiosity forms immediately?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces complicate the relationship?",
+                          "How do their destinies or powers clash?",
+                          "What fear or secret threatens trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical encounters deepen both danger and desire?",
+                          "How does enchantment intensify emotional stakes?",
+                          "What obstacles push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges from the truth?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or technological elements shape the protagonist’s emotional world?",
+                          "How does their environment influence their approach to love?",
+                          "What early signs hint at a connection that defies logic or science?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What scientific anomaly or mission sparks attraction?",
+                          "How does this moment disrupt their emotional routine?",
+                          "What tension or curiosity forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or societal forces complicate the relationship?",
+                          "How do their goals or identities clash?",
+                          "What fear or secret threatens trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What futuristic obstacles deepen both danger and desire?",
+                          "How does technology intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What hidden truth about identity, memory, or technology threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does duty or science challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What emotional or technological act proves their devotion?",
+                          "How do they overcome the forces keeping them apart?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is their future reshaped by love and technology?",
+                          "What new equilibrium emerges?",
+                          "What possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What past relationship shaped the narrator’s emotional worldview?",
+                          "How does the narrator describe their early understanding of love?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What memory, letter, or reunion reopens old feelings?",
+                          "How does this disrupt the narrator’s emotional stability?",
+                          "What fear or longing resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and truth about the relationship?",
+                          "How do past choices shape present emotional challenges?",
+                          "What unresolved feelings complicate the narrator’s journey?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about the relationship?",
+                          "How do old emotions resurface in unexpected ways?",
+                          "What emotional or interpersonal tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of the relationship?",
+                          "How does this revelation challenge their beliefs about love?",
+                          "What new emotional direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in the relationship?",
+                          "How does the past threaten their present emotional stability?",
+                          "What breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings emotional closure?",
+                          "How does the narrator integrate past love with present identity?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s understanding of love evolved?",
+                          "What emotional legacy remains?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does the setting create both intimacy and secrecy?",
+                          "What early clues hint at deeper layers in both the case and the romance?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What crime or secret forces the love interests together?",
+                          "How does this moment disrupt their emotional routines?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What fears, misunderstandings, or external pressures complicate the relationship?",
+                          "How do clues and emotions intertwine?",
+                          "What flaw threatens their connection?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What shared discoveries deepen chemistry?",
+                          "How does danger intensify longing or mistrust?",
+                          "What obstacles push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What secret or revelation threatens the relationship?",
+                          "How does this shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What betrayal, misunderstanding, or danger fractures the relationship?",
+                          "How does the protagonist’s flaw contribute?",
+                          "What seems impossible to repair?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confession, gesture, or realization resolves both the case and the relationship?",
+                          "How does the protagonist grow emotionally?",
+                          "What truth brings them back together?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What does the relationship look like after the case is solved?",
+                          "How have both characters changed?",
+                          "What future do they begin to build?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does instability or tension appear in their early interactions?",
+                          "What subtle signs hint at manipulation or distortion?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What event contradicts the protagonist’s perception of their partner?",
+                          "How does this destabilize their sense of trust?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What forces manipulate or distort the relationship?",
+                          "How does paranoia interfere with emotional connection?",
+                          "What secrets or lies complicate trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What contradictions or red flags escalate tension?",
+                          "How does the protagonist question their partner’s intentions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reframes the partner’s identity or motives?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What choice forces the protagonist to confront the truth about the relationship?",
+                          "How does fear or confusion overwhelm them?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s view of love changed?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does the setting create both intimacy and dread?",
+                          "What early signs hint at a supernatural threat?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What terrifying event binds the love interests together?",
+                          "How does fear intensify their connection?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What supernatural forces threaten the relationship?",
+                          "How do fear and love clash?",
+                          "What secret or flaw complicates trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What horrifying encounters deepen both danger and desire?",
+                          "How does the threat escalate as the romance grows?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth reveals one lover’s connection to the horror?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does fear challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What act of love confronts the horror?",
+                          "How do they overcome or succumb to the darkness?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the relationship after the horror?",
+                          "How has love changed them?",
+                          "What bittersweet or hopeful note lingers?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What emotional wound shapes the protagonist’s approach to love?",
+                          "How does their dangerous lifestyle complicate relationships?",
+                          "What first impression sets the tone for the romance?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What mission or disaster forces the love interests together?",
+                          "How does this moment disrupt their emotional routine?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What fears, misunderstandings, or external pressures complicate the relationship?",
+                          "How do the protagonists challenge each other emotionally?",
+                          "What flaw threatens their connection?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What shared dangers deepen chemistry?",
+                          "How does tension build through vulnerability or conflict?",
+                          "What obstacles intensify longing?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What secret or vulnerability shifts the relationship dynamic?",
+                          "How does this revelation deepen or threaten trust?",
+                          "What emotional truth surfaces?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What breakup, betrayal, or misunderstanding fractures the relationship?",
+                          "How does the protagonist’s flaw contribute?",
+                          "What seems impossible to repair?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confession, gesture, or realization resolves the conflict?",
+                          "How does the protagonist grow emotionally?",
+                          "What truth brings them back together?"
+                      ]
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What does the relationship look like after reconciliation?",
+                          "How have both characters changed?",
+                          "What future do they begin to build?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What elements of magic and technology coexist or clash in the world?",
+                          "How does the protagonist’s emotional wound shape their relationship with both realms?",
+                          "What early signs hint at a connection that transcends science or enchantment?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical-technological event sparks attraction between the love interests?",
+                          "How does this moment disrupt their emotional or physical world?",
+                          "What tension or curiosity forms immediately?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical and technological forces threaten the relationship?",
+                          "How do their identities or destinies clash across realms?",
+                          "What fear or secret complicates trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hybrid obstacles deepen both danger and desire?",
+                          "How do magic and technology intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, scientific truth, or hidden origin threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges from the truth?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does the clash of magic and science challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical-technological act proves their devotion?",
+                          "How do they overcome the forces keeping them apart?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is their world reshaped by the union of magic and science?",
+                          "What future do they build together?",
+                          "What hybrid power or symbol remains?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shaped the narrator’s past love?",
+                          "How does the narrator describe early signs of enchantment or destiny?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What relic, spell, or magical memory reawakens the past?",
+                          "How does this disrupt the narrator’s emotional world?",
+                          "What fear or longing resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between magical memory and truth?",
+                          "How do past enchantments shape present emotional challenges?",
+                          "What unresolved feelings complicate the narrator’s journey?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical flashbacks reveal hidden truths about the relationship?",
+                          "How do old emotions resurface through enchantment?",
+                          "What emotional or supernatural tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten magical truth reshapes the narrator’s understanding of the relationship?",
+                          "How does this revelation challenge their beliefs about love and destiny?",
+                          "What new emotional direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in the magical bond?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical confrontation or confession brings closure?",
+                          "How does the narrator integrate past enchantment with present identity?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s understanding of love and magic evolved?",
+                          "What symbolic magic remains?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the emotional and investigative world?",
+                          "How does enchantment influence the protagonist’s perspective?",
+                          "What early signs hint at a fated or magical bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical crime or event binds the love interests together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces complicate the investigation?",
+                          "How do their destinies clash with the case?",
+                          "What fear or secret threatens trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical clues deepen both danger and desire?",
+                          "How does the world’s enchantment intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship and the case?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act resolves both the case and the relationship?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love and the solved mystery?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements distort or influence perception?",
+                          "How does enchantment intertwine with emotional instability?",
+                          "What early signs hint at a dangerous or fated bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event contradicts the protagonist’s understanding of reality?",
+                          "How does this destabilize their emotional world?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces manipulate the relationship?",
+                          "How does the protagonist question their own mind or magic?",
+                          "What secrets complicate trust?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What illusions, enchantments, or contradictions escalate tension?",
+                          "How does magic blur truth and emotion?",
+                          "What forces push the lovers together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret reframes the relationship?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny or magic challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical confrontation reveals the truth?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the relationship after the truth is revealed?",
+                          "How has magic reshaped their emotional world?",
+                          "What ambiguity lingers?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the lovers’ emotional world?",
+                          "How does enchantment intertwine with dread?",
+                          "What early signs hint at a cursed bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical and terrifying event binds the lovers together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or supernatural forces threaten the relationship?",
+                          "How do their destinies clash with the horror?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the horror escalate as the romance grows?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy or curse reveals the horror’s connection to the lovers?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical act confronts the horror?",
+                          "How do they overcome or succumb to the darkness?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What remains of the world after the horror?",
+                          "How has love changed them?",
+                          "What magic lingers as a symbol of survival?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What magical elements shape the protagonist’s emotional world?",
+                          "How does danger intertwine with enchantment?",
+                          "What early signs hint at a fated bond?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical event forces the love interests together?",
+                          "How does this moment disrupt their lives?",
+                          "What spark or tension forms?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical or emotional forces threaten the relationship?",
+                          "How do their destinies clash?",
+                          "What fear or secret complicates love?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What magical trials deepen both danger and desire?",
+                          "How does the world’s magic intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, curse, or secret threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does destiny challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical or emotional act proves their devotion?",
+                          "How do they overcome destiny or curse?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is the world changed by their love?",
+                          "What future do they build together?",
+                          "What magic remains as a symbol of their bond?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or technological elements shaped the narrator’s past?",
+                          "How does the narrator describe early signs of innovation, danger, or societal change?",
+                          "What emotional wound still influences their present life?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly, device, or discovery reawakens old memories?",
+                          "How does this disrupt the narrator’s present?",
+                          "What fear or curiosity resurfaces?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What contradictions arise between memory and technological truth?",
+                          "How do past innovations or disasters shape present challenges?",
+                          "What emotional patterns reappear?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What flashbacks reveal hidden truths about past experiments or missions?",
+                          "How do old allies or enemies complicate the present?",
+                          "What emotional or scientific tension escalates?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What forgotten truth reshapes the narrator’s understanding of their past?",
+                          "How does this revelation challenge their beliefs about technology or humanity?",
+                          "What new direction emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What painful truth must the narrator confront about their role in past events?",
+                          "How does the past threaten their present?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation or confession brings closure?",
+                          "How does the narrator integrate past and present?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Memoir",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What healing or acceptance emerges?",
+                          "How has the narrator’s identity evolved?",
+                          "What future possibilities or warnings remain?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology shapes the investigative world?",
+                          "How does the protagonist’s role reveal systemic tension?",
+                          "What early clues hint at a deeper conspiracy?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly, crime, or malfunction demands investigation?",
+                          "How does the protagonist become involved?",
+                          "What initial assumptions form?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien forces complicate the case?",
+                          "How does the protagonist’s flaw interfere with uncovering the truth?",
+                          "What danger or pressure increases?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech twists, conspiracies, or contradictions escalate the stakes?",
+                          "How do suspects contradict themselves?",
+                          "What obstacles hinder the investigation?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals a hidden motive or systemic corruption?",
+                          "How does this shift the direction of the investigation?",
+                          "What new suspect or theory emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What danger threatens the protagonist’s progress or life?",
+                          "How does betrayal or misdirection break trust?",
+                          "What crucial clue seems lost or corrupted?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the culprit or truth?",
+                          "How does the protagonist piece together the final puzzle?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Mystery",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What justice or consequences follow the reveal?",
+                          "How does the protagonist reflect on the case?",
+                          "What lingering threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology influences or distorts perception?",
+                          "How does the protagonist’s environment create tension or uncertainty?",
+                          "What early signs hint at manipulation or malfunction?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly or glitch contradicts the protagonist’s memory or reality?",
+                          "How does this destabilize their sense of self?",
+                          "What fear or suspicion emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or systemic forces manipulate the protagonist?",
+                          "How does the protagonist question their own mind or identity?",
+                          "What relationships become suspect?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What malfunctions, contradictions, or conspiracies escalate tension?",
+                          "How does paranoia affect the protagonist’s decisions?",
+                          "What truths become harder to grasp?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What shocking truth reveals the protagonist’s compromised identity or role?",
+                          "How does this revelation deepen the psychological conflict?",
+                          "What new danger becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does fear or confusion overwhelm them?",
+                          "What belief or relationship collapses?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What confrontation reveals the true manipulator or system?",
+                          "How does the protagonist reclaim or lose control?",
+                          "What irreversible shift occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or psychological state remains?",
+                          "How has the protagonist’s reality changed?",
+                          "What future uncertainty lingers?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or scientific elements create unease?",
+                          "How does the protagonist’s environment hint at unknown dangers?",
+                          "What early signs suggest a technological or alien horror?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What anomaly or experiment unleashes the horror?",
+                          "How does the protagonist react to the first encounter?",
+                          "What boundary between science and terror is crossed?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien force becomes the main threat?",
+                          "How does fear complicate the protagonist’s ability to survive?",
+                          "What emotional weakness does the horror exploit?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What mutations, malfunctions, or attacks escalate the terror?",
+                          "How do allies fall or falter under the horror’s influence?",
+                          "What new rules of the threat become clear?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What truth reveals the horror’s origin or purpose?",
+                          "How does this revelation raise the stakes?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does fear overwhelm their rational thinking?",
+                          "What sacrifice becomes unavoidable?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What final confrontation forces the protagonist to face the horror?",
+                          "How does the protagonist use science or desperation to fight back?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Horror",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What emotional or physical scars remain?",
+                          "How has the world changed after the horror?",
+                          "What lingering sign suggests the threat may return?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic technology defines the protagonist’s skillset?",
+                          "How does the environment establish danger or urgency?",
+                          "What personal stake motivates the protagonist?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What mission, anomaly, or attack forces immediate action?",
+                          "How does the protagonist react under pressure?",
+                          "What new threat becomes clear?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or alien forces challenge the protagonist?",
+                          "How does the protagonist’s flaw complicate the mission?",
+                          "What tension arises within the team or system?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What tech failures, chases, or confrontations escalate the stakes?",
+                          "How do alliances shift under pressure?",
+                          "What new information raises the stakes?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What twist reveals the mission was compromised or misunderstood?",
+                          "How does this revelation change the protagonist’s objective?",
+                          "What emotional or moral conflict emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What catastrophic choice must the protagonist make?",
+                          "How does technology push them to the brink?",
+                          "What sacrifice seems inevitable?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What decisive act reshapes the future of humanity or the mission?",
+                          "How does the protagonist use innovation to prevail?",
+                          "What irreversible outcome occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Action",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "What new equilibrium emerges after the conflict?",
+                          "How has the protagonist changed?",
+                          "What future possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What futuristic or technological elements shape the protagonist’s emotional world?",
+                          "How does their environment influence their approach to love?",
+                          "What early signs hint at a connection that defies logic or science?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What scientific anomaly or mission sparks attraction?",
+                          "How does this moment disrupt their emotional routine?",
+                          "What tension or curiosity forms?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What technological or societal forces complicate the relationship?",
+                          "How do their goals or identities clash?",
+                          "What fear or secret threatens trust?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What futuristic obstacles deepen both danger and desire?",
+                          "How does technology intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What hidden truth about identity, memory, or technology threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does duty or science challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What emotional or technological act proves their devotion?",
+                          "How do they overcome the forces keeping them apart?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is their future reshaped by love and technology?",
+                          "What new equilibrium emerges?",
+                          "What possibilities or threats remain?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "questions":  [
+                          "What elements of magic and technology coexist or clash?",
+                          "How does the protagonist’s emotional wound shape their relationship with both realms?",
+                          "What early signs hint at a connection that transcends science or enchantment?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "questions":  [
+                          "What magical-technological event sparks attraction?",
+                          "How does this moment disrupt their emotional or physical world?",
+                          "What tension or curiosity forms?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "questions":  [
+                          "What magical and technological forces threaten the relationship?",
+                          "How do their identities or destinies clash across realms?",
+                          "What fear or secret complicates trust?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "questions":  [
+                          "What hybrid obstacles deepen both danger and desire?",
+                          "How do magic and technology intensify emotional stakes?",
+                          "What forces push them together or apart?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "questions":  [
+                          "What prophecy, scientific truth, or hidden origin threatens the relationship?",
+                          "How does this revelation shift their understanding of each other?",
+                          "What new danger emerges?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "questions":  [
+                          "What sacrifice or separation becomes unavoidable?",
+                          "How does the clash of magic and science challenge their love?",
+                          "What emotional breaking point occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "questions":  [
+                          "What magical-technological act proves their devotion?",
+                          "How do they overcome the forces keeping them apart?",
+                          "What transformation occurs?"
+                      ]
+    },
+    {
+        "genre":  "Sci‑Fi–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "questions":  [
+                          "How is their world reshaped by the union of magic and science?",
+                          "What future do they build together?",
+                          "What hybrid power or symbol remains?"
+                      ]
+    }
+]

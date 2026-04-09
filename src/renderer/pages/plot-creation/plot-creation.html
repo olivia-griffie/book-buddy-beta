@@ -1,0 +1,66 @@
+<section class="page plot-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Plot Creation</p>
+      <h1 id="plot-page-title">Plot Builder</h1>
+      <p id="plot-page-subtitle">Shape your story with genre-specific beats and prompts.</p>
+    </div>
+    <button id="save-plot-workbook" class="btn btn-primary" type="button">Save Plot Notes</button>
+  </div>
+
+  <div id="plot-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so we know which genres to build around.</p>
+    <button id="plot-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="plot-content" class="plot-content" style="display: none;">
+    <section class="card workbook-card">
+      <div class="workbook-grid">
+        <div class="field">
+          <label for="plot-premise">Premise</label>
+          <textarea id="plot-premise" rows="4"></textarea>
+        </div>
+        <div class="field">
+          <label for="plot-stakes">Stakes</label>
+          <textarea id="plot-stakes" rows="4"></textarea>
+        </div>
+        <div class="field field-full">
+          <label for="plot-notes">Plot Notes</label>
+          <textarea id="plot-notes" rows="5"></textarea>
+        </div>
+      </div>
+      <p id="plot-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section id="hybrid-guide-section" class="card hybrid-card" style="display: none;">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Hybrid Guide</p>
+          <h2 id="hybrid-guide-title"></h2>
+        </div>
+      </div>
+      <div id="hybrid-guide-grid" class="hybrid-guide-grid"></div>
+    </section>
+
+    <section id="hybrid-prompts-section" style="display: none;">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Hybrid Prompt Track</p>
+          <h2 id="hybrid-prompts-title"></h2>
+        </div>
+      </div>
+      <div id="hybrid-prompt-grid" class="beat-grid"></div>
+    </section>
+
+    <section>
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Genre Plot Beats</p>
+          <h2>Questions And Prompts</h2>
+        </div>
+      </div>
+      <div id="genre-beat-sections" class="genre-sections"></div>
+    </section>
+  </div>
+</section>

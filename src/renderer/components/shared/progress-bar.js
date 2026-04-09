@@ -1,0 +1,1 @@
+window.renderProgressBar = function renderProgressBar() {};

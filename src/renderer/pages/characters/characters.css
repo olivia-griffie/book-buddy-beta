@@ -1,0 +1,5 @@
+.placeholder-page {
+  display: grid;
+  gap: 12px;
+  max-width: 640px;
+}

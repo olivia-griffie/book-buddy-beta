@@ -1,0 +1,9 @@
+{
+  "id": "string",
+  "title": "string",
+  "subtitle": "string",
+  "genres": [],
+  "wordCountGoal": 0,
+  "currentWordCount": 0,
+  "thumbnail": ""
+}

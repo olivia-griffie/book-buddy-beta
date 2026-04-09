@@ -1,0 +1,1 @@
+window.initPage = async function () {};

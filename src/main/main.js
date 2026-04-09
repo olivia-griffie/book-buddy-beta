@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
+const { setApplicationMenu } = require('./menu');
 
 const store = new Store();
 let mainWindow;
@@ -28,32 +29,43 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  setApplicationMenu();
   createWindow();
+
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow();
+    }
   });
 });
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
 });
 
-// ── IPC: Projects ─────────────────────────────────────────────────────────────
+// IPC: Projects
 ipcMain.handle('projects:getAll', () => store.get('projects', []));
 
 ipcMain.handle('projects:save', (_, project) => {
   const projects = store.get('projects', []);
-  const idx = projects.findIndex(p => p.id === project.id);
-  if (idx >= 0) projects[idx] = project;
-  else projects.push(project);
+  const index = projects.findIndex((entry) => entry.id === project.id);
+
+  if (index >= 0) {
+    projects[index] = project;
+  } else {
+    projects.push(project);
+  }
+
   store.set('projects', projects);
   return project;
 });
 
 ipcMain.handle('projects:delete', (_, id) => {
-  const projects = store.get('projects', []).filter(p => p.id !== id);
+  const projects = store.get('projects', []).filter((project) => project.id !== id);
   store.set('projects', projects);
 });
 
-// ── IPC: Settings ─────────────────────────────────────────────────────────────
+// IPC: Settings
 ipcMain.handle('settings:get', () => store.get('settings', { tier: 'beta' }));

@@ -1,0 +1,95 @@
+.plot-page {
+  display: grid;
+  gap: 24px;
+}
+
+.plot-content {
+  display: grid;
+  gap: 24px;
+}
+
+.workbook-card,
+.hybrid-card {
+  padding: 24px;
+}
+
+.workbook-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.field-full {
+  grid-column: 1 / -1;
+}
+
+.section-heading {
+  margin-bottom: 16px;
+}
+
+.hybrid-guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.hybrid-beat,
+.beat-card {
+  padding: 16px;
+  border-radius: 16px;
+  background: #fffdfa;
+  border: 1px solid var(--border-soft);
+}
+
+.hybrid-beat h3,
+.beat-card h4 {
+  margin-bottom: 8px;
+}
+
+.genre-sections {
+  display: grid;
+  gap: 24px;
+}
+
+.genre-section {
+  display: grid;
+  gap: 16px;
+}
+
+.genre-section-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.genre-pill {
+  border-radius: 999px;
+  background: #efe6d9;
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.beat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.beat-card ul {
+  padding-left: 18px;
+  color: var(--ink-soft);
+}
+
+.beat-card li + li {
+  margin-top: 6px;
+}
+
+.prompt-callout {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: #f5efe6;
+  color: var(--ink);
+}
