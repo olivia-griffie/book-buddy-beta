@@ -59,6 +59,10 @@ function normalizeGenreKey(value = '') {
     .toLowerCase();
 }
 
+function slugify(value = '') {
+  return normalizeGenreKey(value).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+
 async function loadJson(path) {
   if (!dataCache.has(path)) {
     const promise = fetch(path).then(async (response) => {
@@ -86,6 +90,115 @@ async function getGenrePromptData() {
     genrePrompts,
     specificPrompts,
     hybridGuides,
+  };
+}
+
+function dedupeBy(items, keyBuilder) {
+  const seen = new Set();
+  return items.filter((item) => {
+    const key = keyBuilder(item);
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+}
+
+function computeWordCount(text = '') {
+  const trimmed = text.trim();
+  return trimmed ? trimmed.split(/\s+/).length : 0;
+}
+
+function getDefaultBeatOrder() {
+  return [
+    'Exposition & Initial Setup',
+    'Inciting Incident',
+    'Core Conflict',
+    'Rising Action',
+    'Midpoint Revelation',
+    'Crisis',
+    'Climax',
+    'Aftermath',
+  ];
+}
+
+function buildProjectResources(project, promptData) {
+  const selectedGenres = project?.genres || [];
+  const selectedKeys = selectedGenres.map((genre) => normalizeGenreKey(genre));
+
+  function isMatchingHybridEntry(genreName) {
+    const genreKey = normalizeGenreKey(genreName);
+    return selectedKeys.length === 2
+      && selectedKeys.every((key) => genreKey.includes(key))
+      && genreKey.includes('-');
+  }
+
+  const hybridGuide = selectedGenres.length === 2
+    ? promptData.hybridGuides.find((entry) => {
+      const entryKey = normalizeGenreKey(entry.genre);
+      const forward = `${selectedKeys[0]} x ${selectedKeys[1]}`;
+      const reverse = `${selectedKeys[1]} x ${selectedKeys[0]}`;
+      return entryKey === forward || entryKey === reverse;
+    })
+    : null;
+
+  const genreTracks = selectedGenres.map((genre) => {
+    const genreKey = normalizeGenreKey(genre);
+    return {
+      genre,
+      beats: promptData.genrePrompts.filter((entry) => normalizeGenreKey(entry.genre) === genreKey),
+      prompts: promptData.specificPrompts.filter((entry) => normalizeGenreKey(entry.genre) === genreKey),
+    };
+  });
+
+  const hybridTrack = selectedGenres.length === 2
+    ? {
+      genre: hybridGuide?.genre || `${selectedGenres[0]} - ${selectedGenres[1]}`,
+      beats: promptData.genrePrompts.filter((entry) => isMatchingHybridEntry(entry.genre)),
+      prompts: promptData.specificPrompts.filter((entry) => isMatchingHybridEntry(entry.genre)),
+    }
+    : null;
+
+  const baseLabels = hybridGuide
+    ? Object.keys(hybridGuide.beats)
+    : genreTracks[0]?.beats.map((entry) => entry.plotPoint) || getDefaultBeatOrder();
+
+  const existingSections = project?.plotSections || [];
+  const plotSections = baseLabels.map((label, index) => {
+    const existing = existingSections.find(
+      (section) => normalizeGenreKey(section.label) === normalizeGenreKey(label),
+    );
+
+    return existing || {
+      id: `section-${slugify(label) || index + 1}`,
+      label,
+      targetWords: 0,
+      notes: '',
+    };
+  });
+
+  const sequentialSource = hybridTrack?.prompts?.length
+    ? hybridTrack.prompts
+    : genreTracks[0]?.prompts || [];
+
+  const promptPool = dedupeBy(
+    [
+      ...(hybridTrack?.prompts || []),
+      ...genreTracks.flatMap((track) => track.prompts),
+    ],
+    (entry) => `${normalizeGenreKey(entry.genre)}|${entry.plotPoint}|${entry.prompt}`,
+  );
+
+  return {
+    selectedGenres,
+    hybridGuide,
+    hybridTrack,
+    genreTracks,
+    plotSections,
+    promptPool,
+    sequentialSource,
   };
 }
 
@@ -170,6 +283,14 @@ window.getCurrentProject = getProject;
 window.setCurrentProject = setCurrentProject;
 window.normalizeGenreKey = normalizeGenreKey;
 window.getGenrePromptData = getGenrePromptData;
+window.getProjectResources = buildProjectResources;
+window.computeWordCount = computeWordCount;
+window.slugify = slugify;
+window.saveProjectData = async function saveProjectData(project) {
+  await window.api.saveProject(project);
+  setCurrentProject(project);
+  return project;
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (typeof window.renderSidebar === 'function') {

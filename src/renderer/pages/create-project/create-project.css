@@ -80,3 +80,7 @@
 .form-message {
   min-height: 24px;
 }
+
+.goal-progress-card {
+  max-width: 620px;
+}

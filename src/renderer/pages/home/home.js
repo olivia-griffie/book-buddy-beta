@@ -22,6 +22,7 @@ window.initPage = async function () {
       const pct = project.wordCountGoal > 0
         ? Math.min(100, Math.round((project.currentWordCount / project.wordCountGoal) * 100))
         : 0;
+      const completed = project.wordCountGoal > 0 && (project.currentWordCount || 0) >= project.wordCountGoal;
       const genres = (project.genres || [])
         .map((genre) => `<span class="genre-tag">${genre}</span>`)
         .join('');
@@ -36,13 +37,19 @@ window.initPage = async function () {
             <div class="project-title">${project.title}</div>
             <div class="project-subtitle">${project.subtitle || ''}</div>
             <div class="project-genres">${genres}</div>
-            <div class="project-progress">
-              <div class="progress-label">
-                <span>${(project.currentWordCount || 0).toLocaleString()} words</span>
-                <span>${pct}%</span>
+            <div class="project-progress goal-progress-card">
+              <div class="goal-progress-head">
+                <div class="progress-status-icon ${completed ? 'is-complete' : ''}">${completed ? '✓' : '•'}</div>
+                <div>
+                  <div class="goal-progress-meta">
+                    <span class="goal-progress-percent">${pct}%</span>
+                    <span class="goal-progress-state">${completed ? 'Completed' : 'in progress'}</span>
+                  </div>
+                  <p class="goal-progress-caption">${(project.currentWordCount || 0).toLocaleString()} of ${(project.wordCountGoal || 0).toLocaleString()} words</p>
+                </div>
               </div>
-              <div class="progress-bar-track">
-                <div class="progress-bar-fill" style="width:${pct}%"></div>
+              <div class="goal-progress-track">
+                <div class="goal-progress-fill ${completed ? 'is-complete' : ''}" style="width:${pct}%"></div>
               </div>
             </div>
           </div>

@@ -30,17 +30,14 @@ window.initPage = async function ({ project }) {
   notesInput.value = workbook.notes || '';
 
   const { genrePrompts, specificPrompts, hybridGuides } = await window.getGenrePromptData();
-  const selectedGenres = activeProject.genres || [];
-  const selectedKeys = selectedGenres.map((genre) => window.normalizeGenreKey(genre));
+  const resources = window.getProjectResources(activeProject, {
+    genrePrompts,
+    specificPrompts,
+    hybridGuides,
+  });
+  const selectedGenres = resources.selectedGenres;
   const hybridPromptSection = document.getElementById('hybrid-prompts-section');
   const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');
-
-  function isMatchingHybridEntry(genreName) {
-    const genreKey = window.normalizeGenreKey(genreName);
-    return selectedKeys.length === 2
-      && selectedKeys.every((key) => genreKey.includes(key))
-      && genreKey.includes('-');
-  }
 
   function buildBeatCards(entries, matchingPrompts) {
     if (!entries.length) {
@@ -64,21 +61,12 @@ window.initPage = async function ({ project }) {
       .join('');
   }
 
-  const hybridGuide = selectedGenres.length === 2
-    ? hybridGuides.find((entry) => {
-      const entryKey = window.normalizeGenreKey(entry.genre);
-      const forward = `${selectedKeys[0]} x ${selectedKeys[1]}`;
-      const reverse = `${selectedKeys[1]} x ${selectedKeys[0]}`;
-      return entryKey === forward || entryKey === reverse;
-    })
-    : null;
-
   const hybridSection = document.getElementById('hybrid-guide-section');
   const hybridGrid = document.getElementById('hybrid-guide-grid');
-  if (hybridGuide) {
+  if (resources.hybridGuide) {
     hybridSection.style.display = 'grid';
-    document.getElementById('hybrid-guide-title').textContent = hybridGuide.genre;
-    hybridGrid.innerHTML = Object.entries(hybridGuide.beats)
+    document.getElementById('hybrid-guide-title').textContent = resources.hybridGuide.genre;
+    hybridGrid.innerHTML = Object.entries(resources.hybridGuide.beats)
       .map(([label, text]) => `
         <article class="hybrid-beat">
           <h3>${label}</h3>
@@ -90,27 +78,19 @@ window.initPage = async function ({ project }) {
     hybridSection.style.display = 'none';
   }
 
-  const hybridPromptEntries = selectedGenres.length === 2
-    ? genrePrompts.filter((entry) => isMatchingHybridEntry(entry.genre))
-    : [];
-  const hybridSpecificPrompts = selectedGenres.length === 2
-    ? specificPrompts.filter((entry) => isMatchingHybridEntry(entry.genre))
-    : [];
-
-  if (hybridPromptEntries.length) {
+  if (resources.hybridTrack?.beats?.length) {
     hybridPromptSection.style.display = 'block';
-    document.getElementById('hybrid-prompts-title').textContent = hybridPromptEntries[0].genre;
-    hybridPromptGrid.innerHTML = buildBeatCards(hybridPromptEntries, hybridSpecificPrompts);
+    document.getElementById('hybrid-prompts-title').textContent = resources.hybridTrack.genre;
+    hybridPromptGrid.innerHTML = buildBeatCards(resources.hybridTrack.beats, resources.hybridTrack.prompts);
   } else {
     hybridPromptSection.style.display = 'none';
   }
 
   const genreSections = document.getElementById('genre-beat-sections');
-  genreSections.innerHTML = selectedGenres
-    .map((genre) => {
-      const genreKey = window.normalizeGenreKey(genre);
-      const beats = genrePrompts.filter((entry) => window.normalizeGenreKey(entry.genre) === genreKey);
-      const prompts = specificPrompts.filter((entry) => window.normalizeGenreKey(entry.genre) === genreKey);
+  genreSections.innerHTML = resources.genreTracks
+    .map((track) => {
+      const beats = track.beats;
+      const prompts = track.prompts;
       const cards = buildBeatCards(beats, prompts);
 
       return `
@@ -118,7 +98,7 @@ window.initPage = async function ({ project }) {
           <div class="genre-section-header">
             <div>
               <p class="eyebrow">Genre Track</p>
-              <h2>${genre}</h2>
+              <h2>${track.genre}</h2>
             </div>
             <span class="genre-pill">${beats.length} beats</span>
           </div>
@@ -131,6 +111,7 @@ window.initPage = async function ({ project }) {
   saveButton.addEventListener('click', async () => {
     const updatedProject = {
       ...activeProject,
+      plotSections: resources.plotSections,
       plotWorkbook: {
         premise: premiseInput.value.trim(),
         stakes: stakesInput.value.trim(),
@@ -139,8 +120,7 @@ window.initPage = async function ({ project }) {
       updatedAt: new Date().toISOString(),
     };
 
-    await window.api.saveProject(updatedProject);
-    window.setCurrentProject(updatedProject);
+    await window.saveProjectData(updatedProject);
     saveMessage.textContent = 'Plot notes saved.';
   });
 };
