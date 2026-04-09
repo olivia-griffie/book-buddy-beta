@@ -6,8 +6,12 @@ window.initPage = async function ({ project }) {
   const generateButton = document.getElementById('generate-prompts');
   const countInput = document.getElementById('prompt-count');
   const modeInput = document.getElementById('prompt-mode');
+  const testerCodeInput = document.getElementById('tester-code');
+  const unlockTesterButton = document.getElementById('unlock-tester-mode');
   const status = document.getElementById('daily-prompts-status');
   const resultsGrid = document.getElementById('prompt-results-grid');
+  const settings = await window.api.getSettings();
+  const isTester = Boolean(settings.betaTesterUnlocked);
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -28,6 +32,21 @@ window.initPage = async function ({ project }) {
   const dailyState = {
     cursor: Number(activeProject.dailyPromptState?.cursor || 0),
   };
+
+  function isSameLocalDay(left, right) {
+    return new Date(left).toDateString() === new Date(right).toDateString();
+  }
+
+  function syncPromptCountState() {
+    if (isTester) {
+      return;
+    }
+
+    countInput.value = '1';
+    [...countInput.options].forEach((option) => {
+      option.disabled = option.value !== '1';
+    });
+  }
 
   function getContextLabel(index) {
     const character = activeProject.characters?.[index % (activeProject.characters?.length || 1)];
@@ -79,28 +98,71 @@ window.initPage = async function ({ project }) {
     }));
   }
 
+  countInput.addEventListener('change', () => {
+    if (!isTester && countInput.value !== '1') {
+      countInput.value = '1';
+      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock larger prompt packs.';
+    }
+  });
+
+  unlockTesterButton?.addEventListener('click', async () => {
+    const code = String(testerCodeInput.value || '').trim();
+    if (code !== 'Tester') {
+      status.textContent = 'That code did not unlock tester mode.';
+      return;
+    }
+
+    await window.saveSettingsData({ betaTesterUnlocked: true });
+    status.textContent = 'Tester mode unlocked. You can now generate multiple prompts for admin testing.';
+    window.navigate('daily-prompts', { project: activeProject });
+  });
+
   generateButton.addEventListener('click', async () => {
+    const today = new Date();
+    const lastGeneratedAt = activeProject.dailyPromptState?.lastGeneratedAt;
+
+    if (!isTester && Number(countInput.value) !== 1) {
+      countInput.value = '1';
+      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock 3 and 5 prompt packs.';
+      return;
+    }
+
+    if (!isTester && lastGeneratedAt && isSameLocalDay(lastGeneratedAt, today)) {
+      status.textContent = 'You have already used today\'s beta prompt. Buy the full version on release for expanded prompt generation.';
+      renderPromptCards(activeProject.dailyPromptHistory || []);
+      return;
+    }
+
     const prompts = generatePromptBatch();
     renderPromptCards(prompts);
 
-    await window.saveProjectData({
+    const updatedProject = {
       ...activeProject,
       dailyPromptState: {
         cursor: dailyState.cursor,
         lastMode: modeInput.value,
         lastCount: Number(countInput.value || 1),
-        lastGeneratedAt: new Date().toISOString(),
+        lastGeneratedAt: today.toISOString(),
       },
       dailyPromptHistory: prompts,
-      updatedAt: new Date().toISOString(),
-    });
+      updatedAt: today.toISOString(),
+    };
 
-    status.textContent = modeInput.value === 'sequential'
-      ? 'Sequential prompts generated.'
-      : 'Wild prompts generated.';
+    await window.saveProjectData(updatedProject);
+
+    status.textContent = isTester
+      ? `${prompts.length} prompt${prompts.length === 1 ? '' : 's'} generated in tester mode.`
+      : 'Today\'s beta prompt is ready.';
   });
 
+  testerCodeInput.value = '';
+  testerCodeInput.placeholder = isTester ? 'Tester mode unlocked' : 'Enter admin code';
+  unlockTesterButton.textContent = isTester ? 'Tester Mode Active' : 'Unlock Tester Mode';
+  unlockTesterButton.disabled = isTester;
+
+  syncPromptCountState();
   renderPromptCards(activeProject.dailyPromptHistory || []);
+
   if (!activeProject.dailyPromptHistory?.length) {
     resultsGrid.innerHTML = '<p>No prompts generated yet today.</p>';
   }

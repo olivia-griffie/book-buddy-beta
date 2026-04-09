@@ -9,6 +9,8 @@ window.initPage = async function ({ project }) {
   const editorShell = document.getElementById('character-editor-shell');
   const editorEmpty = document.getElementById('character-editor-empty');
   const createButton = document.getElementById('characters-create-project');
+  const imageInput = document.getElementById('character-image');
+  const imagePreview = document.getElementById('character-image-preview');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -43,6 +45,12 @@ window.initPage = async function ({ project }) {
     return characters.find((character) => character.id === selectedId) || null;
   }
 
+  function renderImagePreview(image) {
+    imagePreview.innerHTML = image
+      ? `<img src="${image}" alt="Character reference" />`
+      : '<span class="placeholder-icon">Portrait</span>';
+  }
+
   function renderList() {
     list.innerHTML = characters.length
       ? characters.map((character) => `
@@ -50,7 +58,7 @@ window.initPage = async function ({ project }) {
           <button type="button" data-open-character="${character.id}">
             <strong>${character.name || 'Unnamed Character'}</strong>
           </button>
-          <span>${character.desires ? 'Prompt ready' : 'Draft'}</span>
+          <span>${character.image ? 'Image ready' : character.desires ? 'Prompt ready' : 'Draft'}</span>
         </div>
       `).join('')
       : '<p>No characters yet.</p>';
@@ -69,6 +77,7 @@ window.initPage = async function ({ project }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       document.getElementById('character-editor-title').textContent = 'Select a character';
+      renderImagePreview('');
       return;
     }
 
@@ -78,6 +87,8 @@ window.initPage = async function ({ project }) {
     Object.entries(fields).forEach(([key, field]) => {
       field.value = character[key] || '';
     });
+    imageInput.value = '';
+    renderImagePreview(character.image || '');
   }
 
   function syncCharacter() {
@@ -94,10 +105,20 @@ window.initPage = async function ({ project }) {
     renderList();
   }
 
+  async function readImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('Unable to read the selected character image.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   addButton.addEventListener('click', () => {
     const character = {
       id: `character-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       name: `Character ${characters.length + 1}`,
+      image: '',
       appearance: '',
       background: '',
       secrets: '',
@@ -115,6 +136,23 @@ window.initPage = async function ({ project }) {
   });
 
   Object.values(fields).forEach((field) => field.addEventListener('input', syncCharacter));
+
+  imageInput.addEventListener('change', async (event) => {
+    const character = getSelectedCharacter();
+    const file = event.target.files?.[0];
+    if (!character || !file) {
+      return;
+    }
+
+    try {
+      character.image = await readImage(file);
+      renderImagePreview(character.image);
+      renderList();
+      saveMessage.textContent = '';
+    } catch (error) {
+      saveMessage.textContent = error.message;
+    }
+  });
 
   saveButton.addEventListener('click', async () => {
     const updatedProject = {

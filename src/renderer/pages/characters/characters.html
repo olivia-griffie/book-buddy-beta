@@ -37,6 +37,16 @@
       <div id="character-editor-shell" style="display: none;">
         <div class="entity-form-grid">
           <div class="field"><label for="character-name">Name</label><input id="character-name" type="text" /></div>
+          <div class="field">
+            <label for="character-image">Character Image</label>
+            <input id="character-image" type="file" accept="image/*" />
+          </div>
+          <div class="field field-full image-upload-card">
+            <label>Image Preview</label>
+            <div id="character-image-preview" class="image-upload-preview">
+              <span class="placeholder-icon">Portrait</span>
+            </div>
+          </div>
           <div class="field"><label for="character-appearance">Appearance</label><textarea id="character-appearance" rows="3"></textarea></div>
           <div class="field"><label for="character-background">Background</label><textarea id="character-background" rows="3"></textarea></div>
           <div class="field"><label for="character-secrets">Secrets</label><textarea id="character-secrets" rows="3"></textarea></div>

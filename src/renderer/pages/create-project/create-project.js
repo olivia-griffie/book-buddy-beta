@@ -9,7 +9,11 @@ window.initPage = async function () {
   const goalCaption = document.getElementById('project-goal-caption');
   const goalFill = document.getElementById('project-goal-fill');
   const goalIcon = document.getElementById('project-goal-icon');
+  const thumbnailInput = document.getElementById('project-thumbnail');
+  const thumbnailPreview = document.getElementById('project-thumbnail-preview');
   const { genrePrompts } = await window.getGenrePromptData();
+  const existingProjects = await window.api.getAllProjects();
+  let thumbnailData = '';
 
   const genres = [...new Set(genrePrompts.map((entry) => entry.genre))]
     .filter((genre) => {
@@ -37,6 +41,12 @@ window.initPage = async function () {
     });
   }
 
+  function renderThumbnailPreview() {
+    thumbnailPreview.innerHTML = thumbnailData
+      ? `<img src="${thumbnailData}" alt="Project thumbnail preview" />`
+      : '<span class="placeholder-icon">Book</span>';
+  }
+
   function syncGoalPreview() {
     const goal = Number(goalInput.value || 0);
     const currentWords = 0;
@@ -52,6 +62,23 @@ window.initPage = async function () {
     goalIcon.textContent = completed ? '✓' : '•';
   }
 
+  async function readThumbnail(file) {
+    if (!file) {
+      thumbnailData = '';
+      renderThumbnailPreview();
+      return;
+    }
+
+    thumbnailData = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+      reader.readAsDataURL(file);
+    });
+
+    renderThumbnailPreview();
+  }
+
   genreOptions.innerHTML = genres
     .map((genre) => `
       <label class="genre-option">
@@ -65,13 +92,31 @@ window.initPage = async function () {
     input.addEventListener('change', syncGenreSelectionState);
   });
 
+  thumbnailInput?.addEventListener('change', async (event) => {
+    formMessage.textContent = '';
+
+    try {
+      await readThumbnail(event.target.files?.[0]);
+    } catch (error) {
+      thumbnailData = '';
+      renderThumbnailPreview();
+      formMessage.textContent = error.message;
+    }
+  });
+
   syncGenreSelectionState();
   syncGoalPreview();
+  renderThumbnailPreview();
   goalInput.addEventListener('input', syncGoalPreview);
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     formMessage.textContent = '';
+
+    if (existingProjects.length >= 1) {
+      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or buy the full version when it releases to unlock multiple projects.';
+      return;
+    }
 
     const formData = new FormData(form);
     const selectedGenres = getSelectedGenres();
@@ -88,6 +133,7 @@ window.initPage = async function () {
       genres: selectedGenres,
       wordCountGoal: Number(formData.get('wordCountGoal') || 0),
       currentWordCount: 0,
+      thumbnail: thumbnailData,
       plotWorkbook: {},
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

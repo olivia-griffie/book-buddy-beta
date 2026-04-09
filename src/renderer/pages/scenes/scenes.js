@@ -9,7 +9,6 @@ window.initPage = async function ({ project }) {
   const editorShell = document.getElementById('scene-editor-shell');
   const editorEmpty = document.getElementById('scene-editor-empty');
   const createButton = document.getElementById('scenes-create-project');
-  const chapters = activeProject?.chapters || [];
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -19,6 +18,10 @@ window.initPage = async function ({ project }) {
     saveButton.style.display = 'none';
     return;
   }
+
+  const chapters = activeProject.chapters || [];
+  const imageInput = document.getElementById('scene-image');
+  const imagePreview = document.getElementById('scene-image-preview');
 
   emptyState.style.display = 'none';
   content.style.display = 'grid';
@@ -45,6 +48,12 @@ window.initPage = async function ({ project }) {
     return scenes.find((scene) => scene.id === selectedId) || null;
   }
 
+  function renderImagePreview(image) {
+    imagePreview.innerHTML = image
+      ? `<img src="${image}" alt="Scene reference" />`
+      : '<span class="placeholder-icon">Scene</span>';
+  }
+
   function renderList() {
     list.innerHTML = scenes.length
       ? scenes.map((scene) => `
@@ -52,7 +61,7 @@ window.initPage = async function ({ project }) {
           <button type="button" data-open-scene="${scene.id}">
             <strong>${scene.title || 'Untitled Scene'}</strong>
           </button>
-          <span>${scene.linkedChapterId ? 'Connected' : 'General'}</span>
+          <span>${scene.image ? 'Image ready' : scene.linkedChapterId ? 'Connected' : 'General'}</span>
         </div>
       `).join('')
       : '<p>No scenes yet.</p>';
@@ -71,6 +80,7 @@ window.initPage = async function ({ project }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       document.getElementById('scene-editor-title').textContent = 'Select a scene';
+      renderImagePreview('');
       return;
     }
 
@@ -82,6 +92,8 @@ window.initPage = async function ({ project }) {
     fields.linkedChapterId.value = scene.linkedChapterId || '';
     fields.summary.value = scene.summary || '';
     fields.other.value = scene.other || '';
+    imageInput.value = '';
+    renderImagePreview(scene.image || '');
   }
 
   function syncScene() {
@@ -99,10 +111,20 @@ window.initPage = async function ({ project }) {
     renderList();
   }
 
+  async function readImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('Unable to read the selected scene image.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   addButton.addEventListener('click', () => {
     const scene = {
       id: `scene-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       title: `Scene ${scenes.length + 1}`,
+      image: '',
       tags: [],
       linkedChapterId: '',
       summary: '',
@@ -118,6 +140,23 @@ window.initPage = async function ({ project }) {
   Object.values(fields).forEach((field) => {
     field.addEventListener('input', syncScene);
     field.addEventListener('change', syncScene);
+  });
+
+  imageInput.addEventListener('change', async (event) => {
+    const scene = getSelectedScene();
+    const file = event.target.files?.[0];
+    if (!scene || !file) {
+      return;
+    }
+
+    try {
+      scene.image = await readImage(file);
+      renderImagePreview(scene.image);
+      renderList();
+      saveMessage.textContent = '';
+    } catch (error) {
+      saveMessage.textContent = error.message;
+    }
   });
 
   saveButton.addEventListener('click', async () => {

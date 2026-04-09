@@ -291,6 +291,9 @@ window.saveProjectData = async function saveProjectData(project) {
   setCurrentProject(project);
   return project;
 };
+window.saveSettingsData = async function saveSettingsData(settings) {
+  return window.api.saveSettings(settings);
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (typeof window.renderSidebar === 'function') {

@@ -70,3 +70,12 @@ ipcMain.handle('projects:delete', (_, id) => {
 
 // IPC: Settings
 ipcMain.handle('settings:get', () => store.get('settings', { tier: 'beta' }));
+ipcMain.handle('settings:save', (_, settings) => {
+  const nextSettings = {
+    ...store.get('settings', { tier: 'beta' }),
+    ...settings,
+  };
+
+  store.set('settings', nextSettings);
+  return nextSettings;
+});

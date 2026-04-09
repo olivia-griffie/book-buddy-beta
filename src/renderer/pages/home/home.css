@@ -20,6 +20,12 @@
   max-width: 520px;
 }
 
+.beta-banner {
+  padding: 18px 20px;
+  background: #f8f2ea;
+  border: 1px solid var(--border-soft);
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -37,7 +43,28 @@
   box-shadow: var(--shadow-card);
 }
 
+.project-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.project-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-shrink: 0;
+  justify-content: start;
+}
+
+.project-card-actions .btn {
+  padding: 8px 12px;
+  font-size: 0.72rem;
+}
+
 .project-thumb {
+  flex: 1;
   height: 140px;
   border-radius: 14px;
   background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
