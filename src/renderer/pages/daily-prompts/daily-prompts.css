@@ -1,5 +1,26 @@
-.placeholder-page {
+.daily-prompts-page {
   display: grid;
-  gap: 12px;
-  max-width: 640px;
+  gap: 24px;
+}
+
+.daily-prompts-layout {
+  display: grid;
+  gap: 24px;
+}
+
+.prompt-controls-card,
+.prompt-results-card {
+  padding: 24px;
+}
+
+.daily-prompt-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: end;
+}
+
+.prompt-results-grid {
+  display: grid;
+  gap: 14px;
 }

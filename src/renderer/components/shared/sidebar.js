@@ -20,8 +20,12 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
   container.innerHTML = `
     <div class="sidebar">
       <div class="sidebar-brand">
-        <p class="sidebar-kicker">Book Buddy Beta</p>
-        <h2>Writer's Hub</h2>
+        <img
+          class="sidebar-brand-logo"
+          src="../../public/logo-full.png"
+          alt="Book Buddy"
+        />
+        <p class="sidebar-kicker">Writer's Hub</p>
         <p>${projectTitle}</p>
       </div>
       <nav class="sidebar-nav">

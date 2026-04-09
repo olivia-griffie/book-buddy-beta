@@ -1,5 +1,4 @@
-.placeholder-page {
+.entity-page {
   display: grid;
-  gap: 12px;
-  max-width: 640px;
+  gap: 24px;
 }

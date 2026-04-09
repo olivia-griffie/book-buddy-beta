@@ -47,10 +47,18 @@ body {
   gap: 8px;
 }
 
+.sidebar-brand-logo {
+  display: block;
+  width: 100%;
+  max-width: 188px;
+  height: auto;
+}
+
 .sidebar-kicker {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.78rem;
+  color: var(--ink-muted);
 }
 
 .sidebar-nav {

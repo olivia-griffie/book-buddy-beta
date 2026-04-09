@@ -1,5 +1,53 @@
-<section class="page placeholder-page">
-  <p class="eyebrow">Characters</p>
-  <h1>Character Builder</h1>
-  <p>This folder is ready for character cards and notes.</p>
+<section class="page entity-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Characters</p>
+      <h1 id="characters-page-title">Character Builder</h1>
+      <p>Create prompt-ready character profiles with motivations, secrets, and scene anchors.</p>
+    </div>
+    <button id="save-characters" class="btn btn-primary" type="button">Save Characters</button>
+  </div>
+
+  <div id="characters-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so character notes can be attached to your book.</p>
+    <button id="characters-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="characters-content" class="entity-layout" style="display: none;">
+    <section class="card entity-list-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Character List</p>
+          <h2>Cast</h2>
+        </div>
+        <button id="add-character" class="btn btn-ghost" type="button">Add Character</button>
+      </div>
+      <div id="characters-list" class="entity-list"></div>
+      <p id="characters-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card entity-editor-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Character Profile</p>
+          <h2 id="character-editor-title">Select a character</h2>
+        </div>
+      </div>
+      <div id="character-editor-shell" style="display: none;">
+        <div class="entity-form-grid">
+          <div class="field"><label for="character-name">Name</label><input id="character-name" type="text" /></div>
+          <div class="field"><label for="character-appearance">Appearance</label><textarea id="character-appearance" rows="3"></textarea></div>
+          <div class="field"><label for="character-background">Background</label><textarea id="character-background" rows="3"></textarea></div>
+          <div class="field"><label for="character-secrets">Secrets</label><textarea id="character-secrets" rows="3"></textarea></div>
+          <div class="field"><label for="character-desires">Desires</label><textarea id="character-desires" rows="3"></textarea></div>
+          <div class="field"><label for="character-chapter-intro">Chapter Intro</label><textarea id="character-chapter-intro" rows="3"></textarea></div>
+          <div class="field"><label for="character-death-scene">Death Scene</label><textarea id="character-death-scene" rows="3"></textarea></div>
+          <div class="field"><label for="character-romance-scenes">Romance Scenes</label><textarea id="character-romance-scenes" rows="3"></textarea></div>
+          <div class="field field-full"><label for="character-other">Other</label><textarea id="character-other" rows="4"></textarea></div>
+        </div>
+      </div>
+      <div id="character-editor-empty" class="editor-empty">Pick a character from the left, or add a new one.</div>
+    </section>
+  </div>
 </section>

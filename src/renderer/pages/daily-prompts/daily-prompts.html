@@ -1,5 +1,55 @@
-<section class="page placeholder-page">
-  <p class="eyebrow">Daily Prompts</p>
-  <h1>Writing Prompt Generator</h1>
-  <p>This folder is ready for the daily challenge experience.</p>
+<section class="page daily-prompts-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Daily Prompts</p>
+      <h1 id="daily-prompts-title">Writing Prompt Generator</h1>
+      <p>Pick how many prompts you want today, then choose sequential order or wild style.</p>
+    </div>
+    <button id="generate-prompts" class="btn btn-primary" type="button">Generate Prompts</button>
+  </div>
+
+  <div id="daily-prompts-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so prompts can be matched to your genres and story notes.</p>
+    <button id="daily-prompts-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="daily-prompts-content" class="daily-prompts-layout" style="display: none;">
+    <section class="card prompt-controls-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Prompt Controls</p>
+          <h2>Today's Setup</h2>
+        </div>
+      </div>
+      <div class="daily-prompt-controls">
+        <div class="field">
+          <label for="prompt-count">Prompt Count</label>
+          <select id="prompt-count">
+            <option value="1">1 prompt</option>
+            <option value="3" selected>3 prompts</option>
+            <option value="5">5 prompts</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="prompt-mode">Prompt Style</label>
+          <select id="prompt-mode">
+            <option value="sequential">Sequential Order</option>
+            <option value="wild">Wild Style</option>
+          </select>
+        </div>
+      </div>
+      <p id="daily-prompts-status" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card prompt-results-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Prompt Results</p>
+          <h2>Today's Writing Sprint</h2>
+        </div>
+      </div>
+      <div id="prompt-results-grid" class="prompt-results-grid"></div>
+    </section>
+  </div>
 </section>

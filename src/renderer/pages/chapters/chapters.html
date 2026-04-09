@@ -1,5 +1,100 @@
-<section class="page placeholder-page">
-  <p class="eyebrow">Chapters</p>
-  <h1>Chapter Workspace</h1>
-  <p>This page is being prepared for chapter planning and drafting.</p>
+<section class="page chapters-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Chapters</p>
+      <h1 id="chapters-page-title">Chapter Workspace</h1>
+      <p id="chapters-page-subtitle">Build chapters for each plot section and track word-count goals as you draft.</p>
+    </div>
+    <button id="save-chapters" class="btn btn-primary" type="button">Save Chapters</button>
+  </div>
+
+  <div id="chapters-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create and plot a project first so the chapter page has sections to build from.</p>
+    <button id="chapters-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="chapters-content" class="chapters-layout" style="display: none;">
+    <section class="card plot-sections-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Plot Areas</p>
+          <h2>Section Targets</h2>
+        </div>
+      </div>
+      <div id="plot-sections-list" class="plot-sections-list"></div>
+      <p id="chapters-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card chapter-editor-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Chapter Editor</p>
+          <h2 id="chapter-editor-title">Select a chapter</h2>
+        </div>
+      </div>
+
+      <div id="chapter-editor-shell" style="display: none;">
+        <div class="chapter-form-grid">
+          <div class="field">
+            <label for="chapter-title">Chapter Title</label>
+            <input id="chapter-title" type="text" />
+          </div>
+          <div class="field">
+            <label for="chapter-section">Plot Section</label>
+            <select id="chapter-section"></select>
+          </div>
+          <div class="field">
+            <label for="chapter-target-words">Chapter Target Words</label>
+            <input id="chapter-target-words" type="number" min="0" step="100" />
+          </div>
+          <div class="field">
+            <label for="chapter-font-family">Font Style</label>
+            <select id="chapter-font-family">
+              <option value="serif">Serif</option>
+              <option value="sans-serif">Sans Serif</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-font-size">Font Size</label>
+            <select id="chapter-font-size">
+              <option value="16">16</option>
+              <option value="18">18</option>
+              <option value="20">20</option>
+              <option value="22">22</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-current-words">Current Words</label>
+            <input id="chapter-current-words" type="text" readonly />
+          </div>
+        </div>
+
+        <div class="goal-progress-card chapter-progress-card">
+          <div class="goal-progress-head">
+            <div id="chapter-progress-icon" class="progress-status-icon" aria-hidden="true">•</div>
+            <div>
+              <div class="goal-progress-meta">
+                <span id="chapter-progress-percent" class="goal-progress-percent">0%</span>
+                <span id="chapter-progress-state" class="goal-progress-state">in progress</span>
+              </div>
+              <p id="chapter-progress-caption" class="goal-progress-caption">0 of 0 words</p>
+            </div>
+          </div>
+          <div class="goal-progress-track">
+            <div id="chapter-progress-fill" class="goal-progress-fill"></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="chapter-content">Draft</label>
+          <textarea id="chapter-content" rows="18"></textarea>
+        </div>
+      </div>
+
+      <div id="chapter-editor-empty" class="editor-empty">
+        Pick a chapter from the left, or add a new one inside a plot section.
+      </div>
+    </section>
+  </div>
 </section>

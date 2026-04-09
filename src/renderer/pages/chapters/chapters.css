@@ -1,5 +1,82 @@
-.placeholder-page {
+.chapters-page {
   display: grid;
+  gap: 24px;
+}
+
+.chapters-layout {
+  display: grid;
+  grid-template-columns: minmax(340px, 430px) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.plot-sections-card,
+.chapter-editor-card {
+  padding: 24px;
+}
+
+.plot-sections-list {
+  display: grid;
+  gap: 14px;
+}
+
+.plot-section-item {
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  background: #fffdfa;
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.plot-section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
   gap: 12px;
-  max-width: 640px;
+}
+
+.plot-section-head h3 {
+  font-size: 1.15rem;
+}
+
+.chapter-list {
+  display: grid;
+  gap: 8px;
+}
+
+.chapter-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  padding: 12px;
+  background: white;
+}
+
+.chapter-open {
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chapter-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.chapter-progress-card {
+  margin-bottom: 18px;
+  max-width: 620px;
+}
+
+#chapter-content {
+  min-height: 420px;
+  resize: vertical;
 }

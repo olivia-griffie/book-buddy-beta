@@ -1,5 +1,52 @@
-<section class="page placeholder-page">
-  <p class="eyebrow">Locations</p>
-  <h1>Worldbuilding</h1>
-  <p>This folder is ready for location entries and setting notes.</p>
+<section class="page entity-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Locations</p>
+      <h1 id="locations-page-title">Worldbuilding</h1>
+      <p>Define places and conditions that can shape scenes, prompts, and story atmosphere.</p>
+    </div>
+    <button id="save-locations" class="btn btn-primary" type="button">Save Locations</button>
+  </div>
+
+  <div id="locations-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so worldbuilding notes can be attached to your book.</p>
+    <button id="locations-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="locations-content" class="entity-layout" style="display: none;">
+    <section class="card entity-list-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Location List</p>
+          <h2>World Entries</h2>
+        </div>
+        <button id="add-location" class="btn btn-ghost" type="button">Add Location</button>
+      </div>
+      <div id="locations-list" class="entity-list"></div>
+      <p id="locations-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card entity-editor-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Location Profile</p>
+          <h2 id="location-editor-title">Select a location</h2>
+        </div>
+      </div>
+      <div id="location-editor-shell" style="display: none;">
+        <div class="entity-form-grid">
+          <div class="field"><label for="location-name">Name</label><input id="location-name" type="text" /></div>
+          <div class="field"><label for="location-type">Type</label><select id="location-type"><option>Country</option><option>Planet</option><option>Time</option><option>Space</option><option>City</option><option>Town</option><option>Water</option><option>General Area</option></select></div>
+          <div class="field"><label for="location-temperature">Temperature</label><input id="location-temperature" type="text" /></div>
+          <div class="field"><label for="location-climate">Climate</label><input id="location-climate" type="text" /></div>
+          <div class="field"><label for="location-season">Season</label><input id="location-season" type="text" /></div>
+          <div class="field"><label for="location-time-of-day">Time Of Day</label><input id="location-time-of-day" type="text" /></div>
+          <div class="field"><label for="location-social-dynamic">Social Dynamic</label><input id="location-social-dynamic" type="text" /></div>
+          <div class="field field-full"><label for="location-other">Other</label><textarea id="location-other" rows="4"></textarea></div>
+        </div>
+      </div>
+      <div id="location-editor-empty" class="editor-empty">Pick a location from the left, or add a new one.</div>
+    </section>
+  </div>
 </section>

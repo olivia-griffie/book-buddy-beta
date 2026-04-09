@@ -1,5 +1,49 @@
-<section class="page placeholder-page">
-  <p class="eyebrow">Scenes</p>
-  <h1>Scene Planner</h1>
-  <p>This folder is ready for scene tracking and chapter linking.</p>
+<section class="page entity-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Scenes</p>
+      <h1 id="scenes-page-title">Scene Planner</h1>
+      <p>Store scene ideas and connect them to chapters for future reference.</p>
+    </div>
+    <button id="save-scenes" class="btn btn-primary" type="button">Save Scenes</button>
+  </div>
+
+  <div id="scenes-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so scene notes can be attached to your book.</p>
+    <button id="scenes-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="scenes-content" class="entity-layout" style="display: none;">
+    <section class="card entity-list-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Scene List</p>
+          <h2>Scene Bank</h2>
+        </div>
+        <button id="add-scene" class="btn btn-ghost" type="button">Add Scene</button>
+      </div>
+      <div id="scenes-list" class="entity-list"></div>
+      <p id="scenes-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card entity-editor-card">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Scene Details</p>
+          <h2 id="scene-editor-title">Select a scene</h2>
+        </div>
+      </div>
+      <div id="scene-editor-shell" style="display: none;">
+        <div class="entity-form-grid">
+          <div class="field"><label for="scene-title">Title</label><input id="scene-title" type="text" /></div>
+          <div class="field"><label for="scene-tags">Tags</label><input id="scene-tags" type="text" placeholder="comma, separated, tags" /></div>
+          <div class="field"><label for="scene-linked-chapter">Linked Chapter</label><select id="scene-linked-chapter"></select></div>
+          <div class="field field-full"><label for="scene-summary">Summary</label><textarea id="scene-summary" rows="4"></textarea></div>
+          <div class="field field-full"><label for="scene-other">Other</label><textarea id="scene-other" rows="4"></textarea></div>
+        </div>
+      </div>
+      <div id="scene-editor-empty" class="editor-empty">Pick a scene from the left, or add a new one.</div>
+    </section>
+  </div>
 </section>
