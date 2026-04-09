@@ -54,6 +54,38 @@ function setApplicationMenu() {
   Menu.setApplicationMenu(buildMenu());
 }
 
+function buildTextContextMenu(mainWindow, params = {}) {
+  const canEdit = params.isEditable;
+  const hasSelection = Boolean(params.selectionText);
+  const spellingSuggestions = (params.dictionarySuggestions || []).slice(0, 5).map((suggestion) => ({
+    label: suggestion,
+    click: () => {
+      mainWindow.webContents.replaceMisspelling(suggestion);
+    },
+  }));
+  const template = [
+    ...spellingSuggestions,
+    ...(spellingSuggestions.length ? [{ type: 'separator' }] : []),
+    { role: 'undo', enabled: canEdit },
+    { role: 'redo', enabled: canEdit },
+    { type: 'separator' },
+    { role: 'cut', enabled: canEdit && hasSelection },
+    { role: 'copy', enabled: hasSelection },
+    { role: 'paste', enabled: canEdit },
+    { role: 'selectAll', enabled: canEdit || hasSelection },
+  ];
+
+  if (params.misspelledWord && !spellingSuggestions.length) {
+    template.unshift(
+      { label: 'No suggestions found', enabled: false },
+      { type: 'separator' },
+    );
+  }
+
+  return Menu.buildFromTemplate(template);
+}
+
 module.exports = {
   setApplicationMenu,
+  buildTextContextMenu,
 };

@@ -86,7 +86,7 @@ window.initPage = async function () {
             <div class="project-genres">${genres}</div>
             <div class="project-progress goal-progress-card">
               <div class="goal-progress-head">
-                <div class="progress-status-icon ${completed ? 'is-complete' : ''}">${completed ? '✓' : '•'}</div>
+                <div class="progress-status-icon ${completed ? 'is-complete' : ''}">${completed ? 'OK' : '...'}</div>
                 <div>
                   <div class="goal-progress-meta">
                     <span class="goal-progress-percent">${pct}%</span>
@@ -97,6 +97,15 @@ window.initPage = async function () {
               </div>
               <div class="goal-progress-track">
                 <div class="goal-progress-fill ${completed ? 'is-complete' : ''}" style="width:${pct}%"></div>
+              </div>
+              <div class="project-goal-editor">
+                <div class="project-goal-editor-row">
+                  <div class="field">
+                    <label for="goal-${project.id}">Word Count Goal</label>
+                    <input id="goal-${project.id}" type="number" min="0" step="100" value="${project.wordCountGoal || 0}" data-goal-input="${project.id}" />
+                  </div>
+                  <button class="btn btn-ghost" type="button" data-save-goal="${project.id}">Update Goal</button>
+                </div>
               </div>
             </div>
           </div>
@@ -181,6 +190,32 @@ window.initPage = async function () {
       };
 
       await window.saveProjectData(updatedProject);
+      await window.navigate('home');
+    });
+  });
+
+  grid.querySelectorAll('[data-save-goal]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const projectId = button.dataset.saveGoal;
+      const project = allProjects.find((entry) => entry.id === projectId);
+      const input = grid.querySelector(`[data-goal-input="${projectId}"]`);
+      if (!project || !input) {
+        return;
+      }
+
+      const wordCountGoal = Math.max(0, Number(input.value || 0));
+      const updatedProject = {
+        ...project,
+        wordCountGoal,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await window.saveProjectData(updatedProject);
+      betaBanner.style.display = 'block';
+      betaBanner.innerHTML = `
+        <p class="eyebrow">Project Updated</p>
+        <p>Your word count goal is now ${wordCountGoal.toLocaleString()} words.</p>
+      `;
       await window.navigate('home');
     });
   });

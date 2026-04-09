@@ -35,7 +35,6 @@ window.initPage = async function ({ project }) {
     specificPrompts,
     hybridGuides,
   });
-  const selectedGenres = resources.selectedGenres;
   const hybridPromptSection = document.getElementById('hybrid-prompts-section');
   const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');
 
@@ -85,28 +84,6 @@ window.initPage = async function ({ project }) {
   } else {
     hybridPromptSection.style.display = 'none';
   }
-
-  const genreSections = document.getElementById('genre-beat-sections');
-  genreSections.innerHTML = resources.genreTracks
-    .map((track) => {
-      const beats = track.beats;
-      const prompts = track.prompts;
-      const cards = buildBeatCards(beats, prompts);
-
-      return `
-        <section class="genre-section">
-          <div class="genre-section-header">
-            <div>
-              <p class="eyebrow">Genre Track</p>
-              <h2>${track.genre}</h2>
-            </div>
-            <span class="genre-pill">${beats.length} beats</span>
-          </div>
-          <div class="beat-grid">${cards}</div>
-        </section>
-      `;
-    })
-    .join('');
 
   saveButton.addEventListener('click', async () => {
     const updatedProject = {

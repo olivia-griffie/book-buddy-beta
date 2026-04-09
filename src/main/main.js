@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
-const { setApplicationMenu } = require('./menu');
+const { setApplicationMenu, buildTextContextMenu } = require('./menu');
 
 const store = new Store();
 let mainWindow;
@@ -19,10 +19,22 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
+      spellcheck: true,
     },
   });
 
+  mainWindow.webContents.session.setSpellCheckerLanguages(['en-US']);
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+
+  mainWindow.webContents.on('context-menu', (event, params) => {
+    if (!params.isEditable && !params.selectionText && !params.misspelledWord) {
+      return;
+    }
+
+    buildTextContextMenu(mainWindow, params).popup({
+      window: mainWindow,
+    });
+  });
 
   if (process.argv.includes('--dev')) {
     mainWindow.webContents.openDevTools();
