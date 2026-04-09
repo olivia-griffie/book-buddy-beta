@@ -1,0 +1,59 @@
+const { app, BrowserWindow, ipcMain } = require('electron');
+const path = require('path');
+const Store = require('electron-store');
+
+const store = new Store();
+let mainWindow;
+
+function createWindow() {
+  mainWindow = new BrowserWindow({
+    width: 1280,
+    height: 800,
+    minWidth: 900,
+    minHeight: 600,
+    titleBarStyle: 'hiddenInset',
+    backgroundColor: '#faf7f2',
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      contextIsolation: true,
+      nodeIntegration: false,
+    },
+  });
+
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+
+  if (process.argv.includes('--dev')) {
+    mainWindow.webContents.openDevTools();
+  }
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') app.quit();
+});
+
+// ── IPC: Projects ─────────────────────────────────────────────────────────────
+ipcMain.handle('projects:getAll', () => store.get('projects', []));
+
+ipcMain.handle('projects:save', (_, project) => {
+  const projects = store.get('projects', []);
+  const idx = projects.findIndex(p => p.id === project.id);
+  if (idx >= 0) projects[idx] = project;
+  else projects.push(project);
+  store.set('projects', projects);
+  return project;
+});
+
+ipcMain.handle('projects:delete', (_, id) => {
+  const projects = store.get('projects', []).filter(p => p.id !== id);
+  store.set('projects', projects);
+});
+
+// ── IPC: Settings ─────────────────────────────────────────────────────────────
+ipcMain.handle('settings:get', () => store.get('settings', { tier: 'beta' }));

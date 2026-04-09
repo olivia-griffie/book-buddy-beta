@@ -1,0 +1,50 @@
+{
+  "name": "book-buddy-beta",
+  "version": "1.0.0-beta",
+  "description": "Book Buddy Beta – Manuscript organization and daily writing challenge app",
+  "main": "src/main/main.js",
+  "author": "Olivia Griffie",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:all": "electron-builder --mac --win",
+    "pack": "electron-builder --dir"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "build": {
+    "appId": "com.oliviagriffie.bookbuddybeta",
+    "productName": "Book Buddy Beta",
+    "directories": {
+      "buildResources": "public",
+      "output": "releases"
+    },
+    "files": [
+      "src/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "public/icon.icns",
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "icon": "public/icon.ico",
+      "target": ["nsis", "portable"]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
