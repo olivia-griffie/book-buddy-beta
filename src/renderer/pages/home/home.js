@@ -14,6 +14,15 @@ window.initPage = async function () {
     `;
   }
 
+  async function readImage(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('Unable to read the selected thumbnail image.'));
+      reader.readAsDataURL(file);
+    });
+  }
+
   function handleNewProject() {
     if (visibleProjects.length >= 1) {
       showCreateLimitMessage();
@@ -58,7 +67,14 @@ window.initPage = async function () {
       return `
         <div class="project-card" data-id="${project.id}">
           <div class="project-card-head">
-            <div class="project-thumb">${thumb}</div>
+            <div>
+              <div class="project-thumb">${thumb}</div>
+              <div class="project-thumb-actions">
+                <button class="btn btn-ghost" type="button" data-change-thumbnail="${project.id}">${project.thumbnail ? 'Change Thumbnail' : 'Upload Thumbnail'}</button>
+                <button class="btn btn-ghost" type="button" data-remove-thumbnail="${project.id}" ${project.thumbnail ? '' : 'disabled'}>Remove Thumbnail</button>
+                <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
+              </div>
+            </div>
             <div class="project-card-actions">
               <button class="btn btn-ghost" type="button" data-open-project="${project.id}">Open</button>
               <button class="btn btn-ghost" type="button" data-delete-project="${project.id}">Delete</button>
@@ -106,6 +122,65 @@ window.initPage = async function () {
         window.setCurrentProject(null);
       }
 
+      await window.navigate('home');
+    });
+  });
+
+  grid.querySelectorAll('[data-change-thumbnail]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const input = grid.querySelector(`[data-thumbnail-input="${button.dataset.changeThumbnail}"]`);
+      input?.click();
+    });
+  });
+
+  grid.querySelectorAll('[data-thumbnail-input]').forEach((input) => {
+    input.addEventListener('change', async (event) => {
+      const projectId = event.currentTarget.dataset.thumbnailInput;
+      const file = event.currentTarget.files?.[0];
+      if (!file) {
+        return;
+      }
+
+      const project = allProjects.find((entry) => entry.id === projectId);
+      if (!project) {
+        return;
+      }
+
+      try {
+        const thumbnail = await readImage(file);
+        const updatedProject = {
+          ...project,
+          thumbnail,
+          updatedAt: new Date().toISOString(),
+        };
+
+        await window.saveProjectData(updatedProject);
+        await window.navigate('home');
+      } catch (error) {
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = `
+          <p class="eyebrow">Thumbnail Error</p>
+          <p>${error.message}</p>
+        `;
+      }
+    });
+  });
+
+  grid.querySelectorAll('[data-remove-thumbnail]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const projectId = button.dataset.removeThumbnail;
+      const project = allProjects.find((entry) => entry.id === projectId);
+      if (!project) {
+        return;
+      }
+
+      const updatedProject = {
+        ...project,
+        thumbnail: '',
+        updatedAt: new Date().toISOString(),
+      };
+
+      await window.saveProjectData(updatedProject);
       await window.navigate('home');
     });
   });

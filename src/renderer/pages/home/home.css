@@ -63,6 +63,16 @@
   font-size: 0.72rem;
 }
 
+.project-thumb-actions {
+  display: grid;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.project-thumb-actions .btn {
+  width: 100%;
+}
+
 .project-thumb {
   flex: 1;
   height: 140px;
