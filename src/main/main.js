@@ -3,6 +3,10 @@ const path = require('path');
 const Store = require('electron-store');
 const { setApplicationMenu, buildTextContextMenu } = require('./menu');
 
+const contextMenu = require('electron-context-menu');
+
+contextMenu();
+
 const store = new Store();
 let mainWindow;
 

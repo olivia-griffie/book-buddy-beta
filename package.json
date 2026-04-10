@@ -15,10 +15,11 @@
     "pack": "electron-builder --dir"
   },
   "devDependencies": {
-    "electron": "^29.0.0",
-    "electron-builder": "^24.0.0"
+    "electron": "^41.2.0",
+    "electron-builder": "^26.8.1"
   },
   "dependencies": {
+    "electron-context-menu": "^4.1.2",
     "electron-store": "^8.1.0"
   },
   "build": {
@@ -36,11 +37,17 @@
     "mac": {
       "category": "public.app-category.productivity",
       "icon": "public/icon.icns",
-      "target": ["dmg", "zip"]
+      "target": [
+        "dmg",
+        "zip"
+      ]
     },
     "win": {
       "icon": "public/icon.ico",
-      "target": ["nsis", "portable"]
+      "target": [
+        "nsis",
+        "portable"
+      ]
     },
     "nsis": {
       "oneClick": false,
