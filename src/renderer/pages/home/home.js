@@ -1,16 +1,50 @@
 window.initPage = async function () {
   const allProjects = await window.api.getAllProjects();
-  const visibleProjects = allProjects.slice(0, 1);
+  const settings = await window.api.getSettings();
+  const isAdminMode = Boolean(settings.betaTesterUnlocked);
+  const visibleProjects = isAdminMode ? allProjects : allProjects.slice(0, 1);
   const grid = document.getElementById('projects-grid');
   const empty = document.getElementById('empty-state');
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
+  const ADMIN_OVERRIDE_CODE = 'Tester';
 
   function showCreateLimitMessage() {
     betaBanner.style.display = 'block';
     betaBanner.innerHTML = `
       <p class="eyebrow">Beta Limit</p>
       <p>Book Buddy Beta includes one project slot for now. Delete your current project to start a different one, or buy the full version on release to unlock multiple projects.</p>
+      <div class="admin-banner-row">
+        <div class="field">
+          <label for="home-admin-code">Admin Key</label>
+          <input id="home-admin-code" type="password" placeholder="Enter admin key" />
+        </div>
+        <button id="unlock-home-admin" class="btn btn-ghost" type="button">Unlock Admin Mode</button>
+      </div>
+    `;
+
+    const input = document.getElementById('home-admin-code');
+    const button = document.getElementById('unlock-home-admin');
+    button?.addEventListener('click', async () => {
+      const code = String(input?.value || '').trim();
+      if (code !== ADMIN_OVERRIDE_CODE) {
+        betaBanner.innerHTML = `
+          <p class="eyebrow">Admin Key</p>
+          <p>That admin key did not unlock project override mode.</p>
+        `;
+        return;
+      }
+
+      await window.saveSettingsData({ betaTesterUnlocked: true });
+      await window.navigate('home');
+    });
+  }
+
+  function showAdminModeMessage() {
+    betaBanner.style.display = 'block';
+    betaBanner.innerHTML = `
+      <p class="eyebrow">Admin Mode</p>
+      <p>Admin mode is active on this device. Multiple project slots are available for testing.</p>
     `;
   }
 
@@ -24,7 +58,7 @@ window.initPage = async function () {
   }
 
   function handleNewProject() {
-    if (visibleProjects.length >= 1) {
+    if (!isAdminMode && visibleProjects.length >= 1) {
       showCreateLimitMessage();
       return;
     }
@@ -41,13 +75,18 @@ window.initPage = async function () {
   if (!visibleProjects.length) {
     grid.style.display = 'none';
     empty.style.display = 'block';
-    betaBanner.style.display = 'none';
+    betaBanner.style.display = isAdminMode ? 'block' : 'none';
+    if (isAdminMode) {
+      showAdminModeMessage();
+    }
     return;
   }
 
   empty.style.display = 'none';
-  betaBanner.style.display = allProjects.length >= 1 ? 'block' : 'none';
-  if (betaBanner.style.display === 'block') {
+  betaBanner.style.display = (isAdminMode || allProjects.length >= 1) ? 'block' : 'none';
+  if (betaBanner.style.display === 'block' && isAdminMode) {
+    showAdminModeMessage();
+  } else if (betaBanner.style.display === 'block') {
     showCreateLimitMessage();
   }
 
@@ -67,17 +106,13 @@ window.initPage = async function () {
       return `
         <div class="project-card" data-id="${project.id}">
           <div class="project-card-head">
-            <div>
+            <div class="project-media">
               <div class="project-thumb">${thumb}</div>
               <div class="project-thumb-actions">
-                <button class="btn btn-ghost" type="button" data-change-thumbnail="${project.id}">${project.thumbnail ? 'Change Thumbnail' : 'Upload Thumbnail'}</button>
-                <button class="btn btn-ghost" type="button" data-remove-thumbnail="${project.id}" ${project.thumbnail ? '' : 'disabled'}>Remove Thumbnail</button>
+                <button class="project-thumb-icon-btn" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}" aria-label="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}">Import</button>
+                <button class="project-thumb-icon-btn project-thumb-icon-btn-danger" type="button" data-remove-thumbnail="${project.id}" title="Remove thumbnail" aria-label="Remove thumbnail" ${project.thumbnail ? '' : 'disabled'}>X</button>
                 <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
               </div>
-            </div>
-            <div class="project-card-actions">
-              <button class="btn btn-ghost" type="button" data-open-project="${project.id}">Open</button>
-              <button class="btn btn-ghost" type="button" data-delete-project="${project.id}">Delete</button>
             </div>
           </div>
           <div class="project-info">
@@ -90,7 +125,7 @@ window.initPage = async function () {
                 <div>
                   <div class="goal-progress-meta">
                     <span class="goal-progress-percent">${pct}%</span>
-                    <span class="goal-progress-state">${completed ? 'Completed' : 'in progress'}</span>
+                    <span class="goal-progress-state">${completed ? 'Completed' : 'done'}</span>
                   </div>
                   <p class="goal-progress-caption">${(project.currentWordCount || 0).toLocaleString()} of ${(project.wordCountGoal || 0).toLocaleString()} words</p>
                 </div>
@@ -99,23 +134,54 @@ window.initPage = async function () {
                 <div class="goal-progress-fill ${completed ? 'is-complete' : ''}" style="width:${pct}%"></div>
               </div>
               <div class="project-goal-editor">
-                <div class="project-goal-editor-row">
-                  <div class="field">
-                    <label for="goal-${project.id}">Word Count Goal</label>
-                    <input id="goal-${project.id}" type="number" min="0" step="100" value="${project.wordCountGoal || 0}" data-goal-input="${project.id}" />
+                <div class="project-goal-summary">
+                  <div class="project-goal-copy">
+                    <span class="project-goal-label">Word Count Goal</span>
+                    <span class="project-goal-value">${(project.wordCountGoal || 0).toLocaleString()} words</span>
                   </div>
-                  <button class="btn btn-ghost" type="button" data-save-goal="${project.id}">Update Goal</button>
+                  <button class="btn btn-ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit</button>
+                </div>
+                <div class="project-goal-editor-panel">
+                  <div class="project-goal-editor-row">
+                    <div class="field">
+                      <label for="goal-${project.id}">Update Goal</label>
+                      <input id="goal-${project.id}" type="number" min="0" step="100" value="${project.wordCountGoal || 0}" data-goal-input="${project.id}" />
+                    </div>
+                    <button class="btn btn-sage-soft" type="button" data-save-goal="${project.id}">Update Goal</button>
+                  </div>
                 </div>
               </div>
             </div>
+          </div>
+          <div class="project-card-actions">
+            <button class="btn btn-ghost" type="button" data-open-project="${project.id}">Open</button>
+            <button class="btn btn-ghost" type="button" data-export-project="${project.id}">Export</button>
+            <button class="btn btn-danger-soft" type="button" data-delete-project="${project.id}">Delete</button>
           </div>
         </div>
       `;
     })
     .join('');
 
+  grid.querySelectorAll('.project-card').forEach((card) => {
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('button, input, label')) {
+        return;
+      }
+
+      const project = allProjects.find((entry) => entry.id === card.dataset.id);
+      if (!project) {
+        return;
+      }
+
+      window.showProjectNav(true);
+      window.navigate('plot-creation', { project });
+    });
+  });
+
   grid.querySelectorAll('[data-open-project]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       const project = allProjects.find((entry) => entry.id === button.dataset.openProject);
       window.showProjectNav(true);
       window.navigate('plot-creation', { project });
@@ -123,8 +189,19 @@ window.initPage = async function () {
   });
 
   grid.querySelectorAll('[data-delete-project]').forEach((button) => {
-    button.addEventListener('click', async () => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
       const projectId = button.dataset.deleteProject;
+      const project = allProjects.find((entry) => entry.id === projectId);
+      if (!project) {
+        return;
+      }
+
+      const confirmed = window.confirm(`Delete "${project.title || 'this project'}"? This cannot be undone.`);
+      if (!confirmed) {
+        return;
+      }
+
       await window.api.deleteProject(projectId);
 
       if (window.getCurrentProject()?.id === projectId) {
@@ -135,8 +212,48 @@ window.initPage = async function () {
     });
   });
 
+  grid.querySelectorAll('[data-export-project]').forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      const project = allProjects.find((entry) => entry.id === button.dataset.exportProject);
+      if (!project) {
+        return;
+      }
+
+      if (typeof window.api?.exportProjectManuscript !== 'function') {
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = `
+          <p class="eyebrow">Export</p>
+          <p>Export is not available in the current app session. Restart Book Buddy Beta and try again.</p>
+        `;
+        return;
+      }
+
+      try {
+        const result = await window.api.exportProjectManuscript(project);
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = result?.canceled
+          ? `
+            <p class="eyebrow">Export</p>
+            <p>Export canceled.</p>
+          `
+          : `
+            <p class="eyebrow">Export Complete</p>
+            <p>Your book was exported as ${result.format?.toUpperCase()} to ${result.filePath}.</p>
+          `;
+      } catch (error) {
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = `
+          <p class="eyebrow">Export Failed</p>
+          <p>${error?.message || 'Please restart the app and try again.'}</p>
+        `;
+      }
+    });
+  });
+
   grid.querySelectorAll('[data-change-thumbnail]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       const input = grid.querySelector(`[data-thumbnail-input="${button.dataset.changeThumbnail}"]`);
       input?.click();
     });
@@ -144,6 +261,7 @@ window.initPage = async function () {
 
   grid.querySelectorAll('[data-thumbnail-input]').forEach((input) => {
     input.addEventListener('change', async (event) => {
+      event.stopPropagation();
       const projectId = event.currentTarget.dataset.thumbnailInput;
       const file = event.currentTarget.files?.[0];
       if (!file) {
@@ -176,7 +294,8 @@ window.initPage = async function () {
   });
 
   grid.querySelectorAll('[data-remove-thumbnail]').forEach((button) => {
-    button.addEventListener('click', async () => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
       const projectId = button.dataset.removeThumbnail;
       const project = allProjects.find((entry) => entry.id === projectId);
       if (!project) {
@@ -194,8 +313,20 @@ window.initPage = async function () {
     });
   });
 
+  grid.querySelectorAll('[data-toggle-goal]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const panel = button.closest('.project-goal-editor')?.querySelector('.project-goal-editor-panel');
+      panel?.classList.toggle('is-open');
+      if (panel?.classList.contains('is-open')) {
+        panel.querySelector('[data-goal-input]')?.focus();
+      }
+    });
+  });
+
   grid.querySelectorAll('[data-save-goal]').forEach((button) => {
-    button.addEventListener('click', async () => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
       const projectId = button.dataset.saveGoal;
       const project = allProjects.find((entry) => entry.id === projectId);
       const input = grid.querySelector(`[data-goal-input="${projectId}"]`);
@@ -217,6 +348,23 @@ window.initPage = async function () {
         <p>Your word count goal is now ${wordCountGoal.toLocaleString()} words.</p>
       `;
       await window.navigate('home');
+    });
+  });
+
+  grid.querySelectorAll('[data-goal-input]').forEach((input) => {
+    input.addEventListener('click', (event) => {
+      event.stopPropagation();
+    });
+
+    input.addEventListener('keydown', async (event) => {
+      if (event.key !== 'Enter') {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      const saveButton = grid.querySelector(`[data-save-goal="${event.currentTarget.dataset.goalInput}"]`);
+      await saveButton?.click();
     });
   });
 };

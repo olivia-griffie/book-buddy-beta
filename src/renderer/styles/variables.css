@@ -5,12 +5,12 @@
   --ink-muted: #8b8075;
   --sage: #7d9b76;
   --sage-light: #97b28f;
-  --border: #d3c7ba;
-  --border-soft: #e8dfd4;
-  --shadow-card: 0 14px 30px rgba(47, 38, 31, 0.06);
+  --border: #cfc3b5;
+  --border-soft: #ddd4c8;
+  --shadow-card: 0 16px 34px rgba(47, 38, 31, 0.08);
   --shadow-lift: 0 18px 32px rgba(47, 38, 31, 0.12);
-  --radius-sm: 10px;
-  --radius-md: 18px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
   --space-sm: 8px;
   --space-md: 16px;
   --space-lg: 24px;

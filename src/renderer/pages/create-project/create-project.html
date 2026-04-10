@@ -10,7 +10,14 @@
   <form id="create-project-form" class="project-form card">
     <section class="beta-note">
       <p class="eyebrow">Beta Access</p>
-      <p>Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.</p>
+      <p id="project-slot-note">Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.</p>
+      <div class="admin-unlock-row">
+        <div class="field">
+          <label for="project-admin-code">Admin Key</label>
+          <input id="project-admin-code" type="password" placeholder="Enter admin key" />
+        </div>
+        <button id="unlock-project-admin" class="btn btn-ghost" type="button">Unlock Admin Mode</button>
+      </div>
     </section>
 
     <div class="form-grid">
@@ -21,6 +28,10 @@
       <div class="field">
         <label for="project-subtitle">Subtitle or Hook</label>
         <input id="project-subtitle" name="subtitle" type="text" maxlength="160" />
+      </div>
+      <div class="field">
+        <label for="project-author-name">Author Name</label>
+        <input id="project-author-name" name="authorName" type="text" maxlength="120" />
       </div>
       <div class="field">
         <label for="project-goal">Word Count Goal</label>

@@ -1,3 +1,90 @@
-.editor-shell {
-  min-height: 320px;
+.rich-text-source[hidden] {
+  display: none !important;
+}
+
+.rich-text-editor {
+  display: grid;
+  gap: 10px;
+}
+
+.rich-text-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: #f8f2ea;
+}
+
+.rich-text-toolbar-main,
+.rich-text-toolbar-advanced {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.rich-text-toolbar-advanced {
+  display: none;
+}
+
+.rich-text-toolbar.is-expanded .rich-text-toolbar-advanced {
+  display: flex;
+}
+
+.rich-text-btn,
+.rich-text-select {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  color: var(--ink);
+  font: inherit;
+}
+
+.rich-text-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  cursor: pointer;
+}
+
+.rich-text-select {
+  height: 34px;
+  padding: 0 10px;
+  width: auto;
+}
+
+.rich-text-btn-toggle {
+  min-width: 40px;
+  font-weight: 600;
+}
+
+.rich-text-editor-shell {
+  min-height: 140px;
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  outline: none;
+  overflow-wrap: anywhere;
+}
+
+.rich-text-editor-shell:focus {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.15);
+}
+
+.rich-text-editor-shell p,
+.rich-text-editor-shell ul,
+.rich-text-editor-shell ol {
+  margin: 0 0 0.8em;
+}
+
+.rich-text-editor-shell p:last-child,
+.rich-text-editor-shell ul:last-child,
+.rich-text-editor-shell ol:last-child {
+  margin-bottom: 0;
 }

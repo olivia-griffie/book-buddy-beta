@@ -5,7 +5,10 @@
       <h1 id="chapters-page-title">Chapter Workspace</h1>
       <p id="chapters-page-subtitle">Build chapters for each plot section and track word-count goals as you draft.</p>
     </div>
-    <button id="save-chapters" class="btn btn-primary" type="button">Save Chapters</button>
+    <div class="page-header-actions">
+      <button id="export-chapters" class="btn btn-ghost" type="button">Export Book</button>
+      <button id="save-chapters" class="btn btn-primary" type="button">Save Chapters</button>
+    </div>
   </div>
 
   <div id="chapters-empty-state" class="empty-state card" style="display: none;">
@@ -58,10 +61,23 @@
           <div class="field">
             <label for="chapter-font-size">Font Size</label>
             <select id="chapter-font-size">
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
               <option value="16">16</option>
               <option value="18">18</option>
               <option value="20">20</option>
               <option value="22">22</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-line-height">Line Spacing</label>
+            <select id="chapter-line-height">
+              <option value="1.2">1.2</option>
+              <option value="1.4">1.4</option>
+              <option value="1.6" selected>1.6</option>
+              <option value="1.8">1.8</option>
+              <option value="2">2.0</option>
             </select>
           </div>
           <div class="field">

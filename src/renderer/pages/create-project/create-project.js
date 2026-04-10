@@ -1,8 +1,12 @@
 window.initPage = async function () {
+  const ADMIN_OVERRIDE_CODE = 'Tester';
   const form = document.getElementById('create-project-form');
   const genreOptions = document.getElementById('genre-options');
   const genreCount = document.getElementById('genre-count');
   const formMessage = document.getElementById('form-message');
+  const projectSlotNote = document.getElementById('project-slot-note');
+  const adminCodeInput = document.getElementById('project-admin-code');
+  const unlockAdminButton = document.getElementById('unlock-project-admin');
   const goalInput = document.getElementById('project-goal');
   const goalPercent = document.getElementById('project-goal-percent');
   const goalState = document.getElementById('project-goal-state');
@@ -13,6 +17,8 @@ window.initPage = async function () {
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
   const { genrePrompts } = await window.getGenrePromptData();
   const existingProjects = await window.api.getAllProjects();
+  const settings = await window.api.getSettings();
+  let isAdminMode = Boolean(settings.betaTesterUnlocked);
   let thumbnailData = '';
 
   const genres = [...new Set(genrePrompts.map((entry) => entry.genre))]
@@ -45,6 +51,17 @@ window.initPage = async function () {
     thumbnailPreview.innerHTML = thumbnailData
       ? `<img src="${thumbnailData}" alt="Project thumbnail preview" />`
       : '<span class="placeholder-icon">Book</span>';
+  }
+
+  function syncAdminState() {
+    projectSlotNote.textContent = isAdminMode
+      ? 'Admin mode is active. You can create multiple projects while testing.'
+      : 'Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.';
+    adminCodeInput.value = '';
+    adminCodeInput.placeholder = isAdminMode ? 'Admin mode unlocked' : 'Enter admin key';
+    adminCodeInput.disabled = isAdminMode;
+    unlockAdminButton.textContent = isAdminMode ? 'Admin Mode Active' : 'Unlock Admin Mode';
+    unlockAdminButton.disabled = isAdminMode;
   }
 
   function syncGoalPreview() {
@@ -107,13 +124,27 @@ window.initPage = async function () {
   syncGenreSelectionState();
   syncGoalPreview();
   renderThumbnailPreview();
+  syncAdminState();
   goalInput.addEventListener('input', syncGoalPreview);
+
+  unlockAdminButton?.addEventListener('click', async () => {
+    const code = String(adminCodeInput.value || '').trim();
+    if (code !== ADMIN_OVERRIDE_CODE) {
+      formMessage.textContent = 'That admin key did not unlock project override mode.';
+      return;
+    }
+
+    await window.saveSettingsData({ betaTesterUnlocked: true });
+    isAdminMode = true;
+    formMessage.textContent = 'Admin mode unlocked. Multiple project slots are now available on this device.';
+    syncAdminState();
+  });
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     formMessage.textContent = '';
 
-    if (existingProjects.length >= 1) {
+    if (!isAdminMode && existingProjects.length >= 1) {
       formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or buy the full version when it releases to unlock multiple projects.';
       return;
     }
@@ -130,6 +161,7 @@ window.initPage = async function () {
       id: `project-${Date.now()}`,
       title: String(formData.get('title') || '').trim(),
       subtitle: String(formData.get('subtitle') || '').trim(),
+      authorName: String(formData.get('authorName') || '').trim(),
       genres: selectedGenres,
       wordCountGoal: Number(formData.get('wordCountGoal') || 0),
       currentWordCount: 0,

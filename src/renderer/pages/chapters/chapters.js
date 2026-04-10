@@ -3,6 +3,7 @@ window.initPage = async function ({ project }) {
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
+  const exportButton = document.getElementById('export-chapters');
   const createButton = document.getElementById('chapters-create-project');
   const sectionsList = document.getElementById('plot-sections-list');
   const saveMessage = document.getElementById('chapters-save-message');
@@ -13,6 +14,7 @@ window.initPage = async function ({ project }) {
   const targetWordsInput = document.getElementById('chapter-target-words');
   const fontFamilyInput = document.getElementById('chapter-font-family');
   const fontSizeInput = document.getElementById('chapter-font-size');
+  const lineHeightInput = document.getElementById('chapter-line-height');
   const currentWordsInput = document.getElementById('chapter-current-words');
   const contentInput = document.getElementById('chapter-content');
   const chapterProgressPercent = document.getElementById('chapter-progress-percent');
@@ -27,12 +29,14 @@ window.initPage = async function ({ project }) {
     emptyState.style.display = 'grid';
     content.style.display = 'none';
     saveButton.style.display = 'none';
+    exportButton.style.display = 'none';
     return;
   }
 
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = activeProject.title || 'Chapter Workspace';
   document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
 
@@ -42,10 +46,24 @@ window.initPage = async function ({ project }) {
   const chapters = (activeProject.chapters || []).map((chapter) => ({
     fontFamily: 'serif',
     fontSize: 18,
+    lineHeight: 1.6,
     ...chapter,
   }));
 
   let selectedChapterId = chapters[0]?.id || '';
+
+  function getNextChapterNumber() {
+    const explicitNumbers = chapters
+      .map((chapter) => {
+        const match = String(chapter.title || '').match(/chapter\s+(\d+)/i);
+        return match ? Number(match[1]) : 0;
+      })
+      .filter(Boolean);
+
+    return explicitNumbers.length
+      ? Math.max(...explicitNumbers) + 1
+      : chapters.length + 1;
+  }
 
   function getSelectedChapter() {
     return chapters.find((chapter) => chapter.id === selectedChapterId) || null;
@@ -67,10 +85,21 @@ window.initPage = async function ({ project }) {
   }
 
   function applyEditorStyles() {
-    contentInput.style.fontFamily = fontFamilyInput.value === 'serif'
+    const fontFamily = fontFamilyInput.value === 'serif'
       ? "Georgia, 'Times New Roman', serif"
       : "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+    if (contentInput._richText) {
+      contentInput._richText.setPreferences({
+        fontFamily,
+        fontSize: fontSizeInput.value,
+        lineHeight: lineHeightInput.value,
+      });
+      return;
+    }
+
+    contentInput.style.fontFamily = fontFamily;
     contentInput.style.fontSize = `${fontSizeInput.value}px`;
+    contentInput.style.lineHeight = lineHeightInput.value;
   }
 
   function populateSectionSelect() {
@@ -96,7 +125,9 @@ window.initPage = async function ({ project }) {
     targetWordsInput.value = chapter.targetWords || 0;
     fontFamilyInput.value = chapter.fontFamily || 'serif';
     fontSizeInput.value = String(chapter.fontSize || 18);
+    lineHeightInput.value = String(chapter.lineHeight || 1.6);
     contentInput.value = chapter.content || '';
+    window.refreshTextEditor(contentInput, chapter.content || '');
 
     const currentWords = window.computeWordCount(chapter.content || '');
     currentWordsInput.value = currentWords.toLocaleString();
@@ -131,9 +162,18 @@ window.initPage = async function ({ project }) {
                 ? sectionChapters
                   .map((chapter) => `
                     <div class="chapter-row">
-                      <button class="chapter-open" type="button" data-open-chapter="${chapter.id}">
-                        <strong>${chapter.title || 'Untitled Chapter'}</strong>
-                      </button>
+                      <div class="chapter-row-main">
+                        <button class="chapter-open" type="button" data-open-chapter="${chapter.id}">
+                          Open
+                        </button>
+                        <input
+                          class="chapter-title-inline"
+                          type="text"
+                          value="${chapter.title || ''}"
+                          placeholder="Chapter title"
+                          data-title-chapter="${chapter.id}"
+                        />
+                      </div>
                       <span>${window.computeWordCount(chapter.content || '')} words</span>
                     </div>
                   `)
@@ -157,19 +197,41 @@ window.initPage = async function ({ project }) {
     sectionsList.querySelectorAll('[data-open-chapter]').forEach((button) => {
       button.addEventListener('click', () => {
         selectedChapterId = button.dataset.openChapter;
+        renderSections();
         renderEditor();
+      });
+    });
+
+    sectionsList.querySelectorAll('[data-title-chapter]').forEach((input) => {
+      input.addEventListener('input', () => {
+        const chapter = chapters.find((entry) => entry.id === input.dataset.titleChapter);
+        if (!chapter) {
+          return;
+        }
+
+        chapter.title = input.value.trim();
+        if (chapter.id === selectedChapterId) {
+          document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
+          titleInput.value = chapter.title || '';
+        }
+      });
+
+      input.addEventListener('click', (event) => {
+        event.stopPropagation();
       });
     });
 
     sectionsList.querySelectorAll('.add-chapter').forEach((button) => {
       button.addEventListener('click', () => {
+        const nextChapterNumber = getNextChapterNumber();
         const newChapter = {
           id: `chapter-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
-          title: `New Chapter ${chapters.length + 1}`,
+          title: `Chapter ${nextChapterNumber}`,
           sectionId: button.dataset.section,
           targetWords: 0,
           fontFamily: 'serif',
           fontSize: 18,
+          lineHeight: 1.6,
           content: '',
         };
 
@@ -192,7 +254,8 @@ window.initPage = async function ({ project }) {
     chapter.targetWords = Number(targetWordsInput.value || 0);
     chapter.fontFamily = fontFamilyInput.value;
     chapter.fontSize = Number(fontSizeInput.value || 18);
-    chapter.content = contentInput.value;
+    chapter.lineHeight = Number(lineHeightInput.value || 1.6);
+    chapter.content = window.getEditorFieldValue(contentInput);
 
     const currentWords = window.computeWordCount(chapter.content);
     currentWordsInput.value = currentWords.toLocaleString();
@@ -215,11 +278,33 @@ window.initPage = async function ({ project }) {
     };
   }
 
+  async function exportProjectBook() {
+    if (typeof window.api?.exportProjectManuscript !== 'function') {
+      saveMessage.textContent = 'Export is not available in the current app session. Restart Book Buddy Beta and try again.';
+      return;
+    }
+
+    try {
+      const updatedProject = buildProjectPayload();
+      const result = await window.api.exportProjectManuscript(updatedProject);
+
+      if (result?.canceled) {
+        saveMessage.textContent = 'Export canceled.';
+        return;
+      }
+
+      saveMessage.textContent = `Book exported as ${result.format?.toUpperCase()} to ${result.filePath}.`;
+    } catch (error) {
+      saveMessage.textContent = error?.message || 'Export failed. Please try again after restarting the app.';
+    }
+  }
+
+  window.initializeTextEditor(document.getElementById('chapters-content'));
   populateSectionSelect();
   renderSections();
   renderEditor();
 
-  [titleInput, sectionSelect, targetWordsInput, fontFamilyInput, fontSizeInput, contentInput].forEach((field) => {
+  [titleInput, sectionSelect, targetWordsInput, fontFamilyInput, fontSizeInput, lineHeightInput, contentInput].forEach((field) => {
     field.addEventListener('input', syncSelectedChapter);
   });
 
@@ -227,5 +312,9 @@ window.initPage = async function ({ project }) {
     const updatedProject = buildProjectPayload();
     await window.saveProjectData(updatedProject);
     saveMessage.textContent = 'Chapters saved.';
+  });
+
+  exportButton.addEventListener('click', async () => {
+    await exportProjectBook();
   });
 };

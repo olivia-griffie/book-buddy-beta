@@ -4,6 +4,7 @@ window.initPage = async function ({ project }) {
   const content = document.getElementById('characters-content');
   const saveButton = document.getElementById('save-characters');
   const addButton = document.getElementById('add-character');
+  const gallery = document.getElementById('characters-gallery');
   const list = document.getElementById('characters-list');
   const saveMessage = document.getElementById('characters-save-message');
   const editorShell = document.getElementById('character-editor-shell');
@@ -25,6 +26,7 @@ window.initPage = async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   document.getElementById('characters-page-title').textContent = `${activeProject.title || 'Project'} Characters`;
+  window.initializeTextEditor(content);
 
   const characters = (activeProject.characters || []).map((character) => ({ ...character }));
   let selectedId = characters[0]?.id || '';
@@ -52,6 +54,24 @@ window.initPage = async function ({ project }) {
   }
 
   function renderList() {
+    gallery.innerHTML = characters.length
+      ? characters.map((character) => `
+        <button
+          class="character-gallery-card ${character.id === selectedId ? 'is-active' : ''}"
+          type="button"
+          data-gallery-character="${character.id}"
+        >
+          <div class="character-gallery-thumb">
+            ${character.image
+              ? `<img src="${character.image}" alt="${character.name || 'Character'}" />`
+              : '<span class="placeholder-icon">Portrait</span>'}
+          </div>
+          <div class="character-gallery-name">${character.name || 'Unnamed Character'}</div>
+          <div class="character-gallery-status">${character.image ? 'Image Ready' : character.desires ? 'Prompt Ready' : 'Draft'}</div>
+        </button>
+      `).join('')
+      : '';
+
     list.innerHTML = characters.length
       ? characters.map((character) => `
         <div class="entity-list-item">
@@ -66,6 +86,15 @@ window.initPage = async function ({ project }) {
     list.querySelectorAll('[data-open-character]').forEach((button) => {
       button.addEventListener('click', () => {
         selectedId = button.dataset.openCharacter;
+        renderList();
+        renderEditor();
+      });
+    });
+
+    gallery.querySelectorAll('[data-gallery-character]').forEach((button) => {
+      button.addEventListener('click', () => {
+        selectedId = button.dataset.galleryCharacter;
+        renderList();
         renderEditor();
       });
     });
@@ -86,6 +115,7 @@ window.initPage = async function ({ project }) {
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
     Object.entries(fields).forEach(([key, field]) => {
       field.value = character[key] || '';
+      window.refreshTextEditor(field, field.value);
     });
     imageInput.value = '';
     renderImagePreview(character.image || '');
@@ -98,7 +128,7 @@ window.initPage = async function ({ project }) {
     }
 
     Object.entries(fields).forEach(([key, field]) => {
-      character[key] = field.value.trim();
+      character[key] = String(window.getEditorFieldValue(field) || '').trim();
     });
 
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';

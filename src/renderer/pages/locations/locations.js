@@ -23,6 +23,7 @@ window.initPage = async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   document.getElementById('locations-page-title').textContent = `${activeProject.title || 'Project'} Locations`;
+  window.initializeTextEditor(content);
 
   const locations = (activeProject.locations || []).map((location) => ({ ...location }));
   let selectedId = locations[0]?.id || '';
@@ -76,6 +77,7 @@ window.initPage = async function ({ project }) {
     document.getElementById('location-editor-title').textContent = location.name || 'Location Profile';
     Object.entries(fields).forEach(([key, field]) => {
       field.value = location[key] || (key === 'type' ? 'Country' : '');
+      window.refreshTextEditor(field, field.value);
     });
   }
 
@@ -86,7 +88,7 @@ window.initPage = async function ({ project }) {
     }
 
     Object.entries(fields).forEach(([key, field]) => {
-      location[key] = field.value.trim();
+      location[key] = String(window.getEditorFieldValue(field) || '').trim();
     });
 
     document.getElementById('location-editor-title').textContent = location.name || 'Location Profile';

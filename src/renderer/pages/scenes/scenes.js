@@ -27,6 +27,7 @@ window.initPage = async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   document.getElementById('scenes-page-title').textContent = `${activeProject.title || 'Project'} Scenes`;
+  window.initializeTextEditor(content);
 
   const scenes = (activeProject.scenes || []).map((scene) => ({ ...scene }));
   let selectedId = scenes[0]?.id || '';
@@ -92,6 +93,8 @@ window.initPage = async function ({ project }) {
     fields.linkedChapterId.value = scene.linkedChapterId || '';
     fields.summary.value = scene.summary || '';
     fields.other.value = scene.other || '';
+    window.refreshTextEditor(fields.summary, fields.summary.value);
+    window.refreshTextEditor(fields.other, fields.other.value);
     imageInput.value = '';
     renderImagePreview(scene.image || '');
   }
@@ -105,8 +108,8 @@ window.initPage = async function ({ project }) {
     scene.title = fields.title.value.trim();
     scene.tags = fields.tags.value.split(',').map((tag) => tag.trim()).filter(Boolean);
     scene.linkedChapterId = fields.linkedChapterId.value;
-    scene.summary = fields.summary.value.trim();
-    scene.other = fields.other.value.trim();
+    scene.summary = String(window.getEditorFieldValue(fields.summary) || '').trim();
+    scene.other = String(window.getEditorFieldValue(fields.other) || '').trim();
     document.getElementById('scene-editor-title').textContent = scene.title || 'Scene Details';
     renderList();
   }

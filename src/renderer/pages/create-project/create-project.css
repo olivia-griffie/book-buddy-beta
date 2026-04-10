@@ -23,6 +23,18 @@
   gap: 8px;
 }
 
+.admin-unlock-row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.admin-unlock-row .field {
+  flex: 1;
+  min-width: 220px;
+}
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -37,6 +49,9 @@
 .thumbnail-preview-card {
   display: grid;
   gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
 }
 
 .thumbnail-preview-head p {

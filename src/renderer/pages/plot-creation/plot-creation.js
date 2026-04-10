@@ -8,6 +8,7 @@ window.initPage = async function ({ project }) {
   const premiseInput = document.getElementById('plot-premise');
   const stakesInput = document.getElementById('plot-stakes');
   const notesInput = document.getElementById('plot-notes');
+  const workbookGrid = document.querySelector('.workbook-grid');
 
   createProjectButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -28,6 +29,30 @@ window.initPage = async function ({ project }) {
   premiseInput.value = workbook.premise || '';
   stakesInput.value = workbook.stakes || '';
   notesInput.value = workbook.notes || '';
+  window.initializeTextEditor(content);
+  [premiseInput, stakesInput, notesInput].forEach((field) => window.refreshTextEditor(field, field.value));
+
+  function syncWorkbookLayout() {
+    const premiseValue = window.getEditorFieldValue(premiseInput).trim();
+    const stakesValue = window.getEditorFieldValue(stakesInput).trim();
+    workbookGrid?.classList.toggle('has-secondary-column', Boolean(premiseValue && stakesValue));
+  }
+
+  function syncAutoHeight(textarea) {
+    if (!textarea || textarea._richText) {
+      return;
+    }
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+
+  syncAutoHeight(notesInput);
+  notesInput?.addEventListener('input', () => syncAutoHeight(notesInput));
+  [premiseInput, stakesInput, notesInput].forEach((field) => {
+    field?.addEventListener('input', syncWorkbookLayout);
+  });
+  syncWorkbookLayout();
 
   const { genrePrompts, specificPrompts, hybridGuides } = await window.getGenrePromptData();
   const resources = window.getProjectResources(activeProject, {
@@ -90,14 +115,15 @@ window.initPage = async function ({ project }) {
       ...activeProject,
       plotSections: resources.plotSections,
       plotWorkbook: {
-        premise: premiseInput.value.trim(),
-        stakes: stakesInput.value.trim(),
-        notes: notesInput.value.trim(),
+        premise: window.getEditorFieldValue(premiseInput),
+        stakes: window.getEditorFieldValue(stakesInput),
+        notes: window.getEditorFieldValue(notesInput),
       },
       updatedAt: new Date().toISOString(),
     };
 
     await window.saveProjectData(updatedProject);
     saveMessage.textContent = 'Plot notes saved.';
+    syncWorkbookLayout();
   });
 };

@@ -2,3 +2,60 @@
   display: grid;
   gap: 24px;
 }
+
+.character-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.character-gallery-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  background: #fffdfa;
+  cursor: pointer;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.character-gallery-card:hover,
+.character-gallery-card.is-active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--sage-light);
+}
+
+.character-gallery-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
+  border: 1px solid var(--border-soft);
+}
+
+.character-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.character-gallery-name {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.character-gallery-status {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}

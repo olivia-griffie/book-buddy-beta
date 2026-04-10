@@ -26,7 +26,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
           alt="Book Buddy"
         />
         <p class="sidebar-kicker">Writer's Hub</p>
-        <p>${projectTitle}</p>
+        <p>Book Selected: ${projectTitle}</p>
       </div>
       <nav class="sidebar-nav">
         ${sidebarItems

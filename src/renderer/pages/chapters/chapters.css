@@ -3,6 +3,12 @@
   gap: 24px;
 }
 
+.page-header-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .chapters-layout {
   display: grid;
   grid-template-columns: minmax(340px, 430px) minmax(0, 1fr);
@@ -55,13 +61,27 @@
   background: white;
 }
 
+.chapter-row-main {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
 .chapter-open {
-  border: none;
-  background: transparent;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: #f7f1e7;
   color: var(--ink);
   font: inherit;
-  text-align: left;
+  padding: 6px 12px;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.chapter-title-inline {
+  flex: 1;
+  min-width: 0;
 }
 
 .chapter-form-grid {

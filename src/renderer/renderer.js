@@ -107,7 +107,14 @@ function dedupeBy(items, keyBuilder) {
 }
 
 function computeWordCount(text = '') {
-  const trimmed = text.trim();
+  const normalized = String(text || '').includes('<')
+    ? (() => {
+      const temp = document.createElement('div');
+      temp.innerHTML = String(text || '');
+      return temp.textContent || temp.innerText || '';
+    })()
+    : String(text || '');
+  const trimmed = normalized.trim();
   return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 

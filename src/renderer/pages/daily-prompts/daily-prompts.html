@@ -5,7 +5,6 @@
       <h1 id="daily-prompts-title">Writing Prompt Generator</h1>
       <p>Beta users receive one prompt per day. Enter the tester code if you need to preview the expanded prompt generator.</p>
     </div>
-    <button id="generate-prompts" class="btn btn-primary" type="button">Generate Prompts</button>
   </div>
 
   <div id="daily-prompts-empty-state" class="empty-state card" style="display: none;">
@@ -19,7 +18,7 @@
       <div class="section-heading">
         <div>
           <p class="eyebrow">Prompt Controls</p>
-          <h2>Today's Setup</h2>
+          <h2 class="card-heading">Today's Setup</h2>
         </div>
       </div>
       <div class="daily-prompt-controls">
@@ -46,6 +45,9 @@
         </div>
         <button id="unlock-tester-mode" class="btn btn-ghost" type="button">Unlock Tester Mode</button>
       </div>
+      <div class="prompt-controls-actions">
+        <button id="generate-prompts" class="btn btn-primary" type="button">Generate Prompts</button>
+      </div>
       <p id="daily-prompts-status" class="form-message" aria-live="polite"></p>
     </section>
 
@@ -53,7 +55,22 @@
       <div class="section-heading">
         <div>
           <p class="eyebrow">Prompt Results</p>
-          <h2>Today's Writing Sprint</h2>
+          <h2 class="card-heading">Today's Writing Sprint</h2>
+        </div>
+      </div>
+      <div id="daily-prompts-progress" class="goal-progress-card daily-prompts-progress-card max-620" style="display: none;">
+        <div class="goal-progress-head">
+          <div id="daily-prompts-progress-icon" class="progress-status-icon" aria-hidden="true">...</div>
+          <div>
+            <div class="goal-progress-meta">
+              <span id="daily-prompts-progress-percent" class="goal-progress-percent">0%</span>
+              <span id="daily-prompts-progress-state" class="goal-progress-state">not started</span>
+            </div>
+            <p id="daily-prompts-progress-caption" class="goal-progress-caption">0 of 0 prompts completed</p>
+          </div>
+        </div>
+        <div class="goal-progress-track">
+          <div id="daily-prompts-progress-fill" class="goal-progress-fill"></div>
         </div>
       </div>
       <div id="prompt-results-grid" class="prompt-results-grid"></div>
