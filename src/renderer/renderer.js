@@ -301,6 +301,60 @@ window.saveProjectData = async function saveProjectData(project) {
 window.saveSettingsData = async function saveSettingsData(settings) {
   return window.api.saveSettings(settings);
 };
+window.runButtonFeedback = async function runButtonFeedback(button, task, options = {}) {
+  if (typeof task !== 'function') {
+    throw new Error('runButtonFeedback requires a task function.');
+  }
+
+  if (!button) {
+    return task();
+  }
+
+  if (!button.dataset.baseLabel) {
+    button.dataset.baseLabel = button.textContent.trim();
+  }
+
+  const baseLabel = button.dataset.baseLabel;
+  const successDuration = Number(options.successDuration || 900);
+
+  function render(state) {
+    if (state === 'idle') {
+      button.innerHTML = `<span>${baseLabel}</span>`;
+      return;
+    }
+
+    if (state === 'loading') {
+      button.innerHTML = `
+        <span class="btn-feedback-icon is-spinner" aria-hidden="true"></span>
+        <span>${baseLabel}</span>
+      `;
+      return;
+    }
+
+    if (state === 'success') {
+      button.innerHTML = `
+        <span class="btn-feedback-icon is-check" aria-hidden="true"></span>
+        <span>${baseLabel}</span>
+      `;
+    }
+  }
+
+  button.disabled = true;
+  button.dataset.feedbackState = 'loading';
+  render('loading');
+
+  try {
+    const result = await task();
+    button.dataset.feedbackState = 'success';
+    render('success');
+    await new Promise((resolve) => setTimeout(resolve, successDuration));
+    return result;
+  } finally {
+    button.disabled = false;
+    button.dataset.feedbackState = 'idle';
+    render('idle');
+  }
+};
 
 document.addEventListener('DOMContentLoaded', async () => {
   if (typeof window.renderSidebar === 'function') {

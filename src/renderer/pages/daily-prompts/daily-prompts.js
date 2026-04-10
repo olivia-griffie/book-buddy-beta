@@ -46,6 +46,8 @@ window.initPage = async function ({ project }) {
         ...entry,
         id: entry.id || `daily-prompt-legacy-${Date.now()}-${index}`,
         assignedChapterId: entry.assignedChapterId || '',
+        answer: entry.answer || '',
+        answerInsertedAt: entry.answerInsertedAt || '',
       })),
       updatedAt: new Date().toISOString(),
     });
@@ -103,18 +105,36 @@ window.initPage = async function ({ project }) {
   }
 
   function buildCompletionSnapshot(entry) {
-    const completed = hasPromptBeenCompleted(entry);
+    const completed = hasPromptBeenCompleted(entry) || Boolean(entry.answerInsertedAt);
     const percent = completed ? 100 : 0;
     return {
       completed,
       percent,
-      state: completed ? 'completed' : entry.assignedChapterId ? 'added to chapter' : 'not added',
+      state: completed ? 'completed' : entry.assignedChapterId ? 'assigned to chapter' : 'not assigned',
       caption: completed
-        ? 'Prompt found in the linked chapter.'
+        ? 'Answer has been inserted into the linked chapter.'
         : entry.assignedChapterId
-          ? 'Waiting for this prompt text to appear in the linked chapter.'
-          : 'Choose a chapter and add this prompt to start writing.',
+          ? 'Write your answer and insert it into the linked chapter.'
+          : 'Choose a chapter to start writing against this prompt.',
     };
+  }
+
+  function appendPromptAnswerToChapter(chapter, answerValue) {
+    const parsedChapter = window.parseRichTextValue(chapter.content || '');
+    const parsedAnswer = window.parseRichTextValue(answerValue || '');
+    const textOnly = (() => {
+      const temp = document.createElement('div');
+      temp.innerHTML = parsedAnswer.html || '';
+      return (temp.textContent || temp.innerText || '').trim();
+    })();
+
+    if (!textOnly) {
+      return false;
+    }
+
+    const nextHtml = `${parsedChapter.html || '<p><br></p>'}${parsedAnswer.html || ''}`;
+    chapter.content = window.serializeRichTextValue(nextHtml, parsedChapter.settings || {});
+    return true;
   }
 
   function renderBatchProgress(entries) {
@@ -145,6 +165,10 @@ window.initPage = async function ({ project }) {
           <p class="genre-pill">${entry.genre}</p>
           <p class="prompt-callout">${entry.prompt}</p>
           <p>${entry.context || 'Use this anywhere in the draft.'}</p>
+          <div class="daily-prompt-answer">
+            <label for="prompt-answer-${entry.id}">Your Answer</label>
+            <textarea id="prompt-answer-${entry.id}" data-prompt-answer="${entry.id}" rows="5">${entry.answer || ''}</textarea>
+          </div>
           <div class="daily-prompt-actions">
             <div class="field">
               <label for="prompt-chapter-${entry.id}">Add To Chapter</label>
@@ -157,9 +181,12 @@ window.initPage = async function ({ project }) {
                 `).join('')}
               </select>
             </div>
-            <button class="btn btn-ghost" type="button" data-add-prompt="${entry.id}" ${getChapters().length ? '' : 'disabled'}>
-              Add To Chapter
-            </button>
+            <div class="daily-prompt-editor-actions">
+              <button class="btn btn-ghost" type="button" data-save-prompt-answer="${entry.id}">Save Answer</button>
+              <button class="btn btn-primary" type="button" data-add-prompt="${entry.id}" ${getChapters().length ? '' : 'disabled'}>
+                Insert Into Chapter
+              </button>
+            </div>
           </div>
           <div class="daily-prompt-progress">
             <div class="goal-progress-track">
@@ -172,6 +199,14 @@ window.initPage = async function ({ project }) {
         </article>
       `).join('')
       : '<p>No prompts found for this project yet.</p>';
+
+    window.initializeTextEditor(resultsGrid);
+    entries.forEach((entry) => {
+      const answerField = resultsGrid.querySelector(`[data-prompt-answer="${entry.id}"]`);
+      if (answerField) {
+        window.refreshTextEditor(answerField, entry.answer || '');
+      }
+    });
 
     renderBatchProgress(entries);
 
@@ -207,18 +242,12 @@ window.initPage = async function ({ project }) {
           return;
         }
 
-        const marker = `Daily Prompt: ${promptEntry.prompt}`;
-        const existingValue = String(chapters[chapterIndex].content || '');
-        const parsed = window.parseRichTextValue(existingValue);
-        const textOnly = (() => {
-          const temp = document.createElement('div');
-          temp.innerHTML = parsed.html || '';
-          return temp.textContent || temp.innerText || '';
-        })();
-
-        if (!textOnly.includes(marker)) {
-          const nextHtml = `${parsed.html || '<p><br></p>'}<p>${marker}</p>`;
-          chapters[chapterIndex].content = window.serializeRichTextValue(nextHtml, parsed.settings || {});
+        const answerField = resultsGrid.querySelector(`[data-prompt-answer="${promptEntry.id}"]`);
+        promptEntry.answer = window.getEditorFieldValue(answerField);
+        const inserted = appendPromptAnswerToChapter(chapters[chapterIndex], promptEntry.answer);
+        if (!inserted) {
+          status.textContent = 'Write an answer before inserting it into a chapter.';
+          return;
         }
 
         const nextHistory = getDailyHistory().map((entry) => (
@@ -226,7 +255,8 @@ window.initPage = async function ({ project }) {
             ? {
               ...entry,
               assignedChapterId: promptEntry.assignedChapterId,
-              insertedAt: new Date().toISOString(),
+              answer: promptEntry.answer,
+              answerInsertedAt: new Date().toISOString(),
             }
             : entry
         ));
@@ -242,9 +272,26 @@ window.initPage = async function ({ project }) {
           updatedAt: new Date().toISOString(),
         });
 
-        status.textContent = hasPromptBeenCompleted(nextHistory.find((entry) => entry.id === promptEntry.id))
-          ? 'Prompt added to the selected chapter and marked completed.'
-          : 'Prompt added to the selected chapter. Completion will verify once it appears in the draft.';
+        status.textContent = 'Prompt answer inserted into the selected chapter.';
+        renderPromptCards(getDailyHistory());
+      });
+    });
+
+    resultsGrid.querySelectorAll('[data-save-prompt-answer]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const promptEntry = getDailyHistory().find((entry) => entry.id === button.dataset.savePromptAnswer);
+        const answerField = resultsGrid.querySelector(`[data-prompt-answer="${button.dataset.savePromptAnswer}"]`);
+        if (!promptEntry || !answerField) {
+          return;
+        }
+
+        promptEntry.answer = window.getEditorFieldValue(answerField);
+        activeProject = await window.saveProjectData({
+          ...activeProject,
+          dailyPromptHistory: getDailyHistory(),
+          updatedAt: new Date().toISOString(),
+        });
+        status.textContent = 'Prompt answer saved.';
         renderPromptCards(getDailyHistory());
       });
     });
@@ -275,6 +322,8 @@ window.initPage = async function ({ project }) {
       ...entry,
       context: getContextLabel(index),
       assignedChapterId: '',
+      answer: '',
+      answerInsertedAt: '',
     }));
   }
 

@@ -7,8 +7,8 @@
   --sage-light: #97b28f;
   --border: #cfc3b5;
   --border-soft: #ddd4c8;
-  --shadow-card: 0 16px 34px rgba(47, 38, 31, 0.08);
-  --shadow-lift: 0 18px 32px rgba(47, 38, 31, 0.12);
+  --shadow-card: 0 8px 18px rgba(47, 38, 31, 0.05);
+  --shadow-lift: 0 12px 24px rgba(47, 38, 31, 0.1);
   --radius-sm: 6px;
   --radius-md: 12px;
   --space-sm: 8px;

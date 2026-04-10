@@ -111,19 +111,21 @@ window.initPage = async function ({ project }) {
   }
 
   saveButton.addEventListener('click', async () => {
-    const updatedProject = {
-      ...activeProject,
-      plotSections: resources.plotSections,
-      plotWorkbook: {
-        premise: window.getEditorFieldValue(premiseInput),
-        stakes: window.getEditorFieldValue(stakesInput),
-        notes: window.getEditorFieldValue(notesInput),
-      },
-      updatedAt: new Date().toISOString(),
-    };
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = {
+        ...activeProject,
+        plotSections: resources.plotSections,
+        plotWorkbook: {
+          premise: window.getEditorFieldValue(premiseInput),
+          stakes: window.getEditorFieldValue(stakesInput),
+          notes: window.getEditorFieldValue(notesInput),
+        },
+        updatedAt: new Date().toISOString(),
+      };
 
-    await window.saveProjectData(updatedProject);
-    saveMessage.textContent = 'Plot notes saved.';
-    syncWorkbookLayout();
+      await window.saveProjectData(updatedProject);
+      saveMessage.textContent = 'Plot notes saved.';
+      syncWorkbookLayout();
+    });
   });
 };

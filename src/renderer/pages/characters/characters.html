@@ -40,7 +40,11 @@
           <div class="field"><label for="character-name">Name</label><input id="character-name" type="text" /></div>
           <div class="field">
             <label for="character-image">Character Image</label>
-            <input id="character-image" type="file" accept="image/*" />
+            <input id="character-image" class="file-input-hidden" type="file" accept="image/*" />
+            <button id="character-image-trigger" class="upload-trigger" type="button" aria-label="Upload character image">
+              <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+              <span>Upload Image</span>
+            </button>
           </div>
           <div class="field field-full image-upload-card">
             <label>Image Preview</label>

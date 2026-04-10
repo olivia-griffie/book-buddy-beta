@@ -14,6 +14,7 @@ window.initPage = async function () {
   const goalFill = document.getElementById('project-goal-fill');
   const goalIcon = document.getElementById('project-goal-icon');
   const thumbnailInput = document.getElementById('project-thumbnail');
+  const thumbnailTrigger = document.getElementById('project-thumbnail-trigger');
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
   const { genrePrompts } = await window.getGenrePromptData();
   const existingProjects = await window.api.getAllProjects();
@@ -119,6 +120,10 @@ window.initPage = async function () {
       renderThumbnailPreview();
       formMessage.textContent = error.message;
     }
+  });
+
+  thumbnailTrigger?.addEventListener('click', () => {
+    thumbnailInput?.click();
   });
 
   syncGenreSelectionState();

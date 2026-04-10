@@ -11,6 +11,7 @@ window.initPage = async function ({ project }) {
   const editorEmpty = document.getElementById('character-editor-empty');
   const createButton = document.getElementById('characters-create-project');
   const imageInput = document.getElementById('character-image');
+  const imageTrigger = document.getElementById('character-image-trigger');
   const imagePreview = document.getElementById('character-image-preview');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
@@ -184,15 +185,21 @@ window.initPage = async function ({ project }) {
     }
   });
 
-  saveButton.addEventListener('click', async () => {
-    const updatedProject = {
-      ...activeProject,
-      characters,
-      updatedAt: new Date().toISOString(),
-    };
+  imageTrigger?.addEventListener('click', () => {
+    imageInput?.click();
+  });
 
-    await window.saveProjectData(updatedProject);
-    saveMessage.textContent = 'Characters saved.';
+  saveButton.addEventListener('click', async () => {
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = {
+        ...activeProject,
+        characters,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await window.saveProjectData(updatedProject);
+      saveMessage.textContent = 'Characters saved.';
+    });
   });
 
   renderList();

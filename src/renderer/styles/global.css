@@ -31,23 +31,8 @@ body {
 
 .app-main {
   flex: 1;
-  position: relative;
   overflow-y: auto;
   padding: 32px 32px 40px;
-}
-
-.app-main::after {
-  content: '';
-  position: sticky;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: block;
-  height: 28px;
-  margin-top: -28px;
-  background: linear-gradient(180deg, rgba(250, 247, 242, 0) 0%, rgba(250, 247, 242, 0.96) 100%);
-  pointer-events: none;
-  z-index: 2;
 }
 
 .sidebar {
@@ -61,6 +46,37 @@ body {
 .sidebar-brand {
   display: grid;
   gap: 8px;
+}
+
+.sidebar-project-status {
+  display: grid;
+  gap: 8px;
+}
+
+.sidebar-project-pill {
+  display: inline-flex;
+  width: fit-content;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sidebar-project-pill.is-selected {
+  background: rgba(125, 155, 118, 0.28);
+  color: #d8ead3;
+}
+
+.sidebar-project-pill.is-empty {
+  background: rgba(250, 247, 242, 0.1);
+  color: rgba(250, 247, 242, 0.72);
+}
+
+.sidebar-project-title {
+  color: rgba(250, 247, 242, 0.9);
+  line-height: 1.4;
 }
 
 .sidebar-brand-logo {
@@ -145,6 +161,7 @@ a:hover { color: var(--sage-light); }
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-sm);
   padding: 10px 20px;
   border: none;
@@ -156,6 +173,45 @@ a:hover { color: var(--sage-light); }
   text-transform: uppercase;
   cursor: pointer;
   transition: all var(--duration) var(--ease);
+}
+
+.btn[disabled] {
+  cursor: wait;
+}
+
+.btn-feedback-icon {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.btn-feedback-icon.is-spinner {
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: currentColor;
+  border-radius: 999px;
+  animation: buttonSpin 0.75s linear infinite;
+}
+
+.btn-feedback-icon.is-check {
+  position: relative;
+  color: #4b8f5f;
+}
+
+.btn-feedback-icon.is-check::before {
+  content: '';
+  position: absolute;
+  left: 0.22rem;
+  top: 0.04rem;
+  width: 0.3rem;
+  height: 0.55rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+@keyframes buttonSpin {
+  to { transform: rotate(360deg); }
 }
 
 .btn-primary {
@@ -201,6 +257,18 @@ input, textarea, select {
   color: var(--ink);
   transition: border-color var(--duration) var(--ease);
   outline: none;
+}
+
+.file-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 input:focus, textarea:focus, select:focus {
@@ -310,6 +378,58 @@ label {
 .image-upload-card {
   display: grid;
   gap: 10px;
+}
+
+.upload-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #fffdfa;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+.upload-trigger:hover {
+  border-color: var(--ink-muted);
+  background: white;
+  transform: translateY(-1px);
+}
+
+.upload-trigger:focus-visible {
+  outline: none;
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.15);
+}
+
+.upload-trigger-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  display: block;
+}
+
+.upload-trigger-compact {
+  min-width: 42px;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.upload-trigger-compact .upload-trigger-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .image-upload-preview {

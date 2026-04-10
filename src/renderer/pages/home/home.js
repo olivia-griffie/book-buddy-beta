@@ -109,7 +109,9 @@ window.initPage = async function () {
             <div class="project-media">
               <div class="project-thumb">${thumb}</div>
               <div class="project-thumb-actions">
-                <button class="project-thumb-icon-btn" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}" aria-label="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}">Import</button>
+                <button class="upload-trigger upload-trigger-compact" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}" aria-label="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}">
+                  <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+                </button>
                 <button class="project-thumb-icon-btn project-thumb-icon-btn-danger" type="button" data-remove-thumbnail="${project.id}" title="Remove thumbnail" aria-label="Remove thumbnail" ${project.thumbnail ? '' : 'disabled'}>X</button>
                 <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
               </div>

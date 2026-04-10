@@ -17,6 +17,9 @@ window.initPage = async function ({ project }) {
   const lineHeightInput = document.getElementById('chapter-line-height');
   const currentWordsInput = document.getElementById('chapter-current-words');
   const contentInput = document.getElementById('chapter-content');
+  const chapterPromptList = document.getElementById('chapter-prompt-list');
+  const chapterPromptEmpty = document.getElementById('chapter-prompt-empty');
+  const chapterPromptMessage = document.getElementById('chapter-prompt-message');
   const chapterProgressPercent = document.getElementById('chapter-progress-percent');
   const chapterProgressState = document.getElementById('chapter-progress-state');
   const chapterProgressCaption = document.getElementById('chapter-progress-caption');
@@ -49,6 +52,11 @@ window.initPage = async function ({ project }) {
     lineHeight: 1.6,
     ...chapter,
   }));
+  const dailyPromptHistory = (activeProject.dailyPromptHistory || []).map((entry) => ({
+    answer: '',
+    answerInsertedAt: '',
+    ...entry,
+  }));
 
   let selectedChapterId = chapters[0]?.id || '';
 
@@ -67,6 +75,16 @@ window.initPage = async function ({ project }) {
 
   function getSelectedChapter() {
     return chapters.find((chapter) => chapter.id === selectedChapterId) || null;
+  }
+
+  function getChapterPrompts() {
+    return dailyPromptHistory.filter((entry) => {
+      if (!selectedChapterId) {
+        return false;
+      }
+
+      return !entry.assignedChapterId || entry.assignedChapterId === selectedChapterId;
+    });
   }
 
   function setProgress(currentWords, targetWords) {
@@ -133,6 +151,138 @@ window.initPage = async function ({ project }) {
     currentWordsInput.value = currentWords.toLocaleString();
     setProgress(currentWords, chapter.targetWords);
     applyEditorStyles();
+    renderPromptPanel();
+  }
+
+  function appendHtmlToChapter(chapter, valueToAppend) {
+    const parsedChapter = window.parseRichTextValue(chapter.content || '');
+    const parsedAnswer = window.parseRichTextValue(valueToAppend || '');
+    const answerText = (() => {
+      const temp = document.createElement('div');
+      temp.innerHTML = parsedAnswer.html || '';
+      return (temp.textContent || temp.innerText || '').trim();
+    })();
+
+    if (!answerText) {
+      return false;
+    }
+
+    const nextHtml = `${parsedChapter.html || '<p><br></p>'}${parsedAnswer.html || ''}`;
+    chapter.content = window.serializeRichTextValue(nextHtml, parsedChapter.settings || {});
+    return true;
+  }
+
+  function renderPromptPanel() {
+    const chapter = getSelectedChapter();
+    const prompts = getChapterPrompts();
+
+    if (!chapter) {
+      chapterPromptEmpty.style.display = 'block';
+      chapterPromptList.innerHTML = '';
+      chapterPromptMessage.textContent = '';
+      chapterPromptMessage.classList.remove('is-success');
+      return;
+    }
+
+    chapterPromptEmpty.style.display = prompts.length ? 'none' : 'block';
+    chapterPromptList.innerHTML = prompts.length
+      ? prompts.map((entry, index) => `
+        <details class="chapter-prompt-card" ${index === 0 ? 'open' : ''}>
+          <summary class="chapter-prompt-toggle">
+            <div class="chapter-prompt-toggle-copy">
+              <h4>${index + 1}. ${entry.plotPoint}</h4>
+              <div class="chapter-prompt-meta">
+                <span class="genre-pill">${entry.genre}</span>
+                <span>${entry.context || 'Use this anywhere in the draft.'}</span>
+              </div>
+            </div>
+            <span class="chapter-prompt-toggle-indicator" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="chapter-prompt-body">
+            <p class="prompt-callout">${entry.prompt}</p>
+            <div class="chapter-prompt-answer">
+              <label for="chapter-prompt-answer-${entry.id}">Your Answer</label>
+              <textarea id="chapter-prompt-answer-${entry.id}" data-chapter-prompt-answer="${entry.id}" rows="5">${entry.answer || ''}</textarea>
+            </div>
+            <div class="chapter-prompt-footer">
+              <p class="daily-prompt-status">
+                ${entry.answerInsertedAt ? 'Inserted into draft.' : entry.assignedChapterId === selectedChapterId ? 'Ready to insert into this chapter.' : 'Available for this chapter.'}
+              </p>
+              <div class="chapter-prompt-actions">
+                <button class="btn btn-ghost" type="button" data-prompt-save-answer="${entry.id}">Save Answer</button>
+                <button class="btn btn-primary" type="button" data-insert-prompt-answer="${entry.id}">Insert Answer Into Draft</button>
+              </div>
+            </div>
+          </div>
+        </details>
+      `).join('')
+      : '';
+
+    if (!prompts.length) {
+      return;
+    }
+
+    window.initializeTextEditor(chapterPromptList);
+    prompts.forEach((entry) => {
+      const answerField = chapterPromptList.querySelector(`[data-chapter-prompt-answer="${entry.id}"]`);
+      if (answerField) {
+        window.refreshTextEditor(answerField, entry.answer || '');
+      }
+    });
+
+    chapterPromptList.querySelectorAll('[data-prompt-save-answer]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const promptEntry = dailyPromptHistory.find((entry) => entry.id === button.dataset.promptSaveAnswer);
+        const field = chapterPromptList.querySelector(`[data-chapter-prompt-answer="${button.dataset.promptSaveAnswer}"]`);
+        if (!promptEntry || !field) {
+          return;
+        }
+
+        promptEntry.answer = window.getEditorFieldValue(field);
+        promptEntry.assignedChapterId = selectedChapterId;
+        activeProject = await window.saveProjectData({
+          ...buildProjectPayload(),
+          dailyPromptHistory,
+        });
+        chapterPromptMessage.textContent = 'Prompt answer saved.';
+        chapterPromptMessage.classList.remove('is-success');
+        renderPromptPanel();
+      });
+    });
+
+    chapterPromptList.querySelectorAll('[data-insert-prompt-answer]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const promptEntry = dailyPromptHistory.find((entry) => entry.id === button.dataset.insertPromptAnswer);
+        const field = chapterPromptList.querySelector(`[data-chapter-prompt-answer="${button.dataset.insertPromptAnswer}"]`);
+        const selected = getSelectedChapter();
+        if (!promptEntry || !field || !selected) {
+          return;
+        }
+
+        const answerValue = window.getEditorFieldValue(field);
+        promptEntry.answer = answerValue;
+        promptEntry.assignedChapterId = selected.id;
+        const inserted = appendHtmlToChapter(selected, answerValue);
+
+        if (!inserted) {
+          chapterPromptMessage.textContent = 'Write an answer before inserting it into the draft.';
+          chapterPromptMessage.classList.remove('is-success');
+          return;
+        }
+
+        promptEntry.answerInsertedAt = new Date().toISOString();
+        contentInput.value = selected.content || '';
+        window.refreshTextEditor(contentInput, selected.content || '');
+        syncSelectedChapter();
+        activeProject = await window.saveProjectData({
+          ...buildProjectPayload(),
+          dailyPromptHistory,
+        });
+        chapterPromptMessage.textContent = 'Daily prompt submission has been added to the bottom of the selected chapter.';
+        chapterPromptMessage.classList.add('is-success');
+        renderPromptPanel();
+      });
+    });
   }
 
   function renderSections() {
@@ -161,11 +311,8 @@ window.initPage = async function ({ project }) {
               ${sectionChapters.length
                 ? sectionChapters
                   .map((chapter) => `
-                    <div class="chapter-row">
+                    <div class="chapter-row ${chapter.id === selectedChapterId ? 'is-active' : ''}" data-open-chapter="${chapter.id}">
                       <div class="chapter-row-main">
-                        <button class="chapter-open" type="button" data-open-chapter="${chapter.id}">
-                          Open
-                        </button>
                         <input
                           class="chapter-title-inline"
                           type="text"
@@ -219,6 +366,10 @@ window.initPage = async function ({ project }) {
       input.addEventListener('click', (event) => {
         event.stopPropagation();
       });
+
+      input.addEventListener('focus', (event) => {
+        event.stopPropagation();
+      });
     });
 
     sectionsList.querySelectorAll('.add-chapter').forEach((button) => {
@@ -270,6 +421,7 @@ window.initPage = async function ({ project }) {
       ...activeProject,
       plotSections,
       chapters,
+      dailyPromptHistory,
       currentWordCount: chapters.reduce(
         (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
         0,
@@ -309,9 +461,11 @@ window.initPage = async function ({ project }) {
   });
 
   saveButton.addEventListener('click', async () => {
-    const updatedProject = buildProjectPayload();
-    await window.saveProjectData(updatedProject);
-    saveMessage.textContent = 'Chapters saved.';
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = buildProjectPayload();
+      await window.saveProjectData(updatedProject);
+      saveMessage.textContent = 'Chapters saved.';
+    });
   });
 
   exportButton.addEventListener('click', async () => {

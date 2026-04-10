@@ -37,10 +37,7 @@
         <label for="project-goal">Word Count Goal</label>
         <input id="project-goal" name="wordCountGoal" type="number" min="0" step="100" value="60000" />
       </div>
-      <div class="field">
-        <label for="project-thumbnail">Project Thumbnail</label>
-        <input id="project-thumbnail" name="thumbnailFile" type="file" accept="image/*" />
-      </div>
+      <input id="project-thumbnail" class="file-input-hidden" name="thumbnailFile" type="file" accept="image/*" />
     </div>
 
     <section class="thumbnail-preview-card">
@@ -52,6 +49,12 @@
       </div>
       <div id="project-thumbnail-preview" class="project-thumbnail-preview">
         <span class="placeholder-icon">Book</span>
+      </div>
+      <div class="thumbnail-preview-actions">
+        <button id="project-thumbnail-trigger" class="upload-trigger" type="button" aria-label="Upload project thumbnail">
+          <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+          <span>Upload Thumbnail</span>
+        </button>
       </div>
     </section>
 

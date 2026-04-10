@@ -38,7 +38,14 @@
         <div class="entity-form-grid">
           <div class="field"><label for="scene-title">Title</label><input id="scene-title" type="text" /></div>
           <div class="field"><label for="scene-tags">Tags</label><input id="scene-tags" type="text" placeholder="comma, separated, tags" /></div>
-          <div class="field"><label for="scene-image">Scene Image</label><input id="scene-image" type="file" accept="image/*" /></div>
+          <div class="field">
+            <label for="scene-image">Scene Image</label>
+            <input id="scene-image" class="file-input-hidden" type="file" accept="image/*" />
+            <button id="scene-image-trigger" class="upload-trigger" type="button" aria-label="Upload scene image">
+              <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+              <span>Upload Image</span>
+            </button>
+          </div>
           <div class="field"><label for="scene-linked-chapter">Linked Chapter</label><select id="scene-linked-chapter"></select></div>
           <div class="field field-full image-upload-card">
             <label>Image Preview</label>

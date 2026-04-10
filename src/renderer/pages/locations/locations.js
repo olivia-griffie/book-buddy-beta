@@ -120,14 +120,16 @@ window.initPage = async function ({ project }) {
   });
 
   saveButton.addEventListener('click', async () => {
-    const updatedProject = {
-      ...activeProject,
-      locations,
-      updatedAt: new Date().toISOString(),
-    };
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = {
+        ...activeProject,
+        locations,
+        updatedAt: new Date().toISOString(),
+      };
 
-    await window.saveProjectData(updatedProject);
-    saveMessage.textContent = 'Locations saved.';
+      await window.saveProjectData(updatedProject);
+      saveMessage.textContent = 'Locations saved.';
+    });
   });
 
   renderList();

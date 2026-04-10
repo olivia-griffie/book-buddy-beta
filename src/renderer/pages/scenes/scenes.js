@@ -4,6 +4,7 @@ window.initPage = async function ({ project }) {
   const content = document.getElementById('scenes-content');
   const saveButton = document.getElementById('save-scenes');
   const addButton = document.getElementById('add-scene');
+  const imageTrigger = document.getElementById('scene-image-trigger');
   const list = document.getElementById('scenes-list');
   const saveMessage = document.getElementById('scenes-save-message');
   const editorShell = document.getElementById('scene-editor-shell');
@@ -162,15 +163,21 @@ window.initPage = async function ({ project }) {
     }
   });
 
-  saveButton.addEventListener('click', async () => {
-    const updatedProject = {
-      ...activeProject,
-      scenes,
-      updatedAt: new Date().toISOString(),
-    };
+  imageTrigger?.addEventListener('click', () => {
+    imageInput?.click();
+  });
 
-    await window.saveProjectData(updatedProject);
-    saveMessage.textContent = 'Scenes saved.';
+  saveButton.addEventListener('click', async () => {
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = {
+        ...activeProject,
+        scenes,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await window.saveProjectData(updatedProject);
+      saveMessage.textContent = 'Scenes saved.';
+    });
   });
 
   renderList();
