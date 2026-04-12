@@ -1,5 +1,26 @@
 window.initPage = async function ({ project }) {
-  const activeProject = project || window.getCurrentProject();
+  function escapeHtml(value = '') {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function excerptRichText(value = '', fallback = 'No details yet.') {
+    const parsed = window.parseRichTextValue(value || '');
+    const temp = document.createElement('div');
+    temp.innerHTML = parsed.html || '';
+    const text = (temp.textContent || temp.innerText || '').trim().replace(/\s+/g, ' ');
+    if (!text) {
+      return fallback;
+    }
+
+    return text.length > 180 ? `${text.slice(0, 177)}...` : text;
+  }
+
+  let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
@@ -17,6 +38,8 @@ window.initPage = async function ({ project }) {
   const lineHeightInput = document.getElementById('chapter-line-height');
   const currentWordsInput = document.getElementById('chapter-current-words');
   const contentInput = document.getElementById('chapter-content');
+  const chapterSelectedSection = document.getElementById('chapter-selected-section');
+  const chapterSelectedName = document.getElementById('chapter-selected-name');
   const chapterPromptList = document.getElementById('chapter-prompt-list');
   const chapterPromptEmpty = document.getElementById('chapter-prompt-empty');
   const chapterPromptMessage = document.getElementById('chapter-prompt-message');
@@ -25,6 +48,8 @@ window.initPage = async function ({ project }) {
   const chapterProgressCaption = document.getElementById('chapter-progress-caption');
   const chapterProgressFill = document.getElementById('chapter-progress-fill');
   const chapterProgressIcon = document.getElementById('chapter-progress-icon');
+  const contextContent = document.getElementById('chapter-context-content');
+  const contextTabs = [...document.querySelectorAll('[data-context-tab]')];
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -52,11 +77,26 @@ window.initPage = async function ({ project }) {
     lineHeight: 1.6,
     ...chapter,
   }));
+  const characters = (activeProject.characters || []).map((character) => ({ ...character }));
+  const scenes = (activeProject.scenes || []).map((scene) => ({ ...scene }));
+  const locations = (activeProject.locations || []).map((location) => ({ ...location }));
   const dailyPromptHistory = (activeProject.dailyPromptHistory || []).map((entry) => ({
     answer: '',
     answerInsertedAt: '',
     ...entry,
   }));
+  const contextState = {
+    tab: 'plot',
+  };
+  const autosave = window.createAutosaveController(async () => {
+    const updatedProject = buildProjectPayload();
+    activeProject = await window.saveProjectData(updatedProject, {
+      dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],
+    });
+    saveMessage.textContent = 'Chapter changes autosaved.';
+  }, {
+    dirtyText: 'Chapter changes not saved',
+  });
 
   let selectedChapterId = chapters[0]?.id || '';
 
@@ -85,6 +125,64 @@ window.initPage = async function ({ project }) {
 
       return !entry.assignedChapterId || entry.assignedChapterId === selectedChapterId;
     });
+  }
+
+  function getEntityCollection(type) {
+    if (type === 'characters') {
+      return characters;
+    }
+    if (type === 'scenes') {
+      return scenes;
+    }
+    return locations;
+  }
+
+  function getEntityLabel(type, entity) {
+    if (type === 'characters') {
+      return entity.name || 'Unnamed Character';
+    }
+    if (type === 'scenes') {
+      return entity.title || 'Untitled Scene';
+    }
+    return entity.name || 'Untitled Location';
+  }
+
+  function renderSectionLinkCard(type, label, sectionId) {
+    const collection = getEntityCollection(type);
+    const linkedItems = collection.filter((entity) => entity.sectionId === sectionId);
+    const selectableItems = collection.filter((entity) => entity.sectionId !== sectionId);
+    const singularLabel = label.endsWith('s') ? label.slice(0, -1) : label;
+
+    return `
+      <div class="plot-section-link-card">
+        <div class="plot-section-link-head">
+          <div>
+            <h4>${label}</h4>
+            <p>${linkedItems.length ? `${linkedItems.length} linked here` : `No ${label.toLowerCase()} linked yet`}</p>
+          </div>
+          <span class="plot-section-link-count">${linkedItems.length}</span>
+        </div>
+        <div class="plot-section-linked-list">
+          ${linkedItems.length
+      ? linkedItems.map((entity) => `
+                <span class="plot-section-linked-chip">
+                  <span>${escapeHtml(getEntityLabel(type, entity))}</span>
+                  <button class="plot-section-chip-remove" type="button" data-unlink-entity="${type}" data-unlink-id="${entity.id}">×</button>
+                </span>
+              `).join('')
+      : '<span class="plot-section-link-empty">None linked yet.</span>'}
+        </div>
+        <div class="field">
+          <label>Add ${singularLabel}</label>
+          <select data-link-entity="${type}" data-link-section="${sectionId}">
+            <option value="">Choose ${singularLabel.toLowerCase()}</option>
+            ${selectableItems.map((entity) => `
+              <option value="${entity.id}">${escapeHtml(getEntityLabel(type, entity))}</option>
+            `).join('')}
+          </select>
+        </div>
+      </div>
+    `;
   }
 
   function setProgress(currentWords, targetWords) {
@@ -137,7 +235,10 @@ window.initPage = async function ({ project }) {
 
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
+    const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
     document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
+    chapterSelectedSection.textContent = currentSection?.label || 'Plot Section';
+    chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
     titleInput.value = chapter.title || '';
     sectionSelect.value = chapter.sectionId || plotSections[0]?.id || '';
     targetWordsInput.value = chapter.targetWords || 0;
@@ -151,7 +252,122 @@ window.initPage = async function ({ project }) {
     currentWordsInput.value = currentWords.toLocaleString();
     setProgress(currentWords, chapter.targetWords);
     applyEditorStyles();
+    renderContextPanel();
     renderPromptPanel();
+  }
+
+  function renderContextPanel() {
+    const chapter = getSelectedChapter();
+    const currentSection = plotSections.find((section) => section.id === chapter?.sectionId);
+    const workbook = activeProject.plotWorkbook || {};
+    const visibleCharacters = (characters.filter((character) => !currentSection?.id || character.sectionId === currentSection.id).length
+      ? characters.filter((character) => character.sectionId === currentSection?.id)
+      : characters).map((character) => ({
+      ...character,
+      typeTags: Array.isArray(character.typeTags) ? character.typeTags : [],
+    }));
+    const visibleScenes = scenes.filter((scene) => (
+      !chapter
+      || scene.linkedChapterId === chapter.id
+      || scene.sectionId === currentSection?.id
+      || (!scene.linkedChapterId && !scene.sectionId)
+    ));
+    const visibleLocations = locations.filter((location) => !currentSection?.id || location.sectionId === currentSection.id).length
+      ? locations.filter((location) => location.sectionId === currentSection?.id)
+      : locations;
+
+    contextTabs.forEach((tab) => {
+      const isActive = tab.dataset.contextTab === contextState.tab;
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', String(isActive));
+    });
+
+    if (contextState.tab === 'plot') {
+      contextContent.innerHTML = `
+        <div class="chapter-context-grid">
+          <article class="chapter-context-card">
+            <h4>Premise</h4>
+            <p>${escapeHtml(excerptRichText(workbook.premise, 'Add a premise in Plot Creation to keep it handy here.'))}</p>
+          </article>
+          <article class="chapter-context-card">
+            <h4>Stakes</h4>
+            <p>${escapeHtml(excerptRichText(workbook.stakes, 'Add stakes in Plot Creation to keep the tension visible while you write.'))}</p>
+          </article>
+          <article class="chapter-context-card">
+            <h4>${escapeHtml(currentSection?.label || 'Current Plot Area')}</h4>
+            <div class="chapter-context-meta">
+              <span class="chapter-context-pill">Target ${Number(currentSection?.targetWords || 0).toLocaleString()} words</span>
+            </div>
+            <p>${escapeHtml(excerptRichText(currentSection?.notes, 'This plot area does not have notes yet.'))}</p>
+          </article>
+          <article class="chapter-context-card">
+            <h4>Plot Notes</h4>
+            <p>${escapeHtml(excerptRichText(workbook.notes, 'General plot notes will appear here once you add them.'))}</p>
+          </article>
+        </div>
+      `;
+      return;
+    }
+
+    if (contextState.tab === 'characters') {
+      contextContent.innerHTML = visibleCharacters.length
+        ? `
+          <div class="chapter-context-grid">
+            ${visibleCharacters.map((character) => `
+              <article class="chapter-context-card">
+                <h4>${escapeHtml(character.name || 'Unnamed Character')}</h4>
+                <div class="chapter-context-meta">
+                  ${(character.typeTags || []).slice(0, 3).map((tag) => `
+                    <span class="chapter-context-pill">${escapeHtml(tag.replace(/-/g, ' '))}</span>
+                  `).join('')}
+                </div>
+                <p>${escapeHtml(excerptRichText(character.desires || character.background || character.other, 'No reference notes yet.'))}</p>
+              </article>
+            `).join('')}
+          </div>
+        `
+        : '<div class="chapter-context-empty">Add or link characters to this plot area to keep your cast notes visible while drafting.</div>';
+      return;
+    }
+
+    if (contextState.tab === 'scenes') {
+      contextContent.innerHTML = visibleScenes.length
+        ? `
+          <div class="chapter-context-grid">
+            ${visibleScenes.map((scene) => `
+              <article class="chapter-context-card">
+                <h4>${escapeHtml(scene.title || 'Untitled Scene')}</h4>
+                <div class="chapter-context-meta">
+                  <span class="chapter-context-pill">${scene.linkedChapterId === chapter?.id ? 'Linked to this chapter' : 'General scene idea'}</span>
+                  ${(scene.tags || []).slice(0, 2).map((tag) => `
+                    <span class="chapter-context-pill">${escapeHtml(tag)}</span>
+                  `).join('')}
+                </div>
+                <p>${escapeHtml(excerptRichText(scene.summary || scene.other, 'No scene summary yet.'))}</p>
+              </article>
+            `).join('')}
+          </div>
+        `
+        : '<div class="chapter-context-empty">Add or link scenes to this plot area to keep chapter-specific beats nearby while you write.</div>';
+      return;
+    }
+
+    contextContent.innerHTML = visibleLocations.length
+      ? `
+        <div class="chapter-context-grid">
+          ${visibleLocations.map((location) => `
+            <article class="chapter-context-card">
+              <h4>${escapeHtml(location.name || 'Untitled Location')}</h4>
+              <div class="chapter-context-meta">
+                <span class="chapter-context-pill">${escapeHtml(location.type || 'General Area')}</span>
+                ${location.timeOfDay ? `<span class="chapter-context-pill">${escapeHtml(location.timeOfDay)}</span>` : ''}
+              </div>
+              <p>${escapeHtml(excerptRichText(location.other || location.socialDynamic || location.climate, 'No location notes yet.'))}</p>
+            </article>
+          `).join('')}
+        </div>
+      `
+      : '<div class="chapter-context-empty">Add or link locations to this plot area to keep setting details close at hand while drafting.</div>';
   }
 
   function appendHtmlToChapter(chapter, valueToAppend) {
@@ -209,7 +425,7 @@ window.initPage = async function ({ project }) {
                 ${entry.answerInsertedAt ? 'Inserted into draft.' : entry.assignedChapterId === selectedChapterId ? 'Ready to insert into this chapter.' : 'Available for this chapter.'}
               </p>
               <div class="chapter-prompt-actions">
-                <button class="btn btn-ghost" type="button" data-prompt-save-answer="${entry.id}">Save Answer</button>
+                <button class="btn btn-save" type="button" data-prompt-save-answer="${entry.id}">Save Answer</button>
                 <button class="btn btn-primary" type="button" data-insert-prompt-answer="${entry.id}">Insert Answer Into Draft</button>
               </div>
             </div>
@@ -243,6 +459,8 @@ window.initPage = async function ({ project }) {
         activeProject = await window.saveProjectData({
           ...buildProjectPayload(),
           dailyPromptHistory,
+        }, {
+          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],
         });
         chapterPromptMessage.textContent = 'Prompt answer saved.';
         chapterPromptMessage.classList.remove('is-success');
@@ -277,6 +495,8 @@ window.initPage = async function ({ project }) {
         activeProject = await window.saveProjectData({
           ...buildProjectPayload(),
           dailyPromptHistory,
+        }, {
+          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],
         });
         chapterPromptMessage.textContent = 'Daily prompt submission has been added to the bottom of the selected chapter.';
         chapterPromptMessage.classList.add('is-success');
@@ -293,41 +513,54 @@ window.initPage = async function ({ project }) {
           (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
           0,
         );
+        const hasSelectedChapter = sectionChapters.some((chapter) => chapter.id === selectedChapterId);
 
         return `
-          <article class="plot-section-item">
-            <div class="plot-section-head">
-              <div>
+          <details class="plot-section-item" ${hasSelectedChapter ? 'open' : ''}>
+            <summary class="plot-section-toggle">
+              <div class="plot-section-toggle-copy">
                 <h3>${section.label}</h3>
                 <p>${sectionWords.toLocaleString()} words across ${sectionChapters.length} chapter${sectionChapters.length === 1 ? '' : 's'}</p>
               </div>
-              <button class="btn btn-ghost add-chapter" type="button" data-section="${section.id}">Add Chapter</button>
-            </div>
-            <div class="field">
-              <label>Plot Area Target Words</label>
-              <input type="number" min="0" step="100" value="${section.targetWords || 0}" data-target-section="${section.id}" />
-            </div>
-            <div class="chapter-list">
-              ${sectionChapters.length
-                ? sectionChapters
-                  .map((chapter) => `
-                    <div class="chapter-row ${chapter.id === selectedChapterId ? 'is-active' : ''}" data-open-chapter="${chapter.id}">
-                      <div class="chapter-row-main">
-                        <input
-                          class="chapter-title-inline"
-                          type="text"
-                          value="${chapter.title || ''}"
-                          placeholder="Chapter title"
-                          data-title-chapter="${chapter.id}"
-                        />
+              <span class="plot-section-toggle-indicator" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="plot-section-body">
+              <div class="plot-section-head">
+                <div class="field">
+                  <label>Plot Area Target Words</label>
+                  <input type="number" min="0" step="100" value="${section.targetWords || 0}" data-target-section="${section.id}" />
+                </div>
+                <button class="btn btn-ghost add-chapter" type="button" data-section="${section.id}">Add Chapter</button>
+              </div>
+              <div class="chapter-list">
+                ${sectionChapters.length
+                  ? sectionChapters
+                    .map((chapter) => `
+                      <div class="chapter-row ${chapter.id === selectedChapterId ? 'is-active' : ''}" data-open-chapter="${chapter.id}">
+                        <div class="chapter-row-main">
+                          <input
+                            class="chapter-title-inline"
+                            type="text"
+                            value="${chapter.title || ''}"
+                            placeholder="Chapter title"
+                            data-title-chapter="${chapter.id}"
+                          />
+                        </div>
+                        <span>${window.computeWordCount(chapter.content || '')} words</span>
                       </div>
-                      <span>${window.computeWordCount(chapter.content || '')} words</span>
-                    </div>
-                  `)
-                  .join('')
-                : '<p>No chapters yet for this section.</p>'}
+                    `)
+                    .join('')
+                  : '<p>No chapters yet for this section.</p>'}
+              </div>
+              <div class="plot-section-links">
+                <div class="plot-section-links-grid">
+                  ${renderSectionLinkCard('characters', 'Characters', section.id)}
+                  ${renderSectionLinkCard('scenes', 'Scenes', section.id)}
+                  ${renderSectionLinkCard('locations', 'Locations', section.id)}
+                </div>
+              </div>
             </div>
-          </article>
+          </details>
         `;
       })
       .join('');
@@ -337,6 +570,7 @@ window.initPage = async function ({ project }) {
         const section = plotSections.find((entry) => entry.id === input.dataset.targetSection);
         if (section) {
           section.targetWords = Number(input.value || 0);
+          autosave.touch();
         }
       });
     });
@@ -357,8 +591,10 @@ window.initPage = async function ({ project }) {
         }
 
         chapter.title = input.value.trim();
+        autosave.touch();
         if (chapter.id === selectedChapterId) {
           document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
+          chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
           titleInput.value = chapter.title || '';
         }
       });
@@ -388,8 +624,43 @@ window.initPage = async function ({ project }) {
 
         chapters.push(newChapter);
         selectedChapterId = newChapter.id;
+        autosave.touch();
         renderSections();
         renderEditor();
+      });
+    });
+
+    sectionsList.querySelectorAll('[data-link-entity]').forEach((input) => {
+      input.addEventListener('change', () => {
+        if (!input.value) {
+          return;
+        }
+
+        const collection = getEntityCollection(input.dataset.linkEntity);
+        const entity = collection.find((entry) => entry.id === input.value);
+        if (!entity) {
+          return;
+        }
+
+        entity.sectionId = input.dataset.linkSection;
+        autosave.touch();
+        renderSections();
+        renderContextPanel();
+      });
+    });
+
+    sectionsList.querySelectorAll('[data-unlink-entity]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const collection = getEntityCollection(button.dataset.unlinkEntity);
+        const entity = collection.find((entry) => entry.id === button.dataset.unlinkId);
+        if (!entity) {
+          return;
+        }
+
+        entity.sectionId = '';
+        autosave.touch();
+        renderSections();
+        renderContextPanel();
       });
     });
   }
@@ -412,8 +683,13 @@ window.initPage = async function ({ project }) {
     currentWordsInput.value = currentWords.toLocaleString();
     setProgress(currentWords, chapter.targetWords);
     document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
+    const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
+    chapterSelectedSection.textContent = currentSection?.label || 'Plot Section';
+    chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
     applyEditorStyles();
     renderSections();
+    renderContextPanel();
+    autosave.touch();
   }
 
   function buildProjectPayload() {
@@ -421,6 +697,9 @@ window.initPage = async function ({ project }) {
       ...activeProject,
       plotSections,
       chapters,
+      characters,
+      scenes,
+      locations,
       dailyPromptHistory,
       currentWordCount: chapters.reduce(
         (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
@@ -455,6 +734,12 @@ window.initPage = async function ({ project }) {
   populateSectionSelect();
   renderSections();
   renderEditor();
+  contextTabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      contextState.tab = tab.dataset.contextTab;
+      renderContextPanel();
+    });
+  });
 
   [titleInput, sectionSelect, targetWordsInput, fontFamilyInput, fontSizeInput, lineHeightInput, contentInput].forEach((field) => {
     field.addEventListener('input', syncSelectedChapter);
@@ -463,7 +748,9 @@ window.initPage = async function ({ project }) {
   saveButton.addEventListener('click', async () => {
     await window.runButtonFeedback(saveButton, async () => {
       const updatedProject = buildProjectPayload();
-      await window.saveProjectData(updatedProject);
+      activeProject = await window.saveProjectData(updatedProject, {
+        dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],
+      });
       saveMessage.textContent = 'Chapters saved.';
     });
   });

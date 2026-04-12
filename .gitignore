@@ -1,6 +1,8 @@
 node_modules/
 releases/
 dist/
+dist-win/
+dist-win-*/
 out/
 .DS_Store
 Thumbs.db

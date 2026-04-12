@@ -50,6 +50,8 @@ window.initPage = async function ({ project }) {
         answerInsertedAt: entry.answerInsertedAt || '',
       })),
       updatedAt: new Date().toISOString(),
+    }, {
+      dirtyFields: ['dailyPromptHistory'],
     });
   }
 
@@ -160,7 +162,7 @@ window.initPage = async function ({ project }) {
   function renderPromptCards(entries) {
     resultsGrid.innerHTML = entries.length
       ? entries.map((entry, index) => `
-        <article class="beat-card daily-prompt-card">
+        <article class="beat-card daily-prompt-card ui-card ui-card-soft ui-card-stack">
           <h4>${index + 1}. ${entry.plotPoint}</h4>
           <p class="genre-pill">${entry.genre}</p>
           <p class="prompt-callout">${entry.prompt}</p>
@@ -182,7 +184,7 @@ window.initPage = async function ({ project }) {
               </select>
             </div>
             <div class="daily-prompt-editor-actions">
-              <button class="btn btn-ghost" type="button" data-save-prompt-answer="${entry.id}">Save Answer</button>
+              <button class="btn btn-save" type="button" data-save-prompt-answer="${entry.id}">Save Answer</button>
               <button class="btn btn-primary" type="button" data-add-prompt="${entry.id}" ${getChapters().length ? '' : 'disabled'}>
                 Insert Into Chapter
               </button>
@@ -222,6 +224,8 @@ window.initPage = async function ({ project }) {
           ...activeProject,
           dailyPromptHistory: getDailyHistory(),
           updatedAt: new Date().toISOString(),
+        }, {
+          dirtyFields: ['dailyPromptHistory'],
         });
         renderPromptCards(getDailyHistory());
       });
@@ -270,6 +274,8 @@ window.initPage = async function ({ project }) {
             0,
           ),
           updatedAt: new Date().toISOString(),
+        }, {
+          dirtyFields: ['chapters', 'dailyPromptHistory', 'currentWordCount'],
         });
 
         status.textContent = 'Prompt answer inserted into the selected chapter.';
@@ -290,6 +296,8 @@ window.initPage = async function ({ project }) {
           ...activeProject,
           dailyPromptHistory: getDailyHistory(),
           updatedAt: new Date().toISOString(),
+        }, {
+          dirtyFields: ['dailyPromptHistory'],
         });
         status.textContent = 'Prompt answer saved.';
         renderPromptCards(getDailyHistory());
@@ -377,7 +385,9 @@ window.initPage = async function ({ project }) {
       updatedAt: today.toISOString(),
     };
 
-    activeProject = await window.saveProjectData(updatedProject);
+    activeProject = await window.saveProjectData(updatedProject, {
+      dirtyFields: ['dailyPromptState', 'dailyPromptHistory'],
+    });
 
     status.textContent = isTester
       ? `${prompts.length} prompt${prompts.length === 1 ? '' : 's'} generated in tester mode.`

@@ -5,7 +5,7 @@
       <h1 id="plot-page-title">Plot Builder</h1>
       <p id="plot-page-subtitle">Shape your story with genre-specific beats and prompts.</p>
     </div>
-    <button id="save-plot-workbook" class="btn btn-primary" type="button">Save Plot Notes</button>
+    <button id="save-plot-workbook" class="btn btn-save" type="button">Save Plot Notes</button>
   </div>
 
   <div id="plot-empty-state" class="empty-state card" style="display: none;">
@@ -15,27 +15,85 @@
   </div>
 
   <div id="plot-content" class="plot-content" style="display: none;">
-    <section class="card workbook-card">
-      <div class="workbook-grid">
-        <div class="field">
-          <label for="plot-premise">Premise</label>
-          <textarea id="plot-premise" rows="4"></textarea>
+    <div class="plot-page-tools">
+      <button id="plot-collapse-all" class="btn btn-ghost" type="button">Collapse All</button>
+      <button id="plot-back-to-top" class="btn btn-ghost" type="button">Back To Top</button>
+    </div>
+
+    <section class="card ui-card ui-card-stack workbook-card">
+      <details class="plot-block" open>
+        <summary class="plot-block-summary">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Story Spine</p>
+            <h2>Outline</h2>
+          </div>
+          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="plot-block-body">
+          <div class="field field-full plot-outline-field">
+            <label for="plot-outline">Outline</label>
+            <textarea id="plot-outline" rows="6"></textarea>
+          </div>
         </div>
-        <div class="field">
-          <label for="plot-stakes">Stakes</label>
-          <textarea id="plot-stakes" rows="4"></textarea>
+      </details>
+
+      <details class="plot-block" open>
+        <summary class="plot-block-summary">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Story Foundation</p>
+            <h2>Premise And Stakes</h2>
+          </div>
+          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="plot-block-body">
+          <div class="workbook-grid">
+            <div class="field">
+              <label for="plot-premise">Premise</label>
+              <textarea id="plot-premise" rows="4"></textarea>
+            </div>
+            <div class="field">
+              <label for="plot-stakes">Stakes</label>
+              <textarea id="plot-stakes" rows="4"></textarea>
+            </div>
+          </div>
         </div>
-        <div class="field field-full">
-          <label for="plot-notes">Plot Notes</label>
-          <textarea id="plot-notes" rows="5"></textarea>
+      </details>
+
+      <details class="plot-block" open>
+        <summary class="plot-block-summary">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Big Picture</p>
+            <h2>Plot Notes</h2>
+          </div>
+          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="plot-block-body">
+          <div class="field field-full">
+            <label for="plot-notes">Plot Notes</label>
+            <textarea id="plot-notes" rows="5"></textarea>
+          </div>
         </div>
-      </div>
+      </details>
+
+      <details class="plot-block" open>
+        <summary class="plot-block-summary">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Book Placement</p>
+            <h2>Section Targets</h2>
+          </div>
+          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="plot-block-body">
+          <div id="plot-section-targets" class="plot-section-targets"></div>
+        </div>
+      </details>
+
       <p id="plot-save-message" class="form-message" aria-live="polite"></p>
     </section>
 
-    <section id="hybrid-guide-section" class="card hybrid-card" style="display: none;">
-      <div class="section-heading">
-        <div>
+    <section id="hybrid-guide-section" class="card ui-card ui-card-stack hybrid-card" style="display: none;">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
           <p class="eyebrow">Hybrid Guide</p>
           <h2 id="hybrid-guide-title"></h2>
         </div>
@@ -43,9 +101,9 @@
       <div id="hybrid-guide-grid" class="hybrid-guide-grid"></div>
     </section>
 
-    <section id="hybrid-prompts-section" style="display: none;">
-      <div class="section-heading">
-        <div>
+    <section id="hybrid-prompts-section" class="card ui-card ui-card-stack hybrid-card" style="display: none;">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
           <p class="eyebrow">Hybrid Prompt Track</p>
           <h2 id="hybrid-prompts-title"></h2>
         </div>

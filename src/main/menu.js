@@ -55,8 +55,14 @@ function setApplicationMenu() {
 }
 
 function buildTextContextMenu(mainWindow, params = {}) {
-  const canEdit = params.isEditable;
-  const hasSelection = Boolean(params.selectionText);
+  const canEdit = Boolean(
+    params.isEditable
+    || params.inputFieldType && params.inputFieldType !== 'none'
+    || params.editFlags?.canPaste
+    || params.editFlags?.canUndo
+    || params.editFlags?.canRedo,
+  );
+  const hasSelection = Boolean(params.selectionText || params.editFlags?.canCopy || params.editFlags?.canCut);
   const spellingSuggestions = (params.dictionarySuggestions || []).slice(0, 5).map((suggestion) => ({
     label: suggestion,
     click: () => {
@@ -69,7 +75,7 @@ function buildTextContextMenu(mainWindow, params = {}) {
     { role: 'undo', enabled: canEdit },
     { role: 'redo', enabled: canEdit },
     { type: 'separator' },
-    { role: 'cut', enabled: canEdit && hasSelection },
+    { role: 'cut', enabled: canEdit && (hasSelection || params.editFlags?.canCut) },
     { role: 'copy', enabled: hasSelection },
     { role: 'paste', enabled: canEdit },
     { role: 'selectAll', enabled: canEdit || hasSelection },

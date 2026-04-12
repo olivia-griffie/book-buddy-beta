@@ -43,7 +43,12 @@ const pageRegistry = {
 
 const state = {
   currentPage: null,
-  currentProject: null,
+  referenceDrawerOpen: false,
+  referenceDrawerTab: 'plot',
+  saveStatus: {
+    tone: 'neutral',
+    text: 'Ready to write',
+  },
 };
 
 let activePageScript = null;
@@ -80,6 +85,10 @@ async function loadJson(path) {
 }
 
 async function getGenrePromptData() {
+  if (typeof window.api?.getPromptData === 'function') {
+    return window.api.getPromptData();
+  }
+
   const [genrePrompts, specificPrompts, hybridGuides] = await Promise.all([
     loadJson('../data/prompts/genre_prompts.json'),
     loadJson('../data/prompts/specific_genre_prompts.json'),
@@ -116,6 +125,53 @@ function computeWordCount(text = '') {
     : String(text || '');
   const trimmed = normalized.trim();
   return trimmed ? trimmed.split(/\s+/).length : 0;
+}
+
+function buildLocalDayKey(value = new Date()) {
+  const date = value instanceof Date ? value : new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return '';
+  }
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function updateDailyWritingHistory(nextProject, previousProject) {
+  const previousMatches = previousProject?.id && previousProject.id === nextProject?.id;
+  const nextWords = Number(nextProject?.currentWordCount || 0);
+  const previousWords = previousMatches ? Number(previousProject?.currentWordCount || 0) : 0;
+  const positiveDelta = Math.max(0, nextWords - previousWords);
+  const todayKey = buildLocalDayKey(new Date());
+  const history = [...(nextProject?.dailyWordHistory || previousProject?.dailyWordHistory || [])]
+    .map((entry) => ({
+      date: entry.date,
+      wordsWritten: Number(entry.wordsWritten || 0),
+      totalWords: Number(entry.totalWords || 0),
+    }))
+    .filter((entry) => entry.date);
+
+  let todayEntry = history.find((entry) => entry.date === todayKey);
+
+  if (!todayEntry && !positiveDelta) {
+    return history.sort((left, right) => left.date.localeCompare(right.date));
+  }
+
+  if (!todayEntry) {
+    todayEntry = {
+      date: todayKey,
+      wordsWritten: 0,
+      totalWords: nextWords,
+    };
+    history.push(todayEntry);
+  }
+
+  todayEntry.wordsWritten += positiveDelta;
+  todayEntry.totalWords = nextWords;
+
+  return history.sort((left, right) => left.date.localeCompare(right.date));
 }
 
 function getDefaultBeatOrder() {
@@ -210,13 +266,53 @@ function buildProjectResources(project, promptData) {
 }
 
 function getProject() {
-  return state.currentProject;
+  return window.projectStore?.getProject?.() || null;
+}
+
+function syncProjectState(project) {
+  if (!project) {
+    state.referenceDrawerOpen = false;
+  }
+  if (typeof window.renderSidebar === 'function') {
+    window.renderSidebar(state.currentPage, project);
+  }
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(state.currentPage, project, state.saveStatus);
+  }
+  if (typeof window.renderReferenceDrawer === 'function') {
+    window.renderReferenceDrawer(project, {
+      open: state.referenceDrawerOpen,
+      tab: state.referenceDrawerTab,
+    });
+  }
 }
 
 function setCurrentProject(project) {
-  state.currentProject = project;
-  if (typeof window.renderSidebar === 'function') {
-    window.renderSidebar(state.currentPage, state.currentProject);
+  if (window.projectStore?.setProject) {
+    return window.projectStore.setProject(project);
+  }
+
+  syncProjectState(project);
+  return project || null;
+}
+
+function setSaveStatus(nextStatus = {}) {
+  state.saveStatus = {
+    ...state.saveStatus,
+    ...nextStatus,
+  };
+
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+  }
+}
+
+function renderReferenceDrawer() {
+  if (typeof window.renderReferenceDrawer === 'function') {
+    window.renderReferenceDrawer(getProject(), {
+      open: state.referenceDrawerOpen,
+      tab: state.referenceDrawerTab,
+    });
   }
 }
 
@@ -260,7 +356,10 @@ async function navigate(page, options = {}) {
   state.currentPage = page;
 
   if (Object.prototype.hasOwnProperty.call(options, 'project')) {
-    state.currentProject = options.project;
+    if (!options.project) {
+      state.referenceDrawerOpen = false;
+    }
+    setCurrentProject(options.project);
   }
 
   const [htmlResponse] = await Promise.all([
@@ -273,14 +372,35 @@ async function navigate(page, options = {}) {
   ensurePageStylesheet().href = pageDefinition.css;
 
   if (typeof window.renderSidebar === 'function') {
-    window.renderSidebar(page, state.currentProject);
+    window.renderSidebar(page, getProject());
   }
 
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(page, getProject(), state.saveStatus);
+  }
+  renderReferenceDrawer();
+
   if (typeof window.initPage === 'function') {
-    await window.initPage({
-      page,
-      project: state.currentProject,
-    });
+    try {
+      await window.initPage({
+        page,
+        project: getProject(),
+      });
+    } catch (error) {
+      console.error(`Failed to initialize page "${page}".`, error);
+      document.getElementById('main-content').innerHTML = `
+        <section class="page">
+          <div class="empty-state card">
+            <h2>That page hit a loading problem</h2>
+            <p>${error?.message || 'A renderer error interrupted the page setup.'}</p>
+            <button id="page-init-retry" class="btn btn-save" type="button">Retry Page</button>
+          </div>
+        </section>
+      `;
+      document.getElementById('page-init-retry')?.addEventListener('click', () => {
+        window.navigate(page, { project: getProject() });
+      });
+    }
   }
 }
 
@@ -292,11 +412,158 @@ window.normalizeGenreKey = normalizeGenreKey;
 window.getGenrePromptData = getGenrePromptData;
 window.getProjectResources = buildProjectResources;
 window.computeWordCount = computeWordCount;
+window.buildLocalDayKey = buildLocalDayKey;
 window.slugify = slugify;
-window.saveProjectData = async function saveProjectData(project) {
-  await window.api.saveProject(project);
-  setCurrentProject(project);
-  return project;
+window.setAppSaveStatus = setSaveStatus;
+window.isReferenceDrawerOpen = function isReferenceDrawerOpen() {
+  return state.referenceDrawerOpen;
+};
+window.setReferenceDrawerOpen = function setReferenceDrawerOpen(isOpen) {
+  state.referenceDrawerOpen = Boolean(isOpen && getProject());
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+  }
+  renderReferenceDrawer();
+};
+window.toggleReferenceDrawer = function toggleReferenceDrawer() {
+  window.setReferenceDrawerOpen(!state.referenceDrawerOpen);
+};
+window.setReferenceDrawerTab = function setReferenceDrawerTab(tab) {
+  state.referenceDrawerTab = tab || 'plot';
+  state.referenceDrawerOpen = Boolean(getProject());
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+  }
+  renderReferenceDrawer();
+};
+window.showMilestoneCelebration = function showMilestoneCelebration(milestones = []) {
+  if (!milestones.length) {
+    return;
+  }
+
+  let rail = document.getElementById('milestone-toast-rail');
+  if (!rail) {
+    rail = document.createElement('div');
+    rail.id = 'milestone-toast-rail';
+    rail.className = 'milestone-toast-rail';
+    document.body.appendChild(rail);
+  }
+
+  milestones.forEach((milestone, index) => {
+    const toast = document.createElement('article');
+    toast.className = 'milestone-toast';
+    toast.innerHTML = `
+      <div class="milestone-toast-mark" aria-hidden="true">+</div>
+      <div class="milestone-toast-copy">
+        <p class="milestone-toast-kicker">Milestone unlocked</p>
+        <h3>${milestone.label}</h3>
+        <p>${milestone.description}</p>
+      </div>
+    `;
+    rail.appendChild(toast);
+
+    requestAnimationFrame(() => {
+      toast.classList.add('is-visible');
+    });
+
+    setTimeout(() => {
+      toast.classList.remove('is-visible');
+      setTimeout(() => toast.remove(), 260);
+    }, 2600 + (index * 180));
+  });
+};
+window.markAppDirty = function markAppDirty(text = 'Unsaved changes') {
+  setSaveStatus({
+    tone: 'warning',
+    text,
+  });
+};
+window.createAutosaveController = function createAutosaveController(saveTask, options = {}) {
+  let timer = null;
+  let pending = false;
+  let saving = false;
+  const delay = Number(options.delay || 7000);
+  const dirtyText = options.dirtyText || 'Unsaved changes';
+
+  async function flush() {
+    if (!pending || saving) {
+      return;
+    }
+
+    pending = false;
+    saving = true;
+
+    try {
+      await saveTask();
+    } catch (error) {
+      setSaveStatus({
+        tone: 'warning',
+        text: error?.message || 'Autosave failed',
+      });
+      throw error;
+    } finally {
+      saving = false;
+      if (pending) {
+        schedule();
+      }
+    }
+  }
+
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      flush().catch(() => {});
+    }, delay);
+  }
+
+  return {
+    touch(text = dirtyText) {
+      pending = true;
+      window.markAppDirty(text);
+      schedule();
+    },
+    flush,
+    cancel() {
+      clearTimeout(timer);
+      pending = false;
+    },
+  };
+};
+window.saveProjectData = async function saveProjectData(project, options = {}) {
+  const previousProject = getProject();
+  const previousMilestones = new Set(previousProject?.unlockedMilestones || []);
+  const milestoneSnapshot = typeof window.getProjectMilestoneSnapshot === 'function'
+    ? window.getProjectMilestoneSnapshot(project)
+    : { unlockedMilestones: project?.unlockedMilestones || [], visibleBadges: [] };
+  const milestoneDefinitions = typeof window.getProjectMilestoneDefinitions === 'function'
+    ? window.getProjectMilestoneDefinitions()
+    : [];
+  const mergedProject = {
+    ...project,
+    dailyWordHistory: updateDailyWritingHistory(project, previousProject),
+    unlockedMilestones: milestoneSnapshot.unlockedMilestones,
+  };
+  const newlyUnlocked = milestoneSnapshot.unlockedMilestones
+    .filter((milestoneId) => !previousMilestones.has(milestoneId))
+    .map((milestoneId) => milestoneDefinitions.find((entry) => entry.id === milestoneId))
+    .filter(Boolean);
+
+  setSaveStatus({
+    tone: 'saving',
+    text: 'Saving changes...',
+  });
+  const savedProject = await window.api.saveProject(mergedProject, {
+    dirtyFields: options.dirtyFields || [],
+  });
+  setCurrentProject(savedProject);
+  setSaveStatus({
+    tone: 'success',
+    text: 'Saved just now',
+  });
+  if (newlyUnlocked.length) {
+    window.showMilestoneCelebration(newlyUnlocked);
+  }
+  return savedProject;
 };
 window.saveSettingsData = async function saveSettingsData(settings) {
   return window.api.saveSettings(settings);
@@ -357,9 +624,62 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('click', (event) => {
+    const sidebarNav = event.target.closest('[data-page]');
+    if (sidebarNav) {
+      const page = sidebarNav.dataset.page;
+      if (page === 'create-project') {
+        window.navigate('create-project', { project: null });
+        return;
+      }
+
+      if (page) {
+        window.navigate(page);
+        return;
+      }
+    }
+
+    const nextStepButton = event.target.closest('#topbar-next-step');
+    if (nextStepButton) {
+      const nextPage = nextStepButton.dataset.nextStep;
+      if (nextPage === 'create-project') {
+        window.navigate('create-project', { project: null });
+      } else if (nextPage) {
+        window.navigate(nextPage);
+      }
+      return;
+    }
+
+    if (event.target.closest('#topbar-new-project') || event.target.closest('#btn-new-project') || event.target.closest('#btn-empty-new')) {
+      window.navigate('create-project', { project: null });
+      return;
+    }
+
+    const stepButton = event.target.closest('[data-topbar-step]');
+    if (stepButton) {
+      const page = stepButton.dataset.topbarStep;
+      if (page === 'create-project') {
+        window.navigate('create-project', { project: null });
+      } else if (page) {
+        window.navigate(page);
+      }
+    }
+  });
+
+  if (window.projectStore?.subscribe) {
+    window.projectStore.subscribe((project) => {
+      syncProjectState(project);
+    });
+  }
+
   if (typeof window.renderSidebar === 'function') {
     window.renderSidebar('home', null);
   }
+
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar('home', null, state.saveStatus);
+  }
+  renderReferenceDrawer();
 
   await navigate('home');
 });

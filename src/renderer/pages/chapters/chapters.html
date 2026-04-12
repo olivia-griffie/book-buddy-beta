@@ -7,7 +7,7 @@
     </div>
     <div class="page-header-actions">
       <button id="export-chapters" class="btn btn-ghost" type="button">Export Book</button>
-      <button id="save-chapters" class="btn btn-primary" type="button">Save Chapters</button>
+      <button id="save-chapters" class="btn btn-save" type="button">Save Chapters</button>
     </div>
   </div>
 
@@ -18,73 +18,37 @@
   </div>
 
   <div id="chapters-content" class="chapters-layout" style="display: none;">
-    <section class="card plot-sections-card">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Plot Areas</p>
-          <h2>Section Targets</h2>
-        </div>
-      </div>
-      <div id="plot-sections-list" class="plot-sections-list"></div>
-      <p id="chapters-save-message" class="form-message" aria-live="polite"></p>
-    </section>
-
-    <section class="card chapter-editor-card">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Chapter Editor</p>
+    <section class="card ui-card ui-card-stack chapter-editor-card">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
+          <p class="eyebrow">Writing Workspace</p>
           <h2 id="chapter-editor-title">Select a chapter</h2>
+          <p class="chapter-editor-note ui-card-description">Choose a chapter below, then write in the draft editor here.</p>
         </div>
       </div>
 
       <div id="chapter-editor-shell" style="display: none;">
-        <div class="chapter-form-grid">
-          <div class="field">
-            <label for="chapter-title">Chapter Title</label>
-            <input id="chapter-title" type="text" />
-          </div>
-          <div class="field">
-            <label for="chapter-section">Plot Section</label>
-            <select id="chapter-section"></select>
-          </div>
-          <div class="field">
-            <label for="chapter-target-words">Chapter Target Words</label>
-            <input id="chapter-target-words" type="number" min="0" step="100" />
-          </div>
-          <div class="field">
-            <label for="chapter-font-family">Font Style</label>
-            <select id="chapter-font-family">
-              <option value="serif">Serif</option>
-              <option value="sans-serif">Sans Serif</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-font-size">Font Size</label>
-            <select id="chapter-font-size">
-              <option value="10">10</option>
-              <option value="12">12</option>
-              <option value="14">14</option>
-              <option value="16">16</option>
-              <option value="18">18</option>
-              <option value="20">20</option>
-              <option value="22">22</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-line-height">Line Spacing</label>
-            <select id="chapter-line-height">
-              <option value="1.2">1.2</option>
-              <option value="1.4">1.4</option>
-              <option value="1.6" selected>1.6</option>
-              <option value="1.8">1.8</option>
-              <option value="2">2.0</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-current-words">Current Words</label>
-            <input id="chapter-current-words" type="text" readonly />
-          </div>
+        <div class="chapter-selection-banner">
+          <span id="chapter-selected-section" class="chapter-selection-pill"></span>
+          <span id="chapter-selected-name" class="chapter-selection-title"></span>
         </div>
+
+        <details class="chapter-panel chapter-panel-challenge" open>
+          <summary class="chapter-panel-summary">
+            <div>
+              <p class="eyebrow">Daily Writing Challenge</p>
+              <h3 class="card-heading">Write From Today&apos;s Prompts</h3>
+            </div>
+            <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="chapter-panel-body">
+            <div id="chapter-prompt-empty" class="editor-empty" style="display: none;">
+              Generate a daily prompt to start writing against this chapter.
+            </div>
+            <div id="chapter-prompt-list" class="chapter-prompt-list"></div>
+            <p id="chapter-prompt-message" class="form-message" aria-live="polite"></p>
+          </div>
+        </details>
 
         <div class="goal-progress-card chapter-progress-card">
           <div class="goal-progress-head">
@@ -102,29 +66,101 @@
           </div>
         </div>
 
-        <section class="daily-challenge-panel">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Daily Writing Challenge</p>
-              <h3 class="card-heading">Write From Today&apos;s Prompts</h3>
+        <section class="chapter-writing-workspace ui-card ui-card-soft ui-card-stack">
+          <div class="section-heading ui-card-head">
+            <div class="ui-card-copy">
+              <p class="eyebrow">Writing Workspace</p>
+              <h3 class="card-heading">Chapter Settings And Draft</h3>
             </div>
           </div>
-          <div id="chapter-prompt-empty" class="editor-empty" style="display: none;">
-            Generate a daily prompt to start writing against this chapter.
+          <div class="chapter-form-grid">
+            <div class="field">
+              <label for="chapter-title">Chapter Title</label>
+              <input id="chapter-title" type="text" />
+            </div>
+            <div class="field">
+              <label for="chapter-section">Plot Section</label>
+              <select id="chapter-section"></select>
+            </div>
+            <div class="field">
+              <label for="chapter-target-words">Chapter Target Words</label>
+              <input id="chapter-target-words" type="number" min="0" step="100" />
+            </div>
+            <div class="field">
+              <label for="chapter-font-family">Font Style</label>
+              <select id="chapter-font-family">
+                <option value="serif">Serif</option>
+                <option value="sans-serif">Sans Serif</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="chapter-font-size">Font Size</label>
+              <select id="chapter-font-size">
+                <option value="10">10</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+                <option value="20">20</option>
+                <option value="22">22</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="chapter-line-height">Line Spacing</label>
+              <select id="chapter-line-height">
+                <option value="1.2">1.2</option>
+                <option value="1.4">1.4</option>
+                <option value="1.6" selected>1.6</option>
+                <option value="1.8">1.8</option>
+                <option value="2">2.0</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="chapter-current-words">Current Words</label>
+              <input id="chapter-current-words" type="text" readonly />
+            </div>
           </div>
-          <div id="chapter-prompt-list" class="chapter-prompt-list"></div>
-          <p id="chapter-prompt-message" class="form-message" aria-live="polite"></p>
+          <div class="field chapter-draft-field">
+            <label for="chapter-content">Chapter Draft</label>
+            <textarea id="chapter-content" rows="18" data-editor-mode="full"></textarea>
+          </div>
         </section>
 
-        <div class="field">
-          <label for="chapter-content">Draft</label>
-          <textarea id="chapter-content" rows="18"></textarea>
-        </div>
+        <details class="chapter-panel chapter-context-panel">
+          <summary class="chapter-panel-summary">
+            <div>
+              <p class="eyebrow">Writing Context</p>
+              <h3 class="card-heading">Keep Story Notes Nearby</h3>
+            </div>
+            <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
+          </summary>
+          <div class="chapter-panel-body">
+            <div class="chapter-context-tabs" role="tablist" aria-label="Chapter reference tabs">
+              <button class="chapter-context-tab is-active" type="button" role="tab" aria-selected="true" data-context-tab="plot">Plot</button>
+              <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="characters">Characters</button>
+              <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="scenes">Scenes</button>
+              <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="locations">Locations</button>
+            </div>
+            <div id="chapter-context-content" class="chapter-context-content"></div>
+          </div>
+        </details>
       </div>
 
       <div id="chapter-editor-empty" class="editor-empty">
-        Pick a chapter from the left, or add a new one inside a plot section.
+        Pick a chapter from the chapter picker below, or add a new one inside a plot section.
       </div>
+    </section>
+
+    <section class="card ui-card ui-card-stack plot-sections-card">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
+          <p class="eyebrow">Chapter Picker</p>
+          <h2>Section Targets</h2>
+          <p class="plot-sections-note ui-card-description">Open a plot area, then connect chapters, scenes, characters, and locations to it.</p>
+        </div>
+      </div>
+      <div id="plot-sections-list" class="plot-sections-list"></div>
+      <p id="chapters-save-message" class="form-message" aria-live="polite"></p>
     </section>
   </div>
 </section>

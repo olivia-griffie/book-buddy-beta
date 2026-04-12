@@ -61,6 +61,35 @@ function serializeRichTextValue(html = '', settings = {}) {
   return wrapper.outerHTML;
 }
 
+function buildAlignmentIcon(kind) {
+  const paths = {
+    left: `
+      <line x1="3" y1="5" x2="17" y2="5"></line>
+      <line x1="3" y1="10" x2="14" y2="10"></line>
+      <line x1="3" y1="15" x2="17" y2="15"></line>
+      <line x1="3" y1="20" x2="12" y2="20"></line>
+    `,
+    center: `
+      <line x1="4" y1="5" x2="16" y2="5"></line>
+      <line x1="6" y1="10" x2="14" y2="10"></line>
+      <line x1="4" y1="15" x2="16" y2="15"></line>
+      <line x1="6" y1="20" x2="14" y2="20"></line>
+    `,
+    right: `
+      <line x1="5" y1="5" x2="17" y2="5"></line>
+      <line x1="8" y1="10" x2="17" y2="10"></line>
+      <line x1="5" y1="15" x2="17" y2="15"></line>
+      <line x1="10" y1="20" x2="17" y2="20"></line>
+    `,
+  };
+
+  return `
+    <svg class="rich-text-btn-icon" viewBox="0 0 20 24" aria-hidden="true" focusable="false">
+      ${paths[kind] || paths.left}
+    </svg>
+  `;
+}
+
 window.parseRichTextValue = parseRichTextValue;
 window.serializeRichTextValue = serializeRichTextValue;
 
@@ -86,21 +115,32 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
 
     textarea.dataset.richTextInitialized = 'true';
     textarea.classList.add('rich-text-source');
+    const editorMode = textarea.dataset.editorMode || 'simple';
+    const showAdvancedToggle = editorMode !== 'minimal';
+    const startExpanded = editorMode === 'full';
 
     const { html, settings } = parseRichTextValue(textarea.value);
     const toolbar = document.createElement('div');
-    toolbar.className = 'rich-text-toolbar';
+    toolbar.className = `rich-text-toolbar is-${editorMode}`;
     toolbar.innerHTML = `
       <div class="rich-text-toolbar-main">
         <button type="button" class="rich-text-btn" data-command="bold" title="Bold"><strong>B</strong></button>
         <button type="button" class="rich-text-btn" data-command="italic" title="Italic"><em>I</em></button>
         <button type="button" class="rich-text-btn" data-command="underline" title="Underline"><u>U</u></button>
-        <button type="button" class="rich-text-btn rich-text-btn-toggle" data-toggle-advanced="true" aria-expanded="false" title="More formatting">...</button>
+        ${showAdvancedToggle
+    ? '<button type="button" class="rich-text-btn rich-text-btn-toggle" data-toggle-advanced="true" aria-expanded="false" title="More formatting">Advanced</button>'
+    : ''}
       </div>
       <div class="rich-text-toolbar-advanced">
-        <button type="button" class="rich-text-btn" data-command="justifyLeft" title="Align left">L</button>
-        <button type="button" class="rich-text-btn" data-command="justifyCenter" title="Center">C</button>
-        <button type="button" class="rich-text-btn" data-command="justifyRight" title="Align right">R</button>
+        <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyLeft" title="Align left" aria-label="Align left">
+          ${buildAlignmentIcon('left')}
+        </button>
+        <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyCenter" title="Align center" aria-label="Align center">
+          ${buildAlignmentIcon('center')}
+        </button>
+        <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyRight" title="Align right" aria-label="Align right">
+          ${buildAlignmentIcon('right')}
+        </button>
         <select class="rich-text-select" data-setting="fontFamily" title="Font family">
           <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Sans</option>
           <option value="Georgia, 'Times New Roman', serif">Serif</option>
@@ -141,19 +181,46 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       lineHeight: settings.lineHeight || '1.6',
       textAlign: settings.textAlign || '',
     };
+    let savedRange = null;
 
     const familySelect = toolbar.querySelector('[data-setting="fontFamily"]');
     const sizeSelect = toolbar.querySelector('[data-setting="fontSize"]');
     const lineHeightSelect = toolbar.querySelector('[data-setting="lineHeight"]');
+
+    function saveSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.rangeCount === 0) {
+        return;
+      }
+
+      const range = selection.getRangeAt(0);
+      if (editor.contains(range.commonAncestorContainer)) {
+        savedRange = range.cloneRange();
+      }
+    }
+
+    function restoreSelection() {
+      if (!savedRange) {
+        return;
+      }
+
+      const selection = window.getSelection();
+      if (!selection) {
+        return;
+      }
+
+      selection.removeAllRanges();
+      selection.addRange(savedRange);
+    }
 
     function applyState() {
       editor.style.fontFamily = state.fontFamily;
       editor.style.fontSize = `${state.fontSize}px`;
       editor.style.lineHeight = state.lineHeight;
       editor.style.textAlign = state.textAlign;
-      familySelect.value = state.fontFamily;
-      sizeSelect.value = state.fontSize;
-      lineHeightSelect.value = state.lineHeight;
+      if (familySelect) familySelect.value = state.fontFamily;
+      if (sizeSelect) sizeSelect.value = state.fontSize;
+      if (lineHeightSelect) lineHeightSelect.value = state.lineHeight;
     }
 
     function syncTextarea(shouldDispatch = false) {
@@ -164,29 +231,55 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     }
 
     toolbar.querySelectorAll('[data-command]').forEach((button) => {
+      button.addEventListener('mousedown', (event) => {
+        event.preventDefault();
+        saveSelection();
+      });
       button.addEventListener('click', () => {
         editor.focus();
+        restoreSelection();
         document.execCommand(button.dataset.command, false);
+        saveSelection();
         syncTextarea(true);
       });
     });
 
     toolbar.querySelectorAll('[data-setting]').forEach((input) => {
+      input.addEventListener('mousedown', () => {
+        saveSelection();
+      });
       input.addEventListener('change', () => {
+        editor.focus();
+        restoreSelection();
         state[input.dataset.setting] = input.value;
         applyState();
+        saveSelection();
         syncTextarea(true);
       });
     });
 
     const advancedToggle = toolbar.querySelector('[data-toggle-advanced]');
+    if (startExpanded) {
+      toolbar.classList.add('is-expanded');
+      advancedToggle?.setAttribute('aria-expanded', 'true');
+    }
+
     advancedToggle?.addEventListener('click', () => {
       const expanded = toolbar.classList.toggle('is-expanded');
       advancedToggle.setAttribute('aria-expanded', String(expanded));
     });
 
-    editor.addEventListener('input', () => syncTextarea(true));
-    editor.addEventListener('blur', () => syncTextarea(false));
+    editor.addEventListener('input', () => {
+      saveSelection();
+      syncTextarea(true);
+    });
+    editor.addEventListener('blur', () => {
+      saveSelection();
+      syncTextarea(false);
+    });
+    editor.addEventListener('mouseup', saveSelection);
+    editor.addEventListener('keyup', saveSelection);
+    editor.addEventListener('focus', saveSelection);
 
     applyState();
     syncTextarea(false);

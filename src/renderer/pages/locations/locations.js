@@ -1,5 +1,5 @@
 window.initPage = async function ({ project }) {
-  const activeProject = project || window.getCurrentProject();
+  let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('locations-empty-state');
   const content = document.getElementById('locations-content');
   const saveButton = document.getElementById('save-locations');
@@ -38,6 +38,18 @@ window.initPage = async function ({ project }) {
     socialDynamic: document.getElementById('location-social-dynamic'),
     other: document.getElementById('location-other'),
   };
+  const autosave = window.createAutosaveController(async () => {
+    activeProject = await window.saveProjectData({
+      ...activeProject,
+      locations,
+      updatedAt: new Date().toISOString(),
+    }, {
+      dirtyFields: ['locations'],
+    });
+    saveMessage.textContent = 'Locations autosaved.';
+  }, {
+    dirtyText: 'Location changes not saved',
+  });
 
   function getSelectedLocation() {
     return locations.find((location) => location.id === selectedId) || null;
@@ -93,6 +105,7 @@ window.initPage = async function ({ project }) {
 
     document.getElementById('location-editor-title').textContent = location.name || 'Location Profile';
     renderList();
+    autosave.touch();
   }
 
   addButton.addEventListener('click', () => {
@@ -110,6 +123,7 @@ window.initPage = async function ({ project }) {
 
     locations.push(location);
     selectedId = location.id;
+    autosave.touch();
     renderList();
     renderEditor();
   });
@@ -127,7 +141,9 @@ window.initPage = async function ({ project }) {
         updatedAt: new Date().toISOString(),
       };
 
-      await window.saveProjectData(updatedProject);
+      activeProject = await window.saveProjectData(updatedProject, {
+        dirtyFields: ['locations'],
+      });
       saveMessage.textContent = 'Locations saved.';
     });
   });

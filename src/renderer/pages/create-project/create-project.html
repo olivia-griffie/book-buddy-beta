@@ -37,6 +37,10 @@
         <label for="project-goal">Word Count Goal</label>
         <input id="project-goal" name="wordCountGoal" type="number" min="0" step="100" value="60000" />
       </div>
+      <div class="field">
+        <label for="project-target-date">Date To Complete</label>
+        <input id="project-target-date" name="targetCompletionDate" type="date" />
+      </div>
       <input id="project-thumbnail" class="file-input-hidden" name="thumbnailFile" type="file" accept="image/*" />
     </div>
 
@@ -51,10 +55,10 @@
         <span class="placeholder-icon">Book</span>
       </div>
       <div class="thumbnail-preview-actions">
-        <button id="project-thumbnail-trigger" class="upload-trigger" type="button" aria-label="Upload project thumbnail">
+        <label id="project-thumbnail-trigger" class="upload-trigger" for="project-thumbnail" aria-label="Upload project thumbnail">
           <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
           <span>Upload Thumbnail</span>
-        </button>
+        </label>
       </div>
     </section>
 
@@ -82,12 +86,53 @@
         </div>
         <span id="genre-count" class="selection-badge">0 selected</span>
       </div>
-      <div id="genre-options" class="genre-options"></div>
+      <div id="genre-options" class="genre-options">
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Contemporary" />
+          <span>Contemporary</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Fantasy" />
+          <span>Fantasy</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Historical Fiction" />
+          <span>Historical Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Horror" />
+          <span>Horror</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Literary Fiction" />
+          <span>Literary Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Memoir" />
+          <span>Memoir</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Mystery" />
+          <span>Mystery</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Romance" />
+          <span>Romance</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Science Fiction" />
+          <span>Science Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Thriller" />
+          <span>Thriller</span>
+        </label>
+      </div>
     </div>
 
     <div class="form-actions">
       <p id="form-message" class="form-message" aria-live="polite"></p>
-      <button class="btn btn-primary" type="submit">Save And Build Plot</button>
+      <button class="btn btn-save" type="submit">Save And Build Plot</button>
     </div>
   </form>
 </section>

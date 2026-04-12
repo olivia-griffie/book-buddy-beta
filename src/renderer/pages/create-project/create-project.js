@@ -1,5 +1,18 @@
 window.initPage = async function () {
   const ADMIN_OVERRIDE_CODE = 'Tester';
+  const fallbackGenres = [
+    'Fantasy',
+    'Romance',
+    'Horror',
+    'Mystery',
+    'Thriller',
+    'Science Fiction',
+    'Historical Fiction',
+    'Memoir',
+    'Literary Fiction',
+    'Contemporary',
+  ];
+
   const form = document.getElementById('create-project-form');
   const genreOptions = document.getElementById('genre-options');
   const genreCount = document.getElementById('genre-count');
@@ -16,18 +29,19 @@ window.initPage = async function () {
   const thumbnailInput = document.getElementById('project-thumbnail');
   const thumbnailTrigger = document.getElementById('project-thumbnail-trigger');
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
-  const { genrePrompts } = await window.getGenrePromptData();
-  const existingProjects = await window.api.getAllProjects();
-  const settings = await window.api.getSettings();
-  let isAdminMode = Boolean(settings.betaTesterUnlocked);
+
+  let existingProjects = [];
+  let isAdminMode = false;
+  let projectLimitsReady = false;
   let thumbnailData = '';
 
-  const genres = [...new Set(genrePrompts.map((entry) => entry.genre))]
-    .filter((genre) => {
-      const normalized = window.normalizeGenreKey(genre);
-      return !normalized.includes('-') && !normalized.includes(' x ');
-    })
-    .sort((a, b) => a.localeCompare(b));
+  function normalizeGenre(value = '') {
+    if (typeof window.normalizeGenreKey === 'function') {
+      return window.normalizeGenreKey(value);
+    }
+
+    return String(value || '').trim().toLowerCase();
+  }
 
   function formatWords(value) {
     return Number(value || 0).toLocaleString();
@@ -46,6 +60,30 @@ window.initPage = async function () {
       input.disabled = shouldDisable;
       input.closest('.genre-option')?.classList.toggle('is-disabled', shouldDisable);
     });
+  }
+
+  function renderGenreOptions(sourceGenres = fallbackGenres) {
+    const genres = [...new Set(sourceGenres)]
+      .filter((genre) => {
+        const normalized = normalizeGenre(genre);
+        return normalized && !normalized.includes('-') && !normalized.includes(' x ');
+      })
+      .sort((left, right) => left.localeCompare(right));
+
+    genreOptions.innerHTML = genres
+      .map((genre) => `
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="${genre}" />
+          <span>${genre}</span>
+        </label>
+      `)
+      .join('');
+
+    genreOptions.querySelectorAll('input').forEach((input) => {
+      input.addEventListener('change', syncGenreSelectionState);
+    });
+
+    syncGenreSelectionState();
   }
 
   function renderThumbnailPreview() {
@@ -77,7 +115,7 @@ window.initPage = async function () {
     goalFill.style.width = `${percent}%`;
     goalFill.classList.toggle('is-complete', completed);
     goalIcon.classList.toggle('is-complete', completed);
-    goalIcon.textContent = completed ? '✓' : '•';
+    goalIcon.textContent = completed ? 'OK' : '...';
   }
 
   async function readThumbnail(file) {
@@ -97,18 +135,33 @@ window.initPage = async function () {
     renderThumbnailPreview();
   }
 
-  genreOptions.innerHTML = genres
-    .map((genre) => `
-      <label class="genre-option">
-        <input type="checkbox" name="genres" value="${genre}" />
-        <span>${genre}</span>
-      </label>
-    `)
-    .join('');
+  async function bootstrapProjectSetup() {
+    try {
+      const promptData = await window.getGenrePromptData();
+      const promptGenres = (promptData?.genrePrompts || []).map((entry) => entry.genre).filter(Boolean);
+      if (promptGenres.length) {
+        renderGenreOptions(promptGenres);
+      }
+    } catch (error) {
+      formMessage.textContent = 'Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.';
+    }
 
-  genreOptions.querySelectorAll('input').forEach((input) => {
-    input.addEventListener('change', syncGenreSelectionState);
-  });
+    try {
+      existingProjects = await window.api.getAllProjects();
+      const settings = await window.api.getSettings();
+      isAdminMode = Boolean(settings?.betaTesterUnlocked);
+      projectLimitsReady = true;
+      syncAdminState();
+    } catch (error) {
+      projectLimitsReady = false;
+      formMessage.textContent = formMessage.textContent || 'Project settings did not load cleanly. You can still create a project and retry a restart later if needed.';
+    }
+  }
+
+  renderGenreOptions(fallbackGenres);
+  renderThumbnailPreview();
+  syncGoalPreview();
+  syncAdminState();
 
   thumbnailInput?.addEventListener('change', async (event) => {
     formMessage.textContent = '';
@@ -126,10 +179,6 @@ window.initPage = async function () {
     thumbnailInput?.click();
   });
 
-  syncGenreSelectionState();
-  syncGoalPreview();
-  renderThumbnailPreview();
-  syncAdminState();
   goalInput.addEventListener('input', syncGoalPreview);
 
   unlockAdminButton?.addEventListener('click', async () => {
@@ -141,6 +190,7 @@ window.initPage = async function () {
 
     await window.saveSettingsData({ betaTesterUnlocked: true });
     isAdminMode = true;
+    projectLimitsReady = true;
     formMessage.textContent = 'Admin mode unlocked. Multiple project slots are now available on this device.';
     syncAdminState();
   });
@@ -149,8 +199,8 @@ window.initPage = async function () {
     event.preventDefault();
     formMessage.textContent = '';
 
-    if (!isAdminMode && existingProjects.length >= 1) {
-      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or buy the full version when it releases to unlock multiple projects.';
+    if (projectLimitsReady && !isAdminMode && existingProjects.length >= 1) {
+      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
       return;
     }
 
@@ -169,9 +219,11 @@ window.initPage = async function () {
       authorName: String(formData.get('authorName') || '').trim(),
       genres: selectedGenres,
       wordCountGoal: Number(formData.get('wordCountGoal') || 0),
+      targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
       currentWordCount: 0,
       thumbnail: thumbnailData,
       plotWorkbook: {},
+      dailyWordHistory: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -181,8 +233,14 @@ window.initPage = async function () {
       return;
     }
 
-    await window.api.saveProject(project);
-    window.setCurrentProject(project);
-    await window.navigate('plot-creation', { project });
+    try {
+      const savedProject = await window.api.saveProject(project);
+      window.setCurrentProject(savedProject);
+      await window.navigate('plot-creation', { project: savedProject });
+    } catch (error) {
+      formMessage.textContent = error?.message || 'Project creation failed. Please try again.';
+    }
   });
+
+  bootstrapProjectSetup().catch(() => {});
 };

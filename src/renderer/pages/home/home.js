@@ -7,6 +7,7 @@ window.initPage = async function () {
   const empty = document.getElementById('empty-state');
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
+  const dashboard = document.getElementById('daily-dashboard');
   const ADMIN_OVERRIDE_CODE = 'Tester';
 
   function showCreateLimitMessage() {
@@ -57,6 +58,169 @@ window.initPage = async function () {
     });
   }
 
+  function formatShortDate(value) {
+    if (!value) {
+      return 'Not set';
+    }
+
+    const date = new Date(`${value}T12:00:00`);
+    if (Number.isNaN(date.getTime())) {
+      return 'Not set';
+    }
+
+    return date.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  }
+
+  function computePace(project) {
+    const goal = Number(project.wordCountGoal || 0);
+    const current = Number(project.currentWordCount || 0);
+    const targetDate = project.targetCompletionDate;
+    if (!goal || !targetDate) {
+      return {
+        status: 'Set a completion date to unlock pace tracking.',
+        detail: 'Choose a target date so Book Buddy can tell you whether the project is on track.',
+        tone: 'neutral',
+      };
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const finish = new Date(`${targetDate}T12:00:00`);
+    const msPerDay = 1000 * 60 * 60 * 24;
+    const daysLeft = Math.ceil((finish - today) / msPerDay);
+    const remainingWords = Math.max(0, goal - current);
+    const recentWords = (project.dailyWordHistory || [])
+      .slice(-7)
+      .reduce((sum, entry) => sum + Number(entry.wordsWritten || 0), 0);
+    const recentDailyAverage = Math.round(recentWords / 7);
+
+    if (remainingWords === 0) {
+      return {
+        status: 'Goal complete',
+        detail: 'You have already reached your current manuscript goal.',
+        tone: 'success',
+      };
+    }
+
+    if (daysLeft <= 0) {
+      return {
+        status: 'Past target date',
+        detail: `${remainingWords.toLocaleString()} words still remain after your planned finish date.`,
+        tone: 'warning',
+      };
+    }
+
+    const neededPerDay = Math.ceil(remainingWords / daysLeft);
+    const onTrack = recentDailyAverage >= neededPerDay;
+
+    return {
+      status: onTrack ? 'On track' : 'Needs a stronger pace',
+      detail: `${neededPerDay.toLocaleString()} words/day needed. Recent average: ${recentDailyAverage.toLocaleString()} words/day.`,
+      tone: onTrack ? 'success' : 'warning',
+    };
+  }
+
+  function renderDashboard(project) {
+    if (!project || !dashboard) {
+      return;
+    }
+
+    const history = project.dailyWordHistory || [];
+    if (!history.length && !project.targetCompletionDate) {
+      dashboard.style.display = 'none';
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const weeklyDates = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(today);
+      date.setDate(today.getDate() - (6 - index));
+      return date;
+    });
+
+    const weeklyEntries = weeklyDates.map((date) => {
+      const dateKey = window.buildLocalDayKey(date);
+      const entry = history.find((item) => item.date === dateKey);
+      return {
+        label: date.toLocaleDateString(undefined, { weekday: 'short' }),
+        value: Number(entry?.wordsWritten || 0),
+      };
+    });
+
+    const maxWeekly = Math.max(...weeklyEntries.map((entry) => entry.value), 1);
+
+    const calendarDates = Array.from({ length: 28 }, (_, index) => {
+      const date = new Date(today);
+      date.setDate(today.getDate() - (27 - index));
+      const dateKey = window.buildLocalDayKey(date);
+      const entry = history.find((item) => item.date === dateKey);
+      return {
+        key: dateKey,
+        dayLabel: String(date.getDate()),
+        value: Number(entry?.wordsWritten || 0),
+      };
+    });
+
+    const maxCalendar = Math.max(...calendarDates.map((entry) => entry.value), 1);
+    const pace = computePace(project);
+
+    dashboard.style.display = 'grid';
+    dashboard.innerHTML = `
+      <div class="daily-dashboard-head">
+        <div>
+          <p class="eyebrow">Daily Dashboard</p>
+          <h2>${project.title} Progress</h2>
+          <p>See your recent writing rhythm and whether you are pacing toward your target finish date.</p>
+        </div>
+        <div class="daily-dashboard-meta">
+          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact">
+            <span class="daily-dashboard-stat-label">Date To Complete</span>
+            <strong>${formatShortDate(project.targetCompletionDate)}</strong>
+          </div>
+          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${pace.tone}">
+            <span class="daily-dashboard-stat-label">${pace.status}</span>
+            <strong>${pace.detail}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="daily-dashboard-grid">
+        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+          <h3>Weekly Writing</h3>
+          <div class="daily-chart">
+            ${weeklyEntries.map((entry) => `
+              <div class="daily-chart-bar-group">
+                <div class="daily-chart-bar-track">
+                  <div class="daily-chart-bar-fill" style="height:${Math.max(10, Math.round((entry.value / maxWeekly) * 100))}%"></div>
+                </div>
+                <span class="daily-chart-bar-value">${entry.value ? entry.value.toLocaleString() : ''}</span>
+                <span class="daily-chart-bar-label">${entry.label}</span>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+          <h3>28 Day Writing Calendar</h3>
+          <div class="daily-calendar">
+            ${calendarDates.map((entry) => {
+              const intensity = entry.value === 0 ? '0' : entry.value < maxCalendar * 0.34 ? '1' : entry.value < maxCalendar * 0.67 ? '2' : '3';
+              return `
+                <div class="daily-calendar-cell intensity-${intensity}" title="${entry.key}: ${entry.value.toLocaleString()} words">
+                  <span>${entry.dayLabel}</span>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      </div>
+    `;
+  }
+
   function handleNewProject() {
     if (!isAdminMode && visibleProjects.length >= 1) {
       showCreateLimitMessage();
@@ -75,6 +239,7 @@ window.initPage = async function () {
   if (!visibleProjects.length) {
     grid.style.display = 'none';
     empty.style.display = 'block';
+    dashboard.style.display = 'none';
     betaBanner.style.display = isAdminMode ? 'block' : 'none';
     if (isAdminMode) {
       showAdminModeMessage();
@@ -104,8 +269,8 @@ window.initPage = async function () {
         : '<span class="placeholder-icon">Book</span>';
 
       return `
-        <div class="project-card" data-id="${project.id}">
-          <div class="project-card-head">
+        <div class="project-card ui-card ui-card-interactive" data-id="${project.id}">
+          <div class="project-card-head ui-card-head">
             <div class="project-media">
               <div class="project-thumb">${thumb}</div>
               <div class="project-thumb-actions">
@@ -117,7 +282,7 @@ window.initPage = async function () {
               </div>
             </div>
           </div>
-          <div class="project-info">
+          <div class="project-info ui-card-body">
             <div class="project-title">${project.title}</div>
             <div class="project-subtitle">${project.subtitle || ''}</div>
             <div class="project-genres">${genres}</div>
@@ -140,6 +305,8 @@ window.initPage = async function () {
                   <div class="project-goal-copy">
                     <span class="project-goal-label">Word Count Goal</span>
                     <span class="project-goal-value">${(project.wordCountGoal || 0).toLocaleString()} words</span>
+                    <span class="project-goal-label">Date To Complete</span>
+                    <span class="project-goal-value">${formatShortDate(project.targetCompletionDate)}</span>
                   </div>
                   <button class="btn btn-ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit</button>
                 </div>
@@ -149,13 +316,17 @@ window.initPage = async function () {
                       <label for="goal-${project.id}">Update Goal</label>
                       <input id="goal-${project.id}" type="number" min="0" step="100" value="${project.wordCountGoal || 0}" data-goal-input="${project.id}" />
                     </div>
-                    <button class="btn btn-sage-soft" type="button" data-save-goal="${project.id}">Update Goal</button>
+                    <div class="field">
+                      <label for="target-date-${project.id}">Target Date</label>
+                      <input id="target-date-${project.id}" type="date" value="${project.targetCompletionDate || ''}" data-target-date-input="${project.id}" />
+                    </div>
+                    <button class="btn btn-save" type="button" data-save-goal="${project.id}">Update Goal</button>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="project-card-actions">
+          <div class="project-card-actions ui-card-footer">
             <button class="btn btn-ghost" type="button" data-open-project="${project.id}">Open</button>
             <button class="btn btn-ghost" type="button" data-export-project="${project.id}">Export</button>
             <button class="btn btn-danger-soft" type="button" data-delete-project="${project.id}">Delete</button>
@@ -283,7 +454,9 @@ window.initPage = async function () {
           updatedAt: new Date().toISOString(),
         };
 
-        await window.saveProjectData(updatedProject);
+        await window.saveProjectData(updatedProject, {
+          dirtyFields: ['thumbnail'],
+        });
         await window.navigate('home');
       } catch (error) {
         betaBanner.style.display = 'block';
@@ -310,7 +483,9 @@ window.initPage = async function () {
         updatedAt: new Date().toISOString(),
       };
 
-      await window.saveProjectData(updatedProject);
+      await window.saveProjectData(updatedProject, {
+        dirtyFields: ['thumbnail'],
+      });
       await window.navigate('home');
     });
   });
@@ -332,22 +507,27 @@ window.initPage = async function () {
       const projectId = button.dataset.saveGoal;
       const project = allProjects.find((entry) => entry.id === projectId);
       const input = grid.querySelector(`[data-goal-input="${projectId}"]`);
+      const targetDateInput = grid.querySelector(`[data-target-date-input="${projectId}"]`);
       if (!project || !input) {
         return;
       }
 
       const wordCountGoal = Math.max(0, Number(input.value || 0));
+      const targetCompletionDate = String(targetDateInput?.value || '').trim();
       const updatedProject = {
         ...project,
         wordCountGoal,
+        targetCompletionDate,
         updatedAt: new Date().toISOString(),
       };
 
-      await window.saveProjectData(updatedProject);
+      await window.saveProjectData(updatedProject, {
+        dirtyFields: ['wordCountGoal', 'targetCompletionDate'],
+      });
       betaBanner.style.display = 'block';
       betaBanner.innerHTML = `
         <p class="eyebrow">Project Updated</p>
-        <p>Your word count goal is now ${wordCountGoal.toLocaleString()} words.</p>
+        <p>Your project goal is now ${wordCountGoal.toLocaleString()} words${targetCompletionDate ? ` with a target date of ${formatShortDate(targetCompletionDate)}` : ''}.</p>
       `;
       await window.navigate('home');
     });
@@ -369,4 +549,7 @@ window.initPage = async function () {
       await saveButton?.click();
     });
   });
+
+  const dashboardProject = visibleProjects.find((project) => project.id === window.getCurrentProject()?.id) || visibleProjects[0];
+  renderDashboard(dashboardProject);
 };

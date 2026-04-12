@@ -37,7 +37,7 @@
 .rich-text-btn,
 .rich-text-select {
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   background: white;
   color: var(--ink);
   font: inherit;
@@ -50,6 +50,26 @@
   cursor: pointer;
 }
 
+.rich-text-icon-btn {
+  width: 34px;
+  min-width: 34px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+}
+
+.rich-text-btn-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.rich-text-btn-icon line {
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
 .rich-text-select {
   height: 34px;
   padding: 0 10px;
@@ -57,7 +77,7 @@
 }
 
 .rich-text-btn-toggle {
-  min-width: 40px;
+  min-width: 88px;
   font-weight: 600;
 }
 

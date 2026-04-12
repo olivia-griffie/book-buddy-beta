@@ -10,6 +10,7 @@ contextMenu.default();
 
 const store = new Store();
 let mainWindow;
+const PROJECT_BACKUP_LIMIT = 15;
 
 function escapeHtml(value = '') {
   return String(value)
@@ -200,6 +201,59 @@ function buildExportDocument(project = {}) {
   };
 }
 
+function normalizeProjectSaveRequest(payload) {
+  if (payload && payload.project) {
+    return {
+      project: payload.project,
+      options: payload.options || {},
+    };
+  }
+
+  return {
+    project: payload,
+    options: {},
+  };
+}
+
+function cloneProjectSnapshot(project) {
+  return JSON.parse(JSON.stringify(project || null));
+}
+
+function mergeProjectRecord(existingProject = {}, incomingProject = {}, dirtyFields = []) {
+  const normalizedDirtyFields = [...new Set((dirtyFields || []).filter(Boolean))];
+  const nextProject = { ...existingProject };
+  const keysToApply = normalizedDirtyFields.length
+    ? normalizedDirtyFields
+    : Object.keys(incomingProject).filter((key) => !['id', 'createdAt', 'updatedAt'].includes(key));
+
+  keysToApply.forEach((key) => {
+    if (Object.prototype.hasOwnProperty.call(incomingProject, key)) {
+      nextProject[key] = incomingProject[key];
+    }
+  });
+
+  nextProject.id = incomingProject.id || existingProject.id;
+  nextProject.createdAt = existingProject.createdAt || incomingProject.createdAt || new Date().toISOString();
+  nextProject.updatedAt = incomingProject.updatedAt || new Date().toISOString();
+
+  return nextProject;
+}
+
+function recordProjectBackup(projectId, projectSnapshot) {
+  if (!projectId || !projectSnapshot) {
+    return;
+  }
+
+  const backups = store.get('projectBackups', {});
+  const projectBackups = Array.isArray(backups[projectId]) ? backups[projectId] : [];
+  projectBackups.unshift({
+    savedAt: new Date().toISOString(),
+    project: cloneProjectSnapshot(projectSnapshot),
+  });
+  backups[projectId] = projectBackups.slice(0, PROJECT_BACKUP_LIMIT);
+  store.set('projectBackups', backups);
+}
+
 async function writeProjectExport(project, targetPath, format) {
   const document = buildExportDocument(project);
 
@@ -242,6 +296,20 @@ async function writeProjectExport(project, targetPath, format) {
   }
 }
 
+async function loadPromptDataBundle() {
+  const [genrePrompts, specificPrompts, hybridGuides] = await Promise.all([
+    fs.readFile(path.join(__dirname, '../data/prompts/genre_prompts.json'), 'utf8').then(JSON.parse),
+    fs.readFile(path.join(__dirname, '../data/prompts/specific_genre_prompts.json'), 'utf8').then(JSON.parse),
+    fs.readFile(path.join(__dirname, '../data/defaults/hybrid_genres.json'), 'utf8').then(JSON.parse),
+  ]);
+
+  return {
+    genrePrompts,
+    specificPrompts,
+    hybridGuides,
+  };
+}
+
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -263,10 +331,6 @@ function createWindow() {
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
   mainWindow.webContents.on('context-menu', (event, params) => {
-    if (!params.isEditable && !params.selectionText && !params.misspelledWord) {
-      return;
-    }
-
     buildTextContextMenu(mainWindow, params).popup({
       window: mainWindow,
     });
@@ -297,18 +361,28 @@ app.on('window-all-closed', () => {
 // IPC: Projects
 ipcMain.handle('projects:getAll', () => store.get('projects', []));
 
-ipcMain.handle('projects:save', (_, project) => {
+ipcMain.handle('projects:save', (_, payload) => {
+  const { project, options } = normalizeProjectSaveRequest(payload);
+  const dirtyFields = options?.dirtyFields || [];
   const projects = store.get('projects', []);
   const index = projects.findIndex((entry) => entry.id === project.id);
 
   if (index >= 0) {
-    projects[index] = project;
+    const existingProject = projects[index];
+    const mergedProject = mergeProjectRecord(existingProject, project, dirtyFields);
+
+    if (JSON.stringify(existingProject) !== JSON.stringify(mergedProject)) {
+      recordProjectBackup(project.id, existingProject);
+    }
+
+    projects[index] = mergedProject;
+    store.set('projects', projects);
+    return mergedProject;
   } else {
     projects.push(project);
+    store.set('projects', projects);
+    return project;
   }
-
-  store.set('projects', projects);
-  return project;
 });
 
 ipcMain.handle('projects:delete', (_, id) => {
@@ -349,6 +423,8 @@ ipcMain.handle('projects:exportManuscript', async (_, project) => {
     format,
   };
 });
+
+ipcMain.handle('data:getPromptData', async () => loadPromptDataBundle());
 
 // IPC: Settings
 ipcMain.handle('settings:get', () => store.get('settings', { tier: 'beta' }));

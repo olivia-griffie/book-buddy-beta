@@ -1,5 +1,5 @@
 window.initPage = async function ({ project }) {
-  const activeProject = project || window.getCurrentProject();
+  let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('scenes-empty-state');
   const content = document.getElementById('scenes-content');
   const saveButton = document.getElementById('save-scenes');
@@ -40,6 +40,18 @@ window.initPage = async function ({ project }) {
     summary: document.getElementById('scene-summary'),
     other: document.getElementById('scene-other'),
   };
+  const autosave = window.createAutosaveController(async () => {
+    activeProject = await window.saveProjectData({
+      ...activeProject,
+      scenes,
+      updatedAt: new Date().toISOString(),
+    }, {
+      dirtyFields: ['scenes'],
+    });
+    saveMessage.textContent = 'Scenes autosaved.';
+  }, {
+    dirtyText: 'Scene changes not saved',
+  });
 
   fields.linkedChapterId.innerHTML = `
     <option value="">General scene idea</option>
@@ -113,6 +125,7 @@ window.initPage = async function ({ project }) {
     scene.other = String(window.getEditorFieldValue(fields.other) || '').trim();
     document.getElementById('scene-editor-title').textContent = scene.title || 'Scene Details';
     renderList();
+    autosave.touch();
   }
 
   async function readImage(file) {
@@ -137,6 +150,7 @@ window.initPage = async function ({ project }) {
 
     scenes.push(scene);
     selectedId = scene.id;
+    autosave.touch();
     renderList();
     renderEditor();
   });
@@ -158,6 +172,7 @@ window.initPage = async function ({ project }) {
       renderImagePreview(scene.image);
       renderList();
       saveMessage.textContent = '';
+      autosave.touch();
     } catch (error) {
       saveMessage.textContent = error.message;
     }
@@ -175,7 +190,9 @@ window.initPage = async function ({ project }) {
         updatedAt: new Date().toISOString(),
       };
 
-      await window.saveProjectData(updatedProject);
+      activeProject = await window.saveProjectData(updatedProject, {
+        dirtyFields: ['scenes'],
+      });
       saveMessage.textContent = 'Scenes saved.';
     });
   });
