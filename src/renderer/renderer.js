@@ -127,6 +127,15 @@ function computeWordCount(text = '') {
   return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 
+async function readFileAsDataUrl(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.onerror = () => reject(new Error('Unable to read the selected image.'));
+    reader.readAsDataURL(file);
+  });
+}
+
 function buildLocalDayKey(value = new Date()) {
   const date = value instanceof Date ? value : new Date(value);
   if (Number.isNaN(date.getTime())) {
@@ -665,6 +674,148 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     }
   });
+
+  document.addEventListener('change', async (event) => {
+    const genreInput = event.target.closest('#genre-options input[name="genres"]');
+    if (genreInput) {
+      const genreContainer = document.getElementById('genre-options');
+      const genreCount = document.getElementById('genre-count');
+      if (genreContainer) {
+        const selectedInputs = [...genreContainer.querySelectorAll('input[name="genres"]:checked')];
+        if (selectedInputs.length > 2) {
+          genreInput.checked = false;
+        }
+
+        const finalSelected = [...genreContainer.querySelectorAll('input[name="genres"]:checked')];
+        genreContainer.querySelectorAll('input[name="genres"]').forEach((input) => {
+          const shouldDisable = finalSelected.length >= 2 && !input.checked;
+          input.disabled = shouldDisable;
+          input.closest('.genre-option')?.classList.toggle('is-disabled', shouldDisable);
+        });
+
+        if (genreCount) {
+          genreCount.textContent = `${finalSelected.length} selected`;
+        }
+      }
+      return;
+    }
+
+    const thumbnailInput = event.target.closest('#project-thumbnail');
+    if (!thumbnailInput) {
+      return;
+    }
+
+    const preview = document.getElementById('project-thumbnail-preview');
+    const status = document.getElementById('project-thumbnail-status');
+    const file = thumbnailInput.files?.[0];
+
+    if (!preview) {
+      return;
+    }
+
+    if (!file) {
+      preview.innerHTML = '<span class="placeholder-icon">Book</span>';
+      const form = document.getElementById('create-project-form');
+      if (form) {
+        form.dataset.thumbnailData = '';
+      }
+      if (status) {
+        status.textContent = 'No image selected yet.';
+      }
+      return;
+    }
+
+    try {
+      const thumbnailData = await readFileAsDataUrl(file);
+      preview.innerHTML = `<img src="${thumbnailData}" alt="Project thumbnail preview" />`;
+      const form = document.getElementById('create-project-form');
+      if (form) {
+        form.dataset.thumbnailData = thumbnailData;
+      }
+      if (status) {
+        status.textContent = 'Image selected and ready for this project.';
+      }
+    } catch (error) {
+      if (status) {
+        status.textContent = error?.message || 'Unable to load the selected image.';
+      }
+    }
+  });
+
+  document.addEventListener('submit', async (event) => {
+    const form = event.target.closest('#create-project-form');
+    if (!form) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const formMessage = document.getElementById('form-message');
+    const titleInput = document.getElementById('project-title');
+    const selectedGenres = [...form.querySelectorAll('input[name="genres"]:checked')].map((input) => input.value);
+
+    if (formMessage) {
+      formMessage.textContent = '';
+    }
+
+    const title = String(titleInput?.value || '').trim();
+    if (!title) {
+      if (formMessage) {
+        formMessage.textContent = 'Add a project title before continuing.';
+      }
+      titleInput?.focus();
+      return;
+    }
+
+    if (!selectedGenres.length) {
+      if (formMessage) {
+        formMessage.textContent = 'Choose at least one genre.';
+      }
+      return;
+    }
+
+    try {
+      const allProjects = typeof window.api?.getAllProjects === 'function'
+        ? await window.api.getAllProjects()
+        : [];
+      const settings = typeof window.api?.getSettings === 'function'
+        ? await window.api.getSettings()
+        : { betaTesterUnlocked: false };
+
+      if (!settings?.betaTesterUnlocked && allProjects.length >= 1) {
+        if (formMessage) {
+          formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
+        }
+        return;
+      }
+
+      const formData = new FormData(form);
+      const project = {
+        id: `project-${Date.now()}`,
+        title,
+        subtitle: String(formData.get('subtitle') || '').trim(),
+        authorName: String(formData.get('authorName') || '').trim(),
+        genres: selectedGenres,
+        wordCountGoal: Number(formData.get('wordCountGoal') || 0),
+        targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
+        currentWordCount: 0,
+        thumbnail: String(form.dataset.thumbnailData || ''),
+        plotWorkbook: {},
+        dailyWordHistory: [],
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+
+      const savedProject = await window.api.saveProject(project);
+      window.setCurrentProject(savedProject);
+      await window.navigate('plot-creation', { project: savedProject });
+    } catch (error) {
+      if (formMessage) {
+        formMessage.textContent = error?.message || 'Project creation failed. Please try again.';
+      }
+    }
+  }, true);
 
   if (window.projectStore?.subscribe) {
     window.projectStore.subscribe((project) => {

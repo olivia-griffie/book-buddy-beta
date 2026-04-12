@@ -60,6 +60,9 @@
 
 .thumbnail-preview-actions {
   margin-top: 14px;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
 }
 
 .project-thumbnail-preview {
@@ -77,6 +80,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.thumbnail-status {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
 }
 
 .genre-panel {
@@ -131,12 +139,20 @@
 .form-actions {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
 }
 
 .form-message {
   min-height: 24px;
+}
+
+.form-actions .btn-save {
+  margin-left: auto;
+}
+
+.form-actions .btn-save:hover {
+  transform: none;
 }
 
 .goal-progress-card {

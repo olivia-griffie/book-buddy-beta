@@ -26,9 +26,11 @@ window.initPage = async function () {
   const goalCaption = document.getElementById('project-goal-caption');
   const goalFill = document.getElementById('project-goal-fill');
   const goalIcon = document.getElementById('project-goal-icon');
+  const titleInput = document.getElementById('project-title');
   const thumbnailInput = document.getElementById('project-thumbnail');
   const thumbnailTrigger = document.getElementById('project-thumbnail-trigger');
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
+  const thumbnailStatus = document.getElementById('project-thumbnail-status');
 
   let existingProjects = [];
   let isAdminMode = false;
@@ -90,6 +92,9 @@ window.initPage = async function () {
     thumbnailPreview.innerHTML = thumbnailData
       ? `<img src="${thumbnailData}" alt="Project thumbnail preview" />`
       : '<span class="placeholder-icon">Book</span>';
+    if (thumbnailStatus) {
+      thumbnailStatus.textContent = thumbnailData ? 'Image selected and ready for this project.' : 'No image selected yet.';
+    }
   }
 
   function syncAdminState() {
@@ -163,17 +168,23 @@ window.initPage = async function () {
   syncGoalPreview();
   syncAdminState();
 
-  thumbnailInput?.addEventListener('change', async (event) => {
+  async function handleThumbnailSelection(event) {
     formMessage.textContent = '';
 
     try {
       await readThumbnail(event.target.files?.[0]);
+      if (event.target.files?.[0]) {
+        formMessage.textContent = 'Thumbnail selected.';
+      }
     } catch (error) {
       thumbnailData = '';
       renderThumbnailPreview();
       formMessage.textContent = error.message;
     }
-  });
+  }
+
+  thumbnailInput?.addEventListener('change', handleThumbnailSelection);
+  thumbnailInput?.addEventListener('input', handleThumbnailSelection);
 
   thumbnailTrigger?.addEventListener('click', () => {
     thumbnailInput?.click();
@@ -230,6 +241,7 @@ window.initPage = async function () {
 
     if (!project.title) {
       formMessage.textContent = 'Add a project title before continuing.';
+      titleInput?.focus();
       return;
     }
 

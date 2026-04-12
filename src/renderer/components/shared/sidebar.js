@@ -68,7 +68,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
     return;
   }
 
-  const projectTitle = currentProject?.title || 'No project selected';
+  const projectTitle = currentProject?.title || '';
   const hasProject = Boolean(currentProject);
   const visibleGroups = sidebarGroups.filter((group) => hasProject || !group.requiresProject);
   const snapshot = hasProject ? getSidebarSnapshot(currentProject) : null;
@@ -86,7 +86,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
           <span class="sidebar-project-pill ${hasProject ? 'is-selected' : 'is-empty'}">
             ${hasProject ? 'Project Selected' : 'No Project Selected'}
           </span>
-          <p class="sidebar-project-title">${projectTitle}</p>
+          ${hasProject ? `<p class="sidebar-project-title">${projectTitle}</p>` : ''}
         </div>
         ${hasProject ? `
           <section class="sidebar-project-snapshot">
