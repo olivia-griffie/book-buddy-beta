@@ -360,6 +360,16 @@ app.on('window-all-closed', () => {
 
 // IPC: Projects
 ipcMain.handle('projects:getAll', () => store.get('projects', []));
+ipcMain.handle('projects:getCurrentId', () => store.get('currentProjectId', null));
+ipcMain.handle('projects:setCurrentId', (_, projectId) => {
+  if (projectId) {
+    store.set('currentProjectId', projectId);
+    return projectId;
+  }
+
+  store.delete('currentProjectId');
+  return null;
+});
 
 ipcMain.handle('projects:save', (_, payload) => {
   const { project, options } = normalizeProjectSaveRequest(payload);
@@ -377,10 +387,16 @@ ipcMain.handle('projects:save', (_, payload) => {
 
     projects[index] = mergedProject;
     store.set('projects', projects);
+    if (store.get('currentProjectId') === mergedProject.id) {
+      store.set('currentProjectId', mergedProject.id);
+    }
     return mergedProject;
   } else {
     projects.push(project);
     store.set('projects', projects);
+    if (!store.get('currentProjectId')) {
+      store.set('currentProjectId', project.id);
+    }
     return project;
   }
 });
@@ -388,6 +404,13 @@ ipcMain.handle('projects:save', (_, payload) => {
 ipcMain.handle('projects:delete', (_, id) => {
   const projects = store.get('projects', []).filter((project) => project.id !== id);
   store.set('projects', projects);
+  if (store.get('currentProjectId') === id) {
+    if (projects.length) {
+      store.set('currentProjectId', projects[0].id);
+    } else {
+      store.delete('currentProjectId');
+    }
+  }
 });
 
 ipcMain.handle('projects:exportManuscript', async (_, project) => {

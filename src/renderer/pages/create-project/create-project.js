@@ -65,6 +65,7 @@ window.initPage = async function () {
   }
 
   function renderGenreOptions(sourceGenres = fallbackGenres) {
+    const selectedGenres = new Set(getSelectedGenres());
     const genres = [...new Set(sourceGenres)]
       .filter((genre) => {
         const normalized = normalizeGenre(genre);
@@ -75,7 +76,7 @@ window.initPage = async function () {
     genreOptions.innerHTML = genres
       .map((genre) => `
         <label class="genre-option">
-          <input type="checkbox" name="genres" value="${genre}" />
+          <input type="checkbox" name="genres" value="${genre}" ${selectedGenres.has(genre) ? 'checked' : ''} />
           <span>${genre}</span>
         </label>
       `)
@@ -129,6 +130,9 @@ window.initPage = async function () {
       renderThumbnailPreview();
       return;
     }
+
+    const previewUrl = URL.createObjectURL(file);
+    thumbnailPreview.innerHTML = `<img src="${previewUrl}" alt="Project thumbnail preview" />`;
 
     thumbnailData = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -185,10 +189,6 @@ window.initPage = async function () {
 
   thumbnailInput?.addEventListener('change', handleThumbnailSelection);
   thumbnailInput?.addEventListener('input', handleThumbnailSelection);
-
-  thumbnailTrigger?.addEventListener('click', () => {
-    thumbnailInput?.click();
-  });
 
   goalInput.addEventListener('input', syncGoalPreview);
 

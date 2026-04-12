@@ -278,6 +278,50 @@ function getProject() {
   return window.projectStore?.getProject?.() || null;
 }
 
+async function persistCurrentProjectSelection(project) {
+  if (typeof window.api?.setCurrentProjectId !== 'function') {
+    return;
+  }
+
+  try {
+    await window.api.setCurrentProjectId(project?.id || null);
+  } catch (error) {
+    console.warn('Unable to persist current project selection.', error);
+  }
+}
+
+async function restoreCurrentProjectSelection() {
+  if (typeof window.api?.getAllProjects !== 'function') {
+    return null;
+  }
+
+  try {
+    const [projects, currentProjectId] = await Promise.all([
+      window.api.getAllProjects(),
+      typeof window.api?.getCurrentProjectId === 'function'
+        ? window.api.getCurrentProjectId()
+        : Promise.resolve(null),
+    ]);
+
+    if (!Array.isArray(projects) || !projects.length) {
+      setCurrentProject(null);
+      return null;
+    }
+
+    const restoredProject = projects.find((project) => project.id === currentProjectId) || projects[0];
+    setCurrentProject(restoredProject);
+
+    if (restoredProject?.id !== currentProjectId) {
+      persistCurrentProjectSelection(restoredProject);
+    }
+
+    return restoredProject;
+  } catch (error) {
+    console.warn('Unable to restore current project selection.', error);
+    return null;
+  }
+}
+
 function syncProjectState(project) {
   if (!project) {
     state.referenceDrawerOpen = false;
@@ -297,6 +341,8 @@ function syncProjectState(project) {
 }
 
 function setCurrentProject(project) {
+  persistCurrentProjectSelection(project);
+
   if (window.projectStore?.setProject) {
     return window.projectStore.setProject(project);
   }
@@ -634,6 +680,14 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 
 document.addEventListener('DOMContentLoaded', async () => {
   document.addEventListener('click', (event) => {
+    const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');
+    if (thumbnailTrigger) {
+      const thumbnailInput = document.getElementById('project-thumbnail');
+      if (thumbnailInput) {
+        thumbnailInput.value = '';
+      }
+    }
+
     const sidebarNav = event.target.closest('[data-page]');
     if (sidebarNav) {
       const page = sidebarNav.dataset.page;
@@ -832,5 +886,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   renderReferenceDrawer();
 
+  await restoreCurrentProjectSelection();
   await navigate('home');
 });
