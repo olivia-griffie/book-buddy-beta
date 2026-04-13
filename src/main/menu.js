@@ -55,14 +55,17 @@ function setApplicationMenu() {
 }
 
 function buildTextContextMenu(mainWindow, params = {}) {
+  const editFlags = params.editFlags || {};
   const canEdit = Boolean(
     params.isEditable
     || params.inputFieldType && params.inputFieldType !== 'none'
-    || params.editFlags?.canPaste
-    || params.editFlags?.canUndo
-    || params.editFlags?.canRedo,
+    || editFlags.canCut
+    || editFlags.canPaste
+    || editFlags.canUndo
+    || editFlags.canRedo
+    || editFlags.canSelectAll,
   );
-  const hasSelection = Boolean(params.selectionText || params.editFlags?.canCopy || params.editFlags?.canCut);
+  const hasSelection = Boolean(params.selectionText);
   const spellingSuggestions = (params.dictionarySuggestions || []).slice(0, 5).map((suggestion) => ({
     label: suggestion,
     click: () => {
@@ -72,13 +75,13 @@ function buildTextContextMenu(mainWindow, params = {}) {
   const template = [
     ...spellingSuggestions,
     ...(spellingSuggestions.length ? [{ type: 'separator' }] : []),
-    { role: 'undo', enabled: canEdit },
-    { role: 'redo', enabled: canEdit },
+    { role: 'undo', enabled: Boolean(editFlags.canUndo || canEdit) },
+    { role: 'redo', enabled: Boolean(editFlags.canRedo || canEdit) },
     { type: 'separator' },
-    { role: 'cut', enabled: canEdit && (hasSelection || params.editFlags?.canCut) },
+    { role: 'cut', enabled: Boolean((editFlags.canCut || canEdit) && hasSelection) },
     { role: 'copy', enabled: hasSelection },
-    { role: 'paste', enabled: canEdit },
-    { role: 'selectAll', enabled: canEdit || hasSelection },
+    { role: 'paste', enabled: Boolean(editFlags.canPaste || canEdit) },
+    { role: 'selectAll', enabled: Boolean(editFlags.canSelectAll || canEdit || hasSelection) },
   ];
 
   if (params.misspelledWord && !spellingSuggestions.length) {
