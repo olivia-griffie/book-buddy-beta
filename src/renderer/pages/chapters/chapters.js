@@ -254,6 +254,12 @@ window.registerPageInit('chapters', async function ({ project }) {
     applyEditorStyles();
     renderContextPanel();
     renderPromptPanel();
+
+    editorShell.querySelectorAll('[data-collapse-toggle]').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        trigger.closest('.field-collapsible')?.classList.toggle('is-open');
+      });
+    });
   }
 
   function renderContextPanel() {
