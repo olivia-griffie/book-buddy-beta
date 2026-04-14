@@ -5,10 +5,6 @@ const Store = require('electron-store');
 const { setApplicationMenu, buildTextContextMenu } = require('./menu');
 const packageJson = require('../../package.json');
 
-const contextMenu = require('electron-context-menu');
-contextMenu({
-  showInspectElement: true,
-});
 
 const store = new Store();
 let mainWindow;
