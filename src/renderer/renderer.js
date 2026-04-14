@@ -521,7 +521,7 @@ async function navigate(page, options = {}) {
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar(page, getProject(), state.saveStatus);
   }
-  renderReferenceDrawer();
+  syncReferenceDrawer();
 
   try {
     const initFn = pageInitRegistry[page];
@@ -577,7 +577,7 @@ window.setReferenceDrawerOpen = function setReferenceDrawerOpen(isOpen) {
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
   }
-  renderReferenceDrawer();
+  syncReferenceDrawer();
 };
 window.toggleReferenceDrawer = function toggleReferenceDrawer() {
   window.setReferenceDrawerOpen(!state.referenceDrawerOpen);
@@ -588,7 +588,7 @@ window.setReferenceDrawerTab = function setReferenceDrawerTab(tab) {
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
   }
-  renderReferenceDrawer();
+  syncReferenceDrawer();
 };
 window.showMilestoneCelebration = function showMilestoneCelebration(milestones = []) {
   if (!milestones.length) {
@@ -980,7 +980,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar('home', getProject(), state.saveStatus);
   }
-  renderReferenceDrawer();
+  syncReferenceDrawer();
 
   try {
     await navigate('home', { project: getProject() });
