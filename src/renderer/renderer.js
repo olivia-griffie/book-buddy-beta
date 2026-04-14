@@ -411,7 +411,7 @@ function setSaveStatus(nextStatus = {}) {
   }
 }
 
-function renderReferenceDrawer() {
+function syncReferenceDrawer() {
   if (typeof window.renderReferenceDrawer === 'function') {
     window.renderReferenceDrawer(getProject(), {
       open: state.referenceDrawerOpen,
