@@ -261,7 +261,7 @@ async function writeProjectExport(project, targetPath, format) {
   }
 
   if (format === 'doc') {
-    await fs.writeFile(targetPath, document.rtf, 'utf8');
+    await fs.writeFile(targetPath, Buffer.from(document.rtf, 'latin1'), 'binary');
     return;
   }
 
