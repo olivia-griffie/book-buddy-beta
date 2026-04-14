@@ -1,6 +1,9 @@
 window.registerPageInit('home', async function () {
   const allProjects = await window.api.getAllProjects();
-  const visibleProjects = allProjects.slice(0, 1);
+  const preferredProject = typeof window.choosePreferredProject === 'function'
+    ? window.choosePreferredProject(allProjects, window.getCurrentProject()?.id || null)
+    : (allProjects[0] || null);
+  const visibleProjects = preferredProject ? [preferredProject] : [];
   const grid = document.getElementById('projects-grid');
   const empty = document.getElementById('empty-state');
   const newProjectButton = document.getElementById('btn-new-project');

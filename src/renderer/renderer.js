@@ -51,6 +51,7 @@ const state = {
   },
 };
 
+const pageInitRegistry = {};
 let activePageScript = null;
 const dataCache = new Map();
 let navigationRequestId = 0;
@@ -114,6 +115,53 @@ function dedupeBy(items, keyBuilder) {
     seen.add(key);
     return true;
   });
+}
+
+function parseProjectTimestamp(value) {
+  const timestamp = new Date(value || '').getTime();
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function getProjectSignalScore(project = {}) {
+  const chapterCount = Array.isArray(project.chapters) ? project.chapters.length : 0;
+  const plotSections = Array.isArray(project.plotSections) ? project.plotSections.length : 0;
+  const plotWorkbook = project.plotWorkbook || {};
+  const plotSignal = ['outline', 'premise', 'stakes', 'notes']
+    .reduce((sum, key) => sum + (String(plotWorkbook[key] || '').trim() ? 1 : 0), 0);
+
+  return (
+    Number(project.currentWordCount || 0)
+    + (chapterCount * 1000)
+    + (plotSections * 50)
+    + (plotSignal * 100)
+  );
+}
+
+function choosePreferredProject(projects = [], preferredId = null) {
+  if (!Array.isArray(projects) || !projects.length) {
+    return null;
+  }
+
+  if (preferredId) {
+    const preferredProject = projects.find((project) => project.id === preferredId);
+    if (preferredProject) {
+      return preferredProject;
+    }
+  }
+
+  return [...projects].sort((left, right) => {
+    const signalDifference = getProjectSignalScore(right) - getProjectSignalScore(left);
+    if (signalDifference !== 0) {
+      return signalDifference;
+    }
+
+    const updatedDifference = parseProjectTimestamp(right.updatedAt) - parseProjectTimestamp(left.updatedAt);
+    if (updatedDifference !== 0) {
+      return updatedDifference;
+    }
+
+    return parseProjectTimestamp(right.createdAt) - parseProjectTimestamp(left.createdAt);
+  })[0];
 }
 
 function computeWordCount(text = '') {
@@ -309,7 +357,7 @@ async function restoreCurrentProjectSelection() {
       return null;
     }
 
-    const restoredProject = projects.find((project) => project.id === currentProjectId) || projects[0];
+    const restoredProject = choosePreferredProject(projects, currentProjectId);
     setCurrentProject(restoredProject);
 
     if (restoredProject?.id !== currentProjectId) {
@@ -372,6 +420,32 @@ function renderReferenceDrawer() {
   }
 }
 
+function renderStartupError(error) {
+  const mainContent = document.getElementById('main-content');
+  if (!mainContent) {
+    return;
+  }
+
+  mainContent.innerHTML = `
+    <section class="page">
+      <div class="empty-state card">
+        <h2>Startup hit a loading problem</h2>
+        <p>${error?.message || 'The app shell loaded, but the first page did not finish rendering.'}</p>
+        <button id="startup-retry" class="btn btn-save" type="button">Retry Home</button>
+      </div>
+    </section>
+  `;
+
+  document.getElementById('startup-retry')?.addEventListener('click', async () => {
+    try {
+      const restoredProject = await restoreCurrentProjectSelection();
+      await window.navigate('home', { project: restoredProject || getProject() });
+    } catch (retryError) {
+      renderStartupError(retryError);
+    }
+  });
+}
+
 function ensurePageStylesheet() {
   let link = document.getElementById('page-stylesheet');
 
@@ -421,13 +495,17 @@ async function navigate(page, options = {}) {
     setCurrentProject(options.project);
   }
 
-  window.initPage = null;
-  window.__registeredPageInit = null;
+  const htmlResponse = await fetch(pageDefinition.html);
+  const markup = await htmlResponse.text();
 
-  const [htmlResponse, pageScript] = await Promise.all([
-    fetch(pageDefinition.html),
-    loadPageScript(pageDefinition.script),
-  ]);
+  if (requestId !== navigationRequestId) {
+    return;
+  }
+
+  document.getElementById('main-content').innerHTML = markup;
+  ensurePageStylesheet().href = pageDefinition.css;
+
+  const pageScript = await loadPageScript(pageDefinition.script);
 
   if (requestId !== navigationRequestId) {
     pageScript?.remove();
@@ -435,10 +513,6 @@ async function navigate(page, options = {}) {
   }
 
   activePageScript = pageScript;
-
-  const markup = await htmlResponse.text();
-  document.getElementById('main-content').innerHTML = markup;
-  ensurePageStylesheet().href = pageDefinition.css;
 
   if (typeof window.renderSidebar === 'function') {
     window.renderSidebar(page, getProject());
@@ -450,12 +524,12 @@ async function navigate(page, options = {}) {
   renderReferenceDrawer();
 
   try {
-    if (typeof window.initPage !== 'function' || window.__registeredPageInit !== page) {
-      const registeredPage = window.__registeredPageInit || 'none';
-      throw new Error(`The ${page} page did not finish registering correctly. Registered page: ${registeredPage}.`);
+    const initFn = pageInitRegistry[page];
+    if (typeof initFn !== 'function') {
+      throw new Error(`The ${page} page did not finish registering correctly.`);
     }
 
-    await window.initPage({
+    await initFn({
       page,
       project: getProject(),
     });
@@ -482,8 +556,7 @@ window.registerPageInit = function registerPageInit(pageName, initFn) {
     throw new Error(`registerPageInit expected a function for "${pageName}".`);
   }
 
-  window.__registeredPageInit = pageName;
-  window.initPage = initFn;
+  pageInitRegistry[pageName] = initFn;
 };
 window.showProjectNav = () => {};
 window.getCurrentProject = getProject;
@@ -494,6 +567,7 @@ window.getProjectResources = buildProjectResources;
 window.computeWordCount = computeWordCount;
 window.buildLocalDayKey = buildLocalDayKey;
 window.slugify = slugify;
+window.choosePreferredProject = choosePreferredProject;
 window.setAppSaveStatus = setSaveStatus;
 window.isReferenceDrawerOpen = function isReferenceDrawerOpen() {
   return state.referenceDrawerOpen;
@@ -900,14 +974,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   if (typeof window.renderSidebar === 'function') {
-    window.renderSidebar('home', null);
+    window.renderSidebar('home', getProject());
   }
 
   if (typeof window.renderTopBar === 'function') {
-    window.renderTopBar('home', null, state.saveStatus);
+    window.renderTopBar('home', getProject(), state.saveStatus);
   }
   renderReferenceDrawer();
 
-  await restoreCurrentProjectSelection();
-  await navigate('home');
+  try {
+    await navigate('home', { project: getProject() });
+  } catch (error) {
+    console.error('Initial home navigation failed.', error);
+    renderStartupError(error);
+  }
+
+  restoreCurrentProjectSelection()
+    .then(async (restoredProject) => {
+      if (!restoredProject) {
+        return;
+      }
+
+      if (state.currentPage === 'home') {
+        await navigate('home', { project: restoredProject });
+      } else {
+        syncProjectState(restoredProject);
+      }
+    })
+    .catch((error) => {
+      console.error('Background project restore failed.', error);
+    });
 });
