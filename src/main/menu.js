@@ -57,21 +57,54 @@ function setApplicationMenu() {
 function buildTextContextMenu(mainWindow, params = {}) {
   const canEdit = Boolean(
     params.isEditable
-    || params.inputFieldType && params.inputFieldType !== 'none'
+    || (params.inputFieldType && params.inputFieldType !== 'none')
     || params.editFlags?.canPaste
     || params.editFlags?.canUndo
     || params.editFlags?.canRedo,
   );
-  const hasSelection = Boolean(params.selectionText || params.editFlags?.canCopy || params.editFlags?.canCut);
-  const spellingSuggestions = (params.dictionarySuggestions || []).slice(0, 5).map((suggestion) => ({
-    label: suggestion,
-    click: () => {
-      mainWindow.webContents.replaceMisspelling(suggestion);
-    },
-  }));
-  const template = [
-    ...spellingSuggestions,
-    ...(spellingSuggestions.length ? [{ type: 'separator' }] : []),
+  const hasSelection = Boolean(
+    params.selectionText?.trim()
+    || params.editFlags?.canCopy
+    || params.editFlags?.canCut,
+  );
+
+  const template = [];
+
+  // Spellcheck suggestions
+  const spellingSuggestions = (params.dictionarySuggestions || []).slice(0, 5);
+  if (params.misspelledWord) {
+    if (spellingSuggestions.length) {
+      spellingSuggestions.forEach((suggestion) => {
+        template.push({
+          label: suggestion,
+          click: () => mainWindow.webContents.replaceMisspelling(suggestion),
+        });
+      });
+    } else {
+      template.push({ label: 'No suggestions found', enabled: false });
+    }
+    template.push({
+      label: 'Add to dictionary',
+      click: () => mainWindow.webContents.session.addWordToSpellCheckerDictionary(params.misspelledWord),
+    });
+    template.push({ type: 'separator' });
+  }
+
+  // Thesaurus — only shown when a single word is selected
+  const selectedWord = params.selectionText?.trim();
+  if (selectedWord && !selectedWord.includes(' ')) {
+    template.push({
+      label: `Thesaurus: "${selectedWord}"`,
+      click: () => {
+        const encoded = encodeURIComponent(selectedWord);
+        shell.openExternal(`https://www.merriam-webster.com/thesaurus/${encoded}`);
+      },
+    });
+    template.push({ type: 'separator' });
+  }
+
+  // Standard edit actions
+  template.push(
     { role: 'undo', enabled: canEdit },
     { role: 'redo', enabled: canEdit },
     { type: 'separator' },
@@ -79,14 +112,16 @@ function buildTextContextMenu(mainWindow, params = {}) {
     { role: 'copy', enabled: hasSelection },
     { role: 'paste', enabled: canEdit },
     { role: 'selectAll', enabled: canEdit || hasSelection },
-  ];
+  );
 
-  if (params.misspelledWord && !spellingSuggestions.length) {
-    template.unshift(
-      { label: 'No suggestions found', enabled: false },
-      { type: 'separator' },
-    );
-  }
+  // Inspect element (always available)
+  template.push(
+    { type: 'separator' },
+    {
+      label: 'Inspect Element',
+      click: () => mainWindow.webContents.inspectElement(params.x, params.y),
+    },
+  );
 
   return Menu.buildFromTemplate(template);
 }
