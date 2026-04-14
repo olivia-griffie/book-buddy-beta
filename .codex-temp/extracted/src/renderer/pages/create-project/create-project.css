@@ -1,0 +1,160 @@
+.create-project-page {
+  display: grid;
+  gap: 24px;
+}
+
+.project-form {
+  padding: 28px;
+  display: grid;
+  gap: 24px;
+  max-width: 980px;
+}
+
+.beta-note,
+.thumbnail-preview-card {
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #f8f2ea;
+  border: 1px solid var(--border-soft);
+}
+
+.beta-note {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-unlock-row {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.admin-unlock-row .field {
+  flex: 1;
+  min-width: 220px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.thumbnail-preview-card {
+  display: grid;
+  gap: 14px;
+  width: fit-content;
+  max-width: 100%;
+  justify-self: start;
+}
+
+.thumbnail-preview-head p {
+  margin-top: 4px;
+}
+
+.thumbnail-preview-actions {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+}
+
+.project-thumbnail-preview {
+  width: min(100%, 280px);
+  aspect-ratio: 16 / 10;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
+  border: 1px solid var(--border-soft);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.project-thumbnail-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnail-status {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.genre-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.genre-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 16px;
+}
+
+.genre-panel-header p {
+  margin-top: 4px;
+}
+
+.selection-badge {
+  border-radius: 999px;
+  background: #f1eadf;
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.genre-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.genre-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: #fffdfa;
+  cursor: pointer;
+}
+
+.genre-option input {
+  width: auto;
+}
+
+.genre-option.is-disabled {
+  opacity: 0.55;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.form-message {
+  min-height: 24px;
+}
+
+.form-actions .btn-save {
+  margin-left: auto;
+}
+
+.form-actions .btn-save:hover {
+  transform: none;
+}
+
+.goal-progress-card {
+  max-width: 620px;
+}

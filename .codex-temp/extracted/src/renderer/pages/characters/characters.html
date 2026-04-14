@@ -1,0 +1,76 @@
+<section class="page entity-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Characters</p>
+      <h1 id="characters-page-title">Character Builder</h1>
+      <p>Create prompt-ready character profiles with motivations, secrets, and scene anchors.</p>
+    </div>
+    <button id="save-characters" class="btn btn-save" type="button">Save Characters</button>
+  </div>
+
+  <div id="characters-empty-state" class="empty-state card" style="display: none;">
+    <h2>No project selected</h2>
+    <p>Create a project first so character notes can be attached to your book.</p>
+    <button id="characters-create-project" class="btn btn-sage" type="button">Create Project</button>
+  </div>
+
+  <div id="characters-content" class="entity-layout" style="display: none;">
+    <section class="card ui-card ui-card-stack entity-list-card">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
+          <p class="eyebrow">Character List</p>
+          <h2>Cast</h2>
+        </div>
+        <button id="add-character" class="btn btn-ghost" type="button">Add Character</button>
+      </div>
+      <div id="characters-gallery" class="character-gallery"></div>
+      <div id="characters-list" class="entity-list"></div>
+      <p id="characters-save-message" class="form-message" aria-live="polite"></p>
+    </section>
+
+    <section class="card ui-card ui-card-stack entity-editor-card">
+      <div class="section-heading ui-card-head">
+        <div class="ui-card-copy">
+          <p class="eyebrow">Character Profile</p>
+          <h2 id="character-editor-title">Select a character</h2>
+        </div>
+      </div>
+      <div id="character-editor-shell" style="display: none;">
+        <div class="entity-form-grid">
+          <div class="field"><label for="character-name">Name</label><input id="character-name" type="text" /></div>
+          <div class="field">
+            <label for="character-image">Character Image</label>
+            <input id="character-image" class="file-input-hidden" type="file" accept="image/*" />
+            <button id="character-image-trigger" class="upload-trigger" type="button" aria-label="Upload character image">
+              <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+              <span>Upload Image</span>
+            </button>
+          </div>
+          <div class="field field-full image-upload-card">
+            <label>Image Preview</label>
+            <div id="character-image-preview" class="image-upload-preview">
+              <span class="placeholder-icon">Portrait</span>
+            </div>
+          </div>
+          <div class="field field-full">
+            <label>Character Type Tags</label>
+            <div id="character-type-tags" class="character-type-tags" role="group" aria-label="Character type tags"></div>
+            <p id="character-type-help" class="character-type-help">
+              Select one or more role tags so prompt generation can understand how this character functions in the story.
+            </p>
+            <div id="character-type-summary" class="character-type-summary"></div>
+          </div>
+          <div class="field"><label for="character-appearance">Appearance</label><textarea id="character-appearance" rows="3"></textarea></div>
+          <div class="field"><label for="character-background">Background</label><textarea id="character-background" rows="3"></textarea></div>
+          <div class="field"><label for="character-secrets">Secrets</label><textarea id="character-secrets" rows="3"></textarea></div>
+          <div class="field"><label for="character-desires">Desires</label><textarea id="character-desires" rows="3"></textarea></div>
+          <div class="field"><label for="character-chapter-intro">Chapter Intro</label><textarea id="character-chapter-intro" rows="3"></textarea></div>
+          <div class="field"><label for="character-death-scene">Death Scene</label><textarea id="character-death-scene" rows="3"></textarea></div>
+          <div class="field"><label for="character-romance-scenes">Romance Scenes</label><textarea id="character-romance-scenes" rows="3"></textarea></div>
+          <div class="field field-full"><label for="character-other">Other</label><textarea id="character-other" rows="4"></textarea></div>
+        </div>
+      </div>
+      <div id="character-editor-empty" class="editor-empty">Pick a character from the left, or add a new one.</div>
+    </section>
+  </div>
+</section>

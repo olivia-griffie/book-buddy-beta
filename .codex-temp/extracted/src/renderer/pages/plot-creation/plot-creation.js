@@ -1,0 +1,244 @@
+window.initPage = async function ({ project }) {
+  let activeProject = project || window.getCurrentProject();
+  const emptyState = document.getElementById('plot-empty-state');
+  const content = document.getElementById('plot-content');
+  const createProjectButton = document.getElementById('plot-create-project');
+  const saveButton = document.getElementById('save-plot-workbook');
+  const saveMessage = document.getElementById('plot-save-message');
+  const collapseAllButton = document.getElementById('plot-collapse-all');
+  const backToTopButton = document.getElementById('plot-back-to-top');
+  const outlineInput = document.getElementById('plot-outline');
+  const premiseInput = document.getElementById('plot-premise');
+  const stakesInput = document.getElementById('plot-stakes');
+  const notesInput = document.getElementById('plot-notes');
+  const sectionTargets = document.getElementById('plot-section-targets');
+  const workbookGrid = document.querySelector('.workbook-grid');
+
+  createProjectButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
+
+  if (!activeProject) {
+    emptyState.style.display = 'grid';
+    content.style.display = 'none';
+    saveButton.style.display = 'none';
+    return;
+  }
+
+  emptyState.style.display = 'none';
+  content.style.display = 'grid';
+  saveButton.style.display = 'inline-flex';
+  document.getElementById('plot-page-title').textContent = activeProject.title || 'Plot Builder';
+  document.getElementById('plot-page-subtitle').textContent = (activeProject.genres || []).join(' + ');
+
+  const workbook = activeProject.plotWorkbook || {};
+  outlineInput.value = workbook.outline || '';
+  premiseInput.value = workbook.premise || '';
+  stakesInput.value = workbook.stakes || '';
+  notesInput.value = workbook.notes || '';
+  window.initializeTextEditor(content);
+  [outlineInput, premiseInput, stakesInput, notesInput].forEach((field) => window.refreshTextEditor(field, field.value));
+
+  function syncWorkbookLayout() {
+    const premiseValue = window.getEditorFieldValue(premiseInput).trim();
+    const stakesValue = window.getEditorFieldValue(stakesInput).trim();
+    workbookGrid?.classList.toggle('has-secondary-column', Boolean(premiseValue && stakesValue));
+  }
+
+  function syncAutoHeight(textarea) {
+    if (!textarea || textarea._richText) {
+      return;
+    }
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+
+  syncAutoHeight(notesInput);
+  notesInput?.addEventListener('input', () => syncAutoHeight(notesInput));
+  [premiseInput, stakesInput, notesInput].forEach((field) => {
+    field?.addEventListener('input', syncWorkbookLayout);
+  });
+  syncWorkbookLayout();
+
+  const { genrePrompts, specificPrompts, hybridGuides } = await window.getGenrePromptData();
+  const resources = window.getProjectResources(activeProject, {
+    genrePrompts,
+    specificPrompts,
+    hybridGuides,
+  });
+  const autosave = window.createAutosaveController(async () => {
+    const updatedProject = {
+      ...activeProject,
+      plotSections: resources.plotSections,
+      plotWorkbook: {
+        outline: window.getEditorFieldValue(outlineInput),
+        premise: window.getEditorFieldValue(premiseInput),
+        stakes: window.getEditorFieldValue(stakesInput),
+        notes: window.getEditorFieldValue(notesInput),
+      },
+      updatedAt: new Date().toISOString(),
+    };
+
+    activeProject = await window.saveProjectData(updatedProject, {
+      dirtyFields: ['plotSections', 'plotWorkbook'],
+    });
+    saveMessage.textContent = 'Plot notes autosaved.';
+    syncWorkbookLayout();
+  }, {
+    dirtyText: 'Plot notes not saved',
+  });
+
+  [outlineInput, premiseInput, stakesInput, notesInput].forEach((field) => {
+    field?.addEventListener('input', () => autosave.touch());
+  });
+  const hybridPromptSection = document.getElementById('hybrid-prompts-section');
+  const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');
+
+  function renderSectionTargets() {
+    sectionTargets.innerHTML = resources.plotSections.map((section) => `
+      <article class="plot-section-target-card">
+        <div>
+          <h3>${section.label}</h3>
+          <p>Use this to anchor where this part of the book lives and what it needs to accomplish.</p>
+        </div>
+        <div class="field">
+          <label for="plot-section-target-${section.id}">Target Words</label>
+          <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
+        </div>
+        <div class="field">
+          <label for="plot-section-notes-${section.id}">Section Notes</label>
+          <textarea id="plot-section-notes-${section.id}" rows="4" data-section-notes="${section.id}">${section.notes || ''}</textarea>
+        </div>
+      </article>
+    `).join('');
+
+    window.initializeTextEditor(sectionTargets);
+    resources.plotSections.forEach((section) => {
+      const notesField = sectionTargets.querySelector(`[data-section-notes="${section.id}"]`);
+      if (notesField) {
+        window.refreshTextEditor(notesField, section.notes || '');
+      }
+    });
+
+    sectionTargets.querySelectorAll('[data-section-target]').forEach((input) => {
+      input.addEventListener('input', () => {
+        const section = resources.plotSections.find((entry) => entry.id === input.dataset.sectionTarget);
+        if (!section) {
+          return;
+        }
+
+        section.targetWords = Number(input.value || 0);
+        autosave.touch();
+      });
+    });
+
+    sectionTargets.querySelectorAll('[data-section-notes]').forEach((input) => {
+      input.addEventListener('input', () => {
+        const section = resources.plotSections.find((entry) => entry.id === input.dataset.sectionNotes);
+        if (!section) {
+          return;
+        }
+
+        section.notes = window.getEditorFieldValue(input);
+        autosave.touch();
+      });
+    });
+  }
+
+  function getPlacementHint(plotPoint = '') {
+    const normalizedPoint = window.normalizeGenreKey(plotPoint);
+    const matchedSection = resources.plotSections.find((section) => (
+      window.normalizeGenreKey(section.label) === normalizedPoint
+      || normalizedPoint.includes(window.normalizeGenreKey(section.label))
+      || window.normalizeGenreKey(section.label).includes(normalizedPoint)
+    ));
+
+    if (!matchedSection) {
+      return 'Use this where it best supports the current act of the story.';
+    }
+
+    return `Best used around "${matchedSection.label}" in the book.`;
+  }
+
+  function buildBeatCards(entries, matchingPrompts) {
+    if (!entries.length) {
+      return '<article class="beat-card ui-card ui-card-soft ui-card-stack"><p>No plot data found for this genre yet.</p></article>';
+    }
+
+    return entries
+      .map((entry) => {
+        const promptEntry = matchingPrompts.find((prompt) => prompt.plotPoint === entry.plotPoint);
+
+        return `
+          <article class="beat-card ui-card ui-card-soft ui-card-stack">
+            <h4>${entry.plotPoint}</h4>
+            <ul>
+              ${entry.questions.map((question) => `<li>${question}</li>`).join('')}
+            </ul>
+            <span class="beat-placement-hint">${getPlacementHint(entry.plotPoint)}</span>
+            ${promptEntry?.prompt ? `<p class="prompt-callout">${promptEntry.prompt}</p>` : ''}
+          </article>
+        `;
+      })
+      .join('');
+  }
+
+  const hybridSection = document.getElementById('hybrid-guide-section');
+  const hybridGrid = document.getElementById('hybrid-guide-grid');
+  if (resources.hybridGuide) {
+    hybridSection.style.display = 'grid';
+    document.getElementById('hybrid-guide-title').textContent = resources.hybridGuide.genre;
+    hybridGrid.innerHTML = Object.entries(resources.hybridGuide.beats)
+      .map(([label, text]) => `
+        <article class="hybrid-beat ui-card ui-card-soft ui-card-stack">
+          <h3>${label}</h3>
+          <p>${text}</p>
+        </article>
+      `)
+      .join('');
+  } else {
+    hybridSection.style.display = 'none';
+  }
+
+  if (resources.hybridTrack?.beats?.length) {
+    hybridPromptSection.style.display = 'block';
+    document.getElementById('hybrid-prompts-title').textContent = resources.hybridTrack.genre;
+    hybridPromptGrid.innerHTML = buildBeatCards(resources.hybridTrack.beats, resources.hybridTrack.prompts);
+  } else {
+    hybridPromptSection.style.display = 'none';
+  }
+
+  renderSectionTargets();
+
+  collapseAllButton?.addEventListener('click', () => {
+    content.querySelectorAll('.plot-block').forEach((block) => {
+      block.open = false;
+    });
+    saveMessage.textContent = 'Plot blocks collapsed. Open any section when you want to focus there.';
+  });
+
+  backToTopButton?.addEventListener('click', () => {
+    document.querySelector('.app-main')?.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  saveButton.addEventListener('click', async () => {
+    await window.runButtonFeedback(saveButton, async () => {
+      const updatedProject = {
+        ...activeProject,
+        plotSections: resources.plotSections,
+        plotWorkbook: {
+          outline: window.getEditorFieldValue(outlineInput),
+          premise: window.getEditorFieldValue(premiseInput),
+          stakes: window.getEditorFieldValue(stakesInput),
+          notes: window.getEditorFieldValue(notesInput),
+        },
+        updatedAt: new Date().toISOString(),
+      };
+
+      activeProject = await window.saveProjectData(updatedProject, {
+        dirtyFields: ['plotSections', 'plotWorkbook'],
+      });
+      saveMessage.textContent = 'Plot notes saved.';
+      syncWorkbookLayout();
+    });
+  });
+};

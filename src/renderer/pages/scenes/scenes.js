@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('scenes', async function ({ project }) {
   let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('scenes-empty-state');
   const content = document.getElementById('scenes-content');
@@ -199,4 +199,4 @@ window.initPage = async function ({ project }) {
 
   renderList();
   renderEditor();
-};
+});

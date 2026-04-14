@@ -1,0 +1,13 @@
+{
+  "name": "book-buddy-beta",
+  "version": "1.0.0-beta",
+  "description": "Book Buddy Beta – Manuscript organization and daily writing challenge app",
+  "main": "src/main/main.js",
+  "author": "Olivia Griffie",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "electron-context-menu": "^4.1.2",
+    "electron-store": "^8.1.0"
+  }
+}

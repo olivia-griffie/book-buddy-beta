@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self';"
+  />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Book Buddy Beta</title>
+  <link rel="icon" type="image/png" href="../../public/icon.png" />
+  <link rel="stylesheet" href="./styles/global.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside id="sidebar-container" class="app-sidebar"></aside>
+    <div class="app-workspace">
+      <header id="topbar-container" class="app-topbar"></header>
+      <main id="main-content" class="app-main"></main>
+      <aside id="reference-drawer-container" class="reference-drawer-shell is-hidden" aria-hidden="true"></aside>
+    </div>
+  </div>
+
+  <script src="./components/shared/sidebar.js"></script>
+  <script src="./components/shared/topbar.js"></script>
+  <script src="./components/shared/reference-drawer.js"></script>
+  <script src="./components/shared/project-store.js"></script>
+  <script src="./components/editor/text-editor.js"></script>
+  <script src="./renderer.js"></script>
+</body>
+</html>

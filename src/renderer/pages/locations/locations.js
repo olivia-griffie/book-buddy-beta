@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('locations', async function ({ project }) {
   let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('locations-empty-state');
   const content = document.getElementById('locations-content');
@@ -150,4 +150,4 @@ window.initPage = async function ({ project }) {
 
   renderList();
   renderEditor();
-};
+});

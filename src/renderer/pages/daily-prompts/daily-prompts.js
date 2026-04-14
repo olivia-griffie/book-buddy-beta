@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('daily-prompts', async function ({ project }) {
   let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('daily-prompts-empty-state');
   const content = document.getElementById('daily-prompts-content');
@@ -6,8 +6,6 @@ window.initPage = async function ({ project }) {
   const generateButton = document.getElementById('generate-prompts');
   const countInput = document.getElementById('prompt-count');
   const modeInput = document.getElementById('prompt-mode');
-  const testerCodeInput = document.getElementById('tester-code');
-  const unlockTesterButton = document.getElementById('unlock-tester-mode');
   const status = document.getElementById('daily-prompts-status');
   const resultsGrid = document.getElementById('prompt-results-grid');
   const progressCard = document.getElementById('daily-prompts-progress');
@@ -16,8 +14,6 @@ window.initPage = async function ({ project }) {
   const progressState = document.getElementById('daily-prompts-progress-state');
   const progressCaption = document.getElementById('daily-prompts-progress-caption');
   const progressFill = document.getElementById('daily-prompts-progress-fill');
-  const settings = await window.api.getSettings();
-  const isTester = Boolean(settings.betaTesterUnlocked);
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -39,7 +35,30 @@ window.initPage = async function ({ project }) {
     cursor: Number(activeProject.dailyPromptState?.cursor || 0),
   };
 
-  if (activeProject.dailyPromptHistory?.some((entry) => !entry.id)) {
+  function extractPromptWordTarget(prompt = '') {
+    const normalizedPrompt = String(prompt || '').replace(/,/g, '');
+    const patterns = [
+      /\bwrite\b[\s\S]{0,24}?\b(\d+)\s*-\s*word\b/i,
+      /\bwrite\b[\s\S]{0,24}?\b(\d+)\s+words?\b/i,
+      /\b(\d+)\s*-\s*word\b/i,
+      /\b(\d+)\s+words?\b/i,
+    ];
+    const match = patterns
+      .map((pattern) => normalizedPrompt.match(pattern))
+      .find(Boolean);
+
+    return match ? Number(match[1]) : 0;
+  }
+
+  function getPromptAnswerWordCount(entry) {
+    return window.computeWordCount(entry?.answer || '');
+  }
+
+  if (activeProject.dailyPromptHistory?.some((entry) => (
+    !entry.id
+    || typeof entry.requiredWordCount !== 'number'
+    || typeof entry.insertedWordCount !== 'number'
+  ))) {
     activeProject = await window.saveProjectData({
       ...activeProject,
       dailyPromptHistory: (activeProject.dailyPromptHistory || []).map((entry, index) => ({
@@ -48,6 +67,8 @@ window.initPage = async function ({ project }) {
         assignedChapterId: entry.assignedChapterId || '',
         answer: entry.answer || '',
         answerInsertedAt: entry.answerInsertedAt || '',
+        requiredWordCount: Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)),
+        insertedWordCount: Number(entry.insertedWordCount || 0),
       })),
       updatedAt: new Date().toISOString(),
     }, {
@@ -68,10 +89,6 @@ window.initPage = async function ({ project }) {
   }
 
   function syncPromptCountState() {
-    if (isTester) {
-      return;
-    }
-
     countInput.value = '1';
     [...countInput.options].forEach((option) => {
       option.disabled = option.value !== '1';
@@ -90,34 +107,46 @@ window.initPage = async function ({ project }) {
   }
 
   function hasPromptBeenCompleted(entry) {
-    if (!entry?.assignedChapterId) {
+    if (!entry?.assignedChapterId || !entry?.answerInsertedAt) {
       return false;
     }
 
-    const chapter = getChapters().find((item) => item.id === entry.assignedChapterId);
-    if (!chapter) {
-      return false;
-    }
+    const requiredWordCount = Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt));
+    const insertedWordCount = Number(entry.insertedWordCount || 0);
 
-    const parsed = window.parseRichTextValue(chapter.content || '');
-    const temp = document.createElement('div');
-    temp.innerHTML = parsed.html || '';
-    const chapterText = temp.textContent || temp.innerText || '';
-    return chapterText.includes(String(entry.prompt || '').trim());
+    return requiredWordCount > 0
+      ? insertedWordCount >= requiredWordCount
+      : insertedWordCount > 0;
   }
 
   function buildCompletionSnapshot(entry) {
-    const completed = hasPromptBeenCompleted(entry) || Boolean(entry.answerInsertedAt);
-    const percent = completed ? 100 : 0;
+    const requiredWordCount = Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt));
+    const answerWords = entry.answerInsertedAt
+      ? Number(entry.insertedWordCount || 0)
+      : getPromptAnswerWordCount(entry);
+    const targetWords = requiredWordCount > 0 ? requiredWordCount : Math.max(answerWords, 1);
+    const inserted = Boolean(entry.answerInsertedAt);
+    const thresholdMet = requiredWordCount > 0 ? answerWords >= requiredWordCount : answerWords > 0;
+    const completed = inserted && thresholdMet;
+    const percent = targetWords > 0 ? Math.min(100, Math.round((answerWords / targetWords) * 100)) : 0;
+
     return {
       completed,
       percent,
-      state: completed ? 'completed' : entry.assignedChapterId ? 'assigned to chapter' : 'not assigned',
+      state: completed
+        ? 'completed'
+        : inserted
+          ? 'inserted below target'
+          : entry.assignedChapterId
+            ? 'assigned to chapter'
+            : 'not assigned',
       caption: completed
-        ? 'Answer has been inserted into the linked chapter.'
-        : entry.assignedChapterId
-          ? 'Write your answer and insert it into the linked chapter.'
-          : 'Choose a chapter to start writing against this prompt.',
+        ? `Inserted and met the ${targetWords.toLocaleString()} word target.`
+        : inserted
+          ? `Inserted ${answerWords.toLocaleString()} of ${targetWords.toLocaleString()} required words.`
+          : entry.assignedChapterId
+            ? `Write ${targetWords.toLocaleString()} words, then insert the answer into the linked chapter.`
+            : `Choose a chapter and write ${targetWords.toLocaleString()} words to complete this prompt.`,
     };
   }
 
@@ -167,6 +196,7 @@ window.initPage = async function ({ project }) {
           <p class="genre-pill">${entry.genre}</p>
           <p class="prompt-callout">${entry.prompt}</p>
           <p>${entry.context || 'Use this anywhere in the draft.'}</p>
+          <p class="daily-prompt-status">Target: ${(Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)) || 0).toLocaleString()} words</p>
           <div class="daily-prompt-answer">
             <label for="prompt-answer-${entry.id}">Your Answer</label>
             <textarea id="prompt-answer-${entry.id}" data-prompt-answer="${entry.id}" rows="5">${entry.answer || ''}</textarea>
@@ -254,12 +284,15 @@ window.initPage = async function ({ project }) {
           return;
         }
 
+        const insertedWordCount = window.computeWordCount(promptEntry.answer);
         const nextHistory = getDailyHistory().map((entry) => (
           entry.id === promptEntry.id
             ? {
               ...entry,
               assignedChapterId: promptEntry.assignedChapterId,
               answer: promptEntry.answer,
+              requiredWordCount: Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)),
+              insertedWordCount,
               answerInsertedAt: new Date().toISOString(),
             }
             : entry
@@ -278,7 +311,10 @@ window.initPage = async function ({ project }) {
           dirtyFields: ['chapters', 'dailyPromptHistory', 'currentWordCount'],
         });
 
-        status.textContent = 'Prompt answer inserted into the selected chapter.';
+        const requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
+        status.textContent = insertedWordCount >= requiredWordCount
+          ? 'Prompt answer inserted into the selected chapter and marked complete.'
+          : `Prompt answer inserted, but it is still below the ${requiredWordCount.toLocaleString()} word target.`;
         renderPromptCards(getDailyHistory());
       });
     });
@@ -292,6 +328,7 @@ window.initPage = async function ({ project }) {
         }
 
         promptEntry.answer = window.getEditorFieldValue(answerField);
+        promptEntry.requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
         activeProject = await window.saveProjectData({
           ...activeProject,
           dailyPromptHistory: getDailyHistory(),
@@ -332,40 +369,30 @@ window.initPage = async function ({ project }) {
       assignedChapterId: '',
       answer: '',
       answerInsertedAt: '',
+      requiredWordCount: extractPromptWordTarget(entry.prompt),
+      insertedWordCount: 0,
     }));
   }
 
   countInput.addEventListener('change', () => {
-    if (!isTester && countInput.value !== '1') {
+    if (countInput.value !== '1') {
       countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock larger prompt packs.';
+      status.textContent = 'Book Buddy Beta currently includes one prompt per day.';
     }
-  });
-
-  unlockTesterButton?.addEventListener('click', async () => {
-    const code = String(testerCodeInput.value || '').trim();
-    if (code !== 'Tester') {
-      status.textContent = 'That code did not unlock tester mode.';
-      return;
-    }
-
-    await window.saveSettingsData({ betaTesterUnlocked: true });
-    status.textContent = 'Tester mode unlocked. You can now generate multiple prompts for admin testing.';
-    window.navigate('daily-prompts', { project: activeProject });
   });
 
   generateButton.addEventListener('click', async () => {
     const today = new Date();
     const lastGeneratedAt = activeProject.dailyPromptState?.lastGeneratedAt;
 
-    if (!isTester && Number(countInput.value) !== 1) {
+    if (Number(countInput.value) !== 1) {
       countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock 3 and 5 prompt packs.';
+      status.textContent = 'Book Buddy Beta currently includes one prompt per day.';
       return;
     }
 
-    if (!isTester && lastGeneratedAt && isSameLocalDay(lastGeneratedAt, today)) {
-      status.textContent = 'You have already used today\'s beta prompt. Buy the full version on release for expanded prompt generation.';
+    if (lastGeneratedAt && isSameLocalDay(lastGeneratedAt, today)) {
+      status.textContent = 'You have already used today\'s beta prompt.';
       renderPromptCards(getDailyHistory());
       return;
     }
@@ -389,15 +416,8 @@ window.initPage = async function ({ project }) {
       dirtyFields: ['dailyPromptState', 'dailyPromptHistory'],
     });
 
-    status.textContent = isTester
-      ? `${prompts.length} prompt${prompts.length === 1 ? '' : 's'} generated in tester mode.`
-      : 'Today\'s beta prompt is ready.';
+    status.textContent = 'Today\'s beta prompt is ready.';
   });
-
-  testerCodeInput.value = '';
-  testerCodeInput.placeholder = isTester ? 'Tester mode unlocked' : 'Enter admin code';
-  unlockTesterButton.textContent = isTester ? 'Tester Mode Active' : 'Unlock Tester Mode';
-  unlockTesterButton.disabled = isTester;
 
   syncPromptCountState();
   renderPromptCards(getDailyHistory());
@@ -406,4 +426,4 @@ window.initPage = async function ({ project }) {
     progressCard.style.display = 'none';
     resultsGrid.innerHTML = '<p>No prompts generated yet today.</p>';
   }
-};
+});

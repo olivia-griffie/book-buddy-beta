@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('chapters', async function ({ project }) {
   function escapeHtml(value = '') {
     return String(value)
       .replace(/&/g, '&amp;')
@@ -758,4 +758,4 @@ window.initPage = async function ({ project }) {
   exportButton.addEventListener('click', async () => {
     await exportProjectBook();
   });
-};
+});

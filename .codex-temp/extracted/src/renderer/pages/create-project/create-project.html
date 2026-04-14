@@ -1,0 +1,139 @@
+<section class="page create-project-page">
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Create Project</p>
+      <h1>Build Your Story Setup</h1>
+      <p>Choose one or two genres so Book Buddy can shape your plot prompts around them.</p>
+    </div>
+  </div>
+
+  <form id="create-project-form" class="project-form card">
+    <section class="beta-note">
+      <p class="eyebrow">Beta Access</p>
+      <p id="project-slot-note">Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.</p>
+      <div class="admin-unlock-row">
+        <div class="field">
+          <label for="project-admin-code">Admin Key</label>
+          <input id="project-admin-code" type="password" placeholder="Enter admin key" />
+        </div>
+        <button id="unlock-project-admin" class="btn btn-ghost" type="button">Unlock Admin Mode</button>
+      </div>
+    </section>
+
+    <div class="form-grid">
+      <div class="field">
+        <label for="project-title">Project Title</label>
+        <input id="project-title" name="title" type="text" maxlength="120" />
+      </div>
+      <div class="field">
+        <label for="project-subtitle">Subtitle or Hook</label>
+        <input id="project-subtitle" name="subtitle" type="text" maxlength="160" />
+      </div>
+      <div class="field">
+        <label for="project-author-name">Author Name</label>
+        <input id="project-author-name" name="authorName" type="text" maxlength="120" />
+      </div>
+      <div class="field">
+        <label for="project-goal">Word Count Goal</label>
+        <input id="project-goal" name="wordCountGoal" type="number" min="0" step="100" value="60000" />
+      </div>
+      <div class="field">
+        <label for="project-target-date">Date To Complete</label>
+        <input id="project-target-date" name="targetCompletionDate" type="date" />
+      </div>
+      <input id="project-thumbnail" class="file-input-hidden" name="thumbnailFile" type="file" accept="image/*" />
+    </div>
+
+    <section class="thumbnail-preview-card">
+      <div class="thumbnail-preview-head">
+        <div>
+          <label>Thumbnail Preview</label>
+          <p>Add an optional image for the project card.</p>
+        </div>
+      </div>
+      <div id="project-thumbnail-preview" class="project-thumbnail-preview">
+        <span class="placeholder-icon">Book</span>
+      </div>
+      <div class="thumbnail-preview-actions">
+        <label id="project-thumbnail-trigger" class="upload-trigger" for="project-thumbnail" aria-label="Upload project thumbnail">
+          <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+          <span>Upload Thumbnail</span>
+        </label>
+        <p id="project-thumbnail-status" class="thumbnail-status">No image selected yet.</p>
+      </div>
+    </section>
+
+    <section class="goal-progress-card">
+      <div class="goal-progress-head">
+        <div id="project-goal-icon" class="progress-status-icon" aria-hidden="true">•</div>
+        <div>
+          <div class="goal-progress-meta">
+            <span id="project-goal-percent" class="goal-progress-percent">0%</span>
+            <span id="project-goal-state" class="goal-progress-state">in progress</span>
+          </div>
+          <p id="project-goal-caption" class="goal-progress-caption">0 of 60,000 words</p>
+        </div>
+      </div>
+      <div class="goal-progress-track">
+        <div id="project-goal-fill" class="goal-progress-fill"></div>
+      </div>
+    </section>
+
+    <div class="genre-panel">
+      <div class="genre-panel-header">
+        <div>
+          <label>Genres</label>
+          <p>Select up to two genres to unlock hybrid guidance.</p>
+        </div>
+        <span id="genre-count" class="selection-badge">0 selected</span>
+      </div>
+      <div id="genre-options" class="genre-options">
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Contemporary" />
+          <span>Contemporary</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Fantasy" />
+          <span>Fantasy</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Historical Fiction" />
+          <span>Historical Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Horror" />
+          <span>Horror</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Literary Fiction" />
+          <span>Literary Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Memoir" />
+          <span>Memoir</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Mystery" />
+          <span>Mystery</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Romance" />
+          <span>Romance</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Science Fiction" />
+          <span>Science Fiction</span>
+        </label>
+        <label class="genre-option">
+          <input type="checkbox" name="genres" value="Thriller" />
+          <span>Thriller</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <p id="form-message" class="form-message" aria-live="polite"></p>
+      <button class="btn btn-save" type="submit">Save And Build Plot</button>
+    </div>
+  </form>
+</section>

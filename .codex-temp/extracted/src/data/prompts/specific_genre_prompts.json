@@ -1,0 +1,2442 @@
+[
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 310-word internal monologue in which the narrator fixates on a small, ordinary object that unexpectedly triggers the emotional wound they’ve spent years avoiding, revealing their reluctance to acknowledge its significance."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 540-word scene where the narrator receives an unexpected message, object, or reminder that forces them to confront a memory they’ve tried to bury, showing their emotional resistance through hesitant body language and fragmented thoughts."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 260-word reflective passage in which the narrator attempts to reconcile a contradiction between what they remember and what they now suspect is true, revealing their growing distrust of their own recollection."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 420-word flashback scene where the narrator misinterprets someone’s intentions, only now realizing the consequences, and show how this realization complicates their present emotional landscape."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word confession-style entry where the narrator admits a truth they’ve avoided for years, detailing the emotional cost of acknowledging it and the shift it creates in their understanding of themselves."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 330-word moment of emotional collapse in which the narrator realizes they can no longer maintain the story they’ve been telling themselves, showing the unraveling through sensory overload and spiraling thoughts."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 610-word confrontation—either spoken or written—where the narrator finally tells the truth to someone who was part of the original wound, revealing the tension between fear and liberation."
+    },
+    {
+        "genre":  "Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 190-word reflective closing where the narrator describes how their understanding of themselves has changed after the confrontation, noting what healing has begun and what remains unresolved."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 360-word atmospheric description of the protagonist noticing subtle distortions in their environment that others dismiss, revealing the specific fear that makes them vulnerable to the coming horror."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 520-word scene where the protagonist witnesses a disturbing event that defies logic, capturing their attempt to rationalize it while their instincts scream that something is terribly wrong."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 270-word passage where the protagonist realizes the threat is targeting them personally, showing how their fear interferes with their ability to act rationally."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 480-word sequence in which the protagonist attempts to escape or investigate the threat, only to discover new rules or patterns that escalate the danger."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 700-word revelation scene where the protagonist uncovers the origin or nature of the horror, detailing how this knowledge raises the stakes and deepens their personal connection to the threat."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 340-word moment where the protagonist must make a terrifying choice to survive, showing how fear overwhelms their rational thinking and forces a desperate decision."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 620-word confrontation where the protagonist faces the horror directly, using either knowledge or sheer desperation to fight back, and reveal the irreversible outcome."
+    },
+    {
+        "genre":  "Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonist processes the emotional and physical scars left behind, noting one lingering sign that the horror may not be gone."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 450-word worldbuilding scene where the hero’s daily life reveals both the beauty and political tension of the magical realm, along with the flaw that will shape their journey."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word scene where a threat, betrayal, or magical disturbance forces the hero onto a quest, showing the moment they choose to step into danger."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the hero clashes with an ally or rival, revealing how their flaw complicates the quest and strengthens the primary threat."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where the hero faces a magical trial or political conflict that escalates the stakes and shifts alliances."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation scene where the hero learns a hidden truth—prophecy, lineage, or betrayal—that reframes the quest and challenges their beliefs."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 410-word moment where the hero must choose between duty and desire, confronting their deepest fear as the cost of failure becomes clear."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 690-word battle or magical confrontation where the hero uses their growth to face the antagonist, revealing the decisive turning point."
+    },
+    {
+        "genre":  "High Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection on how the world has changed after the conflict and what new role or destiny the hero must now accept."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 350-word introduction showing the protagonist’s skills in action during a high-pressure but everyday scenario, revealing the flaw that will complicate the mission ahead."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 510-word scene where a sudden attack, disaster, or mission summons the protagonist into immediate action, highlighting their instinctive response under pressure."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where the protagonist encounters the primary enemy or obstacle, showing how their flaw interferes with the mission’s success."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 490-word sequence involving a chase, trap, or confrontation that escalates the danger and forces the protagonist to adapt."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 720-word twist scene where the protagonist discovers the mission was compromised or misunderstood, shifting their objective and emotional stakes."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist must make an impossible choice, confronting their greatest fear or weakness as the mission collapses."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word showdown where the protagonist outmaneuvers the antagonist using both skill and personal growth, revealing the decisive action that determines success."
+    },
+    {
+        "genre":  "Action",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the protagonist considers the consequences of the mission and what unresolved threats or opportunities remain."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 330-word scene where the sleuth notices a subtle inconsistency in their environment, revealing the personal stake that draws them into the case."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 520-word scene where the sleuth encounters the crime or disappearance, forming an initial assumption that will later be challenged."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 260-word passage where suspects, clues, or red herrings complicate the case, showing how the sleuth’s flaw interferes with progress."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 480-word investigative sequence where new evidence deepens the mystery and contradicts earlier assumptions."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word twist scene where the sleuth uncovers a hidden motive or realizes a major assumption was wrong, shifting the direction of the investigation."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 350-word moment where the sleuth faces danger, betrayal, or a critical setback that threatens the investigation."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 620-word confrontation where the sleuth reveals the culprit and pieces together the final truth, showing the emotional cost of the discovery."
+    },
+    {
+        "genre":  "Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the sleuth considers the justice served and the lingering questions that remain."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 370-word scene where the protagonist experiences a subtle distortion in perception that others dismiss, revealing the instability beneath their normal life."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 540-word moment where the protagonist encounters an event that contradicts their memory or reality, destabilizing their sense of self."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where the protagonist begins to suspect manipulation, questioning their own mind as relationships become suspect."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where hallucinations, lies, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation scene where the protagonist uncovers a shocking truth about their identity or situation, deepening the psychological conflict."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist must choose whether to trust their own mind, showing how fear overwhelms their reasoning."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation where the protagonist faces the true manipulator or truth, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the protagonist grapples with the emotional and psychological aftermath, noting what ambiguity remains."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 340-word scene where the protagonist’s emotional wound subtly shapes their first impression of the love interest, revealing both attraction and guardedness."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 510-word meet-cute or collision where the protagonists’ interaction disrupts their emotional routines and sparks unexpected tension."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 270-word passage where fears, misunderstandings, or external pressures complicate the growing connection between the protagonists."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 480-word sequence where shared moments deepen chemistry while obstacles intensify longing or conflict."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 720-word scene where a secret or vulnerability shifts the relationship dynamic, threatening or deepening trust."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 350-word breakup or emotional fracture where the protagonist’s flaw contributes to the collapse of the relationship."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 630-word confession or gesture where the protagonist confronts their fear and expresses the truth that resolves the conflict."
+    },
+    {
+        "genre":  "Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the protagonists begin building a future together, noting how they’ve changed."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where magical elements subtly influence the protagonist’s emotional world, hinting at a fated bond with the future love interest."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word magical encounter that binds the love interests together, showing how enchantment intensifies their first spark."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where magical, political, or emotional forces threaten the relationship, revealing how their destinies clash."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where magical trials deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation scene where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical or emotional act where the lovers overcome destiny or curse, proving their devotion."
+    },
+    {
+        "genre":  "Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers build a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where futuristic technology shapes the protagonist’s worldview, revealing the flaw that will complicate their relationship with innovation or society."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 570-word scene where an anomaly, discovery, or malfunction disrupts the status quo and forces the protagonist into action."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where technological or alien forces challenge the protagonist’s goal, revealing a moral or ethical dilemma."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where tech failures, conspiracies, or alien forces escalate the conflict and shift alliances."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation scene where the protagonist uncovers a hidden truth about the world, mission, or themselves, altering the story’s direction."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist must make a catastrophic choice, confronting the cost of technology or science."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the protagonist uses innovation or knowledge to reshape the future of humanity or the mission."
+    },
+    {
+        "genre":  "Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers the new equilibrium and the threats or possibilities that remain."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 460-word scene where the hero demonstrates their combat skills during a routine patrol in a magical landscape, revealing the flaw that will later complicate their ability to face escalating threats."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 620-word action-heavy sequence where a sudden magical attack forces the hero into immediate battle, showing how the chaos disrupts their sense of duty and pushes them into the quest."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where the hero clashes with a rival warrior during a strategy dispute, revealing how their pride or impatience intensifies the danger of the mission."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 540-word chase or combat sequence where the hero must adapt their fighting style to a magical creature or enchanted terrain, showing how the stakes escalate."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation scene where the hero discovers that the mission was sabotaged from within, forcing them to question their allies and their own role in the conflict."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 410-word moment where the hero must choose between saving an ally or securing a crucial magical artifact, revealing the emotional cost of their decision."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 690-word battle where the hero combines physical skill and magical strategy to confront the antagonist, showing the decisive action that determines the fate of the realm."
+    },
+    {
+        "genre":  "High Fantasy–Action",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the hero surveys the battlefield and considers the sacrifices made, noting what unresolved threats still linger."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word atmospheric scene where the hero senses an ancient darkness beneath the beauty of the magical world, revealing the specific fear that makes them vulnerable to the coming horror."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word sequence where the hero witnesses a terrifying magical event—such as a corrupted creature or cursed phenomenon—that signals the awakening of an ancient evil."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where the hero realizes the horror is targeting them personally, showing how fear distorts their judgment and complicates their quest."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word scene where the hero ventures into a cursed forest, tomb, or ruin, discovering new rules of the supernatural threat that escalate the terror."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the hero uncovers the origin of the ancient evil and learns their own connection to it, raising the stakes dramatically."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the hero must choose between fleeing the horror or facing it to protect others, revealing how fear overwhelms their rational thinking."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation where the hero faces the monstrous force directly, using magic or courage to fight back despite overwhelming dread."
+    },
+    {
+        "genre":  "High Fantasy–Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the hero processes the emotional scars left by the encounter and notices one lingering sign that the darkness may return."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word scene where the hero notices a magical inconsistency or political secret that hints at a deeper mystery within the realm."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word scene where a magical crime, disappearance, or betrayal forces the hero into an investigation that disrupts their normal life."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where suspects, factions, or enchanted clues complicate the case, showing how the hero’s flaw interferes with uncovering the truth."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word investigative sequence where the hero uncovers contradictory magical evidence that deepens the mystery and raises new questions."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word twist scene where the hero discovers a hidden motive, prophecy, or betrayal that shifts the direction of the investigation."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the hero faces danger or betrayal that threatens the investigation and forces them to question their allies."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation where the hero reveals the culprit or truth, piecing together the final magical puzzle under pressure."
+    },
+    {
+        "genre":  "High Fantasy–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the hero considers the political or magical consequences of the truth and what mysteries remain unresolved."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 410-word scene where the hero experiences a subtle magical distortion that others dismiss, revealing the instability beneath their perception of the world."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 570-word moment where a magical event contradicts the hero’s memory or reality, destabilizing their sense of identity."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the hero begins to suspect magical manipulation, questioning their own mind and the intentions of those around them."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where illusions, enchantments, or contradictions escalate tension and blur the hero’s grasp on truth."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where the hero uncovers a shocking truth about their destiny or identity, deepening the psychological conflict."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the hero must choose whether to trust their own mind or the magical evidence before them, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word confrontation where the hero faces the true manipulator or magical truth, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "High Fantasy–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the hero grapples with the psychological aftermath and the ambiguity that remains."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word reflective scene where the hero recalls a formative magical event from their childhood that shaped their identity and emotional wound."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a relic, memory, or magical disturbance forces the hero to revisit a past they’ve avoided."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where contradictions arise between the hero’s memory and the magical truth they uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word flashback where the hero confronts an old ally or enemy whose past actions now complicate the present."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the hero uncovers a forgotten magical truth that reshapes their understanding of their past."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the hero must confront a painful truth about their role in past events, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation or confession where the hero integrates past and present by facing someone tied to their original wound."
+    },
+    {
+        "genre":  "High Fantasy–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the hero describes how their identity has evolved and what emotional healing remains."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where magical elements subtly influence the hero’s first impression of the love interest, revealing both attraction and emotional guardedness."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word magical encounter where the love interests meet under unusual or enchanted circumstances that spark immediate tension."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or political forces threaten the growing connection between the lovers, revealing how their destinies clash."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where magical trials or shared dangers deepen both desire and conflict."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where a sacrifice or forced separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the lovers overcome destiny or curse, proving their devotion."
+    },
+    {
+        "genre":  "High Fantasy–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers begin building a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where enchantment shapes the emotional world of the protagonists, hinting at a fated magical bond."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical event binds the love interests together, disrupting their lives and sparking immediate tension."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where magical, political, or emotional forces threaten the relationship, revealing how their powers or destinies clash."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where magical trials deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy or curse threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical act where the lovers overcome destiny or curse, proving their devotion."
+    },
+    {
+        "genre":  "High Fantasy–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers build a future shaped by magic and emotional growth."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 450-word scene where magic and technology coexist uneasily, revealing how the hero navigates the tension between the two systems."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 600-word moment where a futuristic anomaly disrupts ancient magic, forcing the hero into action and raising questions about the world’s stability."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where magical and technological forces challenge the hero’s beliefs, revealing a moral or ethical dilemma."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where tech failures, magical surges, or hybrid threats escalate the conflict and shift alliances."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the hero uncovers a hidden truth linking magic and technology, altering the direction of the quest."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the hero must choose between preserving magic or embracing technology, revealing the emotional cost."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the hero uses both magic and technology to reshape the future of the realm."
+    },
+    {
+        "genre":  "High Fantasy–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the hero considers the new equilibrium between magic and technology and what threats remain."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where the protagonist demonstrates their combat readiness during a routine mission, only to notice subtle signs of a supernatural presence that specifically preys on their deepest fear."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 610-word sequence where a violent, inexplicable attack forces the protagonist into immediate action, revealing how terror disrupts their usual tactical precision."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the protagonist realizes the monstrous threat is adapting to their strategies, showing how fear undermines their ability to think clearly."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word scene where the protagonist attempts to rescue an ally from a creature-infested location, discovering new rules of the horror that escalate the danger."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers the origin of the supernatural threat and learns their personal connection to it, raising the emotional stakes."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist must choose between escaping or facing the horror to save others, revealing how terror overwhelms their rational thinking."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word confrontation where the protagonist battles the monstrous force using both skill and desperation, revealing the irreversible outcome."
+    },
+    {
+        "genre":  "Action–Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the protagonist processes the emotional and physical scars left behind, noting one lingering sign that the horror may return."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word scene where the protagonist notices a suspicious inconsistency during a high-stakes mission, revealing the personal stake that draws them into the investigation."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word sequence where a crime or betrayal interrupts an operation, forcing the protagonist to pursue answers while under pressure."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where suspects, clues, or red herrings complicate the mission, showing how the protagonist’s flaw interferes with uncovering the truth."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word investigative chase where new evidence contradicts earlier assumptions, escalating both danger and urgency."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word twist scene where the protagonist discovers a hidden motive or realizes a major assumption was wrong, shifting the direction of the investigation."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist faces betrayal or a critical setback that threatens the mission and their life."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation where the protagonist reveals the culprit or truth while navigating a dangerous action sequence."
+    },
+    {
+        "genre":  "Action–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonist considers the justice served and the lingering threats that remain."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 410-word scene where the protagonist experiences a subtle distortion in perception during a mission, revealing the instability beneath their confident exterior."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 570-word moment where an event contradicts the protagonist’s memory or reality, destabilizing their sense of control."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the protagonist begins to suspect manipulation, questioning their own mind as allies become suspect."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where hallucinations, lies, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where the protagonist uncovers a shocking truth about their identity or mission, deepening the psychological conflict."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the protagonist must choose whether to trust their own mind or the evidence before them, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word confrontation where the protagonist faces the true manipulator or truth, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "Action–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist grapples with the psychological aftermath and the ambiguity that remains."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word reflective scene where the protagonist recalls a formative mission that shaped their identity and emotional wound."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a new threat echoes an old trauma, forcing the protagonist to revisit a past they’ve avoided."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where contradictions arise between the protagonist’s memory and the truth they uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word flashback where the protagonist confronts an old ally or enemy whose past actions now complicate the present."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers a forgotten truth about a past mission that reshapes their understanding of themselves."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist must confront a painful truth about their role in past events, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation or confession where the protagonist integrates past and present by facing someone tied to their original wound."
+    },
+    {
+        "genre":  "Action–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonist describes how their identity has evolved and what emotional healing remains."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 350-word scene where the protagonist’s emotional wound subtly shapes their first impression of the love interest during a dangerous situation."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 530-word moment where a mission or disaster forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where fears, misunderstandings, or external pressures complicate the growing connection between the protagonists."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where shared danger deepens chemistry while emotional obstacles intensify longing or conflict."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word scene where a secret or vulnerability shifts the relationship dynamic, threatening or deepening trust."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word breakup or emotional fracture where the protagonist’s flaw contributes to the collapse of the relationship."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confession or gesture where the protagonist confronts their fear and expresses the truth that resolves the conflict."
+    },
+    {
+        "genre":  "Action–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the protagonists begin building a future together, noting how they’ve changed."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where magical elements subtly influence the protagonist’s emotional world, hinting at a fated bond with the future love interest."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word magical encounter where the love interests are forced together by a dangerous enchantment, sparking immediate tension."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where magical or emotional forces threaten the relationship, revealing how their destinies clash."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where magical trials deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical or emotional act where the lovers overcome destiny or curse, proving their devotion."
+    },
+    {
+        "genre":  "Action–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers build a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where futuristic technology shapes the protagonist’s skillset during a high-pressure scenario, revealing the flaw that will complicate the mission."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where an anomaly, attack, or malfunction forces the protagonist into immediate action, disrupting their sense of control."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where technological or alien forces challenge the protagonist’s goal, revealing a moral or ethical dilemma."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where tech failures, conspiracies, or alien threats escalate the conflict and shift alliances."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers a hidden truth about the mission or world, altering the story’s direction."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist must make a catastrophic choice, confronting the cost of technology or science."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the protagonist uses innovation or knowledge to reshape the future of humanity or the mission."
+    },
+    {
+        "genre":  "Action–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers the new equilibrium and the threats or possibilities that remain."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word scene where the protagonist notices an unsettling inconsistency in their environment that others dismiss, revealing the personal fear that makes them vulnerable to the deeper mystery."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word sequence where the protagonist witnesses a horrifying event that defies explanation, forcing them to begin investigating despite their rising dread."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where supernatural clues, suspects, or contradictions complicate the investigation, showing how fear distorts the protagonist’s interpretation of evidence."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word scene where the protagonist uncovers disturbing evidence in a forbidden or haunted location, escalating both the horror and the mystery."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word twist scene where the protagonist discovers a hidden truth about the horror’s origin, shifting the investigation and raising the stakes."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist faces a terrifying setback—such as a corrupted clue or betrayal—that threatens their sanity and progress."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation where the protagonist uncovers the true cause of the horror while fighting for survival, piecing together the final truth under extreme pressure."
+    },
+    {
+        "genre":  "Horror–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonist processes the consequences of the reveal and notes one lingering sign that the horror may not be gone."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 410-word scene where the protagonist experiences a subtle distortion in perception that others dismiss, revealing the instability beneath their normal life."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 570-word moment where a terrifying event contradicts the protagonist’s memory or reality, destabilizing their sense of self."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where supernatural or psychological forces manipulate the protagonist, causing them to question their own mind and relationships."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where hallucinations, hauntings, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where the protagonist uncovers a shocking truth about their identity or situation, deepening the psychological conflict."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the protagonist must choose whether to trust their own mind or the terrifying evidence before them, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word confrontation where the protagonist faces the true manipulator or horror, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "Horror–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist grapples with the psychological aftermath and the ambiguity that remains."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word reflective scene where the narrator recalls a childhood haunting or trauma that shaped their worldview and emotional wound."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a memory, object, or supernatural disturbance forces the narrator to revisit a past horror they’ve avoided."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where contradictions arise between the narrator’s memory and the terrifying truth they uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word flashback where the narrator confronts an old fear or person tied to the original haunting, complicating the present."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the narrator uncovers a forgotten truth about the haunting that reshapes their understanding of their past."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator must confront a painful truth about their role in past events, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation where the narrator faces the source of the haunting, integrating past and present in a moment of terror."
+    },
+    {
+        "genre":  "Horror–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the narrator describes how their identity has changed and what fear still lingers."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 350-word scene where the protagonist’s emotional wound shapes their first impression of the love interest in a setting tinged with dread."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 530-word moment where a terrifying event forces the love interests together, intensifying both fear and attraction."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where supernatural forces and emotional fears threaten the growing connection between the lovers."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where horrifying encounters deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word scene where a secret or supernatural truth reveals one lover’s connection to the horror, shifting the relationship dynamic."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word act of love where the protagonists confront the horror together, revealing whether they overcome or succumb to the darkness."
+    },
+    {
+        "genre":  "Horror–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the lovers consider what remains of their relationship and what fear still lingers."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where magical elements intertwine with dread as the protagonists first sense their fated bond."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical and terrifying event binds the lovers together, disrupting their lives and sparking tension."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where magical or supernatural forces threaten the relationship, revealing how their destinies clash."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where magical trials deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy or curse reveals the horror’s connection to the lovers, shifting their understanding of each other."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical act where the lovers confront the horror, revealing whether they overcome or succumb to the darkness."
+    },
+    {
+        "genre":  "Horror–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers consider how the world has changed and what magic or fear remains."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where futuristic or scientific elements create unease, revealing early signs of a technological or alien horror."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where an experiment, anomaly, or malfunction unleashes the horror, forcing the protagonist into action."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the protagonist realizes the horror is adapting or evolving, exploiting their emotional weakness."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where mutations, malfunctions, or alien attacks escalate the terror and reveal new rules of the threat."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers the origin or purpose of the horror, raising the stakes dramatically."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist must make a catastrophic choice to survive, revealing how fear overwhelms their rational thinking."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the protagonist uses science or desperation to face the horror, revealing the irreversible outcome."
+    },
+    {
+        "genre":  "Horror–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers the emotional and physical scars left behind and what threat may still linger."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word scene where the sleuth notices a subtle contradiction in their environment that others dismiss, revealing the personal insecurity that makes them vulnerable to psychological manipulation."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a crime or event contradicts the sleuth’s memory, destabilizing their sense of reality and forcing them into the investigation."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where suspects, clues, or relationships become suspect as the sleuth begins questioning their own mind."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where conflicting evidence and psychological distortions escalate tension, blurring the sleuth’s grasp on truth."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word twist scene where the sleuth uncovers a shocking truth about their identity or involvement in the case, shifting the investigation dramatically."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the sleuth faces a psychological collapse after realizing a crucial clue may have been fabricated or misremembered."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation where the sleuth faces the true manipulator, piecing together the final truth under extreme psychological pressure."
+    },
+    {
+        "genre":  "Mystery–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the sleuth considers the emotional cost of the case and what doubts still linger."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 400-word reflective scene where the narrator recalls an unresolved case from their past, revealing the emotional wound that still shapes them."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where new evidence or a resurfaced memory forces the narrator to reopen the old case they’ve avoided."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where contradictions arise between the narrator’s memory and the truth they uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator confronts an old ally or enemy whose past actions now complicate the investigation."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten truth about the case that reshapes their understanding of their past."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator must confront a painful truth about their role in the original case, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator integrates past and present by facing someone tied to the original mystery."
+    },
+    {
+        "genre":  "Mystery–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator describes how their identity has evolved and what emotional healing remains."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 360-word scene where the sleuth’s emotional wound shapes their first impression of the love interest during a moment of subtle secrecy."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 540-word moment where a crime or secret forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where fears, misunderstandings, or conflicting clues complicate the growing connection between the protagonists."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where shared discoveries deepen chemistry while danger intensifies longing or mistrust."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word scene where a secret or revelation threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where betrayal, misunderstanding, or danger fractures the relationship, revealing the protagonist’s flaw."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confession or gesture where the protagonist confronts their fear and expresses the truth that resolves both the case and the relationship."
+    },
+    {
+        "genre":  "Mystery–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonists begin building a future together, noting how the solved case changed them."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where magical elements subtly influence the sleuth’s first impression of the love interest, hinting at a fated bond."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical crime or enchanted event binds the love interests together, disrupting their lives."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces complicate the investigation and threaten the relationship."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where magical clues deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where a sacrifice or separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the lovers overcome destiny or curse while solving the case."
+    },
+    {
+        "genre":  "Mystery–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how the world has changed and what magic remains."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where futuristic technology shapes the investigative world, revealing early signs of a deeper conspiracy."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where an anomaly, malfunction, or crime forces the protagonist into an investigation that disrupts their routine."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where technological or alien forces complicate the case, revealing a moral or ethical dilemma."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where tech twists, conspiracies, or contradictions escalate the stakes and shift alliances."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers a hidden motive or systemic corruption that alters the direction of the investigation."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist faces danger, betrayal, or a critical setback that threatens the investigation."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the protagonist reveals the culprit or truth while navigating a high-tech or alien threat."
+    },
+    {
+        "genre":  "Mystery–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers the justice served and the lingering threats that remain."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word reflective scene where the narrator recalls a moment when their perception first began to fracture, revealing the emotional wound that still shapes their worldview."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a resurfaced memory or unexpected message contradicts the narrator’s understanding of their past, destabilizing their sense of self."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the narrator struggles to reconcile conflicting memories, revealing how doubt corrodes their trust in their own mind."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator confronts someone tied to their fractured memory, discovering new contradictions that escalate tension."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten truth about their past that reshapes their identity and deepens the psychological conflict."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator reaches an emotional breaking point after realizing a core memory may have been fabricated or distorted."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator faces someone tied to their fractured past, forcing them to integrate or reject the truth."
+    },
+    {
+        "genre":  "Psychological Thriller–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator considers how their identity has changed and what doubts still linger."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 360-word scene where the protagonist’s emotional wound shapes their first impression of the love interest, revealing subtle signs of manipulation or distortion."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 540-word moment where an event contradicts the protagonist’s perception of their partner, destabilizing their sense of trust."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where secrets, lies, or emotional distortions complicate the relationship, revealing how paranoia interferes with connection."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where contradictions in the partner’s behavior escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers a shocking truth about their partner’s identity or motives, shifting the relationship dramatically."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist must choose whether to trust their partner or their own unraveling instincts, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confrontation where the protagonist faces the true manipulator or truth, revealing whether the relationship survives or collapses."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonist considers how their view of love has changed and what ambiguity remains."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where magical elements subtly distort the protagonist’s perception of the love interest, hinting at a dangerous or fated bond."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical event contradicts the protagonist’s understanding of reality, destabilizing their emotional world."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces manipulate the relationship, revealing how the protagonist questions their own mind."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where illusions, enchantments, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret reframes the relationship and deepens the psychological conflict."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the protagonist must choose between trusting magic or their own unraveling instincts, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical confrontation where the protagonist faces the true manipulator or truth, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "Psychological Thriller–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers how magic has reshaped their emotional world and what ambiguity remains."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where futuristic technology subtly distorts the protagonist’s perception, revealing early signs of manipulation or malfunction."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where an anomaly or glitch contradicts the protagonist’s memory, destabilizing their sense of identity."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where technological or systemic forces manipulate the protagonist, causing them to question their own mind and relationships."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where malfunctions, conspiracies, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the protagonist uncovers a shocking truth about their identity or role within the system, deepening the psychological conflict."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the protagonist must choose whether to trust their own mind or the technological evidence before them, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation where the protagonist faces the true manipulator or system, revealing whether they reclaim or lose control."
+    },
+    {
+        "genre":  "Psychological Thriller–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers how their reality has changed and what uncertainty remains."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 360-word reflective scene where the narrator recalls the first moment they realized love could wound them, revealing how that early experience still shapes their emotional worldview."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a message, memory, or unexpected reunion reopens an old romantic wound, forcing the narrator to confront feelings they believed were resolved."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the narrator struggles to reconcile their memory of a past relationship with the truth they now uncover, revealing emotional contradictions."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator revisits a pivotal moment with their former partner, discovering new meaning in the tension or tenderness they once misunderstood."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten truth about the relationship that reshapes their understanding of love and their own role in its downfall."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator confronts the painful truth about how they contributed to the relationship’s collapse, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator finally speaks the truth to someone tied to the relationship, integrating past and present."
+    },
+    {
+        "genre":  "Memoir–Romance",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator describes how their understanding of love has evolved and what emotional healing remains."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word reflective scene where the narrator recalls a magical or enchanted moment from a past love, revealing how it shaped their emotional wound."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a relic, spell, or magical memory resurfaces, forcing the narrator to revisit a love they believed was lost to time."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where contradictions arise between the narrator’s magical memories and the truth they now uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator relives a magical moment with their former lover, discovering new meaning in the enchantment or illusion."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where the narrator uncovers a forgotten magical truth about the relationship that reshapes their understanding of destiny and love."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the narrator confronts the painful truth about their role in the magical bond’s collapse, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word confrontation or confession where the narrator faces someone tied to the magical past, integrating enchantment and reality."
+    },
+    {
+        "genre":  "Memoir–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the narrator describes how magic has reshaped their emotional world and what symbolic remnants remain."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word reflective scene where the narrator recalls a futuristic or technological event from their past that shaped their identity and emotional wound."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where an anomaly, device, or resurfaced data forces the narrator to revisit a past they believed was sealed away."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where contradictions arise between the narrator’s memory and the technological truth they uncover, revealing emotional tension."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator confronts an old ally or enemy tied to a past mission or experiment, complicating the present."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where the narrator uncovers a forgotten truth about a past scientific event that reshapes their understanding of themselves."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the narrator must confront a painful truth about their role in past technological consequences, revealing their emotional breaking point."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word confrontation or confession where the narrator integrates past and present by facing someone tied to the original scientific event."
+    },
+    {
+        "genre":  "Memoir–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the narrator describes how their identity has evolved and what future possibilities or warnings remain."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word scene where the protagonist’s emotional wound subtly shapes their first impression of the magically inclined love interest, revealing both attraction and unease."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical event forces the love interests into unexpected proximity, sparking tension and revealing the first hint of destiny."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces complicate the growing connection, revealing how their fears or powers clash."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where magical encounters deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical or emotional act where the lovers overcome destiny or curse, proving their devotion."
+    },
+    {
+        "genre":  "Romance–Romance Fantasy",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers begin building a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 410-word scene where futuristic technology shapes the protagonist’s emotional worldview as they meet someone whose presence disrupts their carefully controlled life."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a scientific anomaly or mission forces the love interests together, sparking unexpected tension."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where technological or societal forces complicate the relationship, revealing how their goals or identities clash."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where futuristic obstacles deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where a hidden truth about identity, memory, or technology threatens the relationship."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where duty or science forces a painful separation, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word emotional or technological act where the lovers overcome the forces keeping them apart."
+    },
+    {
+        "genre":  "Romance–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how their future has been reshaped by both love and technology."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 360-word reflective scene where the narrator recalls the first moment they realized love could wound them, revealing how that early experience shapes their present emotional worldview."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a message, memory, or unexpected reunion reopens an old romantic wound, forcing the narrator to confront feelings they believed were resolved."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where the narrator struggles to reconcile their memory of a past relationship with the truth they now uncover."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator revisits a pivotal moment with their former partner, discovering new meaning in the tension or tenderness they once misunderstood."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten truth about the relationship that reshapes their understanding of love."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator confronts the painful truth about how they contributed to the relationship’s collapse."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator finally speaks the truth to someone tied to the relationship."
+    },
+    {
+        "genre":  "Romance–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator describes how their understanding of love has evolved."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 350-word scene where the protagonist’s emotional wound shapes their first impression of the love interest during a moment of subtle secrecy."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 540-word moment where a crime or secret forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where fears, misunderstandings, or conflicting clues complicate the growing connection."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where shared discoveries deepen chemistry while danger intensifies longing or mistrust."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 760-word revelation where a secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where betrayal, misunderstanding, or danger fractures the relationship."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confession or gesture where the protagonist confronts their fear and expresses the truth that resolves both the case and the relationship."
+    },
+    {
+        "genre":  "Romance–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 210-word reflection where the protagonists begin building a future together."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word scene where the protagonist’s emotional wound shapes their first impression of the love interest, revealing subtle signs of manipulation or distortion."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where an event contradicts the protagonist’s perception of their partner, destabilizing their sense of trust."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where secrets, lies, or emotional distortions complicate the relationship."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where contradictions in the partner’s behavior escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where the protagonist uncovers a shocking truth about their partner’s identity or motives."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the protagonist must choose whether to trust their partner or their own unraveling instincts."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation where the protagonist faces the true manipulator or truth."
+    },
+    {
+        "genre":  "Romance–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the protagonist considers how their view of love has changed."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 350-word scene where the protagonist’s emotional wound shapes their first impression of the love interest in a setting tinged with dread."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 530-word moment where a terrifying event forces the love interests together, intensifying both fear and attraction."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where supernatural forces and emotional fears threaten the growing connection."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where horrifying encounters deepen both danger and desire."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word revelation where one lover’s connection to the horror threatens the relationship."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word act of love where the protagonists confront the horror together."
+    },
+    {
+        "genre":  "Romance–Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the lovers consider what remains of their relationship."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 340-word scene where the protagonist’s emotional wound shapes their first impression of the love interest during a dangerous situation."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 520-word moment where a mission or disaster forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 280-word passage where fears, misunderstandings, or external pressures complicate the growing connection."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 500-word sequence where shared danger deepens chemistry while emotional obstacles intensify longing."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 740-word revelation where a secret or vulnerability shifts the relationship dynamic."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a breakup or emotional fracture becomes unavoidable."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 640-word confession or gesture where the protagonist confronts their fear and expresses the truth that resolves the conflict."
+    },
+    {
+        "genre":  "Romance–Action",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 200-word reflection where the protagonists begin building a future together."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where magic and technology coexist uneasily as the protagonist meets someone whose presence disrupts both their emotional defenses and their understanding of the world’s balance."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 600-word moment where a magical-technological anomaly forces the love interests into sudden proximity, sparking tension and revealing the first hint of a hybrid destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where magical and technological forces complicate the growing connection, revealing how their identities or destinies clash across realms."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where hybrid threats or anomalies deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where a prophecy, scientific truth, or hidden origin threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the lovers must choose between preserving magic or embracing technology, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word magical-technological act where the lovers overcome the forces keeping them apart, proving their devotion."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how their world has been reshaped by the union of magic and science."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word reflective scene where the narrator recalls a magical moment from a past love that shaped their emotional wound and their belief in destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a relic, spell, or enchanted memory resurfaces, forcing the narrator to revisit a love they believed was sealed away."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where contradictions arise between the narrator’s magical memories and the truth they now uncover."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator relives a magical moment with their former lover, discovering new meaning in the enchantment or illusion."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten magical truth about the relationship that reshapes their understanding of destiny and love."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator confronts the painful truth about their role in the magical bond’s collapse."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator faces someone tied to the magical past, integrating enchantment and reality."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator describes how magic has reshaped their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 400-word scene where magical elements subtly influence the protagonist’s first impression of the love interest, hinting at both secrecy and destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical crime or enchanted disturbance forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical clues and emotional fears complicate the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where shared discoveries deepen chemistry while magical danger intensifies longing or mistrust."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where betrayal, misunderstanding, or magical danger fractures the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the protagonist confronts their fear and expresses the truth that resolves both the case and the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how the solved mystery has changed them."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where enchantment subtly distorts the protagonist’s perception of the love interest, hinting at a dangerous or fated bond."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical event contradicts the protagonist’s understanding of reality, destabilizing their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces manipulate the relationship, revealing how the protagonist questions their own mind."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where illusions, enchantments, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret reframes the relationship and deepens the psychological conflict."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the protagonist must choose between trusting magic or their own unraveling instincts."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical confrontation where the protagonist faces the true manipulator or truth."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers how magic has reshaped their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word scene where enchantment intertwines with dread as the protagonist meets someone whose presence feels both fated and dangerous."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical and terrifying event binds the love interests together, intensifying both fear and attraction."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where supernatural forces and emotional fears threaten the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where horrifying magical encounters deepen both danger and desire."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy or curse reveals the horror’s connection to the lovers."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical act of love where the protagonists confront the horror together."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers consider what remains of their relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 400-word scene where magical danger shapes the protagonist’s first impression of the love interest, revealing both attraction and guardedness."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical attack or crisis forces the love interests together, sparking tension and reluctant trust."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces complicate the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where magical battles or trials deepen both danger and desire."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a breakup, betrayal, or forced separation becomes unavoidable."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the protagonist confronts their fear and expresses the truth that resolves the conflict."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers begin building a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 430-word scene where magic and technology coexist uneasily as the protagonist meets someone whose presence disrupts both their emotional defenses and their understanding of the world’s balance."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 600-word moment where a magical-technological anomaly forces the love interests into sudden proximity, sparking tension and revealing the first hint of a hybrid destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 310-word passage where magical and technological forces complicate the growing connection, revealing how their identities or destinies clash across realms."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where hybrid threats or anomalies deepen both danger and desire, pushing the lovers together or apart."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where a prophecy, scientific truth, or hidden origin threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 380-word moment where the lovers must choose between preserving magic or embracing technology, revealing the emotional breaking point."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 670-word magical-technological act where the lovers overcome the forces keeping them apart, proving their devotion."
+    },
+    {
+        "genre":  "Romance Fantasy–Sci‑Fi",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how their world has been reshaped by the union of magic and science."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 390-word reflective scene where the narrator recalls a magical moment from a past love that shaped their emotional wound and their belief in destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 580-word moment where a relic, spell, or enchanted memory resurfaces, forcing the narrator to revisit a love they believed was sealed away."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where contradictions arise between the narrator’s magical memories and the truth they now uncover."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word flashback where the narrator relives a magical moment with their former lover, discovering new meaning in the enchantment or illusion."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 770-word revelation where the narrator uncovers a forgotten magical truth about the relationship that reshapes their understanding of destiny and love."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where the narrator confronts the painful truth about their role in the magical bond’s collapse."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word confrontation or confession where the narrator faces someone tied to the magical past, integrating enchantment and reality."
+    },
+    {
+        "genre":  "Romance Fantasy–Memoir",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the narrator describes how magic has reshaped their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 400-word scene where magical elements subtly influence the protagonist’s first impression of the love interest, hinting at both secrecy and destiny."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical crime or enchanted disturbance forces the love interests together, sparking tension and reluctant attraction."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical clues and emotional fears complicate the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where shared discoveries deepen chemistry while magical danger intensifies longing or mistrust."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship and shifts their understanding of each other."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where betrayal, misunderstanding, or magical danger fractures the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the protagonist confronts their fear and expresses the truth that resolves both the case and the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Mystery",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers consider how the solved mystery has changed them."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 420-word scene where enchantment subtly distorts the protagonist’s perception of the love interest, hinting at a dangerous or fated bond."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical event contradicts the protagonist’s understanding of reality, destabilizing their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces manipulate the relationship, revealing how the protagonist questions their own mind."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where illusions, enchantments, or contradictions escalate tension and blur the protagonist’s grasp on truth."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret reframes the relationship and deepens the psychological conflict."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 370-word moment where the protagonist must choose between trusting magic or their own unraveling instincts."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical confrontation where the protagonist faces the true manipulator or truth."
+    },
+    {
+        "genre":  "Romance Fantasy–Psychological Thriller",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the protagonist considers how magic has reshaped their emotional world."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 380-word scene where enchantment intertwines with dread as the protagonist meets someone whose presence feels both fated and dangerous."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical and terrifying event binds the love interests together, intensifying both fear and attraction."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 290-word passage where supernatural forces and emotional fears threaten the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 510-word sequence where horrifying magical encounters deepen both danger and desire."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy or curse reveals the horror’s connection to the lovers."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a sacrifice or forced separation becomes unavoidable."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 650-word magical act of love where the protagonists confront the horror together."
+    },
+    {
+        "genre":  "Romance Fantasy–Horror",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 220-word reflection where the lovers consider what remains of their relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Exposition \u0026 Initial Setup",
+        "prompt":  "Write a 400-word scene where magical danger shapes the protagonist’s first impression of the love interest, revealing both attraction and guardedness."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 560-word moment where a magical attack or crisis forces the love interests together, sparking tension and reluctant trust."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 300-word passage where magical or emotional forces complicate the growing connection."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 520-word sequence where magical battles or trials deepen both danger and desire."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 780-word revelation where a prophecy, curse, or secret threatens the relationship."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment where a breakup, betrayal, or forced separation becomes unavoidable."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 660-word magical or emotional act where the protagonist confronts their fear and expresses the truth that resolves the conflict."
+    },
+    {
+        "genre":  "Romance Fantasy–Action",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 230-word reflection where the lovers begin building a future shaped by both magic and emotional growth."
+    }
+]

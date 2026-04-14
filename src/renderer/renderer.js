@@ -53,6 +53,7 @@ const state = {
 
 let activePageScript = null;
 const dataCache = new Map();
+let navigationRequestId = 0;
 
 function normalizeGenreKey(value = '') {
   return value
@@ -394,10 +395,12 @@ async function loadPageScript(scriptPath) {
     const script = document.createElement('script');
     script.src = `${scriptPath}?t=${Date.now()}`;
     script.onload = () => {
-      activePageScript = script;
-      resolve();
+      resolve(script);
     };
-    script.onerror = reject;
+    script.onerror = () => {
+      script.remove();
+      reject(new Error(`Unable to load script: ${scriptPath}`));
+    };
     document.body.appendChild(script);
   });
 }
@@ -408,6 +411,7 @@ async function navigate(page, options = {}) {
     throw new Error(`Unknown page: ${page}`);
   }
 
+  const requestId = ++navigationRequestId;
   state.currentPage = page;
 
   if (Object.prototype.hasOwnProperty.call(options, 'project')) {
@@ -417,10 +421,20 @@ async function navigate(page, options = {}) {
     setCurrentProject(options.project);
   }
 
-  const [htmlResponse] = await Promise.all([
+  window.initPage = null;
+  window.__registeredPageInit = null;
+
+  const [htmlResponse, pageScript] = await Promise.all([
     fetch(pageDefinition.html),
     loadPageScript(pageDefinition.script),
   ]);
+
+  if (requestId !== navigationRequestId) {
+    pageScript?.remove();
+    return;
+  }
+
+  activePageScript = pageScript;
 
   const markup = await htmlResponse.text();
   document.getElementById('main-content').innerHTML = markup;
@@ -435,31 +449,42 @@ async function navigate(page, options = {}) {
   }
   renderReferenceDrawer();
 
-  if (typeof window.initPage === 'function') {
-    try {
-      await window.initPage({
-        page,
-        project: getProject(),
-      });
-    } catch (error) {
-      console.error(`Failed to initialize page "${page}".`, error);
-      document.getElementById('main-content').innerHTML = `
-        <section class="page">
-          <div class="empty-state card">
-            <h2>That page hit a loading problem</h2>
-            <p>${error?.message || 'A renderer error interrupted the page setup.'}</p>
-            <button id="page-init-retry" class="btn btn-save" type="button">Retry Page</button>
-          </div>
-        </section>
-      `;
-      document.getElementById('page-init-retry')?.addEventListener('click', () => {
-        window.navigate(page, { project: getProject() });
-      });
+  try {
+    if (typeof window.initPage !== 'function' || window.__registeredPageInit !== page) {
+      const registeredPage = window.__registeredPageInit || 'none';
+      throw new Error(`The ${page} page did not finish registering correctly. Registered page: ${registeredPage}.`);
     }
+
+    await window.initPage({
+      page,
+      project: getProject(),
+    });
+  } catch (error) {
+    console.error(`Failed to initialize page "${page}".`, error);
+    document.getElementById('main-content').innerHTML = `
+      <section class="page">
+        <div class="empty-state card">
+          <h2>That page hit a loading problem</h2>
+          <p>${error?.message || 'A renderer error interrupted the page setup.'}</p>
+          <button id="page-init-retry" class="btn btn-save" type="button">Retry Page</button>
+        </div>
+      </section>
+    `;
+    document.getElementById('page-init-retry')?.addEventListener('click', () => {
+      window.navigate(page, { project: getProject() });
+    });
   }
 }
 
 window.navigate = navigate;
+window.registerPageInit = function registerPageInit(pageName, initFn) {
+  if (typeof initFn !== 'function') {
+    throw new Error(`registerPageInit expected a function for "${pageName}".`);
+  }
+
+  window.__registeredPageInit = pageName;
+  window.initPage = initFn;
+};
 window.showProjectNav = () => {};
 window.getCurrentProject = getProject;
 window.setCurrentProject = setCurrentProject;
@@ -833,13 +858,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       const allProjects = typeof window.api?.getAllProjects === 'function'
         ? await window.api.getAllProjects()
         : [];
-      const settings = typeof window.api?.getSettings === 'function'
-        ? await window.api.getSettings()
-        : { betaTesterUnlocked: false };
 
-      if (!settings?.betaTesterUnlocked && allProjects.length >= 1) {
+      if (allProjects.length >= 1) {
         if (formMessage) {
-          formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
+          formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project to create a different one.';
         }
         return;
       }

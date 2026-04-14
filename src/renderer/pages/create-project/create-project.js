@@ -1,5 +1,4 @@
-window.initPage = async function () {
-  const ADMIN_OVERRIDE_CODE = 'Tester';
+window.registerPageInit('create-project', async function () {
   const fallbackGenres = [
     'Fantasy',
     'Romance',
@@ -18,8 +17,6 @@ window.initPage = async function () {
   const genreCount = document.getElementById('genre-count');
   const formMessage = document.getElementById('form-message');
   const projectSlotNote = document.getElementById('project-slot-note');
-  const adminCodeInput = document.getElementById('project-admin-code');
-  const unlockAdminButton = document.getElementById('unlock-project-admin');
   const goalInput = document.getElementById('project-goal');
   const goalPercent = document.getElementById('project-goal-percent');
   const goalState = document.getElementById('project-goal-state');
@@ -33,7 +30,6 @@ window.initPage = async function () {
   const thumbnailStatus = document.getElementById('project-thumbnail-status');
 
   let existingProjects = [];
-  let isAdminMode = false;
   let projectLimitsReady = false;
   let thumbnailData = '';
 
@@ -98,15 +94,8 @@ window.initPage = async function () {
     }
   }
 
-  function syncAdminState() {
-    projectSlotNote.textContent = isAdminMode
-      ? 'Admin mode is active. You can create multiple projects while testing.'
-      : 'Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.';
-    adminCodeInput.value = '';
-    adminCodeInput.placeholder = isAdminMode ? 'Admin mode unlocked' : 'Enter admin key';
-    adminCodeInput.disabled = isAdminMode;
-    unlockAdminButton.textContent = isAdminMode ? 'Admin Mode Active' : 'Unlock Admin Mode';
-    unlockAdminButton.disabled = isAdminMode;
+  function syncProjectLimitState() {
+    projectSlotNote.textContent = 'Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.';
   }
 
   function syncGoalPreview() {
@@ -157,10 +146,8 @@ window.initPage = async function () {
 
     try {
       existingProjects = await window.api.getAllProjects();
-      const settings = await window.api.getSettings();
-      isAdminMode = Boolean(settings?.betaTesterUnlocked);
       projectLimitsReady = true;
-      syncAdminState();
+      syncProjectLimitState();
     } catch (error) {
       projectLimitsReady = false;
       formMessage.textContent = formMessage.textContent || 'Project settings did not load cleanly. You can still create a project and retry a restart later if needed.';
@@ -170,7 +157,7 @@ window.initPage = async function () {
   renderGenreOptions(fallbackGenres);
   renderThumbnailPreview();
   syncGoalPreview();
-  syncAdminState();
+  syncProjectLimitState();
 
   async function handleThumbnailSelection(event) {
     formMessage.textContent = '';
@@ -192,26 +179,12 @@ window.initPage = async function () {
 
   goalInput.addEventListener('input', syncGoalPreview);
 
-  unlockAdminButton?.addEventListener('click', async () => {
-    const code = String(adminCodeInput.value || '').trim();
-    if (code !== ADMIN_OVERRIDE_CODE) {
-      formMessage.textContent = 'That admin key did not unlock project override mode.';
-      return;
-    }
-
-    await window.saveSettingsData({ betaTesterUnlocked: true });
-    isAdminMode = true;
-    projectLimitsReady = true;
-    formMessage.textContent = 'Admin mode unlocked. Multiple project slots are now available on this device.';
-    syncAdminState();
-  });
-
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     formMessage.textContent = '';
 
-    if (projectLimitsReady && !isAdminMode && existingProjects.length >= 1) {
-      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
+    if (projectLimitsReady && existingProjects.length >= 1) {
+      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project to create a different one.';
       return;
     }
 
@@ -255,4 +228,4 @@ window.initPage = async function () {
   });
 
   bootstrapProjectSetup().catch(() => {});
-};
+});

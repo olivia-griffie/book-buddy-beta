@@ -1,0 +1,21 @@
+:root {
+  --cream: #faf7f2;
+  --ink: #2f261f;
+  --ink-soft: #5d5248;
+  --ink-muted: #8b8075;
+  --sage: #7d9b76;
+  --sage-light: #97b28f;
+  --border: #cfc3b5;
+  --border-soft: #ddd4c8;
+  --shadow-card: 0 8px 18px rgba(47, 38, 31, 0.05);
+  --shadow-lift: 0 12px 24px rgba(47, 38, 31, 0.1);
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --duration: 180ms;
+  --ease: ease;
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}

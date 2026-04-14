@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('plot-creation', async function ({ project }) {
   let activeProject = project || window.getCurrentProject();
   const emptyState = document.getElementById('plot-empty-state');
   const content = document.getElementById('plot-content');
@@ -241,4 +241,4 @@ window.initPage = async function ({ project }) {
       syncWorkbookLayout();
     });
   });
-};
+});

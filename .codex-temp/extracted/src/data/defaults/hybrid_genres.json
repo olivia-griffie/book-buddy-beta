@@ -1,0 +1,744 @@
+[
+    {
+        "genre":  "High Fantasy × Action",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Establish a magical world on the brink of conflict.",
+                      "Inciting Incident":  "A violent attack or mission forces the hero into action.",
+                      "Core Conflict":  "Magic and warfare collide as the hero confronts a powerful enemy.",
+                      "Rising Action":  "Battles, chases, and magical trials escalate.",
+                      "Midpoint Revelation":  "A hidden truth reshapes the quest and the stakes.",
+                      "Crisis":  "The hero must risk everything for the mission.",
+                      "Climax":  "A decisive magical battle determines the fate of the realm.",
+                      "Aftermath":  "Peace returns, but scars remain."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Horror",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Introduce a wondrous world with unsettling shadows.",
+                      "Inciting Incident":  "A dark magical force emerges.",
+                      "Core Conflict":  "The hero faces ancient terrors tied to the world’s magic.",
+                      "Rising Action":  "Nightmarish creatures and cursed lands intensify the danger.",
+                      "Midpoint Revelation":  "The horror’s origin is revealed.",
+                      "Crisis":  "The hero must confront fear itself.",
+                      "Climax":  "A desperate battle against the monstrous or the unknown.",
+                      "Aftermath":  "The world survives, changed and haunted."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Mystery",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Establish a magical realm with political or arcane secrets.",
+                      "Inciting Incident":  "A magical crime or disappearance disrupts the kingdom.",
+                      "Core Conflict":  "The hero investigates clues tied to ancient lore.",
+                      "Rising Action":  "Suspects, spells, and hidden factions complicate the truth.",
+                      "Midpoint Revelation":  "A secret prophecy or betrayal is uncovered.",
+                      "Crisis":  "The hero is framed or endangered by the real culprit.",
+                      "Climax":  "The truth is revealed in a magical confrontation.",
+                      "Aftermath":  "Justice reshapes the realm."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Psychological Thriller",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Introduce a magical world where reality is unstable.",
+                      "Inciting Incident":  "A spell, vision, or prophecy distorts perception.",
+                      "Core Conflict":  "The hero questions allies, memories, and magic.",
+                      "Rising Action":  "Manipulation, illusions, and mind magic blur truth.",
+                      "Midpoint Revelation":  "The hero’s identity or destiny is not what it seemed.",
+                      "Crisis":  "They must choose which reality to trust.",
+                      "Climax":  "A confrontation reveals the true manipulator.",
+                      "Aftermath":  "Reality stabilizes… or fractures."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Memoir",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A hero reflects on their past in a magical world.",
+                      "Inciting Incident":  "A relic or memory forces them to revisit old wounds.",
+                      "Core Conflict":  "Past choices shape present dangers.",
+                      "Rising Action":  "Flashbacks and present trials intertwine.",
+                      "Midpoint Revelation":  "A forgotten truth reshapes the hero’s identity.",
+                      "Crisis":  "They must confront the past directly.",
+                      "Climax":  "A magical reckoning brings closure.",
+                      "Aftermath":  "Healing and legacy intertwine."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Romance",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Introduce hero, magical world, and emotional wound.",
+                      "Inciting Incident":  "A fated or forbidden magical encounter sparks attraction.",
+                      "Core Conflict":  "Love clashes with prophecy, politics, or magic.",
+                      "Rising Action":  "Trials deepen both danger and desire.",
+                      "Midpoint Revelation":  "A secret threatens the relationship.",
+                      "Crisis":  "The lovers are torn apart by duty or fate.",
+                      "Climax":  "A sacrifice or magical vow reunites them.",
+                      "Aftermath":  "Love reshapes the world."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Romance Fantasy",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Establish a lush magical world and a destined bond.",
+                      "Inciting Incident":  "Magic entwines the lovers’ fates.",
+                      "Core Conflict":  "Their connection disrupts kingdoms or ancient powers.",
+                      "Rising Action":  "Magic, danger, and longing intensify.",
+                      "Midpoint Revelation":  "A prophecy or curse threatens their union.",
+                      "Crisis":  "They must choose between love and destiny.",
+                      "Climax":  "A magical union or sacrifice breaks the curse.",
+                      "Aftermath":  "A restored world shaped by their love."
+                  }
+    },
+    {
+        "genre":  "High Fantasy × Sci Fi",
+        "category":  "High Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical world intersects with advanced technology.",
+                      "Inciting Incident":  "A futuristic anomaly disrupts ancient magic.",
+                      "Core Conflict":  "The hero navigates clashing systems of power.",
+                      "Rising Action":  "Tech and magic collide in escalating conflict.",
+                      "Midpoint Revelation":  "The worlds share a hidden origin.",
+                      "Crisis":  "The hero must bridge or choose between them.",
+                      "Climax":  "A fusion of magic and science determines the future.",
+                      "Aftermath":  "A new hybrid world emerges. ACTION — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Action × Horror",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Introduce a skilled hero in a dangerous world.",
+                      "Inciting Incident":  "A mission reveals a monstrous threat.",
+                      "Core Conflict":  "Survival becomes the new objective.",
+                      "Rising Action":  "Attacks escalate; fear and adrenaline collide.",
+                      "Midpoint Revelation":  "The horror is smarter or closer than expected.",
+                      "Crisis":  "The hero must risk everything to escape.",
+                      "Climax":  "A brutal showdown with the creature or force.",
+                      "Aftermath":  "Survival comes with trauma."
+                  }
+    },
+    {
+        "genre":  "Action × Mystery",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A capable hero faces a puzzling crime.",
+                      "Inciting Incident":  "A mission uncovers a deeper conspiracy.",
+                      "Core Conflict":  "Clues and combat intertwine.",
+                      "Rising Action":  "Chases, interrogations, and twists escalate.",
+                      "Midpoint Revelation":  "The true enemy is revealed.",
+                      "Crisis":  "The hero is betrayed or trapped.",
+                      "Climax":  "A high stakes confrontation exposes the truth.",
+                      "Aftermath":  "Justice is served."
+                  }
+    },
+    {
+        "genre":  "Action × Psychological Thriller",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A skilled hero hides a fractured mind.",
+                      "Inciting Incident":  "A mission triggers paranoia or memory gaps.",
+                      "Core Conflict":  "The hero questions allies and themselves.",
+                      "Rising Action":  "Manipulation and danger blur reality.",
+                      "Midpoint Revelation":  "The hero’s past or identity is compromised.",
+                      "Crisis":  "They must confront their own mind.",
+                      "Climax":  "A truth revealing confrontation.",
+                      "Aftermath":  "A fragile new stability."
+                  }
+    },
+    {
+        "genre":  "Action × Memoir",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A veteran reflects on a life of missions.",
+                      "Inciting Incident":  "A new threat echoes an old trauma.",
+                      "Core Conflict":  "Past and present collide.",
+                      "Rising Action":  "Flashbacks inform current battles.",
+                      "Midpoint Revelation":  "A buried truth resurfaces.",
+                      "Crisis":  "The hero must face their past.",
+                      "Climax":  "A final mission brings closure.",
+                      "Aftermath":  "Healing begins."
+                  }
+    },
+    {
+        "genre":  "Action × Romance",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A driven hero meets someone who challenges them.",
+                      "Inciting Incident":  "A mission forces them together.",
+                      "Core Conflict":  "Attraction complicates danger.",
+                      "Rising Action":  "Tension builds through shared peril.",
+                      "Midpoint Revelation":  "A secret threatens trust.",
+                      "Crisis":  "A breakup or betrayal endangers the mission.",
+                      "Climax":  "A sacrifice or confession reunites them.",
+                      "Aftermath":  "Love survives the chaos."
+                  }
+    },
+    {
+        "genre":  "Action × Romance Fantasy",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A hero and magical love interest collide.",
+                      "Inciting Incident":  "A magical threat binds them together.",
+                      "Core Conflict":  "Love and danger escalate in tandem.",
+                      "Rising Action":  "Magic and combat intensify their bond.",
+                      "Midpoint Revelation":  "A prophecy or curse complicates love.",
+                      "Crisis":  "They must choose each other or the mission.",
+                      "Climax":  "A magical, emotional showdown.",
+                      "Aftermath":  "A powerful union."
+                  }
+    },
+    {
+        "genre":  "Action × Sci Fi",
+        "category":  "Action",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world demands skilled survival.",
+                      "Inciting Incident":  "A mission reveals a technological threat.",
+                      "Core Conflict":  "The hero battles both enemies and systems.",
+                      "Rising Action":  "Tech failures, chases, and conspiracies escalate.",
+                      "Midpoint Revelation":  "The threat is larger than imagined.",
+                      "Crisis":  "A catastrophic choice must be made.",
+                      "Climax":  "A high tech showdown.",
+                      "Aftermath":  "A new future emerges. HORROR — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Horror × Mystery",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A disturbing world hides a deeper secret.",
+                      "Inciting Incident":  "A horrifying event demands investigation.",
+                      "Core Conflict":  "Clues reveal something monstrous.",
+                      "Rising Action":  "Fear and truth intertwine.",
+                      "Midpoint Revelation":  "The horror’s identity is exposed.",
+                      "Crisis":  "The protagonist is hunted or trapped.",
+                      "Climax":  "A confrontation with the true terror.",
+                      "Aftermath":  "Survival with lingering dread."
+                  }
+    },
+    {
+        "genre":  "Horror × Psychological Thriller",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Reality feels unsafe from the start.",
+                      "Inciting Incident":  "A terrifying event fractures perception.",
+                      "Core Conflict":  "The protagonist questions what is real.",
+                      "Rising Action":  "Hallucinations and threats escalate.",
+                      "Midpoint Revelation":  "The horror is tied to the mind.",
+                      "Crisis":  "They must face their deepest fear.",
+                      "Climax":  "A truth shattering confrontation.",
+                      "Aftermath":  "Ambiguous survival."
+                  }
+    },
+    {
+        "genre":  "Horror × Memoir",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator recalls a haunting past.",
+                      "Inciting Incident":  "A memory resurfaces with new terror.",
+                      "Core Conflict":  "Past horrors bleed into the present.",
+                      "Rising Action":  "Flashbacks reveal buried trauma.",
+                      "Midpoint Revelation":  "The truth behind the haunting emerges.",
+                      "Crisis":  "The narrator must confront the past.",
+                      "Climax":  "A final reckoning with the horror .",
+                      "Aftermath":  "Healing or haunting remains."
+                  }
+    },
+    {
+        "genre":  "Horror × Romance",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Love blooms in a world of dread.",
+                      "Inciting Incident":  "A supernatural threat targets the lovers .",
+                      "Core Conflict":  "Fear tests their bond.",
+                      "Rising Action":  "Horror intensifies as love deepens.",
+                      "Midpoint Revelation":  "One lover is tied to the curse.",
+                      "Crisis":  "They must choose love or survival.",
+                      "Climax":  "A sacrifice confronts the horror .",
+                      "Aftermath":  "A bittersweet or tragic ending."
+                  }
+    },
+    {
+        "genre":  "Horror × Romance Fantasy",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical world hides dark forces.",
+                      "Inciting Incident":  "A cursed encounter binds the lovers.",
+                      "Core Conflict":  "Love battles supernatural terror.",
+                      "Rising Action":  "Magic and horror escalate.",
+                      "Midpoint Revelation":  "A prophecy or curse threatens them.",
+                      "Crisis":  "They must risk everything for each other.",
+                      "Climax":  "Love confronts the darkness.",
+                      "Aftermath":  "A restored or haunted world."
+                  }
+    },
+    {
+        "genre":  "Horror × Sci Fi",
+        "category":  "Horror",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world harbors unknown dangers.",
+                      "Inciting Incident":  "A technological or alien horror emerges.",
+                      "Core Conflict":  "Science fails to explain the terror.",
+                      "Rising Action":  "The horror evolves or spreads.",
+                      "Midpoint Revelation":  "The threat is beyond human control.",
+                      "Crisis":  "Survival becomes the only goal.",
+                      "Climax":  "A desperate confrontation.",
+                      "Aftermath":  "A chilling new reality. MYSTERY — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Mystery × Psychological Thriller",
+        "category":  "Mystery",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A sleuth with a fragile mind begins a case.",
+                      "Inciting Incident":  "A crime contradicts their memory or perception.",
+                      "Core Conflict":  "Clues blur with paranoia.",
+                      "Rising Action":  "Manipulation and danger escalate.",
+                      "Midpoint Revelation":  "The sleuth is tied to the case.",
+                      "Crisis":  "They doubt themselves entirely.",
+                      "Climax":  "The truth is revealed in a mental showdown.",
+                      "Aftermath":  "A fragile resolution."
+                  }
+    },
+    {
+        "genre":  "Mystery × Memoir",
+        "category":  "Mystery",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator revisits an unsolved case from their past.",
+                      "Inciting Incident":  "New evidence resurfaces.",
+                      "Core Conflict":  "Memory and truth collide.",
+                      "Rising Action":  "Flashbacks reveal hidden clues.",
+                      "Midpoint Revelation":  "A forgotten detail changes everything.",
+                      "Crisis":  "The narrator confronts their own role.",
+                      "Climax":  "The case is finally solved.",
+                      "Aftermath":  "Closure or regret."
+                  }
+    },
+    {
+        "genre":  "Mystery × Romance",
+        "category":  "Mystery",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A sleuth meets a compelling love interest.",
+                      "Inciting Incident":  "A case forces them together.",
+                      "Core Conflict":  "Attraction complicates investigation.",
+                      "Rising Action":  "Clues and chemistry intensify.",
+                      "Midpoint Revelation":  "A secret threatens trust.",
+                      "Crisis":  "A betrayal or danger separates them.",
+                      "Climax":  "Truth and love triumph.",
+                      "Aftermath":  "A united future."
+                  }
+    },
+    {
+        "genre":  "Mystery × Romance Fantasy",
+        "category":  "Mystery",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical world hides a romantic mystery.",
+                      "Inciting Incident":  "A magical crime binds the lovers.",
+                      "Core Conflict":  "Love and investigation intertwine.",
+                      "Rising Action":  "Magic complicates clues.",
+                      "Midpoint Revelation":  "A prophecy or curse emerges.",
+                      "Crisis":  "Love is threatened by truth.",
+                      "Climax":  "A magical reveal solves the case.",
+                      "Aftermath":  "Love restores balance."
+                  }
+    },
+    {
+        "genre":  "Mystery × Sci Fi",
+        "category":  "Mystery",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world hides a complex crime.",
+                      "Inciting Incident":  "A technological anomaly sparks investigation.",
+                      "Core Conflict":  "Clues reveal systemic corruption.",
+                      "Rising Action":  "Tech twists and conspiracies escalate.",
+                      "Midpoint Revelation":  "The crime is larger than imagined.",
+                      "Crisis":  "The sleuth is targeted.",
+                      "Climax":  "A high tech reveal exposes the truth.",
+                      "Aftermath":  "A new order emerges. PSYCHOLOGICAL THRILLER — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Psych Thriller × Memoir",
+        "category":  "Psych Thriller",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator recounts a fractured past.",
+                      "Inciting Incident":  "A memory resurfaces with contradictions.",
+                      "Core Conflict":  "Truth and perception clash.",
+                      "Rising Action":  "Flashbacks distort reality.",
+                      "Midpoint Revelation":  "The narrator’s role is not what they believed.",
+                      "Crisis":  "They must face their own mind.",
+                      "Climax":  "A truth shattering realization.",
+                      "Aftermath":  "A fragile new identity."
+                  }
+    },
+    {
+        "genre":  "Psych Thriller × Romance",
+        "category":  "Psych Thriller",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A troubled protagonist meets an alluring partner.",
+                      "Inciting Incident":  "A disturbing event strains trust.",
+                      "Core Conflict":  "Love and paranoia intertwine.",
+                      "Rising Action":  "Manipulation or secrets escalate.",
+                      "Midpoint Revelation":  "One partner hides a dangerous truth.",
+                      "Crisis":  "The relationship fractures .",
+                      "Climax":  "A confrontation reveals true intentions.",
+                      "Aftermath":  "Healing or heartbreak."
+                  }
+    },
+    {
+        "genre":  "Psych Thriller × Romance Fantasy",
+        "category":  "Psych Thriller",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Magic and unstable reality shape a fated bond.",
+                      "Inciting Incident":  "A magical event distorts perception.",
+                      "Core Conflict":  "Love battles illusions or manipulation.",
+                      "Rising Action":  "Magic blurs truth.",
+                      "Midpoint Revelation":  "A prophecy or curse reveals hidden motives.",
+                      "Crisis":  "The lovers doubt each other.",
+                      "Climax":  "A magical truth is unveiled.",
+                      "Aftermath":  "A restored or altered bond."
+                  }
+    },
+    {
+        "genre":  "Psych Thriller × Sci Fi",
+        "category":  "Psych Thriller",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world manipulates memory or identity.",
+                      "Inciting Incident":  "A glitch or anomaly fractures perception.",
+                      "Core Conflict":  "The protagonist questions reality.",
+                      "Rising Action":  "Tech and paranoia escalate.",
+                      "Midpoint Revelation":  "Their identity is compromised.",
+                      "Crisis":  "They must choose truth or survival.",
+                      "Climax":  "A confrontation with the system.",
+                      "Aftermath":  "A new, uncertain reality. MEMOIR — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Memoir × Romance",
+        "category":  "",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator reflects on a defining love.",
+                      "Inciting Incident":  "A memory or reunion reopens old feelings.",
+                      "Core Conflict":  "Past love shapes present choices.",
+                      "Rising Action":  "Flashbacks reveal emotional wounds.",
+                      "Midpoint Revelation":  "A truth about the relationship emerges.",
+                      "Crisis":  "The narrator must confront regret or longing.",
+                      "Climax":  "A confession or closure.",
+                      "Aftermath":  "Healing or reconnection."
+                  }
+    },
+    {
+        "genre":  "Memoir × Romance Fantasy",
+        "category":  "",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator recalls a magical love.",
+                      "Inciting Incident":  "A relic or spell reawakens memories.",
+                      "Core Conflict":  "Magic and emotion intertwine.",
+                      "Rising Action":  "Past enchantments resurface.",
+                      "Midpoint Revelation":  "A magical truth reshapes the story.",
+                      "Crisis":  "The narrator must face what was lost.",
+                      "Climax":  "A magical or emotional resolution.",
+                      "Aftermath":  "Peace or renewed wonder."
+                  }
+    },
+    {
+        "genre":  "Memoir × Sci Fi",
+        "category":  "",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator reflects on a futuristic past.",
+                      "Inciting Incident":  "A technological anomaly triggers memories.",
+                      "Core Conflict":  "Past innovations or disasters resurface.",
+                      "Rising Action":  "Flashbacks reveal hidden truths.",
+                      "Midpoint Revelation":  "A secret shapes the future.",
+                      "Crisis":  "The narrator must confront their legacy.",
+                      "Climax":  "A decisive act brings closure.",
+                      "Aftermath":  "A new understanding of the future. ROMANCE — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Romance × Romance Fantasy",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A grounded love story begins in a world touched by magic.",
+                      "Inciting Incident":  "A magical event intensifies or complicates their attraction.",
+                      "Core Conflict":  "Love must navigate enchantments, curses, or supernatural forces.",
+                      "Rising Action":  "Magic deepens emotional stakes and tests trust.",
+                      "Midpoint Revelation":  "A magical truth threatens the relationship.",
+                      "Crisis":  "The lovers are torn apart by fate or enchantment.",
+                      "Climax":  "A magical act or sacrifice proves their devotion.",
+                      "Aftermath":  "A love strengthened by both emotion and magic."
+                  }
+    },
+    {
+        "genre":  "Romance × Sci Fi",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A love story begins in a futuristic or technologically advanced world.",
+                      "Inciting Incident":  "A scientific anomaly or mission forces the lovers together.",
+                      "Core Conflict":  "Technology, distance, or societal systems challenge their bond.",
+                      "Rising Action":  "Futuristic obstacles intensify emotional tension.",
+                      "Midpoint Revelation":  "A hidden truth about identity, memory, or tech threatens trust.",
+                      "Crisis":  "The lovers face separation by duty, time, or science.",
+                      "Climax":  "A bold emotional or technological leap reunites them.",
+                      "Aftermath":  "Love reshapes their future."
+                  }
+    },
+    {
+        "genre":  "Romance × Memoir",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator reflects on a defining love that shaped their life.",
+                      "Inciting Incident":  "A memory, letter, or reunion reopens old emotions.",
+                      "Core Conflict":  "Past love influences present choices.",
+                      "Rising Action":  "Flashbacks reveal wounds and longing.",
+                      "Midpoint Revelation":  "A truth about the relationship emerges.",
+                      "Crisis":  "The narrator must confront regret or desire.",
+                      "Climax":  "A confession or closure moment resolves the emotional arc.",
+                      "Aftermath":  "Healing, reconnection, or acceptance."
+                  }
+    },
+    {
+        "genre":  "Romance × Mystery",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A budding romance forms around a puzzling situation.",
+                      "Inciting Incident":  "A crime or secret forces the love interests to work together.",
+                      "Core Conflict":  "Attraction grows while clues complicate trust.",
+                      "Rising Action":  "Danger and chemistry escalate in tandem.",
+                      "Midpoint Revelation":  "A secret threatens the relationship.",
+                      "Crisis":  "A betrayal or misunderstanding fractures the bond.",
+                      "Climax":  "Solving the mystery restores trust.",
+                      "Aftermath":  "Love thrives once the truth is known."
+                  }
+    },
+    {
+        "genre":  "Romance × Psychological Thriller",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A relationship begins under emotionally unstable or uncertain circumstances.",
+                      "Inciting Incident":  "A disturbing event strains trust.",
+                      "Core Conflict":  "Love becomes entangled with paranoia or manipulation.",
+                      "Rising Action":  "Secrets and psychological tension escalate.",
+                      "Midpoint Revelation":  "One partner hides a dangerous truth.",
+                      "Crisis":  "The relationship fractures under fear or doubt.",
+                      "Climax":  "A confrontation reveals true intentions.",
+                      "Aftermath":  "Healing, escape, or a haunting emotional end."
+                  }
+    },
+    {
+        "genre":  "Romance × Horror",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "Love blooms in a world overshadowed by dread.",
+                      "Inciting Incident":  "A supernatural threat targets or binds the lovers.",
+                      "Core Conflict":  "Fear tests their bond.",
+                      "Rising Action":  "Horror intensifies as love deepens.",
+                      "Midpoint Revelation":  "One lover is tied to the curse or creature.",
+                      "Crisis":  "They must choose between love and survival.",
+                      "Climax":  "A sacrifice confronts the horror .",
+                      "Aftermath":  "A tragic, bittersweet, or miraculous ending."
+                  }
+    },
+    {
+        "genre":  "Romance × Action",
+        "category":  "Romance",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A spark forms between two people in a high stakes world.",
+                      "Inciting Incident":  "A mission or disaster forces them together.",
+                      "Core Conflict":  "Attraction complicates danger and duty.",
+                      "Rising Action":  "Shared peril intensifies emotional tension.",
+                      "Midpoint Revelation":  "A secret threatens trust.",
+                      "Crisis":  "A breakup or betrayal endangers the mission.",
+                      "Climax":  "A sacrifice or confession reunites them.",
+                      "Aftermath":  "Love survives the chaos. ROMANCE FANTASY — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Sci Fi",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical love story unfolds in a world shaped by advanced technology.",
+                      "Inciting Incident":  "A fusion of magic and science binds the lovers .",
+                      "Core Conflict":  "Their bond disrupts both magical and technological powers.",
+                      "Rising Action":  "Enchantment and innovation collide, raising stakes.",
+                      "Midpoint Revelation":  "A prophecy or scientific truth threatens their union.",
+                      "Crisis":  "They must choose between love and destiny.",
+                      "Climax":  "A magical technological act reshapes their fate.",
+                      "Aftermath":  "A new world where love bridges both realms."
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Memoir",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator recalls a magical love that changed their life.",
+                      "Inciting Incident":  "A relic or spell reawakens memories.",
+                      "Core Conflict":  "Past enchantments shape present emotions.",
+                      "Rising Action":  "Flashbacks reveal magical truths.",
+                      "Midpoint Revelation":  "A forgotten magical bond resurfaces.",
+                      "Crisis":  "The narrator must confront what was lost.",
+                      "Climax":  "A magical or emotional reckoning.",
+                      "Aftermath":  "Healing or renewed wonder."
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Mystery",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical world hides a romantic mystery.",
+                      "Inciting Incident":  "A magical crime or secret binds the lovers.",
+                      "Core Conflict":  "Love and investigation intertwine.",
+                      "Rising Action":  "Magic complicates clues and trust.",
+                      "Midpoint Revelation":  "A prophecy or curse emerges.",
+                      "Crisis":  "Love is threatened by truth.",
+                      "Climax":  "A magical reveal solves the case.",
+                      "Aftermath":  "Love restores balance."
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Psychological Thriller",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical bond forms in a world where reality is unstable.",
+                      "Inciting Incident":  "A magical event distorts perception.",
+                      "Core Conflict":  "Love battles illusions or manipulation.",
+                      "Rising Action":  "Magic blurs truth and trust.",
+                      "Midpoint Revelation":  "A prophecy or hidden motive emerges.",
+                      "Crisis":  "The lovers doubt each other.",
+                      "Climax":  "A magical truth is unveiled.",
+                      "Aftermath":  "A restored or altered bond."
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Horror",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical world hides dark forces that threaten love.",
+                      "Inciting Incident":  "A curse or creature binds the lovers.",
+                      "Core Conflict":  "Love must survive supernatural terror.",
+                      "Rising Action":  "Magic and horror escalate.",
+                      "Midpoint Revelation":  "One lover is tied to the darkness.",
+                      "Crisis":  "They must risk everything for each other.",
+                      "Climax":  "Love confronts the horror .",
+                      "Aftermath":  "A restored or haunted world."
+                  }
+    },
+    {
+        "genre":  "Romance Fantasy × Action",
+        "category":  "Romance Fantasy",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A magical bond forms in a world of danger.",
+                      "Inciting Incident":  "A threat forces the lovers into a shared mission.",
+                      "Core Conflict":  "Love and peril intensify together.",
+                      "Rising Action":  "Magic and combat deepen their connection.",
+                      "Midpoint Revelation":  "A prophecy or secret threatens them.",
+                      "Crisis":  "They must choose each other or the mission.",
+                      "Climax":  "A magical, emotional showdown.",
+                      "Aftermath":  "A powerful union. SCI FI — Hybrid Structures"
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Memoir",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A narrator reflects on a futuristic or interstellar past.",
+                      "Inciting Incident":  "A technological anomaly triggers old memories.",
+                      "Core Conflict":  "Past innovations or disasters resurface.",
+                      "Rising Action":  "Flashbacks reveal hidden truths.",
+                      "Midpoint Revelation":  "A secret shapes the future.",
+                      "Crisis":  "The narrator must confront their legacy.",
+                      "Climax":  "A decisive act brings closure.",
+                      "Aftermath":  "A new understanding of the future."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Mystery",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world hides a complex crime.",
+                      "Inciting Incident":  "A technological anomaly sparks investigation.",
+                      "Core Conflict":  "Clues reveal systemic corruption or alien influence.",
+                      "Rising Action":  "Tech twists and conspiracies escalate.",
+                      "Midpoint Revelation":  "The crime is larger than imagined.",
+                      "Crisis":  "The sleuth is targeted or isolated.",
+                      "Climax":  "A high tech reveal exposes the truth.",
+                      "Aftermath":  "A new order emerges."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Psychological Thriller",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world manipulates memory or identity.",
+                      "Inciting Incident":  "A glitch or anomaly fractures perception.",
+                      "Core Conflict":  "The protagonist questions reality.",
+                      "Rising Action":  "Tech and paranoia escalate.",
+                      "Midpoint Revelation":  "Their identity is compromised.",
+                      "Crisis":  "They must choose truth or survival.",
+                      "Climax":  "A confrontation with the system.",
+                      "Aftermath":  "A new, uncertain reality."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Horror",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world harbors unknown dangers.",
+                      "Inciting Incident":  "A technological or alien horror emerges.",
+                      "Core Conflict":  "Science fails to explain the terror.",
+                      "Rising Action":  "The horror evolves or spreads.",
+                      "Midpoint Revelation":  "The threat is beyond human control.",
+                      "Crisis":  "Survival becomes the only goal.",
+                      "Climax":  "A desperate confrontation.",
+                      "Aftermath":  "A chilling new reality."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Action",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A futuristic world demands skilled survival.",
+                      "Inciting Incident":  "A mission reveals a technological threat.",
+                      "Core Conflict":  "The hero battles both enemies and systems.",
+                      "Rising Action":  "Tech failures, chases, and conspiracies escalate.",
+                      "Midpoint Revelation":  "The threat is larger than imagined.",
+                      "Crisis":  "A catastrophic choice must be made.",
+                      "Climax":  "A high tech showdown.",
+                      "Aftermath":  "A new future emerges."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Romance",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A love story begins in a technologically advanced world.",
+                      "Inciting Incident":  "A scientific anomaly or mission binds the lovers.",
+                      "Core Conflict":  "Technology, distance, or systems challenge their bond.",
+                      "Rising Action":  "Futuristic obstacles intensify emotional tension.",
+                      "Midpoint Revelation":  "A hidden truth threatens trust.",
+                      "Crisis":  "The lovers face separation by duty or science.",
+                      "Climax":  "A bold emotional or technological leap reunites them.",
+                      "Aftermath":  "Love reshapes their future."
+                  }
+    },
+    {
+        "genre":  "Sci Fi × Romance Fantasy",
+        "category":  "Sci Fi",
+        "beats":  {
+                      "Exposition \u0026 Initial Setup":  "A world where magic and technology coexist shapes a destined bond.",
+                      "Inciting Incident":  "A magical technological event entwines the lovers.",
+                      "Core Conflict":  "Their love disrupts both realms.",
+                      "Rising Action":  "Enchantment and innovation collide.",
+                      "Midpoint Revelation":  "A prophecy or scientific truth threatens them.",
+                      "Crisis":  "They must choose between love and destiny.",
+                      "Climax":  "A fusion of magic and science saves them.",
+                      "Aftermath":  "A new hybrid world emerges."
+                  }
+    }
+]

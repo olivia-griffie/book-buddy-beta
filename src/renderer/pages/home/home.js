@@ -1,51 +1,17 @@
-window.initPage = async function () {
+window.registerPageInit('home', async function () {
   const allProjects = await window.api.getAllProjects();
-  const settings = await window.api.getSettings();
-  const isAdminMode = Boolean(settings.betaTesterUnlocked);
-  const visibleProjects = isAdminMode ? allProjects : allProjects.slice(0, 1);
+  const visibleProjects = allProjects.slice(0, 1);
   const grid = document.getElementById('projects-grid');
   const empty = document.getElementById('empty-state');
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
   const dashboard = document.getElementById('daily-dashboard');
-  const ADMIN_OVERRIDE_CODE = 'Tester';
 
   function showCreateLimitMessage() {
     betaBanner.style.display = 'block';
     betaBanner.innerHTML = `
       <p class="eyebrow">Beta Limit</p>
-      <p>Book Buddy Beta includes one project slot for now. Delete your current project to start a different one, or buy the full version on release to unlock multiple projects.</p>
-      <div class="admin-banner-row">
-        <div class="field">
-          <label for="home-admin-code">Admin Key</label>
-          <input id="home-admin-code" type="password" placeholder="Enter admin key" />
-        </div>
-        <button id="unlock-home-admin" class="btn btn-ghost" type="button">Unlock Admin Mode</button>
-      </div>
-    `;
-
-    const input = document.getElementById('home-admin-code');
-    const button = document.getElementById('unlock-home-admin');
-    button?.addEventListener('click', async () => {
-      const code = String(input?.value || '').trim();
-      if (code !== ADMIN_OVERRIDE_CODE) {
-        betaBanner.innerHTML = `
-          <p class="eyebrow">Admin Key</p>
-          <p>That admin key did not unlock project override mode.</p>
-        `;
-        return;
-      }
-
-      await window.saveSettingsData({ betaTesterUnlocked: true });
-      await window.navigate('home');
-    });
-  }
-
-  function showAdminModeMessage() {
-    betaBanner.style.display = 'block';
-    betaBanner.innerHTML = `
-      <p class="eyebrow">Admin Mode</p>
-      <p>Admin mode is active on this device. Multiple project slots are available for testing.</p>
+      <p>Book Buddy Beta includes one project slot for now. Delete your current project to start a different one.</p>
     `;
   }
 
@@ -222,7 +188,7 @@ window.initPage = async function () {
   }
 
   function handleNewProject() {
-    if (!isAdminMode && visibleProjects.length >= 1) {
+    if (visibleProjects.length >= 1) {
       showCreateLimitMessage();
       return;
     }
@@ -240,18 +206,13 @@ window.initPage = async function () {
     grid.style.display = 'none';
     empty.style.display = 'block';
     dashboard.style.display = 'none';
-    betaBanner.style.display = isAdminMode ? 'block' : 'none';
-    if (isAdminMode) {
-      showAdminModeMessage();
-    }
+    betaBanner.style.display = 'none';
     return;
   }
 
   empty.style.display = 'none';
-  betaBanner.style.display = (isAdminMode || allProjects.length >= 1) ? 'block' : 'none';
-  if (betaBanner.style.display === 'block' && isAdminMode) {
-    showAdminModeMessage();
-  } else if (betaBanner.style.display === 'block') {
+  betaBanner.style.display = allProjects.length >= 1 ? 'block' : 'none';
+  if (betaBanner.style.display === 'block') {
     showCreateLimitMessage();
   }
 
@@ -552,4 +513,4 @@ window.initPage = async function () {
 
   const dashboardProject = visibleProjects.find((project) => project.id === window.getCurrentProject()?.id) || visibleProjects[0];
   renderDashboard(dashboardProject);
-};
+});

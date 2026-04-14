@@ -1,4 +1,4 @@
-window.initPage = async function ({ project }) {
+window.registerPageInit('characters', async function ({ project }) {
   const characterTypeDefinitions = [
     {
       id: 'protagonist',
@@ -331,4 +331,4 @@ window.initPage = async function ({ project }) {
 
   renderList();
   renderEditor();
-};
+});

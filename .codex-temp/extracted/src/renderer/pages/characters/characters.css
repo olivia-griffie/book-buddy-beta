@@ -1,0 +1,128 @@
+.entity-page {
+  display: grid;
+  gap: 24px;
+}
+
+.character-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.character-gallery-card {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.character-gallery-card:hover,
+.character-gallery-card.is-active {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card);
+  border-color: var(--sage-light);
+}
+
+.character-gallery-thumb {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: 14px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
+  border: 1px solid var(--border-soft);
+}
+
+.character-gallery-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.character-gallery-name {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.character-gallery-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.character-gallery-status {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.character-type-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.character-type-tag {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #fffdfa;
+  color: var(--ink);
+  font: inherit;
+  cursor: pointer;
+  transition: transform var(--duration) var(--ease), border-color var(--duration) var(--ease), background var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+
+.character-type-tag:hover,
+.character-type-tag:focus-visible {
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.14);
+  outline: none;
+}
+
+.character-type-tag.is-selected {
+  background: rgba(125, 155, 118, 0.14);
+  border-color: var(--sage);
+  color: var(--sage-deep);
+}
+
+.character-type-help {
+  margin: 10px 0 0;
+  color: var(--ink-muted);
+}
+
+.character-type-summary {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.character-type-summary-card {
+  padding: 12px 14px;
+}
+
+.character-type-summary-card strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+
+.character-type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #f8f2ea;
+  color: var(--ink-muted);
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+}

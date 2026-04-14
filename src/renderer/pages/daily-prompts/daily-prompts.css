@@ -24,10 +24,6 @@
   margin-top: 18px;
 }
 
-.tester-field {
-  min-width: min(100%, 260px);
-}
-
 .prompt-results-grid {
   display: grid;
   gap: 14px;

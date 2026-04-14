@@ -1,0 +1,1 @@
+window.showModal = function showModal() {};
