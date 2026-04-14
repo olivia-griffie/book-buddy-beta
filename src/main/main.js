@@ -119,7 +119,7 @@ function buildExportDocument(project = {}) {
   const text = textParts.filter(Boolean).join('\n\n\n');
 
   const rtfBody = [
-    '{\\rtf1\\ansi\\deff0',
+    '{\\rtf1\\ansi\\ansicpg1252\\deff0',
     `{\\b\\fs40 ${escapeRtf(title)}}\\par`,
     subtitle ? `\\par {\\i\\fs28 ${escapeRtf(subtitle)}}\\par` : '',
     authorName ? `\\par ${escapeRtf(`by ${authorName}`)}\\par` : '',
