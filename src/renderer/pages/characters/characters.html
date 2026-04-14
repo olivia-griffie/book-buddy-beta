@@ -7,13 +7,13 @@
     </div>
     <button id="save-characters" class="btn btn-save" type="button">Save Characters</button>
   </div>
-
+ 
   <div id="characters-empty-state" class="empty-state card" style="display: none;">
     <h2>No project selected</h2>
     <p>Create a project first so character notes can be attached to your book.</p>
     <button id="characters-create-project" class="btn btn-sage" type="button">Create Project</button>
   </div>
-
+ 
   <div id="characters-content" class="entity-layout" style="display: none;">
     <section class="card ui-card ui-card-stack entity-list-card">
       <div class="section-heading ui-card-head">
@@ -27,7 +27,7 @@
       <div id="characters-list" class="entity-list"></div>
       <p id="characters-save-message" class="form-message" aria-live="polite"></p>
     </section>
-
+ 
     <section class="card ui-card ui-card-stack entity-editor-card">
       <div class="section-heading ui-card-head">
         <div class="ui-card-copy">
@@ -37,7 +37,14 @@
       </div>
       <div id="character-editor-shell" style="display: none;">
         <div class="entity-form-grid">
-          <div class="field"><label for="character-name">Name</label><input id="character-name" type="text" /></div>
+ 
+          <!-- Name -->
+          <div class="field">
+            <label for="character-name">Name</label>
+            <input id="character-name" type="text" />
+          </div>
+ 
+          <!-- Image upload -->
           <div class="field">
             <label for="character-image">Character Image</label>
             <input id="character-image" class="file-input-hidden" type="file" accept="image/*" />
@@ -46,12 +53,16 @@
               <span>Upload Image</span>
             </button>
           </div>
+ 
+          <!-- Image preview -->
           <div class="field field-full image-upload-card">
             <label>Image Preview</label>
             <div id="character-image-preview" class="image-upload-preview">
               <span class="placeholder-icon">Portrait</span>
             </div>
           </div>
+ 
+          <!-- Type tags -->
           <div class="field field-full">
             <label>Character Type Tags</label>
             <div id="character-type-tags" class="character-type-tags" role="group" aria-label="Character type tags"></div>
@@ -60,14 +71,95 @@
             </p>
             <div id="character-type-summary" class="character-type-summary"></div>
           </div>
-          <div class="field"><label for="character-appearance">Appearance</label><textarea id="character-appearance" rows="3"></textarea></div>
-          <div class="field"><label for="character-background">Background</label><textarea id="character-background" rows="3"></textarea></div>
-          <div class="field"><label for="character-secrets">Secrets</label><textarea id="character-secrets" rows="3"></textarea></div>
-          <div class="field"><label for="character-desires">Desires</label><textarea id="character-desires" rows="3"></textarea></div>
-          <div class="field"><label for="character-chapter-intro">Chapter Intro</label><textarea id="character-chapter-intro" rows="3"></textarea></div>
-          <div class="field"><label for="character-death-scene">Death Scene</label><textarea id="character-death-scene" rows="3"></textarea></div>
-          <div class="field"><label for="character-romance-scenes">Romance Scenes</label><textarea id="character-romance-scenes" rows="3"></textarea></div>
-          <div class="field field-full"><label for="character-other">Other</label><textarea id="character-other" rows="4"></textarea></div>
+ 
+          <!-- Appearance — open by default -->
+          <div class="field field-collapsible is-open">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Appearance <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-appearance">Appearance</label>
+              <textarea id="character-appearance" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Background — open by default -->
+          <div class="field field-collapsible is-open">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Background <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-background">Background</label>
+              <textarea id="character-background" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Secrets — collapsed by default -->
+          <div class="field field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Secrets <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-secrets">Secrets</label>
+              <textarea id="character-secrets" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Desires — collapsed by default -->
+          <div class="field field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Desires <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-desires">Desires</label>
+              <textarea id="character-desires" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Chapter Intro — collapsed -->
+          <div class="field field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Chapter Intro <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-chapter-intro">Chapter Intro</label>
+              <textarea id="character-chapter-intro" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Death Scene — collapsed -->
+          <div class="field field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Death Scene <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-death-scene">Death Scene</label>
+              <textarea id="character-death-scene" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Romance Scenes — collapsed -->
+          <div class="field field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Romance Scenes <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-romance-scenes">Romance Scenes</label>
+              <textarea id="character-romance-scenes" rows="3"></textarea>
+            </div>
+          </div>
+ 
+          <!-- Other — collapsed -->
+          <div class="field field-full field-collapsible">
+            <button class="field-collapse-trigger" type="button" data-collapse-toggle>
+              Other Notes <span class="collapse-chevron">▾</span>
+            </button>
+            <div class="field-collapse-body">
+              <label for="character-other">Other</label>
+              <textarea id="character-other" rows="4"></textarea>
+            </div>
+          </div>
+ 
         </div>
       </div>
       <div id="character-editor-empty" class="editor-empty">Pick a character from the left, or add a new one.</div>
