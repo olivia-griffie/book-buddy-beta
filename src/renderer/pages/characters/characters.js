@@ -168,15 +168,6 @@ window.registerPageInit('characters', async function ({ project }) {
     ));
   }
 
-  function buildCharacterPreview(character) {
-    const summary = stripEditorHtml(character.background || character.appearance || character.desires || character.other);
-    if (!summary) {
-      return 'Add appearance, background, or notes to flesh this character out.';
-    }
-
-    return summary.length > 140 ? `${summary.slice(0, 137)}...` : summary;
-  }
-
   function populateLinkFields() {
     linkFields.chapterIntro.innerHTML = `
       <option value="">No chapter linked</option>
@@ -223,7 +214,7 @@ window.registerPageInit('characters', async function ({ project }) {
           type="button"
           data-gallery-character="${character.id}"
         >
-          <div class="character-gallery-thumb">
+          <div class="character-gallery-thumb ${character.image ? 'has-image' : ''}">
             ${character.image
               ? `<img src="${character.image}" alt="${escapeHtml(character.name || 'Character')}" />`
               : '<span class="placeholder-icon">Portrait</span>'}
@@ -234,10 +225,6 @@ window.registerPageInit('characters', async function ({ project }) {
               ${getCharacterTypeLabels(character).slice(0, 3).map((label) => `
                 <span class="character-type-badge">${escapeHtml(label)}</span>
               `).join('')}
-            </div>
-            <p class="character-gallery-snippet">${escapeHtml(buildCharacterPreview(character))}</p>
-            <div class="character-gallery-meta">
-              <div class="character-gallery-status">${character.image ? 'Image Ready' : character.desires ? 'Prompt Ready' : 'Draft'}</div>
             </div>
           </div>
         </button>
