@@ -164,6 +164,19 @@
   color: var(--ink);
 }
 
+.project-title-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-title-edit {
+  padding: 6px 10px;
+  font-size: 0.72rem;
+}
+
 .project-subtitle {
   color: var(--ink-soft);
 }

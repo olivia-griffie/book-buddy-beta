@@ -71,6 +71,7 @@ window.registerPageInit('characters', async function ({ project }) {
   const imagePreview = document.getElementById('character-image-preview');
   const typeTags = document.getElementById('character-type-tags');
   const typeSummary = document.getElementById('character-type-summary');
+  const deleteButton = document.getElementById('delete-character');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -246,6 +247,9 @@ window.registerPageInit('characters', async function ({ project }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       document.getElementById('character-editor-title').textContent = 'Select a character';
+      if (deleteButton) {
+        deleteButton.style.display = 'none';
+      }
       renderImagePreview('');
       typeTags.innerHTML = '';
       typeSummary.innerHTML = '';
@@ -255,6 +259,9 @@ window.registerPageInit('characters', async function ({ project }) {
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
+    if (deleteButton) {
+      deleteButton.style.display = 'inline-flex';
+    }
     Object.entries(textFields).forEach(([key, field]) => {
       field.value = character[key] || '';
       window.refreshTextEditor(field, field.value);
@@ -400,6 +407,30 @@ window.registerPageInit('characters', async function ({ project }) {
 
   imageTrigger?.addEventListener('click', () => {
     imageInput?.click();
+  });
+
+  deleteButton?.addEventListener('click', () => {
+    const character = getSelectedCharacter();
+    if (!character) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete "${character.name || 'this character'}"? This cannot be undone.`);
+    if (!confirmed) {
+      return;
+    }
+
+    const index = characters.findIndex((entry) => entry.id === character.id);
+    if (index === -1) {
+      return;
+    }
+
+    characters.splice(index, 1);
+    selectedId = characters[Math.max(0, index - 1)]?.id || characters[0]?.id || '';
+    saveMessage.textContent = 'Character deleted.';
+    autosave.touch();
+    renderList();
+    renderEditor();
   });
 
   saveButton.addEventListener('click', async () => {

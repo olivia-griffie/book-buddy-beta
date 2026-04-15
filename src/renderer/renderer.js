@@ -58,6 +58,8 @@ let activePageScript = null;
 const dataCache = new Map();
 let navigationRequestId = 0;
 let topbarBadgeTimer = null;
+let lastMainScrollTop = 0;
+let topbarCollapsed = false;
 
 function normalizeGenreKey(value = '') {
   return value
@@ -424,6 +426,10 @@ function setSaveStatus(nextStatus = {}) {
     ...nextStatus,
   };
 
+  if (typeof window.updateTopBarSaveState === 'function' && window.updateTopBarSaveState(state.saveStatus)) {
+    return;
+  }
+
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
   }
@@ -436,6 +442,39 @@ function syncReferenceDrawer() {
       tab: state.referenceDrawerTab,
     });
   }
+}
+
+function syncVisibleProjectLabels(project) {
+  if (!project) {
+    return;
+  }
+
+  const titleByPage = {
+    'plot-creation': project.title || 'Plot Builder',
+    chapters: project.title || 'Chapter Workspace',
+    characters: `${project.title || 'Project'} Characters`,
+    scenes: `${project.title || 'Project'} Scenes`,
+    locations: `${project.title || 'Project'} Locations`,
+    'daily-prompts': `${project.title || 'Project'} Daily Prompts`,
+  };
+
+  const pageTitleElementIds = {
+    'plot-creation': 'plot-page-title',
+    chapters: 'chapters-page-title',
+    characters: 'characters-page-title',
+    scenes: 'scenes-page-title',
+    locations: 'locations-page-title',
+    'daily-prompts': 'daily-prompts-title',
+  };
+
+  const pageTitleElement = document.getElementById(pageTitleElementIds[state.currentPage]);
+  if (pageTitleElement && titleByPage[state.currentPage]) {
+    pageTitleElement.textContent = titleByPage[state.currentPage];
+  }
+
+  document.querySelectorAll(`[data-project-title="${project.id}"]`).forEach((element) => {
+    element.textContent = project.title || 'Untitled Project';
+  });
 }
 
 function renderStartupError(error) {
@@ -497,6 +536,28 @@ async function loadPageScript(scriptPath) {
   });
 }
 
+function syncTopbarScrollState() {
+  const mainContent = document.getElementById('main-content');
+  const topbar = document.getElementById('topbar-container');
+  if (!mainContent || !topbar) {
+    return;
+  }
+
+  const currentScrollTop = Math.max(0, mainContent.scrollTop);
+  const delta = currentScrollTop - lastMainScrollTop;
+
+  if (currentScrollTop <= 24) {
+    topbarCollapsed = false;
+  } else if (!topbarCollapsed && currentScrollTop > 96 && delta > 12) {
+    topbarCollapsed = true;
+  } else if (topbarCollapsed && delta < -12) {
+    topbarCollapsed = false;
+  }
+
+  topbar.classList.toggle('is-collapsed', topbarCollapsed);
+  lastMainScrollTop = currentScrollTop;
+}
+
 async function navigate(page, options = {}) {
   const pageDefinition = pageRegistry[page];
   if (!pageDefinition) {
@@ -520,7 +581,12 @@ async function navigate(page, options = {}) {
     return;
   }
 
-  document.getElementById('main-content').innerHTML = markup;
+  const mainContent = document.getElementById('main-content');
+  mainContent.innerHTML = markup;
+  mainContent.scrollTop = 0;
+  lastMainScrollTop = 0;
+  topbarCollapsed = false;
+  document.getElementById('topbar-container')?.classList.remove('is-collapsed');
   ensurePageStylesheet().href = pageDefinition.css;
 
   const pageScript = await loadPageScript(pageDefinition.script);
@@ -607,6 +673,48 @@ window.setReferenceDrawerTab = function setReferenceDrawerTab(tab) {
     window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
   }
   syncReferenceDrawer();
+};
+window.renameProjectTitle = async function renameProjectTitle(projectId, nextTitle) {
+  const trimmedTitle = String(nextTitle || '').trim();
+  if (!trimmedTitle) {
+    window.setAppSaveStatus({
+      tone: 'warning',
+      text: 'Project title cannot be empty.',
+    });
+    return null;
+  }
+
+  const currentProject = getProject();
+  let baseProject = currentProject && (!projectId || currentProject.id === projectId) ? currentProject : null;
+
+  if (!baseProject && typeof window.api?.getAllProjects === 'function') {
+    const projects = await window.api.getAllProjects();
+    baseProject = projects.find((project) => project.id === projectId) || null;
+  }
+
+  if (!baseProject) {
+    window.setAppSaveStatus({
+      tone: 'warning',
+      text: 'Project not found.',
+    });
+    return null;
+  }
+
+  if ((baseProject.title || '').trim() === trimmedTitle) {
+    return baseProject;
+  }
+
+  const savedProject = await window.saveProjectData({
+    ...baseProject,
+    title: trimmedTitle,
+    updatedAt: new Date().toISOString(),
+  }, {
+    dirtyFields: ['title'],
+  });
+
+  syncVisibleProjectLabels(savedProject);
+  syncProjectState(savedProject);
+  return savedProject;
 };
 window.isSidebarCollapsed = function isSidebarCollapsed() {
   return Boolean(state.sidebarCollapsed);
@@ -808,6 +916,7 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 document.addEventListener('DOMContentLoaded', async () => {
   state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
   scheduleTopbarBadgeRefresh();
+  document.getElementById('main-content')?.addEventListener('scroll', syncTopbarScrollState, { passive: true });
 
   document.addEventListener('click', (event) => {
     const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');

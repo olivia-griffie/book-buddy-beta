@@ -150,6 +150,18 @@
   white-space: nowrap;
 }
 
+.chapter-row-delete {
+  flex-shrink: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  font: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
 .plot-section-add-chapter {
   width: 100%;
   justify-content: center;

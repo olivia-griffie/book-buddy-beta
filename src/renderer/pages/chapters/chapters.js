@@ -552,6 +552,7 @@ window.registerPageInit('chapters', async function ({ project }) {
                           />
                         </div>
                         <span class="chapter-row-word-count">${window.computeWordCount(chapter.content || '')} words</span>
+                        <button class="chapter-row-delete" type="button" data-delete-chapter="${chapter.id}" aria-label="Delete ${escapeHtml(chapter.title || 'chapter')}">Delete</button>
                       </div>
                     `)
                     .join('')
@@ -611,6 +612,49 @@ window.registerPageInit('chapters', async function ({ project }) {
 
       input.addEventListener('focus', (event) => {
         event.stopPropagation();
+      });
+    });
+
+    sectionsList.querySelectorAll('[data-delete-chapter]').forEach((button) => {
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const chapterId = button.dataset.deleteChapter;
+        const chapterIndex = chapters.findIndex((entry) => entry.id === chapterId);
+        if (chapterIndex === -1) {
+          return;
+        }
+
+        const chapter = chapters[chapterIndex];
+        const confirmed = window.confirm(`Delete "${chapter.title || 'this chapter'}"? This cannot be undone.`);
+        if (!confirmed) {
+          return;
+        }
+
+        chapters.splice(chapterIndex, 1);
+        scenes.forEach((scene) => {
+          if (scene.linkedChapterId === chapterId) {
+            scene.linkedChapterId = '';
+          }
+        });
+        characters.forEach((character) => {
+          if (character.chapterIntro === chapterId) {
+            character.chapterIntro = '';
+          }
+        });
+        dailyPromptHistory.forEach((entry) => {
+          if (entry.assignedChapterId === chapterId) {
+            entry.assignedChapterId = '';
+          }
+        });
+
+        if (selectedChapterId === chapterId) {
+          selectedChapterId = chapters[Math.max(0, chapterIndex - 1)]?.id || chapters[0]?.id || '';
+        }
+
+        saveMessage.textContent = 'Chapter deleted.';
+        autosave.touch();
+        renderSections();
+        renderEditor();
       });
     });
 

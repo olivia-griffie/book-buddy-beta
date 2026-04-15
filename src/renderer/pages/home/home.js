@@ -247,7 +247,10 @@ window.registerPageInit('home', async function () {
             </div>
           </div>
           <div class="project-info ui-card-body">
-            <div class="project-title">${project.title}</div>
+            <div class="project-title-row">
+              <div class="project-title" data-project-title="${project.id}">${project.title}</div>
+              <button class="btn btn-ghost project-title-edit" type="button" data-edit-project-title="${project.id}">Edit title</button>
+            </div>
             <div class="project-subtitle">${project.subtitle || ''}</div>
             <div class="project-genres">${genres}</div>
             <div class="project-progress goal-progress-card">
@@ -322,6 +325,24 @@ window.registerPageInit('home', async function () {
       const project = allProjects.find((entry) => entry.id === button.dataset.openProject);
       window.showProjectNav(true);
       window.navigate('plot-creation', { project });
+    });
+  });
+
+  grid.querySelectorAll('[data-edit-project-title]').forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      const project = allProjects.find((entry) => entry.id === button.dataset.editProjectTitle);
+      if (!project) {
+        return;
+      }
+
+      const nextTitle = window.prompt('Project title', project.title || '');
+      if (nextTitle == null) {
+        return;
+      }
+
+      await window.renameProjectTitle?.(project.id, nextTitle);
+      await window.navigate('home', { project: window.getCurrentProject() });
     });
   });
 

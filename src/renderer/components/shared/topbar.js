@@ -176,6 +176,24 @@ window.getProjectMilestoneDefinitions = function getProjectMilestoneDefinitions(
   return milestoneDefinitions.map((milestone) => ({ ...milestone }));
 };
 
+window.updateTopBarSaveState = function updateTopBarSaveState(saveStatus = {}) {
+  const container = document.getElementById('topbar-container');
+  if (!container) {
+    return false;
+  }
+
+  const saveState = container.querySelector('.topbar-save-state');
+  if (!saveState) {
+    return false;
+  }
+
+  const saveTone = saveStatus.tone || 'neutral';
+  const saveText = saveStatus.text || 'Ready to write';
+  saveState.className = `topbar-save-state is-${saveTone}`;
+  saveState.textContent = saveText;
+  return true;
+};
+
 window.renderTopBar = function renderTopBar(currentPage, currentProject, saveStatus = {}) {
   const container = document.getElementById('topbar-container');
   if (!container) {
@@ -204,6 +222,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
           <p class="topbar-kicker">${hasProject ? 'Current Workspace' : 'Welcome'}</p>
           <div class="topbar-title-row">
             <h2 class="topbar-title">${hasProject ? currentProject.title : 'Book Buddy Beta'}</h2>
+            ${hasProject ? '<button id="topbar-edit-project-title" class="btn btn-ghost topbar-title-edit" type="button">Edit title</button>' : ''}
             ${hasProject ? `<span class="topbar-save-state is-${saveTone}">${saveText}</span>` : ''}
           </div>
           <p class="topbar-subtitle">
@@ -300,6 +319,18 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   });
   container.querySelector('#topbar-reference')?.addEventListener('click', () => {
     window.toggleReferenceDrawer();
+  });
+  container.querySelector('#topbar-edit-project-title')?.addEventListener('click', async () => {
+    if (!currentProject) {
+      return;
+    }
+
+    const nextTitle = window.prompt('Project title', currentProject.title || '');
+    if (nextTitle == null) {
+      return;
+    }
+
+    await window.renameProjectTitle?.(currentProject.id, nextTitle);
   });
   container.querySelector('#topbar-next-step')?.addEventListener('click', () => {
     if (nextStep.page === 'create-project') {

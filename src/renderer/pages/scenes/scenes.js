@@ -10,6 +10,7 @@ window.registerPageInit('scenes', async function ({ project }) {
   const editorShell = document.getElementById('scene-editor-shell');
   const editorEmpty = document.getElementById('scene-editor-empty');
   const createButton = document.getElementById('scenes-create-project');
+  const deleteButton = document.getElementById('delete-scene');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -31,6 +32,7 @@ window.registerPageInit('scenes', async function ({ project }) {
   window.initializeTextEditor(content);
 
   const scenes = (activeProject.scenes || []).map((scene) => ({ ...scene }));
+  const characters = (activeProject.characters || []).map((character) => ({ ...character }));
   let selectedId = scenes[0]?.id || '';
 
   const fields = {
@@ -44,9 +46,10 @@ window.registerPageInit('scenes', async function ({ project }) {
     activeProject = await window.saveProjectData({
       ...activeProject,
       scenes,
+      characters,
       updatedAt: new Date().toISOString(),
     }, {
-      dirtyFields: ['scenes'],
+      dirtyFields: ['scenes', 'characters'],
     });
     saveMessage.textContent = 'Scenes autosaved.';
   }, {
@@ -94,6 +97,9 @@ window.registerPageInit('scenes', async function ({ project }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       document.getElementById('scene-editor-title').textContent = 'Select a scene';
+      if (deleteButton) {
+        deleteButton.style.display = 'none';
+      }
       renderImagePreview('');
       return;
     }
@@ -101,6 +107,9 @@ window.registerPageInit('scenes', async function ({ project }) {
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
     document.getElementById('scene-editor-title').textContent = scene.title || 'Scene Details';
+    if (deleteButton) {
+      deleteButton.style.display = 'inline-flex';
+    }
     fields.title.value = scene.title || '';
     fields.tags.value = (scene.tags || []).join(', ');
     fields.linkedChapterId.value = scene.linkedChapterId || '';
@@ -182,16 +191,49 @@ window.registerPageInit('scenes', async function ({ project }) {
     imageInput?.click();
   });
 
+  deleteButton?.addEventListener('click', () => {
+    const scene = getSelectedScene();
+    if (!scene) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete "${scene.title || 'this scene'}"? This cannot be undone.`);
+    if (!confirmed) {
+      return;
+    }
+
+    const index = scenes.findIndex((entry) => entry.id === scene.id);
+    if (index === -1) {
+      return;
+    }
+
+    scenes.splice(index, 1);
+    characters.forEach((character) => {
+      if (character.deathScene === scene.id) {
+        character.deathScene = '';
+      }
+      if (character.romanceScenes === scene.id) {
+        character.romanceScenes = '';
+      }
+    });
+    selectedId = scenes[Math.max(0, index - 1)]?.id || scenes[0]?.id || '';
+    saveMessage.textContent = 'Scene deleted.';
+    autosave.touch();
+    renderList();
+    renderEditor();
+  });
+
   saveButton.addEventListener('click', async () => {
     await window.runButtonFeedback(saveButton, async () => {
       const updatedProject = {
         ...activeProject,
         scenes,
+        characters,
         updatedAt: new Date().toISOString(),
       };
 
       activeProject = await window.saveProjectData(updatedProject, {
-        dirtyFields: ['scenes'],
+        dirtyFields: ['scenes', 'characters'],
       });
       saveMessage.textContent = 'Scenes saved.';
     });

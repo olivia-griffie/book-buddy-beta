@@ -9,6 +9,7 @@ window.registerPageInit('locations', async function ({ project }) {
   const editorShell = document.getElementById('location-editor-shell');
   const editorEmpty = document.getElementById('location-editor-empty');
   const createButton = document.getElementById('locations-create-project');
+  const deleteButton = document.getElementById('delete-location');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -81,12 +82,18 @@ window.registerPageInit('locations', async function ({ project }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       document.getElementById('location-editor-title').textContent = 'Select a location';
+      if (deleteButton) {
+        deleteButton.style.display = 'none';
+      }
       return;
     }
 
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
     document.getElementById('location-editor-title').textContent = location.name || 'Location Profile';
+    if (deleteButton) {
+      deleteButton.style.display = 'inline-flex';
+    }
     Object.entries(fields).forEach(([key, field]) => {
       field.value = location[key] || (key === 'type' ? 'Country' : '');
       window.refreshTextEditor(field, field.value);
@@ -146,6 +153,30 @@ window.registerPageInit('locations', async function ({ project }) {
       });
       saveMessage.textContent = 'Locations saved.';
     });
+  });
+
+  deleteButton?.addEventListener('click', () => {
+    const location = getSelectedLocation();
+    if (!location) {
+      return;
+    }
+
+    const confirmed = window.confirm(`Delete "${location.name || 'this location'}"? This cannot be undone.`);
+    if (!confirmed) {
+      return;
+    }
+
+    const index = locations.findIndex((entry) => entry.id === location.id);
+    if (index === -1) {
+      return;
+    }
+
+    locations.splice(index, 1);
+    selectedId = locations[Math.max(0, index - 1)]?.id || locations[0]?.id || '';
+    saveMessage.textContent = 'Location deleted.';
+    autosave.touch();
+    renderList();
+    renderEditor();
   });
 
   renderList();
