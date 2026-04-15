@@ -84,15 +84,9 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return activeProject.dailyPromptHistory || [];
   }
 
-  function isSameLocalDay(left, right) {
-    return new Date(left).toDateString() === new Date(right).toDateString();
-  }
-
-  function syncPromptCountState() {
-    countInput.value = '1';
-    [...countInput.options].forEach((option) => {
-      option.disabled = option.value !== '1';
-    });
+  function setStatusMessage(message = '', tone = '') {
+    status.textContent = message;
+    status.classList.toggle('is-error', tone === 'error');
   }
 
   function getContextLabel(index) {
@@ -180,7 +174,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
 
     progressCard.style.display = 'block';
     progressPercent.textContent = `${percent}%`;
-    progressState.textContent = completed ? 'completed' : completedCount ? 'in progress' : 'not started';
+    progressState.textContent = completed ? 'completed' : completedCount ? 'done' : 'not started';
     progressCaption.textContent = `${completedCount} of ${entries.length} prompts completed`;
     progressFill.style.width = `${percent}%`;
     progressFill.classList.toggle('is-complete', completed);
@@ -265,22 +259,35 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       button.addEventListener('click', async () => {
         const promptEntry = getDailyHistory().find((entry) => entry.id === button.dataset.addPrompt);
         if (!promptEntry?.assignedChapterId) {
-          status.textContent = 'Choose a chapter before adding this prompt.';
+          setStatusMessage('Choose a chapter before adding this prompt.', 'error');
           return;
         }
 
         const chapters = getChapters().map((chapter) => ({ ...chapter }));
         const chapterIndex = chapters.findIndex((chapter) => chapter.id === promptEntry.assignedChapterId);
         if (chapterIndex < 0) {
-          status.textContent = 'That chapter could not be found.';
+          setStatusMessage('That chapter could not be found.', 'error');
           return;
         }
 
         const answerField = resultsGrid.querySelector(`[data-prompt-answer="${promptEntry.id}"]`);
         promptEntry.answer = window.getEditorFieldValue(answerField);
+        const requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
+        const answerWordCount = window.computeWordCount(promptEntry.answer);
+
+        if (!answerWordCount || (requiredWordCount > 0 && answerWordCount < requiredWordCount)) {
+          setStatusMessage(
+            requiredWordCount > 0
+              ? `Write an answer before inserting it into a chapter. ${requiredWordCount.toLocaleString()} words are required.`
+              : 'Write an answer before inserting it into a chapter.',
+            'error',
+          );
+          return;
+        }
+
         const inserted = appendPromptAnswerToChapter(chapters[chapterIndex], promptEntry.answer);
         if (!inserted) {
-          status.textContent = 'Write an answer before inserting it into a chapter.';
+          setStatusMessage('Write an answer before inserting it into a chapter.', 'error');
           return;
         }
 
@@ -311,10 +318,11 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           dirtyFields: ['chapters', 'dailyPromptHistory', 'currentWordCount'],
         });
 
-        const requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
-        status.textContent = insertedWordCount >= requiredWordCount
-          ? 'Prompt answer inserted into the selected chapter and marked complete.'
-          : `Prompt answer inserted, but it is still below the ${requiredWordCount.toLocaleString()} word target.`;
+        setStatusMessage(
+          insertedWordCount >= requiredWordCount
+            ? 'Prompt answer inserted into the selected chapter and marked complete.'
+            : `Prompt answer inserted, but it is still below the ${requiredWordCount.toLocaleString()} word target.`,
+        );
         renderPromptCards(getDailyHistory());
       });
     });
@@ -336,7 +344,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         }, {
           dirtyFields: ['dailyPromptHistory'],
         });
-        status.textContent = 'Prompt answer saved.';
+        setStatusMessage('Prompt answer saved.');
         renderPromptCards(getDailyHistory());
       });
     });
@@ -374,29 +382,8 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     }));
   }
 
-  countInput.addEventListener('change', () => {
-    if (countInput.value !== '1') {
-      countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day.';
-    }
-  });
-
   generateButton.addEventListener('click', async () => {
     const today = new Date();
-    const lastGeneratedAt = activeProject.dailyPromptState?.lastGeneratedAt;
-
-    if (Number(countInput.value) !== 1) {
-      countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day.';
-      return;
-    }
-
-    if (lastGeneratedAt && isSameLocalDay(lastGeneratedAt, today)) {
-      status.textContent = 'You have already used today\'s beta prompt.';
-      renderPromptCards(getDailyHistory());
-      return;
-    }
-
     const prompts = generatePromptBatch();
     renderPromptCards(prompts);
 
@@ -416,14 +403,9 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       dirtyFields: ['dailyPromptState', 'dailyPromptHistory'],
     });
 
-    status.textContent = 'Today\'s beta prompt is ready.';
+    setStatusMessage(`${prompts.length} prompt${prompts.length === 1 ? '' : 's'} ready.`);
   });
 
-  syncPromptCountState();
-  renderPromptCards(getDailyHistory());
-
-  if (!activeProject.dailyPromptHistory?.length) {
-    progressCard.style.display = 'none';
-    resultsGrid.innerHTML = '<p>No prompts generated yet today.</p>';
-  }
+  progressCard.style.display = 'none';
+  resultsGrid.innerHTML = '<p>No prompts generated yet. Choose 1, 3, or 5 prompts, then click Generate Prompts.</p>';
 });

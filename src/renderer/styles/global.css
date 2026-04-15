@@ -1,6 +1,10 @@
 @import './variables.css';
 @import '../components/editor/editor.css';
 
+:root {
+  --collapse-chevron-icon: url('../../../public/down-chevron.svg');
+}
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html, body {
@@ -27,6 +31,12 @@ body {
   flex-shrink: 0;
   border-right: 1px solid var(--border);
   background: var(--ink);
+  transition: width var(--duration) var(--ease);
+  overflow: hidden;
+}
+
+.app-sidebar.is-collapsed {
+  width: 84px;
 }
 
 .app-workspace {
@@ -55,11 +65,59 @@ body {
   grid-template-rows: auto 1fr;
   gap: 28px;
   padding: 28px 20px;
+  position: relative;
 }
 
 .sidebar-brand {
   display: grid;
   gap: 8px;
+}
+
+.sidebar-brand-mark {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(250, 247, 242, 0.12);
+  border: 1px solid rgba(250, 247, 242, 0.14);
+}
+
+.sidebar-brand-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(250, 247, 242, 0.14);
+  border-radius: 10px;
+  background: rgba(250, 247, 242, 0.08);
+  color: rgba(250, 247, 242, 0.94);
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+  transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+.sidebar-toggle:hover {
+  background: rgba(250, 247, 242, 0.14);
+  border-color: rgba(250, 247, 242, 0.22);
+  transform: translateY(-1px);
+}
+
+.sidebar-toggle-icon {
+  transform: rotate(90deg);
+}
+
+.app-sidebar.is-collapsed .sidebar-toggle-icon {
+  transform: rotate(-90deg);
 }
 
 .sidebar-project-status {
@@ -79,8 +137,8 @@ body {
 }
 
 .sidebar-project-pill.is-selected {
-  background: rgba(125, 155, 118, 0.28);
-  color: #d8ead3;
+  background: rgba(79, 242, 201, 0.22);
+  color: var(--cream);
 }
 
 .sidebar-project-pill.is-empty {
@@ -208,6 +266,23 @@ body {
   transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), transform var(--duration) var(--ease), color var(--duration) var(--ease);
 }
 
+.app-sidebar.is-collapsed .sidebar {
+  padding: 28px 12px;
+}
+
+.app-sidebar.is-collapsed .sidebar-nav {
+  gap: 14px;
+}
+
+.app-sidebar.is-collapsed .sidebar-group-links {
+  gap: 10px;
+}
+
+.app-sidebar.is-collapsed .sidebar-link {
+  justify-content: center;
+  padding: 12px 10px;
+}
+
 .sidebar-link-icon {
   width: 22px;
   height: 22px;
@@ -293,18 +368,18 @@ body {
 }
 
 .topbar-save-state.is-warning {
-  background: #f5e8c8;
-  color: #8a6b22;
+  background: rgba(255, 138, 61, 0.16);
+  color: var(--accent-orange);
 }
 
 .topbar-save-state.is-saving {
-  background: #e4ecf4;
-  color: #44678e;
+  background: rgba(255, 126, 184, 0.14);
+  color: var(--sage-deep);
 }
 
 .topbar-save-state.is-success {
-  background: #e3efe0;
-  color: #4b8f5f;
+  background: rgba(79, 242, 201, 0.18);
+  color: var(--ink);
 }
 
 .topbar-metrics {
@@ -345,8 +420,8 @@ body {
 }
 
 .topbar-actions .btn.is-active {
-  border-color: rgba(125, 155, 118, 0.45);
-  background: #f7fbf5;
+  border-color: rgba(255, 126, 184, 0.4);
+  background: rgba(255, 126, 184, 0.08);
   color: var(--ink);
 }
 
@@ -362,9 +437,9 @@ body {
   gap: 10px;
   min-width: 180px;
   padding: 10px 12px;
-  border: 1px solid rgba(125, 155, 118, 0.24);
+  border: 1px solid rgba(255, 126, 184, 0.24);
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(125, 155, 118, 0.12), rgba(255, 253, 250, 0.95));
+  background: linear-gradient(135deg, rgba(255, 106, 90, 0.1), rgba(255, 126, 184, 0.12), rgba(255, 253, 250, 0.95));
   animation: shellRise 0.36s var(--ease) both;
 }
 
@@ -409,9 +484,9 @@ body {
   gap: 16px;
   align-items: center;
   padding: 14px 16px;
-  border: 1px solid rgba(47, 38, 31, 0.08);
+  border: 1px solid rgba(47, 53, 69, 0.08);
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(255, 253, 250, 0.98), rgba(232, 240, 228, 0.82));
+  background: linear-gradient(135deg, rgba(255, 253, 250, 0.98), rgba(255, 126, 184, 0.08), rgba(79, 242, 201, 0.12));
   animation: shellRise 0.4s var(--ease) both;
 }
 
@@ -421,7 +496,7 @@ body {
 }
 
 .topbar-next-step-kicker {
-  color: #4b8f5f;
+  color: var(--accent-coral);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -471,8 +546,8 @@ body {
 }
 
 .topbar-step.is-active {
-  border-color: rgba(125, 155, 118, 0.4);
-  background: #f7fbf5;
+  border-color: rgba(255, 126, 184, 0.38);
+  background: rgba(255, 126, 184, 0.08);
   color: var(--ink);
 }
 
@@ -598,7 +673,7 @@ a:hover { color: var(--sage-light); }
 
 .btn-feedback-icon.is-check {
   position: relative;
-  color: #4b8f5f;
+  color: var(--accent-mint);
 }
 
 .btn-feedback-icon.is-check::before {
@@ -634,7 +709,7 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-save:hover {
-  background: #6a8863;
+  background: #ff5b4e;
   transform: translateY(-1px);
   box-shadow: var(--shadow-lift);
 }
@@ -656,7 +731,7 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-sage:hover {
-  background: #6a8863;
+  background: #ff5b4e;
   transform: translateY(-1px);
 }
 
@@ -687,7 +762,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
 }
 
 label {
@@ -806,7 +881,7 @@ label {
   gap: 12px;
   align-items: start;
   padding: 14px 16px;
-  border: 1px solid rgba(125, 155, 118, 0.28);
+  border: 1px solid rgba(255, 126, 184, 0.28);
   border-radius: 14px;
   background: rgba(255, 253, 250, 0.97);
   box-shadow: var(--shadow-lift);
@@ -847,7 +922,7 @@ label {
 }
 
 .milestone-toast-kicker {
-  color: #4b8f5f;
+  color: var(--accent-coral);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -934,7 +1009,32 @@ label {
 }
 
 .section-heading {
-  margin-bottom: 16px;
+  margin-bottom: 0;
+}
+
+.collapse-chevron,
+.plot-block-indicator,
+.plot-section-toggle-indicator,
+.chapter-panel-indicator,
+.chapter-prompt-toggle-indicator,
+.plot-section-target-indicator,
+.sidebar-toggle-icon {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 0;
+  line-height: 0;
+  background-color: currentColor;
+  -webkit-mask-image: var(--collapse-chevron-icon);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+  mask-image: var(--collapse-chevron-icon);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  transition: transform var(--duration) var(--ease);
 }
 
 .editor-empty {
@@ -978,7 +1078,7 @@ label {
 .upload-trigger:focus-visible {
   outline: none;
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
 }
 
 .upload-trigger-icon {
@@ -1005,7 +1105,7 @@ label {
   width: min(100%, 320px);
   aspect-ratio: 4 / 5;
   border-radius: 18px;
-  background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
+  background: linear-gradient(135deg, rgba(255, 138, 61, 0.22) 0%, rgba(255, 126, 184, 0.22) 100%);
   border: 1px solid var(--border-soft);
   display: grid;
   place-items: center;
@@ -1044,8 +1144,8 @@ label {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  border: 2px solid rgba(125, 155, 118, 0.5);
-  color: var(--sage);
+  border: 2px solid rgba(255, 106, 90, 0.45);
+  color: var(--accent-coral);
   background: white;
   font-size: 1rem;
   font-weight: 700;
@@ -1053,9 +1153,9 @@ label {
 }
 
 .progress-status-icon.is-complete {
-  background: #109f9f;
-  border-color: #109f9f;
-  color: white;
+  background: var(--accent-mint);
+  border-color: var(--accent-mint);
+  color: var(--ink);
 }
 
 .goal-progress-meta {
@@ -1093,7 +1193,7 @@ label {
 }
 
 .goal-progress-fill.is-complete {
-  background: linear-gradient(90deg, #109f9f 0%, #0b8e8e 100%);
+  background: linear-gradient(90deg, var(--accent-mint) 0%, #2adfb5 100%);
 }
 
 .goal-progress-caption {
@@ -1152,7 +1252,7 @@ label {
 }
 
 .reference-drawer-kicker {
-  color: #4b8f5f;
+  color: var(--accent-coral);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -1200,8 +1300,8 @@ label {
 }
 
 .reference-drawer-tab.is-active {
-  border-color: rgba(125, 155, 118, 0.44);
-  background: #f7fbf5;
+  border-color: rgba(255, 126, 184, 0.42);
+  background: rgba(255, 126, 184, 0.08);
   color: var(--ink);
 }
 

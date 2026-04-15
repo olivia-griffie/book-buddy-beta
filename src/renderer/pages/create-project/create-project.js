@@ -16,7 +16,6 @@ window.registerPageInit('create-project', async function () {
   const genreOptions = document.getElementById('genre-options');
   const genreCount = document.getElementById('genre-count');
   const formMessage = document.getElementById('form-message');
-  const projectSlotNote = document.getElementById('project-slot-note');
   const goalInput = document.getElementById('project-goal');
   const goalPercent = document.getElementById('project-goal-percent');
   const goalState = document.getElementById('project-goal-state');
@@ -95,7 +94,7 @@ window.registerPageInit('create-project', async function () {
   }
 
   function syncProjectLimitState() {
-    projectSlotNote.textContent = 'Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.';
+    return existingProjects.length >= 1;
   }
 
   function syncGoalPreview() {
@@ -105,7 +104,7 @@ window.registerPageInit('create-project', async function () {
     const completed = goal > 0 && currentWords >= goal;
 
     goalPercent.textContent = `${percent}%`;
-    goalState.textContent = completed ? 'Completed' : 'in progress';
+    goalState.textContent = completed ? 'Completed' : 'done';
     goalCaption.textContent = `${formatWords(currentWords)} of ${formatWords(goal)} words`;
     goalFill.style.width = `${percent}%`;
     goalFill.classList.toggle('is-complete', completed);

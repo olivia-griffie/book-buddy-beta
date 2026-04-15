@@ -62,7 +62,6 @@ window.registerPageInit('characters', async function ({ project }) {
   const saveButton = document.getElementById('save-characters');
   const addButton = document.getElementById('add-character');
   const gallery = document.getElementById('characters-gallery');
-  const list = document.getElementById('characters-list');
   const saveMessage = document.getElementById('characters-save-message');
   const editorShell = document.getElementById('character-editor-shell');
   const editorEmpty = document.getElementById('character-editor-empty');
@@ -151,10 +150,6 @@ window.registerPageInit('characters', async function ({ project }) {
       .filter(Boolean))];
   }
 
-  function getSelectedValues(select) {
-    return [...select.selectedOptions].map((option) => option.value).filter(Boolean);
-  }
-
   function renderImagePreview(image) {
     imagePreview.innerHTML = image
       ? `<img src="${image}" alt="Character reference" />`
@@ -193,9 +188,10 @@ window.registerPageInit('characters', async function ({ project }) {
       ${scenes.map((scene) => `<option value="${scene.id}">${escapeHtml(scene.title || 'Untitled Scene')}</option>`).join('')}
     `;
 
-    linkFields.romanceScenes.innerHTML = scenes.length
-      ? scenes.map((scene) => `<option value="${scene.id}">${escapeHtml(scene.title || 'Untitled Scene')}</option>`).join('')
-      : '<option value="" disabled>No scenes available yet</option>';
+    linkFields.romanceScenes.innerHTML = `
+      <option value="">No romance scene linked</option>
+      ${scenes.map((scene) => `<option value="${scene.id}">${escapeHtml(scene.title || 'Untitled Scene')}</option>`).join('')}
+    `;
   }
 
   function initializeCollapsibles() {
@@ -248,25 +244,6 @@ window.registerPageInit('characters', async function ({ project }) {
       `).join('')
       : '';
 
-    list.innerHTML = characters.length
-      ? characters.map((character) => `
-        <div class="entity-list-item">
-          <button type="button" data-open-character="${character.id}">
-            <strong>${escapeHtml(character.name || 'Unnamed Character')}</strong>
-          </button>
-          <span>${escapeHtml(getCharacterTypeLabels(character)[0] || (character.image ? 'Image ready' : character.desires ? 'Prompt ready' : 'Draft'))}</span>
-        </div>
-      `).join('')
-      : '<p>No characters yet.</p>';
-
-    list.querySelectorAll('[data-open-character]').forEach((button) => {
-      button.addEventListener('click', () => {
-        selectedId = button.dataset.openCharacter;
-        renderList();
-        renderEditor();
-      });
-    });
-
     gallery.querySelectorAll('[data-gallery-character]').forEach((button) => {
       button.addEventListener('click', () => {
         selectedId = button.dataset.galleryCharacter;
@@ -298,13 +275,11 @@ window.registerPageInit('characters', async function ({ project }) {
 
     character.chapterIntro = normalizeLinkedId(character.chapterIntro, chapters, 'title');
     character.deathScene = normalizeLinkedId(character.deathScene, scenes, 'title');
-    character.romanceScenes = normalizeLinkedIds(character.romanceScenes, scenes, 'title');
+    character.romanceScenes = normalizeLinkedIds(character.romanceScenes, scenes, 'title')[0] || '';
 
     linkFields.chapterIntro.value = character.chapterIntro || '';
     linkFields.deathScene.value = character.deathScene || '';
-    [...linkFields.romanceScenes.options].forEach((option) => {
-      option.selected = (character.romanceScenes || []).includes(option.value);
-    });
+    linkFields.romanceScenes.value = character.romanceScenes || '';
 
     imageInput.value = '';
     renderImagePreview(character.image || '');
@@ -373,7 +348,7 @@ window.registerPageInit('characters', async function ({ project }) {
     });
     character.chapterIntro = linkFields.chapterIntro.value;
     character.deathScene = linkFields.deathScene.value;
-    character.romanceScenes = getSelectedValues(linkFields.romanceScenes);
+    character.romanceScenes = linkFields.romanceScenes.value;
 
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
     renderList();
@@ -401,7 +376,7 @@ window.registerPageInit('characters', async function ({ project }) {
       typeTags: [],
       chapterIntro: '',
       deathScene: '',
-      romanceScenes: [],
+      romanceScenes: '',
       other: '',
     };
 

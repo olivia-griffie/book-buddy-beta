@@ -195,6 +195,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   const activeStepIndex = workflowSteps.findIndex((step) => step.id === currentPage);
   const saveTone = saveStatus.tone || 'neutral';
   const saveText = saveStatus.text || 'Ready to write';
+  const showBadges = hasProject && window.shouldShowTopbarBadges?.();
 
   container.innerHTML = `
     <div class="topbar-shell">
@@ -241,7 +242,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
           <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
         </div>
       </div>
-      ${hasProject ? `
+      ${showBadges ? `
         <div class="topbar-badges">
           ${milestoneSnapshot.visibleBadges.length
       ? milestoneSnapshot.visibleBadges.slice(0, 4).map((milestone) => `

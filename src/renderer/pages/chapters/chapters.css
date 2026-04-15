@@ -197,8 +197,8 @@
   display: inline-flex;
   padding: 4px 10px;
   border-radius: 999px;
-  background: #e5efe1;
-  color: #456140;
+  background: rgba(255, 138, 61, 0.16);
+  color: var(--accent-coral);
   font-size: 0.72rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -256,7 +256,7 @@
 .chapter-context-tab:hover,
 .chapter-context-tab:focus-visible {
   border-color: var(--sage);
-  background: rgba(125, 155, 118, 0.14);
+  background: rgba(255, 126, 184, 0.12);
   color: var(--sage-deep);
   outline: none;
 }
@@ -449,8 +449,8 @@
   border-radius: 999px;
   display: inline-grid;
   place-items: center;
-  background: #e5efe1;
-  color: #456140;
+  background: rgba(79, 242, 201, 0.18);
+  color: var(--ink);
   font-size: 0.72rem;
   font-weight: 700;
   flex-shrink: 0;
@@ -526,7 +526,7 @@
 }
 
 .form-message.is-success {
-  color: #4b8f5f;
+  color: var(--accent-mint);
 }
 
 .plot-sections-list .plot-section-item:nth-child(1),

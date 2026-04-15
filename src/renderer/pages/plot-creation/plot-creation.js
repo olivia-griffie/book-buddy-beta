@@ -98,20 +98,25 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
   function renderSectionTargets() {
     sectionTargets.innerHTML = resources.plotSections.map((section) => `
-      <article class="plot-section-target-card">
-        <div>
-          <h3>${section.label}</h3>
+      <details class="plot-section-target-card">
+        <summary class="plot-section-target-toggle">
+          <div>
+            <h3>${section.label}</h3>
+          </div>
+          <span class="plot-section-target-indicator" aria-hidden="true"></span>
+        </summary>
+        <div class="plot-section-target-body">
           <p>Use this to anchor where this part of the book lives and what it needs to accomplish.</p>
+          <div class="field">
+            <label for="plot-section-target-${section.id}">Target Words</label>
+            <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
+          </div>
+          <div class="field">
+            <label for="plot-section-notes-${section.id}">Section Notes</label>
+            <textarea id="plot-section-notes-${section.id}" rows="4" data-section-notes="${section.id}">${section.notes || ''}</textarea>
+          </div>
         </div>
-        <div class="field">
-          <label for="plot-section-target-${section.id}">Target Words</label>
-          <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
-        </div>
-        <div class="field">
-          <label for="plot-section-notes-${section.id}">Section Notes</label>
-          <textarea id="plot-section-notes-${section.id}" rows="4" data-section-notes="${section.id}">${section.notes || ''}</textarea>
-        </div>
-      </article>
+      </details>
     `).join('');
 
     window.initializeTextEditor(sectionTargets);

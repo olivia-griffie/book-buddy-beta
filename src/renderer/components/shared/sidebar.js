@@ -70,25 +70,45 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
 
   const projectTitle = currentProject?.title || '';
   const hasProject = Boolean(currentProject);
+  const isCollapsed = Boolean(window.isSidebarCollapsed?.());
   const visibleGroups = sidebarGroups.filter((group) => hasProject || !group.requiresProject);
   const snapshot = hasProject ? getSidebarSnapshot(currentProject) : null;
+  container.classList.toggle('is-collapsed', isCollapsed);
 
   container.innerHTML = `
-    <div class="sidebar">
+    <div class="sidebar ${isCollapsed ? 'is-collapsed' : ''}">
+      <button
+        class="sidebar-toggle"
+        type="button"
+        data-sidebar-toggle
+        aria-label="${isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}"
+        title="${isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}"
+      >
+        <span class="sidebar-toggle-icon" aria-hidden="true"></span>
+      </button>
       <div class="sidebar-brand">
-        <img
-          class="sidebar-brand-logo"
-          src="../../public/logo-full.png"
-          alt="Book Buddy"
-        />
-        <p class="sidebar-kicker">Writer's Hub</p>
-        <div class="sidebar-project-status">
-          <span class="sidebar-project-pill ${hasProject ? 'is-selected' : 'is-empty'}">
-            ${hasProject ? 'Project Selected' : 'No Project Selected'}
-          </span>
-          ${hasProject ? `<p class="sidebar-project-title">${projectTitle}</p>` : ''}
+        <div class="sidebar-brand-mark">
+          <img
+            class="sidebar-brand-icon"
+            src="../../public/sidebar-book.png"
+            alt="Book Buddy"
+          />
         </div>
-        ${hasProject ? `
+        ${isCollapsed ? '' : `
+          <img
+            class="sidebar-brand-logo"
+            src="../../public/logo-full.png"
+            alt="Book Buddy"
+          />
+          <p class="sidebar-kicker">Writer's Hub</p>
+          <div class="sidebar-project-status">
+            <span class="sidebar-project-pill ${hasProject ? 'is-selected' : 'is-empty'}">
+              ${hasProject ? 'Project Selected' : 'No Project Selected'}
+            </span>
+            ${hasProject ? `<p class="sidebar-project-title">${projectTitle}</p>` : ''}
+          </div>
+        `}
+        ${hasProject && !isCollapsed ? `
           <section class="sidebar-project-snapshot">
             <div class="sidebar-snapshot-grid">
               <article class="sidebar-snapshot-card">
@@ -123,7 +143,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
         ${visibleGroups
           .map((group) => `
             <section class="sidebar-group">
-              <p class="sidebar-group-label">${group.label}</p>
+              ${isCollapsed ? '' : `<p class="sidebar-group-label">${group.label}</p>`}
               <div class="sidebar-group-links">
                 ${group.items
                   .map((item) => `
@@ -133,7 +153,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
                       data-page="${item.id}"
                     >
                       <span class="sidebar-link-icon" aria-hidden="true">${item.icon}</span>
-                      <span>${item.label}</span>
+                      ${isCollapsed ? '' : `<span class="sidebar-link-label">${item.label}</span>`}
                     </button>
                   `)
                   .join('')}

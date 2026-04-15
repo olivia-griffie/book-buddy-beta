@@ -192,7 +192,7 @@ window.registerPageInit('chapters', async function ({ project }) {
     const completed = goal > 0 && current >= goal;
 
     chapterProgressPercent.textContent = `${percent}%`;
-    chapterProgressState.textContent = completed ? 'Completed' : 'in progress';
+    chapterProgressState.textContent = completed ? 'Completed' : 'done';
     chapterProgressCaption.textContent = `${current.toLocaleString()} of ${goal.toLocaleString()} words`;
     chapterProgressFill.style.width = `${percent}%`;
     chapterProgressFill.classList.toggle('is-complete', completed);

@@ -6,16 +6,17 @@
 .character-gallery {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  margin-bottom: 18px;
+  gap: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
  
 .character-gallery-card {
   display: grid;
-  grid-template-columns: 88px minmax(0, 1fr);
+  grid-template-columns: 72px minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
-  padding: 12px;
+  gap: 12px;
+  padding: 10px 12px;
   cursor: pointer;
   transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
 }
@@ -29,7 +30,7 @@
  
 .character-gallery-thumb {
   width: 100%;
-  max-width: 88px;
+  max-width: 72px;
   aspect-ratio: 4 / 5;
   border-radius: 10px;
   overflow: hidden;
@@ -66,7 +67,7 @@
 
 .character-gallery-copy {
   display: grid;
-  gap: 8px;
+  gap: 6px;
   text-align: left;
 }
 
@@ -80,8 +81,8 @@
 .character-gallery-snippet {
   margin: 0;
   color: var(--ink-muted);
-  font-size: 0.84rem;
-  line-height: 1.5;
+  font-size: 0.8rem;
+  line-height: 1.4;
 }
  
 /* Collapsible field wrapper */
@@ -168,12 +169,12 @@
 .character-type-tag:hover,
 .character-type-tag:focus-visible {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(125, 155, 118, 0.14);
+  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
   outline: none;
 }
  
 .character-type-tag.is-selected {
-  background: rgba(125, 155, 118, 0.14);
+  background: rgba(255, 126, 184, 0.14);
   border-color: var(--sage);
   color: var(--sage-deep);
 }
@@ -213,12 +214,12 @@
 
 @media (max-width: 700px) {
   .character-gallery-card {
-    grid-template-columns: 64px minmax(0, 1fr);
-    gap: 12px;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 10px;
   }
 
   .character-gallery-thumb {
-    max-width: 64px;
+    max-width: 56px;
   }
 }
  

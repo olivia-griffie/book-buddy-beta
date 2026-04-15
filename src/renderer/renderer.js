@@ -45,6 +45,8 @@ const state = {
   currentPage: null,
   referenceDrawerOpen: false,
   referenceDrawerTab: 'plot',
+  sidebarCollapsed: false,
+  topbarBadgesVisibleUntil: 0,
   saveStatus: {
     tone: 'neutral',
     text: 'Ready to write',
@@ -55,6 +57,7 @@ const pageInitRegistry = {};
 let activePageScript = null;
 const dataCache = new Map();
 let navigationRequestId = 0;
+let topbarBadgeTimer = null;
 
 function normalizeGenreKey(value = '') {
   return value
@@ -389,6 +392,21 @@ function syncProjectState(project) {
   }
 }
 
+function scheduleTopbarBadgeRefresh() {
+  clearTimeout(topbarBadgeTimer);
+
+  const remaining = Number(state.topbarBadgesVisibleUntil || 0) - Date.now();
+  if (remaining <= 0) {
+    return;
+  }
+
+  topbarBadgeTimer = setTimeout(() => {
+    if (typeof window.renderTopBar === 'function') {
+      window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+    }
+  }, remaining + 50);
+}
+
 function setCurrentProject(project) {
   persistCurrentProjectSelection(project);
 
@@ -590,6 +608,16 @@ window.setReferenceDrawerTab = function setReferenceDrawerTab(tab) {
   }
   syncReferenceDrawer();
 };
+window.isSidebarCollapsed = function isSidebarCollapsed() {
+  return Boolean(state.sidebarCollapsed);
+};
+window.setSidebarCollapsed = function setSidebarCollapsed(isCollapsed) {
+  state.sidebarCollapsed = Boolean(isCollapsed);
+  syncProjectState(getProject());
+};
+window.shouldShowTopbarBadges = function shouldShowTopbarBadges() {
+  return Date.now() < Number(state.topbarBadgesVisibleUntil || 0);
+};
 window.showMilestoneCelebration = function showMilestoneCelebration(milestones = []) {
   if (!milestones.length) {
     return;
@@ -778,6 +806,9 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
+  state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
+  scheduleTopbarBadgeRefresh();
+
   document.addEventListener('click', (event) => {
     const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');
     if (thumbnailTrigger) {
@@ -825,6 +856,12 @@ document.addEventListener('DOMContentLoaded', async () => {
       } else if (page) {
         window.navigate(page);
       }
+      return;
+    }
+
+    const sidebarToggle = event.target.closest('[data-sidebar-toggle]');
+    if (sidebarToggle) {
+      window.setSidebarCollapsed(!window.isSidebarCollapsed());
     }
   });
 

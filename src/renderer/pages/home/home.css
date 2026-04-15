@@ -46,7 +46,7 @@
 .project-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lift);
-  border-color: rgba(125, 155, 118, 0.3);
+  border-color: rgba(255, 126, 184, 0.32);
 }
 
 .projects-grid .project-card:nth-child(1) { animation-delay: 0.03s; }
@@ -133,7 +133,7 @@
   width: 100%;
   height: 180px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #e9dece 0%, #f7f1e7 100%);
+  background: linear-gradient(135deg, rgba(255, 138, 61, 0.22) 0%, rgba(255, 126, 184, 0.2) 100%);
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -258,15 +258,15 @@
 }
 
 .btn-sage-soft {
-  background: #dcebd7;
-  color: #446240;
-  border: 1px solid #bdd2b8;
+  background: rgba(79, 242, 201, 0.18);
+  color: var(--ink);
+  border: 1px solid rgba(79, 242, 201, 0.34);
   justify-content: center;
 }
 
 .btn-sage-soft:hover {
-  background: #cfe2c9;
-  color: #365032;
+  background: rgba(79, 242, 201, 0.28);
+  color: var(--ink);
 }
 
 .btn-danger-soft {
@@ -309,8 +309,8 @@
 }
 
 .daily-dashboard-stat.is-success {
-  border-color: rgba(75, 143, 95, 0.24);
-  background: rgba(227, 239, 224, 0.5);
+  border-color: rgba(79, 242, 201, 0.28);
+  background: rgba(79, 242, 201, 0.16);
 }
 
 .daily-dashboard-stat.is-warning {
@@ -365,7 +365,7 @@
   width: 100%;
   min-height: 6px;
   border-radius: inherit;
-  background: linear-gradient(180deg, var(--sage-light), var(--sage));
+  background: linear-gradient(180deg, var(--accent-pink), var(--accent-coral));
 }
 
 .daily-chart-bar-value,
@@ -392,19 +392,19 @@
 }
 
 .daily-calendar-cell.intensity-1 {
-  background: rgba(125, 155, 118, 0.18);
-  border-color: rgba(125, 155, 118, 0.22);
+  background: rgba(255, 138, 61, 0.16);
+  border-color: rgba(255, 138, 61, 0.22);
 }
 
 .daily-calendar-cell.intensity-2 {
-  background: rgba(125, 155, 118, 0.34);
-  border-color: rgba(125, 155, 118, 0.32);
-  color: #395234;
+  background: rgba(255, 126, 184, 0.28);
+  border-color: rgba(255, 126, 184, 0.34);
+  color: var(--ink);
 }
 
 .daily-calendar-cell.intensity-3 {
-  background: var(--sage);
-  border-color: var(--sage);
+  background: var(--accent-coral);
+  border-color: var(--accent-coral);
   color: white;
 }
 
