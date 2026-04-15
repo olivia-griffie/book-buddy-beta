@@ -26,6 +26,9 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  content.querySelectorAll('.plot-block').forEach((block) => {
+    block.open = false;
+  });
   document.getElementById('plot-page-title').textContent = activeProject.title || 'Plot Builder';
   document.getElementById('plot-page-subtitle').textContent = (activeProject.genres || []).join(' + ');
 

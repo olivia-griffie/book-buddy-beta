@@ -24,6 +24,12 @@ function escapeRtf(value = '') {
     .replace(/\\/g, '\\\\')
     .replace(/{/g, '\\{')
     .replace(/}/g, '\\}')
+    .replace(/\u2018|\u2019/g, (c) => `\\u${c.charCodeAt(0)}?`)
+    .replace(/\u201c|\u201d/g, (c) => `\\u${c.charCodeAt(0)}?`)
+    .replace(/\u2013/g, '\\u8211?')
+    .replace(/\u2014/g, '\\u8212?')
+    .replace(/\u2026/g, '\\u8230?')
+    .replace(/[\u0080-\uffff]/g, (c) => `\\u${c.charCodeAt(0)}?`)
     .replace(/\r?\n/g, '\\par\n');
 }
 
@@ -119,7 +125,7 @@ function buildExportDocument(project = {}) {
   const text = textParts.filter(Boolean).join('\n\n\n');
 
   const rtfBody = [
-    '{\\rtf1\\ansi\\ansicpg1252\\deff0',
+    '{\\rtf1\\ansi\\ansicpg1252\\uc1\\deff0',
     `{\\b\\fs40 ${escapeRtf(title)}}\\par`,
     subtitle ? `\\par {\\i\\fs28 ${escapeRtf(subtitle)}}\\par` : '',
     authorName ? `\\par ${escapeRtf(`by ${authorName}`)}\\par` : '',
@@ -261,7 +267,7 @@ async function writeProjectExport(project, targetPath, format) {
   }
 
   if (format === 'doc') {
-    await fs.writeFile(targetPath, Buffer.from(document.rtf, 'latin1'), 'binary');
+    await fs.writeFile(targetPath, document.rtf, 'utf8');
     return;
   }
 

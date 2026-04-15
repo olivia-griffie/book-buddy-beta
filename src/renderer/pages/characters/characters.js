@@ -1,4 +1,23 @@
 window.registerPageInit('characters', async function ({ project }) {
+  function escapeHtml(value = '') {
+    return String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function stripEditorHtml(value = '') {
+    if (!value || !String(value).includes('<')) {
+      return String(value || '').trim();
+    }
+
+    const temp = document.createElement('div');
+    temp.innerHTML = String(value || '');
+    return (temp.textContent || temp.innerText || '').trim();
+  }
+
   const characterTypeDefinitions = [
     {
       id: 'protagonist',
@@ -70,18 +89,22 @@ window.registerPageInit('characters', async function ({ project }) {
   window.initializeTextEditor(content);
 
   const characters = (activeProject.characters || []).map((character) => ({ ...character }));
+  const chapters = (activeProject.chapters || []).map((chapter) => ({ ...chapter }));
+  const scenes = (activeProject.scenes || []).map((scene) => ({ ...scene }));
   let selectedId = characters[0]?.id || '';
 
-  const fields = {
+  const textFields = {
     name: document.getElementById('character-name'),
     appearance: document.getElementById('character-appearance'),
     background: document.getElementById('character-background'),
     secrets: document.getElementById('character-secrets'),
     desires: document.getElementById('character-desires'),
+    other: document.getElementById('character-other'),
+  };
+  const linkFields = {
     chapterIntro: document.getElementById('character-chapter-intro'),
     deathScene: document.getElementById('character-death-scene'),
     romanceScenes: document.getElementById('character-romance-scenes'),
-    other: document.getElementById('character-other'),
   };
   const autosave = window.createAutosaveController(async () => {
     activeProject = await window.saveProjectData({
@@ -98,6 +121,38 @@ window.registerPageInit('characters', async function ({ project }) {
 
   function getSelectedCharacter() {
     return characters.find((character) => character.id === selectedId) || null;
+  }
+
+  function normalizeLinkedId(value, items, labelKey) {
+    const raw = String(value || '').trim();
+    if (!raw) {
+      return '';
+    }
+
+    const directMatch = items.find((item) => item.id === raw);
+    if (directMatch) {
+      return directMatch.id;
+    }
+
+    const fallbackMatch = items.find((item) => String(item[labelKey] || '').trim() === raw);
+    return fallbackMatch?.id || '';
+  }
+
+  function normalizeLinkedIds(value, items, labelKey) {
+    const rawValues = Array.isArray(value)
+      ? value
+      : String(value || '')
+        .split(',')
+        .map((entry) => entry.trim())
+        .filter(Boolean);
+
+    return [...new Set(rawValues
+      .map((entry) => normalizeLinkedId(entry, items, labelKey))
+      .filter(Boolean))];
+  }
+
+  function getSelectedValues(select) {
+    return [...select.selectedOptions].map((option) => option.value).filter(Boolean);
   }
 
   function renderImagePreview(image) {
@@ -118,6 +173,52 @@ window.registerPageInit('characters', async function ({ project }) {
     ));
   }
 
+  function buildCharacterPreview(character) {
+    const summary = stripEditorHtml(character.background || character.appearance || character.desires || character.other);
+    if (!summary) {
+      return 'Add appearance, background, or notes to flesh this character out.';
+    }
+
+    return summary.length > 140 ? `${summary.slice(0, 137)}...` : summary;
+  }
+
+  function populateLinkFields() {
+    linkFields.chapterIntro.innerHTML = `
+      <option value="">No chapter linked</option>
+      ${chapters.map((chapter) => `<option value="${chapter.id}">${escapeHtml(chapter.title || 'Untitled Chapter')}</option>`).join('')}
+    `;
+
+    linkFields.deathScene.innerHTML = `
+      <option value="">No death scene linked</option>
+      ${scenes.map((scene) => `<option value="${scene.id}">${escapeHtml(scene.title || 'Untitled Scene')}</option>`).join('')}
+    `;
+
+    linkFields.romanceScenes.innerHTML = scenes.length
+      ? scenes.map((scene) => `<option value="${scene.id}">${escapeHtml(scene.title || 'Untitled Scene')}</option>`).join('')
+      : '<option value="" disabled>No scenes available yet</option>';
+  }
+
+  function initializeCollapsibles() {
+    editorShell.querySelectorAll('[data-collapse-toggle]').forEach((trigger) => {
+      if (trigger.dataset.collapseBound === 'true') {
+        return;
+      }
+
+      trigger.dataset.collapseBound = 'true';
+      const wrapper = trigger.closest('.field-collapsible');
+      trigger.setAttribute('aria-expanded', String(wrapper?.classList.contains('is-open')));
+      trigger.addEventListener('click', () => {
+        const field = trigger.closest('.field-collapsible');
+        if (!field) {
+          return;
+        }
+
+        const isOpen = field.classList.toggle('is-open');
+        trigger.setAttribute('aria-expanded', String(isOpen));
+      });
+    });
+  }
+
   function renderList() {
     gallery.innerHTML = characters.length
       ? characters.map((character) => `
@@ -128,16 +229,21 @@ window.registerPageInit('characters', async function ({ project }) {
         >
           <div class="character-gallery-thumb">
             ${character.image
-              ? `<img src="${character.image}" alt="${character.name || 'Character'}" />`
+              ? `<img src="${character.image}" alt="${escapeHtml(character.name || 'Character')}" />`
               : '<span class="placeholder-icon">Portrait</span>'}
           </div>
-          <div class="character-gallery-name">${character.name || 'Unnamed Character'}</div>
-          <div class="character-gallery-tags">
-            ${getCharacterTypeLabels(character).slice(0, 2).map((label) => `
-              <span class="character-type-badge">${label}</span>
-            `).join('')}
+          <div class="character-gallery-copy">
+            <div class="character-gallery-name">${escapeHtml(character.name || 'Unnamed Character')}</div>
+            <div class="character-gallery-tags">
+              ${getCharacterTypeLabels(character).slice(0, 3).map((label) => `
+                <span class="character-type-badge">${escapeHtml(label)}</span>
+              `).join('')}
+            </div>
+            <p class="character-gallery-snippet">${escapeHtml(buildCharacterPreview(character))}</p>
+            <div class="character-gallery-meta">
+              <div class="character-gallery-status">${character.image ? 'Image Ready' : character.desires ? 'Prompt Ready' : 'Draft'}</div>
+            </div>
           </div>
-          <div class="character-gallery-status">${character.image ? 'Image Ready' : character.desires ? 'Prompt Ready' : 'Draft'}</div>
         </button>
       `).join('')
       : '';
@@ -146,9 +252,9 @@ window.registerPageInit('characters', async function ({ project }) {
       ? characters.map((character) => `
         <div class="entity-list-item">
           <button type="button" data-open-character="${character.id}">
-            <strong>${character.name || 'Unnamed Character'}</strong>
+            <strong>${escapeHtml(character.name || 'Unnamed Character')}</strong>
           </button>
-          <span>${getCharacterTypeLabels(character)[0] || (character.image ? 'Image ready' : character.desires ? 'Prompt ready' : 'Draft')}</span>
+          <span>${escapeHtml(getCharacterTypeLabels(character)[0] || (character.image ? 'Image ready' : character.desires ? 'Prompt ready' : 'Draft'))}</span>
         </div>
       `).join('')
       : '<p>No characters yet.</p>';
@@ -185,10 +291,21 @@ window.registerPageInit('characters', async function ({ project }) {
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
-    Object.entries(fields).forEach(([key, field]) => {
+    Object.entries(textFields).forEach(([key, field]) => {
       field.value = character[key] || '';
       window.refreshTextEditor(field, field.value);
     });
+
+    character.chapterIntro = normalizeLinkedId(character.chapterIntro, chapters, 'title');
+    character.deathScene = normalizeLinkedId(character.deathScene, scenes, 'title');
+    character.romanceScenes = normalizeLinkedIds(character.romanceScenes, scenes, 'title');
+
+    linkFields.chapterIntro.value = character.chapterIntro || '';
+    linkFields.deathScene.value = character.deathScene || '';
+    [...linkFields.romanceScenes.options].forEach((option) => {
+      option.selected = (character.romanceScenes || []).includes(option.value);
+    });
+
     imageInput.value = '';
     renderImagePreview(character.image || '');
     const selectedTypes = normalizeCharacterTypes(character.typeTags);
@@ -224,6 +341,8 @@ window.registerPageInit('characters', async function ({ project }) {
         </div>
       `;
 
+    initializeCollapsibles();
+
     typeTags.querySelectorAll('[data-character-type]').forEach((button) => {
       button.addEventListener('click', () => {
         const nextCharacter = getSelectedCharacter();
@@ -249,9 +368,12 @@ window.registerPageInit('characters', async function ({ project }) {
     }
 
     character.typeTags = normalizeCharacterTypes(character.typeTags);
-    Object.entries(fields).forEach(([key, field]) => {
+    Object.entries(textFields).forEach(([key, field]) => {
       character[key] = String(window.getEditorFieldValue(field) || '').trim();
     });
+    character.chapterIntro = linkFields.chapterIntro.value;
+    character.deathScene = linkFields.deathScene.value;
+    character.romanceScenes = getSelectedValues(linkFields.romanceScenes);
 
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
     renderList();
@@ -279,7 +401,7 @@ window.registerPageInit('characters', async function ({ project }) {
       typeTags: [],
       chapterIntro: '',
       deathScene: '',
-      romanceScenes: '',
+      romanceScenes: [],
       other: '',
     };
 
@@ -290,7 +412,11 @@ window.registerPageInit('characters', async function ({ project }) {
     renderEditor();
   });
 
-  Object.values(fields).forEach((field) => field.addEventListener('input', syncCharacter));
+  Object.values(textFields).forEach((field) => field.addEventListener('input', syncCharacter));
+  Object.values(linkFields).forEach((field) => {
+    field.addEventListener('input', syncCharacter);
+    field.addEventListener('change', syncCharacter);
+  });
 
   imageInput.addEventListener('change', async (event) => {
     const character = getSelectedCharacter();
@@ -329,6 +455,7 @@ window.registerPageInit('characters', async function ({ project }) {
     });
   });
 
+  populateLinkFields();
   renderList();
   renderEditor();
 });
