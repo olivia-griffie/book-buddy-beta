@@ -533,10 +533,9 @@ window.registerPageInit('chapters', async function ({ project }) {
             <div class="plot-section-body">
               <div class="plot-section-head">
                 <div class="field">
-                  <label>Plot Area Target Words</label>
+                  <label>Plot area target words</label>
                   <input type="number" min="0" step="100" value="${section.targetWords || 0}" data-target-section="${section.id}" />
                 </div>
-                <button class="btn btn-ghost add-chapter" type="button" data-section="${section.id}">Add Chapter</button>
               </div>
               <div class="chapter-list">
                 ${sectionChapters.length
@@ -552,12 +551,13 @@ window.registerPageInit('chapters', async function ({ project }) {
                             data-title-chapter="${chapter.id}"
                           />
                         </div>
-                        <span>${window.computeWordCount(chapter.content || '')} words</span>
+                        <span class="chapter-row-word-count">${window.computeWordCount(chapter.content || '')} words</span>
                       </div>
                     `)
                     .join('')
                   : '<p>No chapters yet for this section.</p>'}
               </div>
+              <button class="btn btn-ghost add-chapter plot-section-add-chapter" type="button" data-section="${section.id}">Add Chapter</button>
               <div class="plot-section-links">
                 <div class="plot-section-links-grid">
                   ${renderSectionLinkCard('characters', 'Characters', section.id)}

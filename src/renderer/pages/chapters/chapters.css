@@ -83,10 +83,13 @@
 }
 
 .plot-section-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 12px;
+  display: grid;
+  justify-content: start;
+  gap: 8px;
+}
+
+.plot-section-head .field {
+  width: min(220px, 100%);
 }
 
 .plot-section-head h3 {
@@ -121,11 +124,35 @@
 .chapter-row-main {
   display: flex;
   flex: 1;
+  min-width: 0;
 }
 
 .chapter-title-inline {
   flex: 1;
   min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--ink);
+}
+
+.chapter-title-inline:focus {
+  outline: none;
+}
+
+.chapter-row-word-count {
+  flex-shrink: 0;
+  padding-left: 12px;
+  border-left: 1px solid var(--border-soft);
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.plot-section-add-chapter {
+  width: 100%;
+  justify-content: center;
 }
 
 .chapter-editor-note,
@@ -406,22 +433,27 @@
 .plot-section-links {
   display: grid;
   gap: 10px;
+  margin-top: 4px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-soft);
 }
 
 .plot-section-links-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 10px;
 }
 
 .plot-section-link-card {
   display: grid;
   gap: 10px;
+  min-width: 0;
   padding: 12px;
   border: 1px solid var(--border-soft);
   border-radius: 12px;
   background: white;
   align-content: start;
+  overflow: hidden;
 }
 
 .plot-section-link-card h4 {
@@ -440,6 +472,11 @@
   justify-content: space-between;
   align-items: start;
   gap: 10px;
+}
+
+.plot-section-link-head > div {
+  min-width: 0;
+  overflow: hidden;
 }
 
 .plot-section-link-count {
@@ -512,6 +549,8 @@
 .plot-section-link-card .field {
   display: grid;
   gap: 6px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .plot-section-link-card .field label {
