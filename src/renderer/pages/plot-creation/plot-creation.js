@@ -5,8 +5,6 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   const createProjectButton = document.getElementById('plot-create-project');
   const saveButton = document.getElementById('save-plot-workbook');
   const saveMessage = document.getElementById('plot-save-message');
-  const collapseAllButton = document.getElementById('plot-collapse-all');
-  const backToTopButton = document.getElementById('plot-back-to-top');
   const outlineInput = document.getElementById('plot-outline');
   const premiseInput = document.getElementById('plot-premise');
   const stakesInput = document.getElementById('plot-stakes');
@@ -216,17 +214,6 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   }
 
   renderSectionTargets();
-
-  collapseAllButton?.addEventListener('click', () => {
-    content.querySelectorAll('.plot-block').forEach((block) => {
-      block.open = false;
-    });
-    saveMessage.textContent = 'Plot blocks collapsed. Open any section when you want to focus there.';
-  });
-
-  backToTopButton?.addEventListener('click', () => {
-    document.querySelector('.app-main')?.scrollTo({ top: 0, behavior: 'smooth' });
-  });
 
   saveButton.addEventListener('click', async () => {
     await window.runButtonFeedback(saveButton, async () => {

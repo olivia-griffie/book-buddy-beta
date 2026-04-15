@@ -989,6 +989,37 @@ label {
   max-width: 520px;
 }
 
+.app-text-entry-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(47, 53, 69, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.app-text-entry-dialog {
+  width: min(100%, 440px);
+  padding: 22px;
+  display: grid;
+  gap: 16px;
+  background: #fffdfa;
+}
+
+.app-text-entry-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.app-text-entry-actions {
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .entity-layout {
   display: grid;
   grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);

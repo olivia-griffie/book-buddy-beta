@@ -336,7 +336,13 @@ window.registerPageInit('home', async function () {
         return;
       }
 
-      const nextTitle = window.prompt('Project title', project.title || '');
+      const nextTitle = await window.requestTextEntry?.({
+        title: 'Edit project title',
+        label: 'Project title',
+        value: project.title || '',
+        confirmLabel: 'Save title',
+        placeholder: 'Enter a project title',
+      });
       if (nextTitle == null) {
         return;
       }

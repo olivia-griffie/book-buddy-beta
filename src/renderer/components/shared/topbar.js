@@ -325,7 +325,13 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
       return;
     }
 
-    const nextTitle = window.prompt('Project title', currentProject.title || '');
+    const nextTitle = await window.requestTextEntry?.({
+      title: 'Edit project title',
+      label: 'Project title',
+      value: currentProject.title || '',
+      confirmLabel: 'Save title',
+      placeholder: 'Enter a project title',
+    });
     if (nextTitle == null) {
       return;
     }

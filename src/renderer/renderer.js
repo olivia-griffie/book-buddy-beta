@@ -477,6 +477,72 @@ function syncVisibleProjectLabels(project) {
   });
 }
 
+window.requestTextEntry = function requestTextEntry(options = {}) {
+  return new Promise((resolve) => {
+    const existing = document.getElementById('app-text-entry-overlay');
+    existing?.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'app-text-entry-overlay';
+    overlay.className = 'app-text-entry-overlay';
+    overlay.innerHTML = `
+      <div class="app-text-entry-dialog card" role="dialog" aria-modal="true" aria-labelledby="app-text-entry-title">
+        <div class="app-text-entry-copy">
+          <p class="eyebrow">Quick Edit</p>
+          <h2 id="app-text-entry-title">${options.title || 'Edit value'}</h2>
+        </div>
+        <div class="field">
+          <label for="app-text-entry-input">${options.label || 'Value'}</label>
+          <input
+            id="app-text-entry-input"
+            type="text"
+            maxlength="120"
+            value="${String(options.value || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}"
+            placeholder="${String(options.placeholder || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}"
+          />
+        </div>
+        <div class="app-text-entry-actions">
+          <button type="button" class="btn btn-ghost" data-text-entry-cancel>Cancel</button>
+          <button type="button" class="btn btn-save" data-text-entry-confirm>${options.confirmLabel || 'Save'}</button>
+        </div>
+      </div>
+    `;
+
+    function close(value) {
+      overlay.remove();
+      resolve(value);
+    }
+
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) {
+        close(null);
+      }
+    });
+
+    overlay.querySelector('[data-text-entry-cancel]')?.addEventListener('click', () => close(null));
+    overlay.querySelector('[data-text-entry-confirm]')?.addEventListener('click', () => {
+      const input = overlay.querySelector('#app-text-entry-input');
+      close(input?.value ?? '');
+    });
+
+    overlay.querySelector('#app-text-entry-input')?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        close(null);
+      }
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const input = overlay.querySelector('#app-text-entry-input');
+        close(input?.value ?? '');
+      }
+    });
+
+    document.body.appendChild(overlay);
+    const input = overlay.querySelector('#app-text-entry-input');
+    input?.focus();
+    input?.select();
+  });
+};
+
 function renderStartupError(error) {
   const mainContent = document.getElementById('main-content');
   if (!mainContent) {
