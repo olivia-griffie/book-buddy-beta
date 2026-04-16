@@ -44,6 +44,25 @@ window.registerPageInit('home', async function () {
     });
   }
 
+  function computePromptStreak(project) {
+    const days = [...new Set(
+      (project?.dailyPromptHistory || [])
+        .filter((entry) => entry.answerInsertedAt)
+        .map((entry) => entry.answerInsertedAt.slice(0, 10))
+        .filter(Boolean),
+    )].sort();
+
+    if (!days.length) return 0;
+    let streak = 0;
+    const cursor = new Date();
+    cursor.setHours(0, 0, 0, 0);
+    while (days.includes(cursor.toISOString().slice(0, 10))) {
+      streak += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+    return streak;
+  }
+
   function computePace(project) {
     const goal = Number(project.wordCountGoal || 0);
     const current = Number(project.currentWordCount || 0);
@@ -138,6 +157,10 @@ window.registerPageInit('home', async function () {
 
     const maxCalendar = Math.max(...calendarDates.map((entry) => entry.value), 1);
     const pace = computePace(project);
+    const streak = computePromptStreak(project);
+    const activePrompts = (project.dailyPromptHistory || []).filter((entry) => !entry.answerInsertedAt);
+    const todayKey = new Date().toISOString().slice(0, 10);
+    const doneToday = (project.dailyPromptHistory || []).some((entry) => entry.answerInsertedAt?.slice(0, 10) === todayKey);
 
     dashboard.style.display = 'grid';
     dashboard.innerHTML = `
@@ -193,6 +216,30 @@ window.registerPageInit('home', async function () {
           </div>
         </section>
       </div>
+      <section class="home-prompt-widget ui-card ui-card-soft ui-card-stack">
+        <div class="home-prompt-widget-head">
+          <div>
+            <p class="eyebrow">Writing Challenges</p>
+            <h3>Today's Prompts</h3>
+          </div>
+          ${streak > 0 ? `
+            <div class="home-streak-badge ${doneToday ? 'is-active' : 'is-warning'}" title="${doneToday ? 'Streak maintained today' : 'Complete a prompt to keep your streak'}">
+              <span class="home-streak-flame">&#9889;</span>
+              <span>${streak} day streak${doneToday ? '' : ' at risk'}</span>
+            </div>
+          ` : ''}
+        </div>
+        ${activePrompts.length > 0 ? `
+          <p class="home-prompt-widget-count">${activePrompts.length} active prompt${activePrompts.length === 1 ? '' : 's'} waiting for you.</p>
+          <div class="home-prompt-previews">
+            ${activePrompts.slice(0, 2).map((p) => `<p class="prompt-callout home-prompt-preview">${p.prompt || ''}</p>`).join('')}
+          </div>
+          <button class="btn btn-primary" type="button" id="home-go-to-challenges">Continue Writing</button>
+        ` : `
+          <p class="home-prompt-widget-count">${doneToday ? 'Great work today! Generate a new batch to keep the momentum.' : 'No active prompts. Start a quick challenge to build your streak.'}</p>
+          <button class="btn btn-primary" type="button" id="home-go-to-challenges">Generate a Prompt</button>
+        `}
+      </section>
     `;
 
     dashboard.querySelector('[data-dashboard-date-input]')?.addEventListener('change', async (event) => {
@@ -204,6 +251,10 @@ window.registerPageInit('home', async function () {
         updatedAt: new Date().toISOString(),
       }, { dirtyFields: ['targetCompletionDate'] });
       renderDashboard(project);
+    });
+
+    dashboard.querySelector('#home-go-to-challenges')?.addEventListener('click', () => {
+      window.navigate('daily-prompts');
     });
   }
 

@@ -135,3 +135,107 @@
 .daily-prompt-card .goal-progress-track {
   background: rgba(255, 255, 255, 0.18);
 }
+
+/* ── Prompt tabs ── */
+.prompt-tab-strip {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.prompt-tab {
+  padding: 7px 16px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.prompt-tab:hover {
+  border-color: var(--sage);
+  color: var(--ink);
+}
+
+.prompt-tab.is-active {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: white;
+  font-weight: 600;
+}
+
+.prompt-tab-count {
+  opacity: 0.8;
+  font-size: 0.76rem;
+}
+
+.prompt-empty-state {
+  color: var(--ink-muted);
+  padding: 8px 0;
+}
+
+/* ── History cards ── */
+.prompt-history-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px 18px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: #fffdfa;
+  animation: promptHistoryRise 0.3s var(--ease) both;
+}
+
+@keyframes promptHistoryRise {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.prompt-history-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.prompt-history-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.prompt-history-title {
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.prompt-history-date {
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.prompt-history-excerpt {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.prompt-history-word-count {
+  display: inline-flex;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(79, 242, 201, 0.16);
+  color: var(--ink);
+  font-size: 0.74rem;
+  font-weight: 600;
+  white-space: nowrap;
+}

@@ -51,6 +51,14 @@
           <h2 class="card-heading">Today's Writing Sprint</h2>
         </div>
       </div>
+      <div class="prompt-tab-strip" id="prompt-view-tabs">
+        <button class="prompt-tab is-active" type="button" data-prompt-tab="active">
+          Active <span id="prompt-tab-active-count" class="prompt-tab-count"></span>
+        </button>
+        <button class="prompt-tab" type="button" data-prompt-tab="history">
+          History <span id="prompt-tab-history-count" class="prompt-tab-count"></span>
+        </button>
+      </div>
       <div id="daily-prompts-progress" class="goal-progress-card daily-prompts-progress-card max-620" style="display: none;">
         <div class="goal-progress-head">
           <div id="daily-prompts-progress-icon" class="progress-status-icon" aria-hidden="true">...</div>

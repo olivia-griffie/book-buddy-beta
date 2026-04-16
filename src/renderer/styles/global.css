@@ -391,6 +391,7 @@ body {
   width: 26px;
   height: 26px;
   border-radius: 6px;
+  position: relative;
   display: inline-grid;
   place-items: center;
   background: rgba(250, 247, 242, 0.12);
@@ -415,6 +416,29 @@ body {
 .sidebar-link:hover .sidebar-link-icon,
 .sidebar-link.is-active .sidebar-link-icon {
   transform: scale(1.06);
+}
+
+.sidebar-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--sage);
+  color: white;
+  font-size: 0.62rem;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  pointer-events: none;
+  animation: badgePop 0.3s var(--ease) both;
+}
+
+@keyframes badgePop {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .topbar-shell {
@@ -532,6 +556,15 @@ body {
   flex-wrap: wrap;
   gap: 10px;
   justify-content: end;
+}
+
+.topbar-quick-prompt-pulse {
+  animation: quickPromptPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes quickPromptPulse {
+  0%, 100% { border-color: var(--border); }
+  50% { border-color: var(--sage); box-shadow: 0 0 0 3px rgba(79, 242, 201, 0.18); }
 }
 
 .topbar-actions .btn.is-active {

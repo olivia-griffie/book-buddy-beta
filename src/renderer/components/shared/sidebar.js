@@ -55,6 +55,10 @@ function formatTargetDate(value) {
   });
 }
 
+function getIncompletePromptCount(project) {
+  return (project?.dailyPromptHistory || []).filter((entry) => !entry.answerInsertedAt).length;
+}
+
 function getSidebarSnapshot(currentProject) {
   const genres = (currentProject?.genres || []).filter(Boolean);
   const characters = currentProject?.characters || [];
@@ -84,6 +88,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
   const isCollapsed = Boolean(window.isSidebarCollapsed?.());
   const visibleGroups = sidebarGroups.filter((group) => hasProject || !group.requiresProject);
   const snapshot = hasProject ? getSidebarSnapshot(currentProject) : null;
+  const incompletePromptCount = hasProject ? getIncompletePromptCount(currentProject) : 0;
   container.classList.toggle('is-collapsed', isCollapsed);
 
   container.innerHTML = `
@@ -156,7 +161,10 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
                       class="sidebar-link ${item.id === currentPage ? 'is-active' : ''}"
                       data-page="${item.id}"
                     >
-                      <span class="sidebar-link-icon" aria-hidden="true">${item.icon}</span>
+                      <span class="sidebar-link-icon" aria-hidden="true">
+                        ${item.icon}
+                        ${item.id === 'daily-prompts' && incompletePromptCount > 0 ? `<span class="sidebar-badge" aria-label="${incompletePromptCount} active prompts">${incompletePromptCount}</span>` : ''}
+                      </span>
                       ${isCollapsed ? '' : `<span class="sidebar-link-label">${item.label}</span>`}
                     </button>
                   `)

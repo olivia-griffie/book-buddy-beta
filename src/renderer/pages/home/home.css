@@ -438,6 +438,69 @@
   color: white;
 }
 
+.home-prompt-widget {
+  display: grid;
+  gap: 14px;
+  padding: 20px 24px;
+}
+
+.home-prompt-widget-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.home-prompt-widget-head h3 {
+  margin: 0;
+}
+
+.home-streak-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.home-streak-badge.is-active {
+  background: rgba(79, 242, 201, 0.16);
+  border: 1px solid rgba(79, 242, 201, 0.3);
+  color: var(--ink);
+}
+
+.home-streak-badge.is-warning {
+  background: rgba(245, 160, 60, 0.14);
+  border: 1px solid rgba(245, 160, 60, 0.28);
+  color: #8a5a10;
+}
+
+.home-streak-flame {
+  font-size: 1rem;
+}
+
+.home-prompt-widget-count {
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.home-prompt-previews {
+  display: grid;
+  gap: 8px;
+}
+
+.home-prompt-preview {
+  font-size: 0.88rem;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 @media (max-width: 900px) {
   .daily-dashboard-grid {
     grid-template-columns: minmax(0, 1fr);

@@ -182,6 +182,77 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     progressIcon.textContent = completed ? 'OK' : '...';
   }
 
+  const promptViewState = { tab: 'active' };
+
+  function excerptAnswer(value) {
+    const temp = document.createElement('div');
+    temp.innerHTML = window.parseRichTextValue(value || '').html || '';
+    const text = (temp.textContent || temp.innerText || '').trim().replace(/\s+/g, ' ');
+    return text.length > 220 ? `${text.slice(0, 217)}...` : text;
+  }
+
+  function renderHistoryCards(entries) {
+    progressCard.style.display = 'none';
+    if (!entries.length) {
+      resultsGrid.innerHTML = '<p class="prompt-empty-state">No completed prompts yet. Finish a prompt on the Active tab to build your history.</p>';
+      return;
+    }
+
+    const reversed = [...entries].reverse();
+    resultsGrid.innerHTML = reversed.map((entry) => {
+      const dateLabel = entry.answerInsertedAt
+        ? new Date(entry.answerInsertedAt).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
+        : '';
+      const wordCount = window.computeWordCount(entry.answer || '');
+      const excerpt = excerptAnswer(entry.answer);
+      return `
+        <article class="prompt-history-card">
+          <div class="prompt-history-head">
+            <div class="prompt-history-meta">
+              <span class="genre-pill">${entry.genre || ''}</span>
+              <strong class="prompt-history-title">${entry.plotPoint || ''}</strong>
+            </div>
+            <span class="prompt-history-date">${dateLabel}</span>
+          </div>
+          <p class="prompt-callout">${entry.prompt || ''}</p>
+          ${excerpt ? `
+            <p class="prompt-history-excerpt">
+              ${excerpt}
+              <span class="prompt-history-word-count">${wordCount.toLocaleString()} words</span>
+            </p>
+          ` : ''}
+        </article>
+      `;
+    }).join('');
+  }
+
+  function renderCurrentTab() {
+    const history = getDailyHistory();
+    const activeEntries = history.filter((entry) => !entry.answerInsertedAt);
+    const completedEntries = history.filter((entry) => entry.answerInsertedAt);
+
+    const activeCountEl = document.getElementById('prompt-tab-active-count');
+    const historyCountEl = document.getElementById('prompt-tab-history-count');
+    if (activeCountEl) activeCountEl.textContent = activeEntries.length ? `(${activeEntries.length})` : '';
+    if (historyCountEl) historyCountEl.textContent = completedEntries.length ? `(${completedEntries.length})` : '';
+
+    document.querySelectorAll('[data-prompt-tab]').forEach((btn) => {
+      btn.classList.toggle('is-active', btn.dataset.promptTab === promptViewState.tab);
+    });
+
+    if (promptViewState.tab === 'history') {
+      renderHistoryCards(completedEntries);
+      return;
+    }
+
+    if (activeEntries.length) {
+      renderPromptCards(activeEntries);
+    } else {
+      progressCard.style.display = 'none';
+      resultsGrid.innerHTML = '<p class="prompt-empty-state">No active prompts. Generate some above to get started.</p>';
+    }
+  }
+
   function renderPromptCards(entries) {
     resultsGrid.innerHTML = entries.length
       ? entries.map((entry, index) => `
@@ -251,7 +322,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         }, {
           dirtyFields: ['dailyPromptHistory'],
         });
-        renderPromptCards(getDailyHistory());
+        renderCurrentTab();
       });
     });
 
@@ -318,12 +389,17 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           dirtyFields: ['chapters', 'dailyPromptHistory', 'currentWordCount'],
         });
 
+        const isComplete = insertedWordCount >= requiredWordCount;
         setStatusMessage(
-          insertedWordCount >= requiredWordCount
-            ? 'Prompt answer inserted into the selected chapter and marked complete.'
-            : `Prompt answer inserted, but it is still below the ${requiredWordCount.toLocaleString()} word target.`,
+          isComplete
+            ? 'Prompt inserted and complete! Taking you to the chapter...'
+            : `Prompt answer inserted, but it is still below the ${requiredWordCount.toLocaleString()} word target. Taking you to the chapter...`,
         );
-        renderPromptCards(getDailyHistory());
+        renderCurrentTab();
+
+        setTimeout(() => {
+          window.navigate('chapters', { chapterId: promptEntry.assignedChapterId });
+        }, 900);
       });
     });
 
@@ -345,7 +421,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           dirtyFields: ['dailyPromptHistory'],
         });
         setStatusMessage('Prompt answer saved.');
-        renderPromptCards(getDailyHistory());
+        renderCurrentTab();
       });
     });
   }
@@ -385,7 +461,10 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   generateButton.addEventListener('click', async () => {
     const today = new Date();
     const prompts = generatePromptBatch();
-    renderPromptCards(prompts);
+    const completedHistory = getDailyHistory().filter((entry) => entry.answerInsertedAt);
+    const nextHistory = [...completedHistory, ...prompts];
+
+    promptViewState.tab = 'active';
 
     const updatedProject = {
       ...activeProject,
@@ -395,7 +474,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         lastCount: Number(countInput.value || 1),
         lastGeneratedAt: today.toISOString(),
       },
-      dailyPromptHistory: prompts,
+      dailyPromptHistory: nextHistory,
       updatedAt: today.toISOString(),
     };
 
@@ -403,9 +482,16 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       dirtyFields: ['dailyPromptState', 'dailyPromptHistory'],
     });
 
+    renderCurrentTab();
     setStatusMessage(`${prompts.length} prompt${prompts.length === 1 ? '' : 's'} ready.`);
   });
 
-  progressCard.style.display = 'none';
-  resultsGrid.innerHTML = '<p>No prompts generated yet. Choose 1, 3, or 5 prompts, then click Generate Prompts.</p>';
+  document.querySelectorAll('[data-prompt-tab]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      promptViewState.tab = btn.dataset.promptTab;
+      renderCurrentTab();
+    });
+  });
+
+  renderCurrentTab();
 });

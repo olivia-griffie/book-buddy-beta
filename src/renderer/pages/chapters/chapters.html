@@ -37,13 +37,14 @@
           <summary class="chapter-panel-summary">
             <div>
               <p class="eyebrow">Daily Writing Challenge</p>
-              <h3 class="card-heading">Write From Today&apos;s Prompts</h3>
+              <h3 class="card-heading">Write From Today's Prompts <span id="chapter-prompt-count-badge" class="chapter-prompt-count-badge" style="display:none;"></span></h3>
             </div>
             <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
           </summary>
           <div class="chapter-panel-body">
-            <div id="chapter-prompt-empty" class="editor-empty" style="display: none;">
-              Generate a daily prompt to start writing against this chapter.
+            <div id="chapter-prompt-empty" style="display: none;">
+              <p class="chapter-prompt-empty">No active prompts yet. Generate a challenge to write against this chapter.</p>
+              <button class="btn btn-ghost" type="button" id="chapter-go-to-challenges">Open Challenges</button>
             </div>
             <div id="chapter-prompt-list" class="chapter-prompt-list"></div>
             <p id="chapter-prompt-message" class="form-message" aria-live="polite"></p>

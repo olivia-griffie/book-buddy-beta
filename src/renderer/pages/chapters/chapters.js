@@ -1,4 +1,4 @@
-window.registerPageInit('chapters', async function ({ project }) {
+window.registerPageInit('chapters', async function ({ project, chapterId }) {
   function escapeHtml(value = '') {
     return String(value)
       .replace(/&/g, '&amp;')
@@ -98,7 +98,9 @@ window.registerPageInit('chapters', async function ({ project }) {
     dirtyText: 'Chapter changes not saved',
   });
 
-  let selectedChapterId = chapters[0]?.id || '';
+  let selectedChapterId = (chapterId && chapters.some((c) => c.id === chapterId))
+    ? chapterId
+    : chapters[0]?.id || '';
 
   function getNextChapterNumber() {
     const explicitNumbers = chapters
@@ -397,6 +399,17 @@ window.registerPageInit('chapters', async function ({ project }) {
   function renderPromptPanel() {
     const chapter = getSelectedChapter();
     const prompts = getChapterPrompts();
+    const countBadge = document.getElementById('chapter-prompt-count-badge');
+
+    const activeCount = dailyPromptHistory.filter((entry) => !entry.answerInsertedAt).length;
+    if (countBadge) {
+      if (activeCount > 0) {
+        countBadge.textContent = `${activeCount}`;
+        countBadge.style.display = 'inline-flex';
+      } else {
+        countBadge.style.display = 'none';
+      }
+    }
 
     if (!chapter) {
       chapterPromptEmpty.style.display = 'block';
@@ -779,6 +792,10 @@ window.registerPageInit('chapters', async function ({ project }) {
       saveMessage.textContent = error?.message || 'Export failed. Please try again after restarting the app.';
     }
   }
+
+  document.getElementById('chapter-go-to-challenges')?.addEventListener('click', () => {
+    window.navigate('daily-prompts');
+  });
 
   window.initializeTextEditor(document.getElementById('chapters-content'));
   populateSectionSelect();
