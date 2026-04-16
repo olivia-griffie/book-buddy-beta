@@ -216,13 +216,12 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   const showBadges = hasProject && window.shouldShowTopbarBadges?.();
 
   container.innerHTML = `
-    <div class="topbar-shell">
-      <div class="topbar-main">
-        <div class="topbar-copy">
+    <details class="topbar-details">
+      <summary class="topbar-summary">
+        <div class="topbar-summary-left">
           <p class="topbar-kicker">${hasProject ? 'Current Workspace' : 'Welcome'}</p>
           <div class="topbar-title-row">
             <h2 class="topbar-title">${hasProject ? currentProject.title : 'Book Buddy Beta'}</h2>
-            ${hasProject ? '<button id="topbar-edit-project-title" class="btn btn-ghost topbar-title-edit" type="button">Edit title</button>' : ''}
             ${hasProject ? `<span class="topbar-save-state is-${saveTone}">${saveText}</span>` : ''}
           </div>
           <p class="topbar-subtitle">
@@ -231,87 +230,93 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               : 'Create a project to unlock the full guided writing workflow.'}
           </p>
         </div>
-        <div class="topbar-metrics">
-          ${hasProject ? `
-            <div class="topbar-metric">
-              <span class="topbar-metric-value">${progressPercent}%</span>
-              <span class="topbar-metric-label">Novel progress</span>
-            </div>
-            <div class="topbar-metric">
-              <span class="topbar-metric-value">${completedChallenges}</span>
-              <span class="topbar-metric-label">Challenge wins</span>
-            </div>
-            <div class="topbar-metric">
-              <span class="topbar-metric-value">${streak}</span>
-              <span class="topbar-metric-label">Day streak</span>
-            </div>
-          ` : ''}
+        <span class="topbar-summary-chevron" aria-hidden="true">▾</span>
+      </summary>
+      <div class="topbar-shell">
+        <div class="topbar-main">
+          <div class="topbar-metrics">
+            ${hasProject ? `
+              <div class="topbar-metric">
+                <span class="topbar-metric-value">${progressPercent}%</span>
+                <span class="topbar-metric-label">Novel progress</span>
+              </div>
+              <div class="topbar-metric">
+                <span class="topbar-metric-value">${completedChallenges}</span>
+                <span class="topbar-metric-label">Challenge wins</span>
+              </div>
+              <div class="topbar-metric">
+                <span class="topbar-metric-value">${streak}</span>
+                <span class="topbar-metric-label">Day streak</span>
+              </div>
+            ` : ''}
+          </div>
+          <div class="topbar-actions">
+            ${hasProject ? '<button id="topbar-edit-project-title" class="btn btn-ghost topbar-title-edit" type="button">Edit title</button>' : ''}
+            ${hasProject ? `
+              <button
+                id="topbar-reference"
+                class="btn btn-ghost ${window.isReferenceDrawerOpen?.() ? 'is-active' : ''}"
+                type="button"
+              >
+                Reference
+              </button>
+            ` : ''}
+            ${hasProject ? '<button id="topbar-export" class="btn btn-ghost" type="button">Export</button>' : ''}
+            <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
+          </div>
         </div>
-        <div class="topbar-actions">
-          ${hasProject ? `
-            <button
-              id="topbar-reference"
-              class="btn btn-ghost ${window.isReferenceDrawerOpen?.() ? 'is-active' : ''}"
-              type="button"
-            >
-              Reference
-            </button>
-          ` : ''}
-          ${hasProject ? '<button id="topbar-export" class="btn btn-ghost" type="button">Export</button>' : ''}
-          <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
-        </div>
-      </div>
-      ${showBadges ? `
-        <div class="topbar-badges">
-          ${milestoneSnapshot.visibleBadges.length
+        ${showBadges ? `
+          <div class="topbar-badges">
+            ${milestoneSnapshot.visibleBadges.length
       ? milestoneSnapshot.visibleBadges.slice(0, 4).map((milestone) => `
-                <div class="topbar-badge" title="${milestone.description}">
-                  <span class="topbar-badge-mark" aria-hidden="true">+</span>
+                  <div class="topbar-badge" title="${milestone.description}">
+                    <span class="topbar-badge-mark" aria-hidden="true">+</span>
+                    <div class="topbar-badge-copy">
+                      <span class="topbar-badge-label">${milestone.label}</span>
+                      <span class="topbar-badge-description">${milestone.description}</span>
+                    </div>
+                  </div>
+                `).join('')
+      : `
+                <div class="topbar-badge is-empty">
                   <div class="topbar-badge-copy">
-                    <span class="topbar-badge-label">${milestone.label}</span>
-                    <span class="topbar-badge-description">${milestone.description}</span>
+                    <span class="topbar-badge-label">First milestone waiting</span>
+                    <span class="topbar-badge-description">Start plotting or drafting to unlock progress badges.</span>
                   </div>
                 </div>
-              `).join('')
-      : `
-              <div class="topbar-badge is-empty">
-                <div class="topbar-badge-copy">
-                  <span class="topbar-badge-label">First milestone waiting</span>
-                  <span class="topbar-badge-description">Start plotting or drafting to unlock progress badges.</span>
-                </div>
-              </div>
-            `}
+              `}
+          </div>
+        ` : ''}
+        <div class="topbar-next-step">
+          <div class="topbar-next-step-copy">
+            <p class="topbar-next-step-kicker">Next Best Step</p>
+            <h3 class="topbar-next-step-title">${nextStep.title}</h3>
+            <p class="topbar-next-step-description">${nextStep.description}</p>
+          </div>
+          <button id="topbar-next-step" class="btn btn-primary" type="button" data-next-step="${nextStep.page}">
+            ${nextStep.label}
+          </button>
         </div>
-      ` : ''}
-      <div class="topbar-next-step">
-        <div class="topbar-next-step-copy">
-          <p class="topbar-next-step-kicker">Next Best Step</p>
-          <h3 class="topbar-next-step-title">${nextStep.title}</h3>
-          <p class="topbar-next-step-description">${nextStep.description}</p>
-        </div>
-        <button id="topbar-next-step" class="btn btn-primary" type="button" data-next-step="${nextStep.page}">
-          ${nextStep.label}
-        </button>
-      </div>
-      <div class="topbar-tracker">
-        ${workflowSteps.map((step, index) => {
+        <div class="topbar-tracker">
+          ${workflowSteps.map((step, index) => {
     const isLocked = !hasProject && step.id !== 'create-project';
     const isActive = step.id === currentPage;
     const isDone = hasProject && activeStepIndex > -1 && index < activeStepIndex;
     return `
-            <button
-              type="button"
-              class="topbar-step ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''} ${isLocked ? 'is-locked' : ''}"
-              data-topbar-step="${step.id}"
-              ${isLocked ? 'disabled' : ''}
-            >
-              <span class="topbar-step-index">${index + 1}</span>
-              <span>${step.label}</span>
-            </button>
-          `;
+              <button
+                type="button"
+                class="topbar-step ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''} ${isLocked ? 'is-locked' : ''}"
+                data-topbar-step="${step.id}"
+                ${isLocked ? 'disabled' : ''}
+              >
+                <span class="topbar-step-index">${index + 1}</span>
+                <span>${step.label}</span>
+              </button>
+            `;
   }).join('')}
+        </div>
       </div>
-    </div>
+    </details>
   `;
 
   container.querySelector('#topbar-new-project')?.addEventListener('click', () => {

@@ -54,6 +54,45 @@ body {
   z-index: 20;
 }
 
+.topbar-details {
+  width: 100%;
+}
+
+.topbar-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.topbar-summary {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.topbar-summary:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.topbar-summary-left {
+  display: grid;
+  gap: 3px;
+}
+
+.topbar-summary-chevron {
+  color: var(--ink-muted);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  transition: transform var(--duration) var(--ease);
+}
+
+.topbar-details[open] .topbar-summary-chevron {
+  transform: rotate(180deg);
+}
+
 .app-main {
   min-width: 0;
   padding: 32px 32px 40px;
@@ -119,6 +158,16 @@ body {
 
 .app-sidebar.is-collapsed .sidebar-toggle-icon {
   transform: rotate(-90deg);
+}
+
+.app-sidebar.is-collapsed .sidebar-toggle {
+  right: auto;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.app-sidebar.is-collapsed .sidebar-toggle:hover {
+  transform: translateX(-50%) translateY(-1px);
 }
 
 .sidebar-project-status {
@@ -320,14 +369,16 @@ body {
 .topbar-shell {
   display: grid;
   gap: 18px;
-  padding: 22px 32px 18px;
+  padding: 16px 20px 20px;
+  border-top: 1px solid var(--border-soft);
 }
 
 .topbar-main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  display: flex;
+  flex-wrap: wrap;
   gap: 18px;
   align-items: center;
+  justify-content: space-between;
 }
 
 .topbar-copy {
@@ -376,23 +427,23 @@ body {
 }
 
 .topbar-save-state.is-neutral {
-  background: #efe7da;
-  color: var(--ink-soft);
+  background: rgba(255, 106, 90, 0.1);
+  color: var(--sage);
 }
 
 .topbar-save-state.is-warning {
-  background: rgba(255, 138, 61, 0.16);
-  color: var(--accent-orange);
+  background: rgba(255, 106, 90, 0.1);
+  color: var(--sage);
 }
 
 .topbar-save-state.is-saving {
-  background: rgba(255, 126, 184, 0.14);
-  color: var(--sage-deep);
+  background: rgba(255, 106, 90, 0.1);
+  color: var(--sage);
 }
 
 .topbar-save-state.is-success {
-  background: rgba(79, 242, 201, 0.18);
-  color: var(--ink);
+  background: rgba(255, 106, 90, 0.1);
+  color: var(--sage);
 }
 
 .topbar-metrics {
