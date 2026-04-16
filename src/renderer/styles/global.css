@@ -1018,6 +1018,10 @@ label {
   padding: 24px;
 }
 
+.entity-list-card {
+  align-content: start;
+}
+
 .entity-list {
   display: grid;
   gap: 10px;

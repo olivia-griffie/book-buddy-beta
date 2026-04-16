@@ -150,7 +150,13 @@ window.registerPageInit('home', async function () {
         <div class="daily-dashboard-meta">
           <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact">
             <span class="daily-dashboard-stat-label">Date To Complete</span>
-            <strong>${formatShortDate(project.targetCompletionDate)}</strong>
+            <input
+              type="date"
+              class="daily-dashboard-date-input"
+              data-dashboard-date-input
+              value="${project.targetCompletionDate || ''}"
+              aria-label="Target completion date"
+            />
           </div>
           <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${pace.tone}">
             <span class="daily-dashboard-stat-label">${pace.status}</span>
@@ -188,6 +194,17 @@ window.registerPageInit('home', async function () {
         </section>
       </div>
     `;
+
+    dashboard.querySelector('[data-dashboard-date-input]')?.addEventListener('change', async (event) => {
+      const newDate = event.target.value;
+      project.targetCompletionDate = newDate;
+      await window.saveProjectData({
+        ...project,
+        targetCompletionDate: newDate,
+        updatedAt: new Date().toISOString(),
+      }, { dirtyFields: ['targetCompletionDate'] });
+      renderDashboard(project);
+    });
   }
 
   function handleNewProject() {

@@ -578,8 +578,8 @@
 
 /* ── Daily challenge panel ── */
 .chapter-panel-challenge {
-  background: var(--accent-orange);
-  border-color: rgba(0, 0, 0, 0.1);
+  background: #1a4a6b;
+  border-color: rgba(0, 0, 0, 0.15);
   color: white;
 }
 
@@ -588,7 +588,7 @@
 }
 
 .chapter-panel-challenge .chapter-panel-summary .eyebrow {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(79, 242, 201, 0.85);
 }
 
 .chapter-panel-challenge .card-heading {
@@ -596,17 +596,17 @@
 }
 
 .chapter-panel-challenge .chapter-panel-indicator {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .chapter-panel-challenge .chapter-panel-body {
-  border-top-color: rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.12);
 }
 
 /* Prompt cards inside the challenge panel */
 .chapter-prompt-card {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .chapter-prompt-card .chapter-prompt-toggle {
@@ -614,7 +614,7 @@
 }
 
 .chapter-prompt-card[open] .chapter-prompt-toggle {
-  border-bottom-color: rgba(255, 255, 255, 0.2);
+  border-bottom-color: rgba(255, 255, 255, 0.14);
 }
 
 .chapter-prompt-card .chapter-prompt-toggle-copy h4 {
@@ -622,25 +622,26 @@
 }
 
 .chapter-prompt-card .chapter-prompt-toggle-copy .genre-pill {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(79, 242, 201, 0.18);
+  color: #4ff2c9;
 }
 
 .chapter-prompt-card .chapter-prompt-toggle-copy span {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .chapter-prompt-card .chapter-prompt-toggle-indicator {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .chapter-prompt-card .chapter-prompt-body {
-  color: white;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .chapter-prompt-card .prompt-callout {
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
+  background: rgba(79, 242, 201, 0.1);
+  border: 1px solid rgba(79, 242, 201, 0.2);
+  color: rgba(255, 255, 255, 0.92);
   margin-top: 0;
 }
 
@@ -662,15 +663,15 @@
 }
 
 .chapter-prompt-card .chapter-prompt-footer {
-  color: white;
+  color: rgba(255, 255, 255, 0.92);
 }
 
 .chapter-prompt-card .daily-prompt-status {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .chapter-prompt-empty {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .form-message.is-success {

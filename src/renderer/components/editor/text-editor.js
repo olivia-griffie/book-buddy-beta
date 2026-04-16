@@ -130,7 +130,6 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         ${showAdvancedToggle
     ? '<button type="button" class="rich-text-btn rich-text-btn-toggle" data-toggle-advanced="true" aria-expanded="false" title="More formatting">Advanced</button>'
     : ''}
-        <button type="button" class="rich-text-btn rich-text-btn-collapse" data-toggle-collapse="true" aria-expanded="true" title="Collapse editor">▲ Collapse</button>
       </div>
       <div class="rich-text-toolbar-advanced">
         <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyLeft" title="Align left" aria-label="Align left">
@@ -170,9 +169,16 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     editor.contentEditable = 'true';
     editor.innerHTML = html || '<p><br></p>';
 
+    const collapseBar = document.createElement('button');
+    collapseBar.type = 'button';
+    collapseBar.className = 'rich-text-collapse-bar';
+    collapseBar.dataset.toggleCollapse = 'true';
+    collapseBar.setAttribute('aria-expanded', 'true');
+    collapseBar.innerHTML = '<span class="rich-text-collapse-label">Editor</span><span class="rich-text-collapse-chevron" aria-hidden="true">▾</span>';
+
     const wrapper = document.createElement('div');
     wrapper.className = 'rich-text-editor';
-    wrapper.append(toolbar, editor);
+    wrapper.append(toolbar, collapseBar, editor);
     textarea.insertAdjacentElement('afterend', wrapper);
     textarea.hidden = true;
 
@@ -270,11 +276,10 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       advancedToggle.setAttribute('aria-expanded', String(expanded));
     });
 
-    const collapseToggle = toolbar.querySelector('[data-toggle-collapse]');
-    collapseToggle?.addEventListener('click', () => {
+    collapseBar.addEventListener('click', () => {
       const collapsed = wrapper.classList.toggle('is-collapsed');
-      collapseToggle.setAttribute('aria-expanded', String(!collapsed));
-      collapseToggle.textContent = collapsed ? '▼ Expand' : '▲ Collapse';
+      collapseBar.setAttribute('aria-expanded', String(!collapsed));
+      collapseBar.querySelector('.rich-text-collapse-chevron').textContent = collapsed ? '▸' : '▾';
     });
 
     editor.addEventListener('input', () => {
