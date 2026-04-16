@@ -58,8 +58,6 @@ let activePageScript = null;
 const dataCache = new Map();
 let navigationRequestId = 0;
 let topbarBadgeTimer = null;
-let lastMainScrollTop = 0;
-let topbarCollapsed = false;
 
 function normalizeGenreKey(value = '') {
   return value
@@ -602,27 +600,6 @@ async function loadPageScript(scriptPath) {
   });
 }
 
-function syncTopbarScrollState() {
-  const mainContent = document.getElementById('main-content');
-  const topbar = document.getElementById('topbar-container');
-  if (!mainContent || !topbar) {
-    return;
-  }
-
-  const currentScrollTop = Math.max(0, mainContent.scrollTop);
-  const delta = currentScrollTop - lastMainScrollTop;
-
-  if (currentScrollTop <= 24) {
-    topbarCollapsed = false;
-  } else if (!topbarCollapsed && currentScrollTop > 96 && delta > 12) {
-    topbarCollapsed = true;
-  } else if (topbarCollapsed && delta < -12) {
-    topbarCollapsed = false;
-  }
-
-  topbar.classList.toggle('is-collapsed', topbarCollapsed);
-  lastMainScrollTop = currentScrollTop;
-}
 
 async function navigate(page, options = {}) {
   const pageDefinition = pageRegistry[page];
@@ -649,10 +626,7 @@ async function navigate(page, options = {}) {
 
   const mainContent = document.getElementById('main-content');
   mainContent.innerHTML = markup;
-  mainContent.scrollTop = 0;
-  lastMainScrollTop = 0;
-  topbarCollapsed = false;
-  document.getElementById('topbar-container')?.classList.remove('is-collapsed');
+  document.getElementById('app-workspace').scrollTop = 0;
   ensurePageStylesheet().href = pageDefinition.css;
 
   const pageScript = await loadPageScript(pageDefinition.script);
@@ -982,7 +956,6 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 document.addEventListener('DOMContentLoaded', async () => {
   state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
   scheduleTopbarBadgeRefresh();
-  document.getElementById('main-content')?.addEventListener('scroll', syncTopbarScrollState, { passive: true });
 
   document.addEventListener('click', (event) => {
     const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');
