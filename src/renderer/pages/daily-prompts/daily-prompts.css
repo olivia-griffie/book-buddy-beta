@@ -71,3 +71,66 @@
   flex-wrap: wrap;
   gap: 10px;
 }
+
+/* ── Orange theme for daily prompt cards ── */
+.daily-prompt-card {
+  background: var(--accent-orange) !important;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.daily-prompt-card h4,
+.daily-prompt-card > p {
+  color: white;
+}
+
+.daily-prompt-card .genre-pill {
+  background: rgba(255, 255, 255, 0.22);
+  color: white;
+}
+
+.daily-prompt-card .prompt-callout {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+}
+
+.daily-prompt-card .daily-prompt-status {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Writing area — white bg + dark text */
+.daily-prompt-card .daily-prompt-answer {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.daily-prompt-card .daily-prompt-answer label {
+  color: var(--ink);
+}
+
+.daily-prompt-card .daily-prompt-answer textarea {
+  background: white;
+  color: var(--ink);
+  border-color: var(--border-soft);
+}
+
+/* Chapter select in actions */
+.daily-prompt-card .daily-prompt-actions .field label {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.daily-prompt-card .daily-prompt-actions .field select {
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Progress bar section */
+.daily-prompt-card .daily-prompt-progress .daily-prompt-status {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.daily-prompt-card .goal-progress-track {
+  background: rgba(255, 255, 255, 0.25);
+}

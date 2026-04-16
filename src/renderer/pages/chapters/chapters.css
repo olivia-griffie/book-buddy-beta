@@ -576,6 +576,103 @@
   font-size: 0.88rem;
 }
 
+/* ── Daily challenge panel ── */
+.chapter-panel-challenge {
+  background: var(--accent-orange);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.chapter-panel-challenge .chapter-panel-summary {
+  color: white;
+}
+
+.chapter-panel-challenge .chapter-panel-summary .eyebrow {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.chapter-panel-challenge .card-heading {
+  color: white;
+}
+
+.chapter-panel-challenge .chapter-panel-indicator {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chapter-panel-challenge .chapter-panel-body {
+  border-top-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Prompt cards inside the challenge panel */
+.chapter-prompt-card {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+.chapter-prompt-card .chapter-prompt-toggle {
+  color: white;
+}
+
+.chapter-prompt-card[open] .chapter-prompt-toggle {
+  border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.chapter-prompt-card .chapter-prompt-toggle-copy h4 {
+  color: white;
+}
+
+.chapter-prompt-card .chapter-prompt-toggle-copy .genre-pill {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.chapter-prompt-card .chapter-prompt-toggle-copy span {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chapter-prompt-card .chapter-prompt-toggle-indicator {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.chapter-prompt-card .chapter-prompt-body {
+  color: white;
+}
+
+.chapter-prompt-card .prompt-callout {
+  background: rgba(255, 255, 255, 0.18);
+  color: white;
+  margin-top: 0;
+}
+
+/* Writing area — keep white bg + dark text */
+.chapter-prompt-card .chapter-prompt-answer {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.chapter-prompt-card .chapter-prompt-answer label {
+  color: var(--ink);
+}
+
+.chapter-prompt-card .chapter-prompt-answer textarea {
+  background: white;
+  color: var(--ink);
+  border-color: var(--border-soft);
+}
+
+.chapter-prompt-card .chapter-prompt-footer {
+  color: white;
+}
+
+.chapter-prompt-card .daily-prompt-status {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.chapter-prompt-empty {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .form-message.is-success {
   color: var(--accent-mint);
 }

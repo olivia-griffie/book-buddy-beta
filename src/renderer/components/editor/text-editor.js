@@ -130,6 +130,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         ${showAdvancedToggle
     ? '<button type="button" class="rich-text-btn rich-text-btn-toggle" data-toggle-advanced="true" aria-expanded="false" title="More formatting">Advanced</button>'
     : ''}
+        <button type="button" class="rich-text-btn rich-text-btn-collapse" data-toggle-collapse="true" aria-expanded="true" title="Collapse editor">▲ Collapse</button>
       </div>
       <div class="rich-text-toolbar-advanced">
         <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyLeft" title="Align left" aria-label="Align left">
@@ -267,6 +268,13 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     advancedToggle?.addEventListener('click', () => {
       const expanded = toolbar.classList.toggle('is-expanded');
       advancedToggle.setAttribute('aria-expanded', String(expanded));
+    });
+
+    const collapseToggle = toolbar.querySelector('[data-toggle-collapse]');
+    collapseToggle?.addEventListener('click', () => {
+      const collapsed = wrapper.classList.toggle('is-collapsed');
+      collapseToggle.setAttribute('aria-expanded', String(!collapsed));
+      collapseToggle.textContent = collapsed ? '▼ Expand' : '▲ Collapse';
     });
 
     editor.addEventListener('input', () => {

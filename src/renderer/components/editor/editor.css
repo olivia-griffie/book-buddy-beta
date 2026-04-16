@@ -83,6 +83,7 @@
 
 .rich-text-editor-shell {
   min-height: 140px;
+  max-height: 520px;
   padding: 14px 16px;
   background: white;
   border: 1px solid var(--border);
@@ -90,6 +91,16 @@
   color: var(--ink);
   outline: none;
   overflow-wrap: anywhere;
+  overflow-y: auto;
+  resize: vertical;
+}
+
+.rich-text-editor.is-collapsed .rich-text-editor-shell {
+  display: none;
+}
+
+.rich-text-btn-collapse {
+  margin-left: auto;
 }
 
 .rich-text-editor-shell:focus {
