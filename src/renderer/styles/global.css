@@ -49,14 +49,14 @@ body {
 
 .app-topbar {
   border-bottom: 1px solid var(--border-soft);
-  background: rgba(255, 253, 250, 0.94);
-  backdrop-filter: blur(10px);
+  background: #fffdfa;
   position: sticky;
   top: 0;
   z-index: 20;
   overflow: hidden;
   max-height: 420px;
   opacity: 1;
+  will-change: transform, opacity;
   transform: translateY(0);
   transition: max-height 0.24s var(--ease), opacity 0.2s var(--ease), transform 0.24s var(--ease), border-color 0.2s var(--ease);
 }
