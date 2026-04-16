@@ -304,17 +304,20 @@ body {
 }
 
 .sidebar-link-icon {
-  width: 22px;
-  height: 22px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   display: inline-grid;
   place-items: center;
   background: rgba(250, 247, 242, 0.12);
-  color: rgba(250, 247, 242, 0.86);
-  font-size: 0.72rem;
-  font-weight: 700;
+  color: rgba(250, 247, 242, 0.9);
   flex-shrink: 0;
   transition: transform var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.sidebar-link-icon svg {
+  display: block;
+  filter: drop-shadow(0 0 1px rgba(250, 247, 242, 0.2));
 }
 
 .sidebar-link:hover,
