@@ -82,6 +82,13 @@ body {
   gap: 3px;
 }
 
+.topbar-summary-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .topbar-summary-chevron {
   color: var(--ink-muted);
   font-size: 1.1rem;
@@ -91,6 +98,50 @@ body {
 
 .topbar-details[open] .topbar-summary-chevron {
   transform: rotate(180deg);
+}
+
+.topbar-collapse-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  color: var(--sage);
+  cursor: pointer;
+  animation: topbarHintPulse 2.8s ease-in-out infinite;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.topbar-collapse-hint:hover {
+  animation: none;
+  opacity: 0.7;
+}
+
+.topbar-details[open] .topbar-collapse-hint {
+  animation: topbarHintPulse 2.8s ease-in-out infinite;
+}
+
+.topbar-details:not([open]) .topbar-collapse-hint {
+  animation: none;
+  opacity: 0.35;
+}
+
+.topbar-collapse-hint-icon {
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--sage) 60%, transparent));
+}
+
+@keyframes topbarHintPulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--sage) 50%, transparent));
+    opacity: 0.7;
+  }
+  50% {
+    filter: drop-shadow(0 0 8px color-mix(in srgb, var(--sage) 80%, transparent));
+    opacity: 1;
+  }
 }
 
 .app-main {
@@ -581,6 +632,9 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  padding: 10px 20px;
+  border-top: 1px solid var(--border-soft);
+  background: #fffdfa;
 }
 
 .topbar-step {

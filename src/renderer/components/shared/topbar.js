@@ -230,7 +230,20 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               : 'Create a project to unlock the full guided writing workflow.'}
           </p>
         </div>
-        <span class="topbar-summary-chevron" aria-hidden="true">▾</span>
+        <div class="topbar-summary-right">
+          <span
+            class="topbar-collapse-hint"
+            title="For more writing room, collapse header"
+            aria-label="For more writing room, collapse header"
+          >
+            <svg class="topbar-collapse-hint-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 7l6-4 6 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 13l6 4 6-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M10 3v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </span>
+          <span class="topbar-summary-chevron" aria-hidden="true">▾</span>
+        </div>
       </summary>
       <div class="topbar-shell">
         <div class="topbar-main">
@@ -297,26 +310,26 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             ${nextStep.label}
           </button>
         </div>
-        <div class="topbar-tracker">
-          ${workflowSteps.map((step, index) => {
+      </div>
+    </details>
+    <div class="topbar-tracker">
+      ${workflowSteps.map((step, index) => {
     const isLocked = !hasProject && step.id !== 'create-project';
     const isActive = step.id === currentPage;
     const isDone = hasProject && activeStepIndex > -1 && index < activeStepIndex;
     return `
-              <button
-                type="button"
-                class="topbar-step ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''} ${isLocked ? 'is-locked' : ''}"
-                data-topbar-step="${step.id}"
-                ${isLocked ? 'disabled' : ''}
-              >
-                <span class="topbar-step-index">${index + 1}</span>
-                <span>${step.label}</span>
-              </button>
-            `;
+          <button
+            type="button"
+            class="topbar-step ${isActive ? 'is-active' : ''} ${isDone ? 'is-done' : ''} ${isLocked ? 'is-locked' : ''}"
+            data-topbar-step="${step.id}"
+            ${isLocked ? 'disabled' : ''}
+          >
+            <span class="topbar-step-index">${index + 1}</span>
+            <span>${step.label}</span>
+          </button>
+        `;
   }).join('')}
-        </div>
-      </div>
-    </details>
+    </div>
   `;
 
   container.querySelector('#topbar-new-project')?.addEventListener('click', () => {
