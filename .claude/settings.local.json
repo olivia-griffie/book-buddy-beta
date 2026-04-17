@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill /F /IM \"Book Buddy Beta.exe\")",
+      "Bash(taskkill /F /IM \"electron.exe\")",
+      "Bash(npm run *)",
+      "Bash(powershell -Command \"Stop-Process -Name electron -Force -ErrorAction SilentlyContinue; Stop-Process -Name 'Book Buddy Beta' -Force -ErrorAction SilentlyContinue; Write-Host 'Done'\")",
+      "Bash(powershell -Command \"handle.exe 'releases\\\\\\\\win-unpacked' 2>&1\")",
+      "Bash(powershell -Command ' *)",
+      "Bash(powershell -Command \"Remove-Item -Path 'C:\\\\\\\\Users\\\\\\\\oewhe\\\\\\\\book-buddy-beta\\\\\\\\releases\\\\\\\\win-unpacked' -Recurse -Force -ErrorAction SilentlyContinue; Write-Host 'Removed'\")",
+      "Bash(powershell -Command 'Get-Process | Where-Object { $_.Name -like '\\\\''*node*'\\\\'' -or $_.Name -like '\\\\''*electron*'\\\\'' -or $_.Name -like '\\\\''*app-builder*'\\\\'' } | Select-Object Id, Name, CPU | Format-Table')",
+      "Bash(powershell -Command \"Get-Process -Id 24968 | Select-Object Id, Name, Path, CommandLine\")",
+      "Bash(powershell -Command \"Add-MpPreference -ExclusionPath 'C:\\\\\\\\Users\\\\\\\\oewhe\\\\\\\\book-buddy-beta\\\\\\\\releases' -ErrorAction SilentlyContinue; Write-Host 'Exclusion added \\(or already exists\\)'\")",
+      "Read(//c/Users/oewhe/.cache/**)",
+      "Read(//c/Users/oewhe/AppData/Local/electron/Cache/**)",
+      "Read(//c/Users/oewhe/AppData/Local/electron-builder/Cache/**)",
+      "Read(//c/Users/oewhe/AppData/Local/electron/**)",
+      "Bash(npx asar *)",
+      "Bash(node -e \"require\\('@electron/asar'\\)\")",
+      "Bash(git rm *)"
+    ]
+  }
+}
