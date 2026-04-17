@@ -4534,5 +4534,85 @@
             "What future do they build together?",
             "What hybrid power or symbol remains?"
         ]
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Exposition & Initial Setup",
+        "questions": [
+            "What does the character's everyday life look like right now?",
+            "What internal flaw, fear, or desire shapes their behavior?",
+            "What subtle tension or imbalance already exists?"
+        ],
+        "description": "Establish the main character, their environment, and their current situation."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Inciting Incident",
+        "questions": [
+            "What specific moment changes things for the character?",
+            "Why can't the character ignore this disruption?",
+            "What initial choice or reaction sets the story in motion?"
+        ],
+        "description": "An event disrupts normal life and demands a response."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Core Conflict",
+        "questions": [
+            "What does the character want, and what stands in their way?",
+            "What internal conflict complicates their external goal?",
+            "Who or what acts as the primary opposition?"
+        ],
+        "description": "The main problem becomes clear, and stakes take shape."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Rising Action",
+        "questions": [
+            "What obstacles make the situation more difficult?",
+            "How do relationships or circumstances shift under stress?",
+            "What new information or complication raises the stakes?"
+        ],
+        "description": "Complications escalate and pressure builds."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Midpoint Revelation",
+        "questions": [
+            "What realization shifts how the character sees the situation?",
+            "How does this challenge their previous beliefs or plan?",
+            "What new approach or direction do they take?"
+        ],
+        "description": "A new insight or turning point changes the character's understanding."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Crisis",
+        "questions": [
+            "What decision forces the character to confront their core fear or desire?",
+            "What are the consequences of each possible choice?",
+            "What must the character risk or give up?"
+        ],
+        "description": "The character faces a difficult choice or breaking point."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Climax",
+        "questions": [
+            "What final action or confrontation determines the outcome?",
+            "How does the character act differently than they would have before?",
+            "What moment defines success or failure?"
+        ],
+        "description": "The central conflict reaches its peak."
+    },
+    {
+        "genre": "Short Story",
+        "plotPoint": "Aftermath",
+        "questions": [
+            "How has the situation changed as a result of the climax?",
+            "What has the character learned or become?",
+            "What emotional or thematic note does the story end on?"
+        ],
+        "description": "The outcome settles and meaning becomes clear."
     }
 ]

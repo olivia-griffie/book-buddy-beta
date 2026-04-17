@@ -2438,5 +2438,45 @@
         "genre":  "Romance Fantasy–Action",
         "plotPoint":  "Aftermath",
         "prompt":  "Write a 230-word reflection where the lovers begin building a future shaped by both magic and emotional growth."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Exposition & Initial Setup",
+        "prompt":  "Write a 280-word opening scene that establishes the character in their ordinary routine, embedding a specific detail — an object, a habit, a recurring thought — that quietly signals the flaw or desire that will drive the story."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Inciting Incident",
+        "prompt":  "Write a 340-word scene in which a single specific moment — an unexpected arrival, a discovery, a choice forced on the character — disrupts their routine and demands a response, showing through their immediate reaction what they stand to gain or lose."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Core Conflict",
+        "prompt":  "Write a 260-word passage in which the character names — internally or aloud — what they want and what is blocking them, revealing how their internal flaw or fear complicates a problem that might otherwise seem straightforward."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Rising Action",
+        "prompt":  "Write a 420-word scene where an obstacle the character thought they understood turns out to be more complicated, shifting a key relationship or raising the cost of what they are trying to do."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Midpoint Revelation",
+        "prompt":  "Write a 500-word scene in which the character realizes something they believed about the situation — or themselves — is wrong, showing how this realization forces them to reconsider their plan and take a new direction."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Crisis",
+        "prompt":  "Write a 360-word moment in which the character faces a decision that cannot be undone, laying out the cost of each path and showing — through hesitation, impulse, or resolve — how their core fear or desire pushes them toward one choice."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Climax",
+        "prompt":  "Write a 480-word scene in which the central conflict reaches its decisive moment, showing the character acting in a way that would not have been possible at the start of the story and making the outcome — success, failure, or something in between — land with emotional weight."
+    },
+    {
+        "genre":  "Short Story",
+        "plotPoint":  "Aftermath",
+        "prompt":  "Write a 180-word closing in which the dust has settled and the character's world reflects what the story cost or gave them, ending on a specific image, line, or moment that carries the thematic weight without stating it outright."
     }
 ]
