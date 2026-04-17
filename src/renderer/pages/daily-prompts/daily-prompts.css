@@ -84,10 +84,6 @@
   color: white;
 }
 
-.daily-prompt-card .genre-pill {
-  background: rgba(79, 242, 201, 0.18);
-  color: #4ff2c9;
-}
 
 .daily-prompt-card .prompt-callout {
   background: rgba(79, 242, 201, 0.1);
@@ -122,9 +118,9 @@
 }
 
 .daily-prompt-card .daily-prompt-actions .field select {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-color: rgba(255, 255, 255, 0.25);
+  background: white;
+  color: #1a1a1a;
+  border-color: var(--border-soft);
 }
 
 /* Progress bar section */

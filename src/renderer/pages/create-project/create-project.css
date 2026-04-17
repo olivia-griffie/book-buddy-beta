@@ -124,6 +124,64 @@
   opacity: 0.55;
 }
 
+.tags-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.tags-panel-header p {
+  margin-top: 4px;
+  color: var(--ink-muted);
+}
+
+.tag-input-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.tag-input-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.project-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 10px;
+}
+
+.project-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(79, 242, 201, 0.14);
+  border: 1px solid rgba(79, 242, 201, 0.3);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.project-tag-remove {
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  transition: color var(--duration) var(--ease);
+}
+
+.project-tag-remove:hover {
+  color: #a04f3e;
+}
+
 .form-actions {
   display: flex;
   justify-content: space-between;

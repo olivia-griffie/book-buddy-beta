@@ -167,6 +167,39 @@
   justify-content: center;
 }
 
+.chapter-editor-head {
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.chapter-selector-row {
+  margin-top: 10px;
+  max-width: 480px;
+}
+
+.chapter-selector-row .field {
+  margin: 0;
+}
+
+.chapter-selector-row label {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+}
+
+.chapter-progress-card {
+  flex-shrink: 0;
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.chapter-workspace-kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 .chapter-editor-note,
 .plot-sections-note {
   margin-top: 6px;
@@ -220,40 +253,22 @@
   margin-bottom: 18px;
 }
 
-.chapter-selection-banner {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
-  margin-bottom: 18px;
-  padding: 14px 16px;
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
-  background: #fffdfa;
-}
-
 .chapter-selection-pill {
   display: inline-flex;
-  padding: 4px 10px;
+  padding: 3px 9px;
   border-radius: 999px;
   background: rgba(255, 138, 61, 0.16);
   color: var(--accent-coral);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.chapter-selection-title {
-  color: var(--ink);
-  font-family: var(--font-display);
-  font-size: 1.1rem;
+.chapter-selection-pill:empty {
+  display: none;
 }
 
-.chapter-progress-card {
-  margin-bottom: 18px;
-  max-width: 620px;
-}
 
 .chapter-writing-workspace {
   display: grid;
@@ -655,8 +670,6 @@
 }
 
 .chapter-prompt-card .prompt-callout {
-  background: rgba(79, 242, 201, 0.1);
-  border: 1px solid rgba(79, 242, 201, 0.2);
   color: rgba(255, 255, 255, 0.92);
   margin-top: 0;
 }

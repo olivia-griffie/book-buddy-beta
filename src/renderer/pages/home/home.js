@@ -296,6 +296,9 @@ window.registerPageInit('home', async function () {
       const genres = (project.genres || [])
         .map((genre) => `<span class="genre-tag">${genre}</span>`)
         .join('');
+      const tags = (project.tags || [])
+        .map((tag) => `<span class="project-tag-chip project-tag-chip-display">${tag}</span>`)
+        .join('');
       const thumb = project.thumbnail
         ? `<img src="${project.thumbnail}" alt="${project.title}" />`
         : '<span class="placeholder-icon">Book</span>';
@@ -321,6 +324,7 @@ window.registerPageInit('home', async function () {
             </div>
             <div class="project-subtitle">${project.subtitle || ''}</div>
             <div class="project-genres">${genres}</div>
+            ${tags ? `<div class="project-tag-chips">${tags}</div>` : ''}
             <div class="project-progress goal-progress-card">
               <div class="goal-progress-head">
                 <div class="progress-status-icon ${completed ? 'is-complete' : ''}">${completed ? 'OK' : '...'}</div>
@@ -355,7 +359,22 @@ window.registerPageInit('home', async function () {
                       <label for="target-date-${project.id}">Target Date</label>
                       <input id="target-date-${project.id}" type="date" value="${project.targetCompletionDate || ''}" data-target-date-input="${project.id}" />
                     </div>
-                    <button class="btn btn-save" type="button" data-save-goal="${project.id}">Update Goal</button>
+                    <button class="btn btn-save" type="button" data-save-goal="${project.id}">Update</button>
+                  </div>
+                  <div class="project-tags-editor">
+                    <label>Tags</label>
+                    <div class="tag-input-row">
+                      <input type="text" class="project-tag-editor-input" data-tag-input="${project.id}" placeholder="Type a tag and press Enter" maxlength="40" autocomplete="off" />
+                      <button type="button" class="btn btn-ghost" data-tag-add="${project.id}">Add</button>
+                    </div>
+                    <div class="project-tags-list" data-tags-list="${project.id}">
+                      ${(project.tags || []).map((tag) => `
+                        <span class="project-tag-chip">
+                          <span>${tag}</span>
+                          <button type="button" class="project-tag-remove" data-card-remove-tag="${tag}" data-card-project="${project.id}" aria-label="Remove tag ${tag}">×</button>
+                        </span>
+                      `).join('')}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -573,10 +592,13 @@ window.registerPageInit('home', async function () {
 
       const wordCountGoal = Math.max(0, Number(input.value || 0));
       const targetCompletionDate = String(targetDateInput?.value || '').trim();
+      const tagChips = [...grid.querySelectorAll(`[data-tags-list="${projectId}"] [data-card-remove-tag]`)];
+      const tags = tagChips.map((btn) => btn.dataset.cardRemoveTag).filter(Boolean);
       const updatedProject = {
         ...project,
         wordCountGoal,
         targetCompletionDate,
+        tags,
         updatedAt: new Date().toISOString(),
       };
 
@@ -589,6 +611,79 @@ window.registerPageInit('home', async function () {
         <p>Your project goal is now ${wordCountGoal.toLocaleString()} words${targetCompletionDate ? ` with a target date of ${formatShortDate(targetCompletionDate)}` : ''}.</p>
       `;
       await window.navigate('home');
+    });
+  });
+
+  function renderCardTags(projectId) {
+    const tagsList = grid.querySelector(`[data-tags-list="${projectId}"]`);
+    if (!tagsList) return;
+    const currentTags = [...tagsList.querySelectorAll('[data-card-remove-tag]')].map((b) => b.dataset.cardRemoveTag);
+    tagsList.innerHTML = currentTags.map((tag) => `
+      <span class="project-tag-chip">
+        <span>${tag}</span>
+        <button type="button" class="project-tag-remove" data-card-remove-tag="${tag}" data-card-project="${projectId}" aria-label="Remove tag ${tag}">×</button>
+      </span>
+    `).join('');
+    wireCardTagRemove(projectId);
+  }
+
+  function wireCardTagRemove(projectId) {
+    grid.querySelectorAll(`[data-card-project="${projectId}"][data-card-remove-tag]`).forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const tag = btn.dataset.cardRemoveTag;
+        const tagsList = grid.querySelector(`[data-tags-list="${projectId}"]`);
+        const remaining = [...tagsList.querySelectorAll('[data-card-remove-tag]')]
+          .map((b) => b.dataset.cardRemoveTag)
+          .filter((t) => t !== tag);
+        tagsList.innerHTML = remaining.map((t) => `
+          <span class="project-tag-chip">
+            <span>${t}</span>
+            <button type="button" class="project-tag-remove" data-card-remove-tag="${t}" data-card-project="${projectId}" aria-label="Remove tag ${t}">×</button>
+          </span>
+        `).join('');
+        wireCardTagRemove(projectId);
+      });
+    });
+  }
+
+  grid.querySelectorAll('[data-tag-add]').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const projectId = btn.dataset.tagAdd;
+      const tagInput = grid.querySelector(`[data-tag-input="${projectId}"]`);
+      const raw = tagInput?.value.replace(/,/g, '').trim();
+      if (!raw) return;
+      const tagsList = grid.querySelector(`[data-tags-list="${projectId}"]`);
+      const existing = [...tagsList.querySelectorAll('[data-card-remove-tag]')].map((b) => b.dataset.cardRemoveTag);
+      if (!existing.includes(raw)) {
+        const chip = document.createElement('span');
+        chip.className = 'project-tag-chip';
+        chip.innerHTML = `<span>${raw}</span><button type="button" class="project-tag-remove" data-card-remove-tag="${raw}" data-card-project="${projectId}" aria-label="Remove tag ${raw}">×</button>`;
+        tagsList.appendChild(chip);
+        wireCardTagRemove(projectId);
+      }
+      tagInput.value = '';
+      tagInput.focus();
+    });
+  });
+
+  grid.querySelectorAll('[data-tag-input]').forEach((input) => {
+    input.addEventListener('click', (event) => event.stopPropagation());
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ',') {
+        event.preventDefault();
+        event.stopPropagation();
+        grid.querySelector(`[data-tag-add="${input.dataset.tagInput}"]`)?.click();
+      }
+    });
+  });
+
+  grid.querySelectorAll('[data-card-remove-tag]').forEach((btn) => {
+    btn.addEventListener('click', (event) => {
+      event.stopPropagation();
+      wireCardTagRemove(btn.dataset.cardProject);
+      btn.closest('.project-tag-chip')?.remove();
     });
   });
 

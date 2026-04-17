@@ -188,6 +188,60 @@
   justify-content: center;
 }
 
+.project-tag-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.project-tag-chip-display {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(79, 242, 201, 0.14);
+  border: 1px solid rgba(79, 242, 201, 0.28);
+  color: var(--ink);
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.project-tags-editor {
+  display: grid;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.project-tags-editor label {
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.project-tags-editor .tag-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.project-tags-editor .tag-input-row input {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.88rem;
+  padding: 7px 10px;
+}
+
+.project-tags-editor .project-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 8px;
+}
+
 .genre-tag {
   border-radius: 6px;
   background: #f1eadf;

@@ -89,12 +89,27 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     status.classList.toggle('is-error', tone === 'error');
   }
 
+  function pickRandom(array, count) {
+    const shuffled = [...array].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, count);
+  }
+
   function getContextLabel(index) {
-    const character = activeProject.characters?.[index % (activeProject.characters?.length || 1)];
+    const allCharacters = (activeProject.characters || []).filter((c) => c.name);
     const scene = activeProject.scenes?.[index % (activeProject.scenes?.length || 1)];
     const location = activeProject.locations?.[index % (activeProject.locations?.length || 1)];
     const pieces = [];
-    if (character?.name) pieces.push(`Character: ${character.name}`);
+
+    if (allCharacters.length > 0) {
+      const maxCharacters = Math.min(3, allCharacters.length);
+      const characterCount = allCharacters.length === 1
+        ? 1
+        : Math.floor(Math.random() * maxCharacters) + 1;
+      const picked = pickRandom(allCharacters, characterCount);
+      const label = picked.length === 1 ? 'Character' : 'Characters';
+      pieces.push(`${label}: ${picked.map((c) => c.name).join(', ')}`);
+    }
+
     if (scene?.title) pieces.push(`Scene: ${scene.title}`);
     if (location?.name) pieces.push(`Location: ${location.name}`);
     return pieces.length ? pieces.join(' | ') : 'Use this anywhere in the draft.';

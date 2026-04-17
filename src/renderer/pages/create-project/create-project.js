@@ -31,6 +31,46 @@ window.registerPageInit('create-project', async function () {
   let existingProjects = [];
   let projectLimitsReady = false;
   let thumbnailData = '';
+  let projectTags = [];
+
+  const tagInput = document.getElementById('project-tag-input');
+  const addTagBtn = document.getElementById('add-tag-btn');
+  const tagsList = document.getElementById('project-tags-list');
+
+  function renderTags() {
+    tagsList.innerHTML = projectTags.map((tag) => `
+      <span class="project-tag-chip">
+        <span>${tag}</span>
+        <button type="button" class="project-tag-remove" data-remove-tag="${tag}" aria-label="Remove tag ${tag}">×</button>
+      </span>
+    `).join('');
+
+    tagsList.querySelectorAll('[data-remove-tag]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        projectTags = projectTags.filter((t) => t !== btn.dataset.removeTag);
+        renderTags();
+      });
+    });
+  }
+
+  function addTag() {
+    const raw = tagInput.value.replace(/,/g, '').trim();
+    if (!raw) return;
+    if (!projectTags.includes(raw)) {
+      projectTags = [...projectTags, raw];
+      renderTags();
+    }
+    tagInput.value = '';
+    tagInput.focus();
+  }
+
+  tagInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' || event.key === ',') {
+      event.preventDefault();
+      addTag();
+    }
+  });
+  addTagBtn?.addEventListener('click', addTag);
 
   function normalizeGenre(value = '') {
     if (typeof window.normalizeGenreKey === 'function') {
@@ -201,6 +241,7 @@ window.registerPageInit('create-project', async function () {
       subtitle: String(formData.get('subtitle') || '').trim(),
       authorName: String(formData.get('authorName') || '').trim(),
       genres: selectedGenres,
+      tags: projectTags,
       wordCountGoal: Number(formData.get('wordCountGoal') || 0),
       targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
       currentWordCount: 0,

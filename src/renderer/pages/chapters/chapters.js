@@ -38,8 +38,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const lineHeightInput = document.getElementById('chapter-line-height');
   const currentWordsInput = document.getElementById('chapter-current-words');
   const contentInput = document.getElementById('chapter-content');
+  const chapterSelectDropdown = document.getElementById('chapter-select-dropdown');
   const chapterSelectedSection = document.getElementById('chapter-selected-section');
-  const chapterSelectedName = document.getElementById('chapter-selected-name');
+  const chapterProgressCard = document.querySelector('.chapter-progress-card');
   const chapterPromptList = document.getElementById('chapter-prompt-list');
   const chapterPromptEmpty = document.getElementById('chapter-prompt-empty');
   const chapterPromptMessage = document.getElementById('chapter-prompt-message');
@@ -220,6 +221,27 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     contentInput.style.lineHeight = lineHeightInput.value;
   }
 
+  function populateChapterDropdown() {
+    const groups = plotSections.map((section) => {
+      const sectionChapters = chapters.filter((ch) => ch.sectionId === section.id);
+      return { section, sectionChapters };
+    }).filter((group) => group.sectionChapters.length > 0);
+
+    chapterSelectDropdown.innerHTML = `<option value="">— Select a chapter —</option>` + groups.map(({ section, sectionChapters }) => `
+      <optgroup label="${escapeHtml(section.label)}">
+        ${sectionChapters.map((ch) => `
+          <option value="${ch.id}" ${ch.id === selectedChapterId ? 'selected' : ''}>
+            ${escapeHtml(ch.title || 'Untitled Chapter')}
+          </option>
+        `).join('')}
+      </optgroup>
+    `).join('');
+
+    if (!groups.length) {
+      chapterSelectDropdown.innerHTML = '<option value="">No chapters yet — add one below</option>';
+    }
+  }
+
   function populateSectionSelect() {
     sectionSelect.innerHTML = plotSections
       .map((section) => `<option value="${section.id}">${section.label}</option>`)
@@ -228,19 +250,20 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   function renderEditor() {
     const chapter = getSelectedChapter();
+    populateChapterDropdown();
+
     if (!chapter) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
-      document.getElementById('chapter-editor-title').textContent = 'Select a chapter';
+      if (chapterProgressCard) chapterProgressCard.style.display = 'none';
       return;
     }
 
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
+    if (chapterProgressCard) chapterProgressCard.style.display = 'block';
     const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
-    document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
-    chapterSelectedSection.textContent = currentSection?.label || 'Plot Section';
-    chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
+    chapterSelectedSection.textContent = currentSection?.label || '';
     titleInput.value = chapter.title || '';
     sectionSelect.value = chapter.sectionId || plotSections[0]?.id || '';
     targetWordsInput.value = chapter.targetWords || 0;
@@ -613,9 +636,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         chapter.title = input.value.trim();
         autosave.touch();
         if (chapter.id === selectedChapterId) {
-          document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
-          chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
           titleInput.value = chapter.title || '';
+          populateChapterDropdown();
         }
       });
 
@@ -747,8 +769,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     setProgress(currentWords, chapter.targetWords);
     document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
     const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
-    chapterSelectedSection.textContent = currentSection?.label || 'Plot Section';
-    chapterSelectedName.textContent = chapter.title || 'Untitled Chapter';
+    chapterSelectedSection.textContent = currentSection?.label || '';
     applyEditorStyles();
     renderSections();
     renderContextPanel();
@@ -795,6 +816,14 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   document.getElementById('chapter-go-to-challenges')?.addEventListener('click', () => {
     window.navigate('daily-prompts');
+  });
+
+  chapterSelectDropdown?.addEventListener('change', () => {
+    if (!chapterSelectDropdown.value) return;
+    selectedChapterId = chapterSelectDropdown.value;
+    renderSections();
+    renderEditor();
+    editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 
   window.initializeTextEditor(document.getElementById('chapters-content'));

@@ -119,6 +119,20 @@
       </div>
     </div>
 
+    <div class="tags-panel">
+      <div class="tags-panel-header">
+        <div>
+          <label>Project Tags</label>
+          <p>Add custom tags to categorize your project — tone, audience, series name, anything useful.</p>
+        </div>
+      </div>
+      <div class="tag-input-row">
+        <input id="project-tag-input" type="text" placeholder="Type a tag and press Enter" maxlength="40" autocomplete="off" />
+        <button type="button" class="btn btn-ghost" id="add-tag-btn">Add</button>
+      </div>
+      <div id="project-tags-list" class="project-tags-list"></div>
+    </div>
+
     <div class="form-actions">
       <p id="form-message" class="form-message" aria-live="polite"></p>
       <button class="btn btn-save" type="submit">Save And Build Plot</button>

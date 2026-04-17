@@ -85,10 +85,10 @@
   min-height: 140px;
   max-height: 520px;
   padding: 14px 16px;
-  background: white;
+  background: white !important;
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
-  color: var(--ink);
+  color: #1a1a1a !important;
   outline: none;
   overflow-wrap: anywhere;
   overflow-y: auto;
