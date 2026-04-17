@@ -23,45 +23,14 @@ function getSectionLabelMap(project) {
 
 function buildPlotPanel(project) {
   const workbook = project?.plotWorkbook || {};
-  const sections = project?.plotSections || [];
+  const outlineText = stripEditorHtml(workbook.outline);
 
   return `
     <div class="reference-panel-grid">
       <article class="reference-card">
         <p class="reference-card-kicker">Outline</p>
-        <p>${buildPreview(workbook.outline, 'Start with a broad outline so this panel can mirror the spine of the story.')}</p>
+        <p class="reference-card-body">${outlineText || 'Start with a broad outline so this panel can mirror the spine of the story.'}</p>
       </article>
-      <article class="reference-card">
-        <p class="reference-card-kicker">Premise</p>
-        <p>${buildPreview(workbook.premise)}</p>
-      </article>
-      <article class="reference-card">
-        <p class="reference-card-kicker">Stakes</p>
-        <p>${buildPreview(workbook.stakes)}</p>
-      </article>
-      <article class="reference-card">
-        <p class="reference-card-kicker">Plot Notes</p>
-        <p>${buildPreview(workbook.notes)}</p>
-      </article>
-    </div>
-    <div class="reference-list">
-      <div class="reference-list-head">
-        <h4>Section Targets</h4>
-        <span>${sections.length} total</span>
-      </div>
-      ${sections.length ? sections.map((section) => `
-        <article class="reference-list-card">
-          <div class="reference-list-row">
-            <strong>${section.label}</strong>
-            <span>${Number(section.targetWords || 0).toLocaleString()} words</span>
-          </div>
-          <p>${buildPreview(section.notes, 'No notes linked to this section yet.')}</p>
-        </article>
-      `).join('') : `
-        <article class="reference-list-card is-empty">
-          <p>No section targets added yet.</p>
-        </article>
-      `}
     </div>
   `;
 }

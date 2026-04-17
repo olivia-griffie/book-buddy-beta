@@ -1533,6 +1533,15 @@ label {
   border: 1px solid var(--border-soft);
   border-radius: 12px;
   background: white;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.reference-card-body {
+  margin: 0;
+  white-space: pre-wrap;
+  line-height: 1.6;
 }
 
 .reference-card-kicker {

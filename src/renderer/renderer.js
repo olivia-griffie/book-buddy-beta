@@ -285,21 +285,25 @@ function buildProjectResources(project, promptData) {
     }
     : null;
 
-  const baseLabels = hybridGuide
-    ? Object.keys(hybridGuide.beats)
-    : genreTracks[0]?.beats.map((entry) => entry.plotPoint) || getDefaultBeatOrder();
+  const baseBeats = hybridGuide
+    ? Object.keys(hybridGuide.beats).map((label) => ({ plotPoint: label, description: '' }))
+    : genreTracks[0]?.beats || getDefaultBeatOrder().map((label) => ({ plotPoint: label, description: '' }));
 
   const existingSections = project?.plotSections || [];
-  const plotSections = baseLabels.map((label, index) => {
+  const plotSections = baseBeats.map((beat, index) => {
+    const label = beat.plotPoint;
     const existing = existingSections.find(
       (section) => normalizeGenreKey(section.label) === normalizeGenreKey(label),
     );
 
-    return existing || {
-      id: `section-${slugify(label) || index + 1}`,
-      label,
-      targetWords: 0,
-      notes: '',
+    return {
+      ...(existing || {
+        id: `section-${slugify(label) || index + 1}`,
+        label,
+        targetWords: 0,
+        notes: '',
+      }),
+      description: beat.description || '',
     };
   });
 

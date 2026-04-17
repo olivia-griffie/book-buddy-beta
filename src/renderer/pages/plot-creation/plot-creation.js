@@ -104,7 +104,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
           <span class="plot-section-target-indicator" aria-hidden="true"></span>
         </summary>
         <div class="plot-section-target-body">
-          <p>Use this to anchor where this part of the book lives and what it needs to accomplish.</p>
+          ${section.description ? `<p class="plot-section-description">${section.description}</p>` : ''}
           <div class="field">
             <label for="plot-section-target-${section.id}">Target Words</label>
             <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
