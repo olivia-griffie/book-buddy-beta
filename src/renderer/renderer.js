@@ -602,8 +602,7 @@ window.requestGenreSelection = async function requestGenreSelection(options = {}
 
     const filteredGenres = [...new Set(allGenres)]
       .filter((g) => {
-        const k = normalizeGenre(g);
-        return k && !k.includes('-') && !k.includes(' x ');
+        return g && !g.includes('\u2013') && !g.includes('\u2014') && !g.includes(' x ');
       })
       .sort((a, b) => a.localeCompare(b));
 
@@ -612,10 +611,10 @@ window.requestGenreSelection = async function requestGenreSelection(options = {}
     overlay.className = 'app-text-entry-overlay';
     overlay.innerHTML = `
       <div class="app-genre-dialog card" role="dialog" aria-modal="true" aria-labelledby="app-genre-dialog-title">
-        <div class="app-text-entry-copy">
+        <div class="app-genre-dialog-header app-text-entry-copy">
           <p class="eyebrow">Update Project</p>
           <h2 id="app-genre-dialog-title">${options.title || 'Change Genre'}</h2>
-          <p class="app-genre-dialog-note">Your written content, characters, chapters, and plot notes won't change — only the guidance and prompts will update to match.</p>
+          <p class="app-genre-dialog-note">Select 1–2 genres. Your written content won't change — only the guidance and prompts will update.</p>
         </div>
         <div class="app-genre-options-wrap">
           <div class="app-genre-count-row">
@@ -631,7 +630,7 @@ window.requestGenreSelection = async function requestGenreSelection(options = {}
             `).join('')}
           </div>
         </div>
-        <div class="app-text-entry-actions">
+        <div class="app-genre-dialog-footer app-text-entry-actions">
           <button type="button" class="btn btn-ghost" data-genre-cancel>Cancel</button>
           <button type="button" class="btn btn-save" data-genre-confirm>Save Genre</button>
         </div>

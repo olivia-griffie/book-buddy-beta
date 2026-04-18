@@ -774,3 +774,49 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* ── Dark mode ── */
+body.dark-mode .plot-section-item {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .chapter-row {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .chapter-writing-workspace {
+  background: var(--surface-bg);
+}
+
+body.dark-mode .chapter-context-tab {
+  background: var(--surface-card);
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .chapter-context-tab.is-active {
+  background: var(--surface-input);
+  color: var(--ink);
+}
+
+body.dark-mode .chapter-context-card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .chapter-context-pill {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .plot-section-link-card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .plot-section-linked-chip {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+}

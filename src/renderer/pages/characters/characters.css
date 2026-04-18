@@ -230,3 +230,29 @@
   }
 }
  
+
+/* ── Dark mode ── */
+body.dark-mode .field-collapse-trigger {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .field-collapse-trigger:hover {
+  background: var(--border);
+}
+
+body.dark-mode .field-collapse-body {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .character-type-tag {
+  background: var(--surface-input);
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .character-type-badge {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+}

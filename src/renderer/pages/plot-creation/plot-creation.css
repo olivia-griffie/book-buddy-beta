@@ -286,3 +286,32 @@
     justify-content: start;
   }
 }
+
+/* ── Dark mode ── */
+body.dark-mode .plot-block {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .workbook-card textarea {
+  background: var(--surface-input) !important;
+}
+
+body.dark-mode .genre-pill {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .prompt-callout {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+  border-color: var(--border);
+}
+
+body.dark-mode .plot-section-target-card {
+  border-color: var(--border);
+}
+
+body.dark-mode .plot-section-target-card[open] .plot-section-target-toggle {
+  border-bottom-color: var(--border);
+}

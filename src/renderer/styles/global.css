@@ -1233,11 +1233,18 @@ label {
 }
 
 .app-genre-dialog {
-  width: min(100%, 520px);
-  padding: 24px;
-  display: grid;
-  gap: 18px;
+  width: min(100%, 480px);
+  max-height: min(88vh, 600px);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--surface-soft);
+  overflow: hidden;
+}
+
+.app-genre-dialog-header {
+  padding: 22px 22px 0;
+  flex-shrink: 0;
 }
 
 .app-genre-dialog-note {
@@ -1248,8 +1255,20 @@ label {
 }
 
 .app-genre-options-wrap {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
+  padding: 16px 22px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.app-genre-dialog-footer {
+  padding: 16px 22px;
+  border-top: 1px solid var(--border-soft);
+  flex-shrink: 0;
+  background: var(--surface-soft);
 }
 
 .app-genre-count-row {
@@ -1878,6 +1897,15 @@ body.dark-mode {
   color: var(--ink);
 }
 
+/* Sidebar stays orange-dark — does NOT use --ink (which flips to light text in dark mode) */
+body.dark-mode .app-sidebar {
+  background: #4a1e00;
+}
+
+body.dark-mode .sidebar-brand-logo {
+  filter: grayscale(1) brightness(3) opacity(0.85);
+}
+
 body.dark-mode .app-topbar {
   background: var(--surface-topbar);
   border-bottom-color: var(--border);
@@ -1977,6 +2005,63 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 body.dark-mode .topbar-summary:hover {
   background: rgba(255, 255, 255, 0.03);
+}
+
+/* Entity lists */
+body.dark-mode .entity-list-item {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+/* Upload / thumbnail controls */
+body.dark-mode .upload-trigger {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+body.dark-mode .upload-trigger:hover {
+  background: var(--surface-input);
+}
+
+/* Goal progress card */
+body.dark-mode .goal-progress-card {
+  background: var(--surface-card);
+}
+body.dark-mode .progress-status-icon {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+body.dark-mode .goal-progress-track {
+  background: var(--border);
+}
+
+/* Reference drawer */
+body.dark-mode .reference-drawer-close,
+body.dark-mode .reference-drawer-tab {
+  background: var(--surface-card);
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+body.dark-mode .reference-drawer-tab.is-active {
+  background: var(--surface-input);
+  color: var(--ink);
+}
+body.dark-mode .reference-card,
+body.dark-mode .reference-list-card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+body.dark-mode .reference-chip {
+  background: var(--surface-input);
+  color: var(--ink-soft);
+}
+body.dark-mode .reference-list-card.is-empty {
+  background: var(--surface-soft);
+}
+
+/* Genre modal footer */
+body.dark-mode .app-genre-dialog-footer {
+  border-top-color: var(--border);
+  background: var(--surface-soft);
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2115,6 +2200,56 @@ body.tablet-mode .app-text-entry {
 /* Reference drawer */
 body.tablet-mode .reference-drawer-shell:not(.is-hidden) {
   width: min(90vw, 360px);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK MODE + TABLET MODE — dark wins over tablet's light overrides
+   ═══════════════════════════════════════════════════════════════════ */
+
+body.dark-mode.tablet-mode {
+  background: var(--surface-bg);
+}
+
+body.dark-mode.tablet-mode .app-shell {
+  box-shadow: 0 0 0 1px var(--border), 0 4px 32px rgba(0, 0, 0, 0.5);
+  background: var(--surface-bg);
+}
+
+body.dark-mode.tablet-mode .app-topbar {
+  background: var(--surface-topbar);
+}
+
+body.dark-mode.tablet-mode .topbar-tracker {
+  background: var(--surface-tracker);
+}
+
+body.dark-mode.tablet-mode .app-main {
+  background: var(--surface-bg);
+}
+
+body.dark-mode.tablet-mode .card {
+  background: var(--surface-card);
+}
+
+body.dark-mode.tablet-mode .ui-card {
+  background: var(--surface-card);
+}
+
+body.dark-mode.tablet-mode input,
+body.dark-mode.tablet-mode textarea,
+body.dark-mode.tablet-mode select {
+  background: var(--surface-input);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+body.dark-mode.tablet-mode .topbar-metric {
+  background: var(--surface-card);
+}
+
+body.dark-mode.tablet-mode .topbar-step {
+  background: var(--surface-step);
+  border-color: var(--border);
 }
 
 /* Inputs/selects never overflow */

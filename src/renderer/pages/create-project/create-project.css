@@ -204,3 +204,19 @@
 .goal-progress-card {
   max-width: 620px;
 }
+
+/* ── Dark mode ── */
+body.dark-mode .beta-note {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .genre-option {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .genre-panel,
+body.dark-mode .tags-panel {
+  color: var(--ink);
+}

@@ -171,3 +171,42 @@
   border-color: var(--sage);
   color: var(--ink);
 }
+
+/* ── Dark mode ── */
+body.dark-mode .rich-text-toolbar {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .rich-text-btn,
+body.dark-mode .rich-text-select {
+  background: var(--surface-card);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+body.dark-mode .rich-text-btn:hover {
+  background: var(--surface-input);
+}
+
+body.dark-mode .rich-text-editor-shell {
+  background: var(--surface-card) !important;
+  border-color: var(--border);
+  color: var(--ink) !important;
+}
+
+body.dark-mode .rich-text-collapse-bar {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
+body.dark-mode .rich-text-collapse-bar:hover {
+  background: var(--border);
+}
+
+body.dark-mode .paste-format-pill button {
+  background: var(--surface-card);
+  border-color: var(--border);
+  color: var(--ink-muted);
+}
+

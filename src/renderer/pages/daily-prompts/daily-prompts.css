@@ -235,3 +235,24 @@
   font-weight: 600;
   white-space: nowrap;
 }
+
+/* ── Dark mode ── */
+body.dark-mode .prompt-history-card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .daily-prompt-card .daily-prompt-answer {
+  background: var(--surface-input);
+}
+
+body.dark-mode .daily-prompt-card .daily-prompt-answer textarea {
+  background: var(--surface-input);
+  color: var(--ink);
+}
+
+body.dark-mode .daily-prompt-card .daily-prompt-actions .field select {
+  background: var(--surface-input);
+  color: var(--ink);
+  border-color: rgba(255,255,255,0.2);
+}
