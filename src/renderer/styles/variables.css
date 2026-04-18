@@ -23,4 +23,34 @@
   --ease: ease;
   --font-display: Georgia, 'Times New Roman', serif;
   --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  /* Surface tokens (overridden in dark mode) */
+  --surface-bg: var(--cream);
+  --surface-card: #ffffff;
+  --surface-topbar: #fffdfa;
+  --surface-tracker: #fffdfa;
+  --surface-step: #ffffff;
+  --surface-input: #ffffff;
+  --surface-soft: #fffdfa;
+  --surface-step-index: #f1eadf;
+}
+
+body.dark-mode {
+  --cream: #16181f;
+  --ink: #e4e6f0;
+  --ink-soft: #b0b8cc;
+  --ink-muted: #7880a0;
+  --border: #2e3348;
+  --border-soft: #252836;
+  --shadow-card: 0 8px 18px rgba(0, 0, 0, 0.3);
+  --shadow-lift: 0 12px 24px rgba(0, 0, 0, 0.45);
+
+  --surface-bg: #16181f;
+  --surface-card: #1e2030;
+  --surface-topbar: #1a1c28;
+  --surface-tracker: #1a1c28;
+  --surface-step: #252836;
+  --surface-input: #252836;
+  --surface-soft: #1e2030;
+  --surface-step-index: #2e3348;
 }

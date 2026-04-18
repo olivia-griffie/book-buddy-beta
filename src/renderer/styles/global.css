@@ -57,7 +57,7 @@ body {
 
 .app-topbar {
   border-bottom: 1px solid var(--border-soft);
-  background: #fffdfa;
+  background: var(--surface-topbar);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -220,10 +220,15 @@ body {
   height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
   gap: 28px;
   padding: 28px 20px;
   position: relative;
+}
+
+.sidebar-footer {
+  padding-top: 12px;
+  border-top: 1px solid rgba(250, 247, 242, 0.1);
 }
 
 .sidebar-brand {
@@ -599,7 +604,7 @@ body {
   padding: 10px 12px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
-  background: white;
+  background: var(--surface-card);
   display: grid;
   gap: 2px;
   animation: shellRise 0.32s var(--ease) both;
@@ -660,7 +665,7 @@ body {
 
 .topbar-badge.is-empty {
   border-color: var(--border-soft);
-  background: white;
+  background: var(--surface-card);
 }
 
 .topbar-badge-mark {
@@ -734,7 +739,7 @@ body {
   gap: 10px;
   padding: 10px 20px;
   border-top: 1px solid var(--border-soft);
-  background: #fffdfa;
+  background: var(--surface-tracker);
 }
 
 .topbar-step {
@@ -744,7 +749,7 @@ body {
   padding: 8px 12px;
   border: 1px solid var(--border-soft);
   border-radius: 999px;
-  background: white;
+  background: var(--surface-step);
   color: var(--ink-soft);
   font: inherit;
   cursor: pointer;
@@ -757,7 +762,7 @@ body {
   border-radius: 999px;
   display: inline-grid;
   place-items: center;
-  background: #f1eadf;
+  background: var(--surface-step-index);
   color: var(--ink);
   font-size: 0.72rem;
   font-weight: 700;
@@ -983,7 +988,7 @@ a:hover { color: var(--sage-light); }
 input, textarea, select {
   width: 100%;
   padding: 10px 14px;
-  background: white;
+  background: var(--surface-input);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-family: var(--font-body);
@@ -1021,7 +1026,7 @@ label {
 }
 
 .card {
-  background: white;
+  background: var(--surface-card);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
@@ -1036,14 +1041,14 @@ label {
 .ui-card {
   display: grid;
   gap: 16px;
-  background: white;
+  background: var(--surface-card);
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
 }
 
 .ui-card-soft {
-  background: #fffdfa;
+  background: var(--surface-soft);
 }
 
 .ui-card-interactive {
@@ -1128,7 +1133,7 @@ label {
   padding: 14px 16px;
   border: 1px solid rgba(255, 126, 184, 0.28);
   border-radius: 14px;
-  background: rgba(255, 253, 250, 0.97);
+  background: var(--surface-card);
   box-shadow: var(--shadow-lift);
   opacity: 0;
   transform: translateY(12px) scale(0.98);
@@ -1224,7 +1229,90 @@ label {
   padding: 22px;
   display: grid;
   gap: 16px;
-  background: #fffdfa;
+  background: var(--surface-soft);
+}
+
+.app-genre-dialog {
+  width: min(100%, 520px);
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+  background: var(--surface-soft);
+}
+
+.app-genre-dialog-note {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.app-genre-options-wrap {
+  display: grid;
+  gap: 10px;
+}
+
+.app-genre-count-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.app-genre-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+/* ── Shared genre picker (used in create-project and genre-change modal) ── */
+.selection-badge {
+  border-radius: 999px;
+  background: var(--surface-step-index);
+  color: var(--ink-soft);
+  padding: 6px 12px;
+  font-size: 0.82rem;
+}
+
+.genre-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.genre-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: var(--surface-card);
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.genre-option:has(input:checked) {
+  border-color: var(--sage);
+  background: rgba(255, 106, 90, 0.06);
+}
+
+.genre-option input {
+  width: auto;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.genre-option.is-disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+body.dark-mode .genre-option {
+  background: var(--surface-input);
 }
 
 .app-text-entry-copy {
@@ -1779,6 +1867,116 @@ label {
 
 .sidebar-backdrop {
   display: none !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   DARK MODE
+   ═══════════════════════════════════════════════════════════════════ */
+
+body.dark-mode {
+  background: var(--surface-bg);
+  color: var(--ink);
+}
+
+body.dark-mode .app-topbar {
+  background: var(--surface-topbar);
+  border-bottom-color: var(--border);
+}
+
+body.dark-mode .topbar-tracker {
+  background: var(--surface-tracker);
+  border-top-color: var(--border);
+}
+
+body.dark-mode .topbar-metric {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .topbar-step {
+  background: var(--surface-step);
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .topbar-step-index {
+  background: var(--surface-step-index);
+  color: var(--ink);
+}
+
+body.dark-mode .topbar-step.is-active {
+  background: rgba(255, 126, 184, 0.12);
+  border-color: rgba(255, 126, 184, 0.3);
+  color: var(--ink);
+}
+
+body.dark-mode .topbar-badge.is-empty {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .topbar-next-step {
+  background: linear-gradient(135deg, var(--surface-card), rgba(255, 126, 184, 0.06), rgba(79, 242, 201, 0.08));
+  border-color: var(--border);
+}
+
+body.dark-mode .card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .ui-card {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .ui-card-soft {
+  background: var(--surface-soft);
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+  background: var(--surface-input);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: var(--ink-muted);
+}
+
+body.dark-mode .btn-ghost {
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .btn-ghost:hover {
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+body.dark-mode .btn-primary {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+body.dark-mode .milestone-toast {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .app-text-entry-dialog {
+  background: var(--surface-card);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--border);
+}
+
+body.dark-mode .topbar-summary:hover {
+  background: rgba(255, 255, 255, 0.03);
 }
 
 /* ═══════════════════════════════════════════════════════════════════

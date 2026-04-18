@@ -455,6 +455,47 @@ ipcMain.handle('projects:exportManuscript', async (_, project) => {
   };
 });
 
+ipcMain.handle('projects:exportBackup', async (_, project) => {
+  const safeTitle = String(project?.title || 'book-buddy-project')
+    .trim()
+    .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '')
+    .replace(/\s+/g, '-')
+    .trim() || 'book-buddy-project';
+  const defaultPath = path.join(app.getPath('documents'), `${safeTitle}.bbproject`);
+  const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
+    title: 'Export BookBuddy Project for Safe Keeping',
+    defaultPath,
+    filters: [{ name: 'BookBuddy Project', extensions: ['bbproject'] }],
+  });
+  if (canceled || !filePath) return { canceled: true };
+  const finalPath = filePath.endsWith('.bbproject') ? filePath : `${filePath}.bbproject`;
+  await fs.writeFile(finalPath, JSON.stringify(project, null, 2), 'utf8');
+  return { canceled: false, filePath: finalPath };
+});
+
+ipcMain.handle('projects:importBackup', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
+    title: 'Import BookBuddy Project',
+    filters: [
+      { name: 'BookBuddy Project', extensions: ['bbproject'] },
+      { name: 'JSON', extensions: ['json'] },
+    ],
+    properties: ['openFile'],
+  });
+  if (canceled || !filePaths.length) return { canceled: true };
+  const raw = await fs.readFile(filePaths[0], 'utf8');
+  let project;
+  try {
+    project = JSON.parse(raw);
+  } catch {
+    throw new Error('Could not read the file — it may be corrupted or not a valid BookBuddy project.');
+  }
+  if (!project || typeof project !== 'object' || !project.id || !project.title) {
+    throw new Error('This file doesn\'t look like a valid BookBuddy project.');
+  }
+  return { canceled: false, project };
+});
+
 ipcMain.handle('data:getPromptData', async () => loadPromptDataBundle());
 
 // IPC: Settings

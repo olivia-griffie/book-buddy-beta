@@ -269,6 +269,28 @@ window.registerPageInit('home', async function () {
 
   newProjectButton?.addEventListener('click', handleNewProject);
 
+  document.getElementById('btn-import-project')?.addEventListener('click', async () => {
+    if (typeof window.api?.importProjectBackup !== 'function') {
+      betaBanner.style.display = 'block';
+      betaBanner.innerHTML = `<p class="eyebrow">Import</p><p>Import is not available in this session. Please restart Book Buddy and try again.</p>`;
+      return;
+    }
+    try {
+      const result = await window.api.importProjectBackup();
+      if (result?.canceled) return;
+      const imported = result.project;
+      imported.id = `project-${Date.now()}`;
+      imported.updatedAt = new Date().toISOString();
+      await window.api.saveProject(imported);
+      betaBanner.style.display = 'block';
+      betaBanner.innerHTML = `<p class="eyebrow">Import Complete</p><p>"${imported.title}" has been restored. All your content, settings, and rich text are preserved.</p>`;
+      await window.navigate('home');
+    } catch (error) {
+      betaBanner.style.display = 'block';
+      betaBanner.innerHTML = `<p class="eyebrow">Import Failed</p><p>${error?.message || 'Could not import the project file. Make sure it was exported from Book Buddy.'}</p>`;
+    }
+  });
+
   document.getElementById('btn-empty-new')?.addEventListener('click', () => {
     window.navigate('create-project', { project: null });
   });
@@ -323,7 +345,10 @@ window.registerPageInit('home', async function () {
               <button class="btn btn-ghost project-title-edit" type="button" data-edit-project-title="${project.id}">Edit title</button>
             </div>
             <div class="project-subtitle">${project.subtitle || ''}</div>
-            <div class="project-genres">${genres}</div>
+            <div class="project-genres-row">
+              <div class="project-genres">${genres || '<span class="genre-tag genre-tag-empty">No genre set</span>'}</div>
+              <button class="btn btn-ghost project-genres-edit" type="button" data-edit-genres="${project.id}" title="Change genre">Change Genre</button>
+            </div>
             ${tags ? `<div class="project-tag-chips">${tags}</div>` : ''}
             <div class="project-progress goal-progress-card">
               <div class="goal-progress-head">
@@ -383,6 +408,7 @@ window.registerPageInit('home', async function () {
           <div class="project-card-actions ui-card-footer">
             <button class="btn btn-ghost" type="button" data-open-project="${project.id}">Open</button>
             <button class="btn btn-ghost" type="button" data-export-project="${project.id}">Export</button>
+            <button class="btn btn-ghost project-backup-btn" type="button" data-export-backup="${project.id}" title="Save a full backup of this project that can be imported after an app update">Export for Safe Keeping</button>
             <button class="btn btn-danger-soft" type="button" data-delete-project="${project.id}">Delete</button>
           </div>
         </div>
@@ -439,6 +465,29 @@ window.registerPageInit('home', async function () {
     });
   });
 
+  grid.querySelectorAll('[data-edit-genres]').forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      const project = allProjects.find((entry) => entry.id === button.dataset.editGenres);
+      if (!project) return;
+
+      const nextGenres = await window.requestGenreSelection?.({
+        title: 'Change Genre',
+        currentGenres: project.genres || [],
+      });
+      if (!nextGenres) return;
+
+      const updatedProject = {
+        ...project,
+        genres: nextGenres,
+        updatedAt: new Date().toISOString(),
+      };
+
+      await window.saveProjectData(updatedProject, { dirtyFields: ['genres'] });
+      await window.navigate('home', { project: window.getCurrentProject() });
+    });
+  });
+
   grid.querySelectorAll('[data-delete-project]').forEach((button) => {
     button.addEventListener('click', async (event) => {
       event.stopPropagation();
@@ -460,6 +509,29 @@ window.registerPageInit('home', async function () {
       }
 
       await window.navigate('home');
+    });
+  });
+
+  grid.querySelectorAll('[data-export-backup]').forEach((button) => {
+    button.addEventListener('click', async (event) => {
+      event.stopPropagation();
+      const project = allProjects.find((entry) => entry.id === button.dataset.exportBackup);
+      if (!project) return;
+      if (typeof window.api?.exportProjectBackup !== 'function') {
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = `<p class="eyebrow">Export</p><p>Export is not available in this session. Please restart Book Buddy and try again.</p>`;
+        return;
+      }
+      try {
+        const result = await window.api.exportProjectBackup(project);
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = result?.canceled
+          ? `<p class="eyebrow">Export</p><p>Export canceled.</p>`
+          : `<p class="eyebrow">Project Saved</p><p>Your project has been exported to <strong>${result.filePath}</strong>. Import it any time from the home page.</p>`;
+      } catch (error) {
+        betaBanner.style.display = 'block';
+        betaBanner.innerHTML = `<p class="eyebrow">Export Failed</p><p>${error?.message || 'Please restart the app and try again.'}</p>`;
+      }
     });
   });
 

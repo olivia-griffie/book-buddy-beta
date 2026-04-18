@@ -39,6 +39,11 @@ const pageRegistry = {
     css: './pages/daily-prompts/daily-prompts.css',
     script: './pages/daily-prompts/daily-prompts.js',
   },
+  settings: {
+    html: './pages/settings/settings.html',
+    css: './pages/settings/settings.css',
+    script: './pages/settings/settings.js',
+  },
 };
 
 const state = {
@@ -297,13 +302,11 @@ function buildProjectResources(project, promptData) {
     );
 
     return {
-      ...(existing || {
-        id: `section-${slugify(label) || index + 1}`,
-        label,
-        targetWords: 0,
-        notes: '',
-      }),
-      description: beat.description || '',
+      id: existing?.id || `section-${slugify(label) || index + 1}`,
+      label: existing?.label ?? label,
+      description: existing != null ? (existing.description ?? beat.description ?? '') : (beat.description || ''),
+      targetWords: existing?.targetWords ?? 0,
+      notes: existing?.notes || '',
     };
   });
 
@@ -464,6 +467,20 @@ window.toggleTabletMode = function toggleTabletMode() {
   }
 };
 
+function applyDarkMode(enabled) {
+  document.body.classList.toggle('dark-mode', enabled);
+}
+
+window.isDarkMode = function isDarkMode() {
+  return localStorage.getItem('darkMode') === 'true';
+};
+
+window.toggleDarkMode = function toggleDarkMode() {
+  const next = !window.isDarkMode();
+  localStorage.setItem('darkMode', String(next));
+  applyDarkMode(next);
+};
+
 
 function syncVisibleProjectLabels(project) {
   if (!project) {
@@ -561,6 +578,108 @@ window.requestTextEntry = function requestTextEntry(options = {}) {
     const input = overlay.querySelector('#app-text-entry-input');
     input?.focus();
     input?.select();
+  });
+};
+
+window.requestGenreSelection = async function requestGenreSelection(options = {}) {
+  return new Promise(async (resolve) => {
+    const existing = document.getElementById('app-genre-selection-overlay');
+    existing?.remove();
+
+    let allGenres = options.genres || [];
+    if (!allGenres.length) {
+      try {
+        const promptData = await window.getGenrePromptData();
+        const fromData = (promptData?.genrePrompts || []).map((entry) => entry.genre).filter(Boolean);
+        allGenres = fromData.length ? fromData : ['Contemporary', 'Fantasy', 'Historical Fiction', 'Horror', 'Literary Fiction', 'Memoir', 'Mystery', 'Romance', 'Science Fiction', 'Short Story', 'Thriller'];
+      } catch {
+        allGenres = ['Contemporary', 'Fantasy', 'Historical Fiction', 'Horror', 'Literary Fiction', 'Memoir', 'Mystery', 'Romance', 'Science Fiction', 'Short Story', 'Thriller'];
+      }
+    }
+
+    const normalizeGenre = (value = '') => String(value || '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLowerCase();
+    const currentGenres = new Set((options.currentGenres || []).map(normalizeGenre));
+
+    const filteredGenres = [...new Set(allGenres)]
+      .filter((g) => {
+        const k = normalizeGenre(g);
+        return k && !k.includes('-') && !k.includes(' x ');
+      })
+      .sort((a, b) => a.localeCompare(b));
+
+    const overlay = document.createElement('div');
+    overlay.id = 'app-genre-selection-overlay';
+    overlay.className = 'app-text-entry-overlay';
+    overlay.innerHTML = `
+      <div class="app-genre-dialog card" role="dialog" aria-modal="true" aria-labelledby="app-genre-dialog-title">
+        <div class="app-text-entry-copy">
+          <p class="eyebrow">Update Project</p>
+          <h2 id="app-genre-dialog-title">${options.title || 'Change Genre'}</h2>
+          <p class="app-genre-dialog-note">Your written content, characters, chapters, and plot notes won't change — only the guidance and prompts will update to match.</p>
+        </div>
+        <div class="app-genre-options-wrap">
+          <div class="app-genre-count-row">
+            <span class="app-genre-label">Select up to 2 genres</span>
+            <span id="app-genre-count" class="selection-badge">0 selected</span>
+          </div>
+          <div id="app-genre-options" class="genre-options">
+            ${filteredGenres.map((genre) => `
+              <label class="genre-option">
+                <input type="checkbox" name="app-genre" value="${genre}" ${currentGenres.has(normalizeGenre(genre)) ? 'checked' : ''} />
+                <span>${genre}</span>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+        <div class="app-text-entry-actions">
+          <button type="button" class="btn btn-ghost" data-genre-cancel>Cancel</button>
+          <button type="button" class="btn btn-save" data-genre-confirm>Save Genre</button>
+        </div>
+      </div>
+    `;
+
+    function getSelected() {
+      return [...overlay.querySelectorAll('input[name="app-genre"]:checked')].map((i) => i.value);
+    }
+
+    function syncState() {
+      const selected = getSelected();
+      const countEl = overlay.querySelector('#app-genre-count');
+      if (countEl) countEl.textContent = `${selected.length} selected`;
+      overlay.querySelectorAll('input[name="app-genre"]').forEach((input) => {
+        const shouldDisable = selected.length >= 2 && !input.checked;
+        input.disabled = shouldDisable;
+        input.closest('.genre-option')?.classList.toggle('is-disabled', shouldDisable);
+      });
+    }
+
+    overlay.querySelectorAll('input[name="app-genre"]').forEach((input) => {
+      input.addEventListener('change', syncState);
+    });
+    syncState();
+
+    function close(value) {
+      overlay.remove();
+      resolve(value);
+    }
+
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) close(null);
+    });
+
+    overlay.querySelector('[data-genre-cancel]')?.addEventListener('click', () => close(null));
+    overlay.querySelector('[data-genre-confirm]')?.addEventListener('click', () => {
+      const selected = getSelected();
+      if (!selected.length) return;
+      close(selected);
+    });
+
+    overlay.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') close(null);
+    });
+
+    document.body.appendChild(overlay);
+    overlay.querySelector('input[name="app-genre"]')?.focus();
   });
 };
 
@@ -985,6 +1104,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (window.isTabletMode()) {
     applyTabletMode(true);
+  }
+
+  if (window.isDarkMode()) {
+    applyDarkMode(true);
   }
 
   document.addEventListener('click', async (event) => {

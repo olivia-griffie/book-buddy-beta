@@ -1,3 +1,16 @@
+.page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.project-backup-btn {
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
 .empty-state {
   padding: 32px;
   display: grid;
@@ -181,11 +194,36 @@
   color: var(--ink-soft);
 }
 
+.project-genres-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 .project-genres {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
+}
+
+.project-genres-edit {
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  opacity: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.project-card:hover .project-genres-edit {
+  opacity: 1;
+}
+
+.genre-tag-empty {
+  color: var(--ink-muted);
+  background: transparent;
+  border: 1px dashed var(--border);
 }
 
 .project-tag-chips {
@@ -244,7 +282,7 @@
 
 .genre-tag {
   border-radius: 6px;
-  background: #f1eadf;
+  background: var(--surface-step-index);
   color: var(--ink-soft);
   padding: 4px 10px;
   font-size: 0.8rem;

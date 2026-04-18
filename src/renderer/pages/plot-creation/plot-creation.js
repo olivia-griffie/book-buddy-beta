@@ -112,13 +112,28 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     sectionTargets.innerHTML = resources.plotSections.map((section) => `
       <details class="plot-section-target-card">
         <summary class="plot-section-target-toggle">
-          <div>
-            <h3>${section.label}</h3>
+          <div class="plot-section-label-row">
+            <h3 class="plot-section-label" data-section-label-display="${section.id}">${section.label}</h3>
+            <button
+              type="button"
+              class="plot-section-label-edit btn btn-ghost"
+              data-section-label-edit="${section.id}"
+              title="Rename this section"
+            >Rename</button>
           </div>
           <span class="plot-section-target-indicator" aria-hidden="true"></span>
         </summary>
         <div class="plot-section-target-body">
-          ${section.description ? `<p class="plot-section-description">${section.description}</p>` : ''}
+          <div class="field">
+            <label for="plot-section-desc-${section.id}">Section Guidance</label>
+            <textarea
+              id="plot-section-desc-${section.id}"
+              class="plot-section-description-input"
+              rows="3"
+              data-section-description="${section.id}"
+              placeholder="Describe what happens in this section of the story..."
+            >${section.description || ''}</textarea>
+          </div>
           <div class="field">
             <label for="plot-section-target-${section.id}">Target Words</label>
             <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
@@ -142,10 +157,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     sectionTargets.querySelectorAll('[data-section-target]').forEach((input) => {
       input.addEventListener('input', () => {
         const section = resources.plotSections.find((entry) => entry.id === input.dataset.sectionTarget);
-        if (!section) {
-          return;
-        }
-
+        if (!section) return;
         section.targetWords = Number(input.value || 0);
         autosave.touch();
       });
@@ -154,11 +166,40 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     sectionTargets.querySelectorAll('[data-section-notes]').forEach((input) => {
       input.addEventListener('input', () => {
         const section = resources.plotSections.find((entry) => entry.id === input.dataset.sectionNotes);
-        if (!section) {
-          return;
-        }
-
+        if (!section) return;
         section.notes = window.getEditorFieldValue(input);
+        autosave.touch();
+      });
+    });
+
+    sectionTargets.querySelectorAll('[data-section-description]').forEach((textarea) => {
+      textarea.addEventListener('input', () => {
+        const section = resources.plotSections.find((entry) => entry.id === textarea.dataset.sectionDescription);
+        if (!section) return;
+        section.description = textarea.value;
+        autosave.touch();
+      });
+    });
+
+    sectionTargets.querySelectorAll('[data-section-label-edit]').forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const section = resources.plotSections.find((entry) => entry.id === button.dataset.sectionLabelEdit);
+        if (!section) return;
+
+        const nextLabel = await window.requestTextEntry?.({
+          title: 'Rename Section',
+          label: 'Section name',
+          value: section.label,
+          confirmLabel: 'Save name',
+          placeholder: 'e.g. Act One, Rising Tension…',
+        });
+        if (!nextLabel?.trim()) return;
+
+        section.label = nextLabel.trim();
+        const display = sectionTargets.querySelector(`[data-section-label-display="${section.id}"]`);
+        if (display) display.textContent = section.label;
         autosave.touch();
       });
     });

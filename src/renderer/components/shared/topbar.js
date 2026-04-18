@@ -381,7 +381,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             ${hasProject ? '<button id="topbar-export" class="btn btn-ghost" type="button">Export</button>' : ''}
             ${hasProject ? `<button id="topbar-quick-prompt" class="btn btn-ghost${completedChallenges === 0 ? ' topbar-quick-prompt-pulse' : ''}" type="button" title="Jump to Writing Challenges">Quick Prompt</button>` : ''}
             <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
-            <button id="topbar-tablet-toggle" class="btn btn-ghost" type="button">${window.isTabletMode?.() ? 'Desktop Mode' : 'Tablet Mode'}</button>
           </div>
         </div>
         ${showBadges ? `
@@ -478,10 +477,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
         text: error?.message || 'Export failed.',
       });
     }
-  });
-
-  container.querySelector('#topbar-tablet-toggle')?.addEventListener('click', () => {
-    window.toggleTabletMode?.();
   });
 
   const bubble = container.querySelector('#topbar-collapse-bubble');

@@ -106,7 +106,7 @@
 .plot-section-target-card {
   border: 1px solid var(--border-soft);
   border-radius: 14px;
-  background: #fffdfa;
+  background: var(--surface-soft);
   overflow: hidden;
 }
 
@@ -118,6 +118,43 @@
   gap: 12px;
   padding: 14px;
   cursor: pointer;
+}
+
+.plot-section-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.plot-section-label {
+  margin: 0;
+  font-size: 1rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plot-section-label-edit {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity var(--duration) var(--ease);
+}
+
+.plot-section-target-card:hover .plot-section-label-edit,
+.plot-section-target-card[open] .plot-section-label-edit {
+  opacity: 1;
+}
+
+.plot-section-description-input {
+  font-size: 0.88rem;
+  color: var(--ink-muted);
+  line-height: 1.55;
+  resize: vertical;
+  min-height: 64px;
 }
 
 .plot-section-target-toggle::-webkit-details-marker {
