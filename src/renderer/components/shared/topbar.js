@@ -363,6 +363,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             ` : ''}
           </div>
           <div class="topbar-actions">
+            <button id="topbar-sidebar-toggle" class="btn btn-ghost topbar-sidebar-toggle" type="button" aria-label="Toggle sidebar">☰</button>
             ${hasProject ? '<button id="topbar-edit-project-title" class="btn btn-ghost topbar-title-edit" type="button">Edit title</button>' : ''}
             ${hasProject ? `
               <button
@@ -376,6 +377,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             ${hasProject ? '<button id="topbar-export" class="btn btn-ghost" type="button">Export</button>' : ''}
             ${hasProject ? `<button id="topbar-quick-prompt" class="btn btn-ghost${completedChallenges === 0 ? ' topbar-quick-prompt-pulse' : ''}" type="button" title="Jump to Writing Challenges">Quick Prompt</button>` : ''}
             <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
+            <button id="topbar-tablet-toggle" class="btn btn-ghost" type="button">${window.isTabletMode?.() ? 'Desktop Mode' : 'Tablet Mode'}</button>
           </div>
         </div>
         ${showBadges ? `
@@ -490,6 +492,13 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
         text: error?.message || 'Export failed.',
       });
     }
+  });
+
+  container.querySelector('#topbar-tablet-toggle')?.addEventListener('click', () => {
+    window.toggleTabletMode?.();
+  });
+  container.querySelector('#topbar-sidebar-toggle')?.addEventListener('click', () => {
+    window.toggleTabletSidebar?.();
   });
 
   container.querySelectorAll('[data-topbar-step]').forEach((button) => {

@@ -39,6 +39,15 @@ body {
   width: 84px;
 }
 
+/* ── Sidebar backdrop (tablet mode only) ─────────────────────────── */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 49;
+}
+
 .app-workspace {
   flex: 1;
   min-width: 0;
@@ -1676,4 +1685,153 @@ label {
     bottom: 16px;
     width: min(360px, calc(100vw - 48px));
   }
+}
+
+/* ── Hamburger button: hidden in desktop mode ────────────────────── */
+.topbar-sidebar-toggle {
+  display: none;
+}
+
+/* ── Tablet mode ─────────────────────────────────────────────────── */
+body.tablet-mode .topbar-sidebar-toggle {
+  display: inline-flex;
+  font-size: 1.1rem;
+  min-width: 38px;
+  padding: 0 10px;
+}
+
+body.tablet-mode .app-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 50;
+  width: 260px;
+  transform: translateX(-100%);
+  transition: transform 0.25s var(--ease);
+}
+
+body.tablet-mode .app-sidebar.is-tablet-open {
+  transform: translateX(0);
+}
+
+body.tablet-mode .app-sidebar.is-collapsed {
+  width: 260px;
+}
+
+body.tablet-mode .app-main {
+  padding: 16px 16px 28px;
+}
+
+body.tablet-mode .topbar-summary {
+  padding: 10px 14px;
+}
+
+/* Collapse multi-column grids to single column in tablet mode */
+body.tablet-mode .plot-workbook-grid,
+body.tablet-mode .plot-section-grid,
+body.tablet-mode .chapter-layout,
+body.tablet-mode .entity-layout,
+body.tablet-mode .reference-panel-grid {
+  grid-template-columns: 1fr !important;
+}
+
+/* Larger tap targets */
+body.tablet-mode .btn {
+  min-height: 44px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+body.tablet-mode .sidebar-link {
+  min-height: 44px;
+}
+
+/* Scale down fonts and spacing for narrow screens */
+body.tablet-mode {
+  font-size: 13px;
+}
+
+body.tablet-mode .topbar-summary {
+  gap: 10px;
+}
+
+body.tablet-mode .topbar-actions {
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+body.tablet-mode .topbar-actions .btn {
+  font-size: 0.8rem;
+  padding-left: 10px;
+  padding-right: 10px;
+  min-height: 36px;
+}
+
+/* Entity/form grids collapse to single column */
+body.tablet-mode .entity-form-grid {
+  grid-template-columns: 1fr !important;
+}
+
+/* Cards use less padding */
+body.tablet-mode .entity-list-card,
+body.tablet-mode .entity-editor-card,
+body.tablet-mode .card {
+  padding: 14px;
+}
+
+/* Rich text editor shell shorter max-height */
+body.tablet-mode .rich-text-editor-shell {
+  max-height: 320px;
+}
+
+/* Topbar tracker wraps instead of overflowing */
+body.tablet-mode .topbar-tracker {
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+body.tablet-mode .topbar-step {
+  font-size: 0.75rem;
+  padding: 4px 10px;
+}
+
+/* Text entry modal fits screen */
+body.tablet-mode .app-text-entry {
+  width: min(96vw, 420px);
+}
+
+/* Reference drawer full-width overlay */
+body.tablet-mode .reference-drawer-shell:not(.is-hidden) {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(92vw, 400px);
+  border-radius: 0;
+}
+
+/* Override page-specific grids with fixed min-widths that cause overflow */
+body.tablet-mode .plot-sections-list,
+body.tablet-mode .chapter-section-targets-grid,
+body.tablet-mode .chapter-prompt-meta-grid {
+  grid-template-columns: 1fr !important;
+}
+
+body.tablet-mode .chapter-form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+body.tablet-mode .plot-section-links-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+/* Prevent block-level elements from overflowing their container */
+body.tablet-mode .card,
+body.tablet-mode .field,
+body.tablet-mode form,
+body.tablet-mode textarea,
+body.tablet-mode input[type="text"],
+body.tablet-mode input[type="number"],
+body.tablet-mode select {
+  max-width: 100%;
 }

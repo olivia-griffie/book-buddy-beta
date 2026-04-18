@@ -447,6 +447,41 @@ function syncReferenceDrawer() {
 }
 window.syncReferenceDrawer = syncReferenceDrawer;
 
+function applyTabletMode(enabled) {
+  document.body.classList.toggle('tablet-mode', enabled);
+  const sidebar = document.getElementById('sidebar-container');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (!enabled && sidebar) {
+    sidebar.classList.remove('is-tablet-open');
+  }
+  if (backdrop) {
+    backdrop.style.display = (enabled && sidebar?.classList.contains('is-tablet-open')) ? 'block' : 'none';
+  }
+}
+
+window.isTabletMode = function isTabletMode() {
+  return localStorage.getItem('tabletMode') === 'true';
+};
+
+window.toggleTabletMode = function toggleTabletMode() {
+  const next = !window.isTabletMode();
+  localStorage.setItem('tabletMode', String(next));
+  applyTabletMode(next);
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+  }
+};
+
+window.toggleTabletSidebar = function toggleTabletSidebar() {
+  if (!window.isTabletMode()) return;
+  const sidebar = document.getElementById('sidebar-container');
+  const backdrop = document.getElementById('sidebar-backdrop');
+  if (!sidebar) return;
+  const open = sidebar.classList.toggle('is-tablet-open');
+  if (backdrop) backdrop.style.display = open ? 'block' : 'none';
+};
+
+
 function syncVisibleProjectLabels(project) {
   if (!project) {
     return;
@@ -961,6 +996,13 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 document.addEventListener('DOMContentLoaded', async () => {
   state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
   scheduleTopbarBadgeRefresh();
+
+  if (window.isTabletMode()) {
+    applyTabletMode(true);
+  }
+  document.getElementById('sidebar-backdrop')?.addEventListener('click', () => {
+    window.toggleTabletSidebar();
+  });
 
   document.addEventListener('click', (event) => {
     const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');
