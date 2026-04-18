@@ -315,7 +315,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   const showBadges = hasProject && window.shouldShowTopbarBadges?.();
 
   container.innerHTML = `
-    <details class="topbar-details">
+    <details class="topbar-details" open>
       <summary class="topbar-summary">
         <div class="topbar-summary-left">
           <p class="topbar-kicker">${hasProject ? 'Current Workspace' : 'Welcome'}</p>
@@ -344,6 +344,12 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
           <span class="topbar-summary-chevron" aria-hidden="true">▾</span>
         </div>
       </summary>
+      ${!localStorage.getItem('topbarHintDismissed') ? `
+        <div class="topbar-collapse-bubble" id="topbar-collapse-bubble" role="status" aria-live="polite">
+          <span>Click here to collapse header</span>
+          <button type="button" class="topbar-collapse-bubble-close" aria-label="Dismiss hint">×</button>
+        </div>
+      ` : ''}
       <div class="topbar-shell">
         <div class="topbar-main">
           <div class="topbar-metrics">
@@ -363,8 +369,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             ` : ''}
           </div>
           <div class="topbar-actions">
-            <button id="topbar-sidebar-toggle" class="btn btn-ghost topbar-sidebar-toggle" type="button" aria-label="Toggle sidebar">☰</button>
-            ${hasProject ? '<button id="topbar-edit-project-title" class="btn btn-ghost topbar-title-edit" type="button">Edit title</button>' : ''}
             ${hasProject ? `
               <button
                 id="topbar-reference"
@@ -443,24 +447,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   container.querySelector('#topbar-reference')?.addEventListener('click', () => {
     window.toggleReferenceDrawer();
   });
-  container.querySelector('#topbar-edit-project-title')?.addEventListener('click', async () => {
-    if (!currentProject) {
-      return;
-    }
-
-    const nextTitle = await window.requestTextEntry?.({
-      title: 'Edit project title',
-      label: 'Project title',
-      value: currentProject.title || '',
-      confirmLabel: 'Save title',
-      placeholder: 'Enter a project title',
-    });
-    if (nextTitle == null) {
-      return;
-    }
-
-    await window.renameProjectTitle?.(currentProject.id, nextTitle);
-  });
   container.querySelector('#topbar-next-step')?.addEventListener('click', () => {
     if (nextStep.page === 'create-project') {
       window.navigate('create-project', { project: null });
@@ -497,9 +483,21 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   container.querySelector('#topbar-tablet-toggle')?.addEventListener('click', () => {
     window.toggleTabletMode?.();
   });
-  container.querySelector('#topbar-sidebar-toggle')?.addEventListener('click', () => {
-    window.toggleTabletSidebar?.();
-  });
+
+  const bubble = container.querySelector('#topbar-collapse-bubble');
+  if (bubble) {
+    const dismissBubble = () => {
+      localStorage.setItem('topbarHintDismissed', '1');
+      bubble.classList.add('is-hiding');
+      setTimeout(() => bubble.remove(), 300);
+    };
+    bubble.querySelector('.topbar-collapse-bubble-close')?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismissBubble();
+    });
+    container.querySelector('.topbar-summary')?.addEventListener('click', dismissBubble, { once: true });
+    setTimeout(dismissBubble, 8000);
+  }
 
   container.querySelectorAll('[data-topbar-step]').forEach((button) => {
     button.addEventListener('click', () => {

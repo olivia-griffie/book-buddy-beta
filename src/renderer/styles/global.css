@@ -61,6 +61,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
+  overflow: visible;
 }
 
 .topbar-details {
@@ -151,6 +152,63 @@ body {
     filter: drop-shadow(0 0 8px color-mix(in srgb, var(--sage) 80%, transparent));
     opacity: 1;
   }
+}
+
+.topbar-collapse-bubble {
+  position: absolute;
+  top: 100%;
+  right: 80px;
+  margin-top: -2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px 7px 14px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 500;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  white-space: nowrap;
+  z-index: 30;
+  pointer-events: auto;
+  animation: bubblePulse 1.8s ease-in-out infinite;
+}
+
+.topbar-collapse-bubble::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 60px;
+  border: 6px solid transparent;
+  border-bottom-color: var(--ink);
+  border-top: none;
+}
+
+.topbar-collapse-bubble-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.65);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+  transition: color 0.15s;
+}
+
+.topbar-collapse-bubble-close:hover {
+  color: #fff;
+}
+
+.topbar-collapse-bubble.is-hiding {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+@keyframes bubblePulse {
+  0%, 100% { box-shadow: 0 4px 14px rgba(0,0,0,0.18), 0 0 0 0 rgba(74,103,65,0.4); }
+  50%       { box-shadow: 0 4px 14px rgba(0,0,0,0.18), 0 0 0 6px rgba(74,103,65,0); }
 }
 
 .app-main {
@@ -781,6 +839,33 @@ a:hover { color: var(--sage-light); }
   gap: 24px;
   align-items: end;
   margin-bottom: 28px;
+}
+
+.page-title-editable {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 6px;
+  transition: color 0.15s;
+}
+
+.page-title-editable::after {
+  content: '✎';
+  font-size: 0.55em;
+  opacity: 0;
+  color: var(--ink-muted);
+  transition: opacity 0.15s;
+  font-style: normal;
+  vertical-align: middle;
+}
+
+.page-title-editable:hover {
+  color: var(--sage);
+}
+
+.page-title-editable:hover::after {
+  opacity: 1;
 }
 
 .eyebrow {
@@ -1687,151 +1772,156 @@ label {
   }
 }
 
-/* ── Hamburger button: hidden in desktop mode ────────────────────── */
+/* ── Hamburger / backdrop: unused in new tablet approach ─────────── */
 .topbar-sidebar-toggle {
   display: none;
 }
 
-/* ── Tablet mode ─────────────────────────────────────────────────── */
-body.tablet-mode .topbar-sidebar-toggle {
-  display: inline-flex;
-  font-size: 1.1rem;
-  min-width: 38px;
-  padding: 0 10px;
+.sidebar-backdrop {
+  display: none !important;
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   TABLET MODE
+   Sidebar stays in-flow. App shell constrained to ~768px and centered.
+   Everything is compact: tighter padding, single-column grids, smaller font.
+   ═══════════════════════════════════════════════════════════════════ */
+
+body.tablet-mode {
+  font-size: 13px;
+  background: #e8e3da;
+}
+
+/* Constrain the whole shell to a tablet-width column */
+body.tablet-mode .app-shell {
+  max-width: 780px;
+  margin: 0 auto;
+  box-shadow: 0 0 0 1px var(--border), 0 4px 32px rgba(0,0,0,0.12);
+  min-height: 100vh;
+}
+
+/* Sidebar: narrower in tablet mode, stays in-flow */
 body.tablet-mode .app-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  z-index: 50;
-  width: 260px;
-  transform: translateX(-100%);
-  transition: transform 0.25s var(--ease);
-}
-
-body.tablet-mode .app-sidebar.is-tablet-open {
-  transform: translateX(0);
+  width: 200px;
 }
 
 body.tablet-mode .app-sidebar.is-collapsed {
-  width: 260px;
+  width: 72px;
 }
 
-body.tablet-mode .app-main {
-  padding: 16px 16px 28px;
+/* Sidebar inner padding tighter so all nav items fit without scrolling */
+body.tablet-mode .sidebar {
+  padding: 14px 10px;
+  gap: 12px;
+  overflow-y: auto;
 }
 
-body.tablet-mode .topbar-summary {
-  padding: 10px 14px;
-}
-
-/* Collapse multi-column grids to single column in tablet mode */
-body.tablet-mode .plot-workbook-grid,
-body.tablet-mode .plot-section-grid,
-body.tablet-mode .chapter-layout,
-body.tablet-mode .entity-layout,
-body.tablet-mode .reference-panel-grid {
-  grid-template-columns: 1fr !important;
-}
-
-/* Larger tap targets */
-body.tablet-mode .btn {
-  min-height: 44px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-body.tablet-mode .sidebar-link {
-  min-height: 44px;
-}
-
-/* Scale down fonts and spacing for narrow screens */
-body.tablet-mode {
-  font-size: 13px;
-}
-
-body.tablet-mode .topbar-summary {
+body.tablet-mode .sidebar-nav {
   gap: 10px;
 }
 
+body.tablet-mode .sidebar-group {
+  gap: 4px;
+}
+
+body.tablet-mode .sidebar-group-links {
+  gap: 4px;
+}
+
+body.tablet-mode .sidebar-link {
+  font-size: 0.78rem;
+  padding: 8px 10px;
+  min-height: 36px;
+}
+
+body.tablet-mode .sidebar-kicker,
+body.tablet-mode .sidebar-group-label {
+  font-size: 0.68rem;
+}
+
+/* Topbar */
+body.tablet-mode .topbar-summary {
+  padding: 8px 14px;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 body.tablet-mode .topbar-actions {
-  gap: 6px;
+  gap: 5px;
   flex-wrap: wrap;
 }
 
 body.tablet-mode .topbar-actions .btn {
-  font-size: 0.8rem;
-  padding-left: 10px;
-  padding-right: 10px;
-  min-height: 36px;
+  font-size: 0.75rem;
+  padding: 6px 10px;
+  min-height: 32px;
 }
 
-/* Entity/form grids collapse to single column */
-body.tablet-mode .entity-form-grid {
-  grid-template-columns: 1fr !important;
+/* Step tracker: scrollable row, no wrap overflow */
+body.tablet-mode .topbar-tracker {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  gap: 0;
+  padding-bottom: 2px;
 }
 
-/* Cards use less padding */
-body.tablet-mode .entity-list-card,
-body.tablet-mode .entity-editor-card,
+body.tablet-mode .topbar-step {
+  font-size: 0.72rem;
+  padding: 5px 10px;
+  white-space: nowrap;
+}
+
+/* Main content padding */
+body.tablet-mode .app-main {
+  padding: 16px 14px 28px;
+}
+
+/* Cards */
 body.tablet-mode .card {
   padding: 14px;
 }
 
-/* Rich text editor shell shorter max-height */
-body.tablet-mode .rich-text-editor-shell {
-  max-height: 320px;
+body.tablet-mode .entity-list-card,
+body.tablet-mode .entity-editor-card {
+  padding: 14px;
 }
 
-/* Topbar tracker wraps instead of overflowing */
-body.tablet-mode .topbar-tracker {
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-body.tablet-mode .topbar-step {
-  font-size: 0.75rem;
-  padding: 4px 10px;
-}
-
-/* Text entry modal fits screen */
-body.tablet-mode .app-text-entry {
-  width: min(96vw, 420px);
-}
-
-/* Reference drawer full-width overlay */
-body.tablet-mode .reference-drawer-shell:not(.is-hidden) {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: min(92vw, 400px);
-  border-radius: 0;
-}
-
-/* Override page-specific grids with fixed min-widths that cause overflow */
+/* All multi-column grids → single column */
+body.tablet-mode .plot-workbook-grid,
+body.tablet-mode .plot-section-grid,
+body.tablet-mode .chapter-layout,
+body.tablet-mode .entity-layout,
+body.tablet-mode .reference-panel-grid,
+body.tablet-mode .entity-form-grid,
 body.tablet-mode .plot-sections-list,
 body.tablet-mode .chapter-section-targets-grid,
 body.tablet-mode .chapter-prompt-meta-grid {
   grid-template-columns: 1fr !important;
 }
 
-body.tablet-mode .chapter-form-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-}
-
+body.tablet-mode .chapter-form-grid,
 body.tablet-mode .plot-section-links-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 }
 
-/* Prevent block-level elements from overflowing their container */
-body.tablet-mode .card,
-body.tablet-mode .field,
-body.tablet-mode form,
+/* Rich text editor */
+body.tablet-mode .rich-text-editor-shell {
+  max-height: 280px;
+}
+
+/* Modal */
+body.tablet-mode .app-text-entry {
+  width: min(96vw, 400px);
+}
+
+/* Reference drawer */
+body.tablet-mode .reference-drawer-shell:not(.is-hidden) {
+  width: min(90vw, 360px);
+}
+
+/* Inputs/selects never overflow */
 body.tablet-mode textarea,
-body.tablet-mode input[type="text"],
-body.tablet-mode input[type="number"],
+body.tablet-mode input,
 body.tablet-mode select {
   max-width: 100%;
 }

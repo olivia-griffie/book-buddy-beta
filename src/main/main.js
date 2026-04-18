@@ -332,6 +332,10 @@ function createWindow() {
   });
 
   mainWindow.webContents.session.setSpellCheckerLanguages(['en-US']);
+  mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.setZoomLevel(0);
+    mainWindow.webContents.setZoomFactor(1.0);
+  });
   mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
 
   mainWindow.webContents.on('context-menu', (event, params) => {

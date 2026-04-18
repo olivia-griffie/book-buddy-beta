@@ -449,14 +449,6 @@ window.syncReferenceDrawer = syncReferenceDrawer;
 
 function applyTabletMode(enabled) {
   document.body.classList.toggle('tablet-mode', enabled);
-  const sidebar = document.getElementById('sidebar-container');
-  const backdrop = document.getElementById('sidebar-backdrop');
-  if (!enabled && sidebar) {
-    sidebar.classList.remove('is-tablet-open');
-  }
-  if (backdrop) {
-    backdrop.style.display = (enabled && sidebar?.classList.contains('is-tablet-open')) ? 'block' : 'none';
-  }
 }
 
 window.isTabletMode = function isTabletMode() {
@@ -470,15 +462,6 @@ window.toggleTabletMode = function toggleTabletMode() {
   if (typeof window.renderTopBar === 'function') {
     window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
   }
-};
-
-window.toggleTabletSidebar = function toggleTabletSidebar() {
-  if (!window.isTabletMode()) return;
-  const sidebar = document.getElementById('sidebar-container');
-  const backdrop = document.getElementById('sidebar-backdrop');
-  if (!sidebar) return;
-  const open = sidebar.classList.toggle('is-tablet-open');
-  if (backdrop) backdrop.style.display = open ? 'block' : 'none';
 };
 
 
@@ -899,6 +882,8 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
     },
   };
 };
+const sessionShownMilestones = new Set();
+
 window.saveProjectData = async function saveProjectData(project, options = {}) {
   const previousProject = getProject();
   const previousMilestones = new Set(previousProject?.unlockedMilestones || []);
@@ -914,9 +899,10 @@ window.saveProjectData = async function saveProjectData(project, options = {}) {
     unlockedMilestones: milestoneSnapshot.unlockedMilestones,
   };
   const newlyUnlocked = milestoneSnapshot.unlockedMilestones
-    .filter((milestoneId) => !previousMilestones.has(milestoneId))
+    .filter((milestoneId) => !previousMilestones.has(milestoneId) && !sessionShownMilestones.has(milestoneId))
     .map((milestoneId) => milestoneDefinitions.find((entry) => entry.id === milestoneId))
     .filter(Boolean);
+  newlyUnlocked.forEach((m) => sessionShownMilestones.add(m.id));
 
   setSaveStatus({
     tone: 'saving',
@@ -1000,11 +986,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.isTabletMode()) {
     applyTabletMode(true);
   }
-  document.getElementById('sidebar-backdrop')?.addEventListener('click', () => {
-    window.toggleTabletSidebar();
-  });
 
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', async (event) => {
+    if (event.target.closest('[data-edit-project-title]')) {
+      const project = getProject();
+      if (!project) return;
+      const nextTitle = await window.requestTextEntry?.({
+        title: 'Edit project title',
+        label: 'Project title',
+        value: project.title || '',
+        confirmLabel: 'Save title',
+        placeholder: 'Enter a project title',
+      });
+      if (nextTitle == null) return;
+      await window.renameProjectTitle?.(project.id, nextTitle);
+      return;
+    }
+
     const thumbnailTrigger = event.target.closest('#project-thumbnail-trigger');
     if (thumbnailTrigger) {
       const thumbnailInput = document.getElementById('project-thumbnail');
