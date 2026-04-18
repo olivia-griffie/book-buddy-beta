@@ -27,6 +27,19 @@
   box-shadow: none;
   transform: none;
 }
+
+.character-gallery-card.is-dragging {
+  opacity: 0.4;
+  cursor: grabbing;
+}
+
+.character-gallery-card.drag-above {
+  border-top: 2px solid var(--accent, #c97b5a);
+}
+
+.character-gallery-card.drag-below {
+  border-bottom: 2px solid var(--accent, #c97b5a);
+}
  
 .character-gallery-thumb {
   width: 44px;

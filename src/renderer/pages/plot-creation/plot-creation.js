@@ -84,12 +84,26 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     });
     saveMessage.textContent = 'Plot notes autosaved.';
     syncWorkbookLayout();
+    window.syncReferenceDrawer?.();
   }, {
     dirtyText: 'Plot notes not saved',
   });
 
   [outlineInput, premiseInput, stakesInput, notesInput].forEach((field) => {
     field?.addEventListener('input', () => autosave.touch());
+  });
+
+  outlineInput?.addEventListener('input', () => {
+    const liveTarget = document.getElementById('reference-outline-live');
+    if (!liveTarget) return;
+    const raw = outlineInput.value || '';
+    const parsed = window.parseRichTextValue ? window.parseRichTextValue(raw) : { html: raw };
+    const temp = document.createElement('div');
+    temp.innerHTML = parsed.html || '';
+    const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
+    liveTarget.innerHTML = hasContent
+      ? parsed.html
+      : '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>';
   });
   const hybridPromptSection = document.getElementById('hybrid-prompts-section');
   const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');
@@ -215,6 +229,40 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
   renderSectionTargets();
 
+  function stripHtml(value = '') {
+    const temp = document.createElement('div');
+    temp.innerHTML = value;
+    return (temp.textContent || temp.innerText || '').trim();
+  }
+
+  document.getElementById('generate-outline-btn')?.addEventListener('click', () => {
+    const lines = resources.plotSections
+      .map((section) => {
+        const notesField = sectionTargets.querySelector(`[data-section-notes="${section.id}"]`);
+        const notesRaw = notesField ? window.getEditorFieldValue(notesField) : section.notes || '';
+        const notesText = stripHtml(notesRaw);
+        const hasContent = section.targetWords > 0 || notesText;
+        if (!hasContent) return null;
+
+        const parts = [section.label];
+        if (section.description) parts.push(section.description);
+        if (section.targetWords > 0) parts.push(`Target Words: ${section.targetWords}`);
+        if (notesText) parts.push(notesText);
+        return parts.join('\n');
+      })
+      .filter(Boolean);
+
+    if (!lines.length) return;
+
+    const outlineText = lines.join('\n\n');
+    window.refreshTextEditor(outlineInput, outlineText);
+    outlineInput.dispatchEvent(new Event('input'));
+
+    const outlineBlock = outlineInput.closest('details');
+    if (outlineBlock) outlineBlock.open = true;
+    outlineInput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
   saveButton.addEventListener('click', async () => {
     await window.runButtonFeedback(saveButton, async () => {
       const updatedProject = {
@@ -234,6 +282,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
       });
       saveMessage.textContent = 'Plot notes saved.';
       syncWorkbookLayout();
+      window.syncReferenceDrawer?.();
     });
   });
 });

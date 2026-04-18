@@ -71,10 +71,59 @@ window.registerPageInit('scenes', async function ({ project }) {
       : '<span class="placeholder-icon">Scene</span>';
   }
 
+  let dragSrcId = null;
+
+  function attachDragHandlers(items, getId, getArray) {
+    items.forEach((item) => {
+      item.setAttribute('draggable', 'true');
+
+      item.addEventListener('dragstart', (e) => {
+        dragSrcId = getId(item);
+        item.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      item.addEventListener('dragend', () => {
+        dragSrcId = null;
+        item.classList.remove('is-dragging');
+        items.forEach((el) => el.classList.remove('drag-above', 'drag-below'));
+      });
+
+      item.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        items.forEach((el) => el.classList.remove('drag-above', 'drag-below'));
+        const { top, height } = item.getBoundingClientRect();
+        item.classList.add(e.clientY < top + height / 2 ? 'drag-above' : 'drag-below');
+      });
+
+      item.addEventListener('dragleave', (e) => {
+        if (!item.contains(e.relatedTarget)) {
+          item.classList.remove('drag-above', 'drag-below');
+        }
+      });
+
+      item.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const tgtId = getId(item);
+        if (!dragSrcId || dragSrcId === tgtId) return;
+        const arr = getArray();
+        const srcIdx = arr.findIndex((x) => x.id === dragSrcId);
+        const [moved] = arr.splice(srcIdx, 1);
+        const { top, height } = item.getBoundingClientRect();
+        const insertAfter = e.clientY >= top + height / 2;
+        const tgtIdx = arr.findIndex((x) => x.id === tgtId);
+        arr.splice(insertAfter ? tgtIdx + 1 : tgtIdx, 0, moved);
+        autosave.touch();
+        renderList();
+      });
+    });
+  }
+
   function renderList() {
     list.innerHTML = scenes.length
       ? scenes.map((scene) => `
-        <div class="entity-list-item">
+        <div class="entity-list-item" data-scene-id="${scene.id}">
           <button type="button" data-open-scene="${scene.id}">
             <strong>${scene.title || 'Untitled Scene'}</strong>
           </button>
@@ -89,6 +138,12 @@ window.registerPageInit('scenes', async function ({ project }) {
         renderEditor();
       });
     });
+
+    attachDragHandlers(
+      [...list.querySelectorAll('[data-scene-id]')],
+      (el) => el.dataset.sceneId,
+      () => scenes,
+    );
   }
 
   function renderEditor() {

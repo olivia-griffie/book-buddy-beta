@@ -234,6 +234,12 @@
   font-weight: 600;
 }
 
+.plot-section-targets-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
 @media (max-width: 900px) {
   .workbook-grid.has-secondary-column {
     grid-template-columns: minmax(0, 1fr);

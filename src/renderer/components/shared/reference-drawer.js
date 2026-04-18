@@ -3,9 +3,18 @@ function stripEditorHtml(value = '') {
     return String(value || '').trim();
   }
 
+  let html = String(value || '');
+  html = html.replace(/<br\s*\/?>/gi, '\n');
+  html = html.replace(/<\/p>/gi, '\n');
+  html = html.replace(/<\/div>/gi, '\n');
+  html = html.replace(/<\/h[1-6]>/gi, '\n');
+  html = html.replace(/<\/li>/gi, '\n');
+
   const temp = document.createElement('div');
-  temp.innerHTML = String(value || '');
-  return (temp.textContent || temp.innerText || '').trim();
+  temp.innerHTML = html;
+  return (temp.textContent || temp.innerText || '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function buildPreview(value = '', fallback = 'Nothing added yet.') {
@@ -23,13 +32,23 @@ function getSectionLabelMap(project) {
 
 function buildPlotPanel(project) {
   const workbook = project?.plotWorkbook || {};
-  const outlineText = stripEditorHtml(workbook.outline);
+  const raw = workbook.outline || '';
+  const parsed = typeof window.parseRichTextValue === 'function'
+    ? window.parseRichTextValue(raw)
+    : { html: raw };
+  const outlineHtml = parsed.html || '';
+
+  const hasContent = (() => {
+    const temp = document.createElement('div');
+    temp.innerHTML = outlineHtml;
+    return (temp.textContent || temp.innerText || '').trim().length > 0;
+  })();
 
   return `
     <div class="reference-panel-grid">
       <article class="reference-card">
         <p class="reference-card-kicker">Outline</p>
-        <p class="reference-card-body">${outlineText || 'Start with a broad outline so this panel can mirror the spine of the story.'}</p>
+        <div class="reference-outline-content" id="reference-outline-live">${hasContent ? outlineHtml : '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>'}</div>
       </article>
     </div>
   `;

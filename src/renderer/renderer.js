@@ -445,6 +445,7 @@ function syncReferenceDrawer() {
     });
   }
 }
+window.syncReferenceDrawer = syncReferenceDrawer;
 
 function syncVisibleProjectLabels(project) {
   if (!project) {

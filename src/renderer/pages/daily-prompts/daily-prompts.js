@@ -94,10 +94,33 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return shuffled.slice(0, count);
   }
 
-  function getContextLabel(index) {
-    const allCharacters = (activeProject.characters || []).filter((c) => c.name);
-    const scene = activeProject.scenes?.[index % (activeProject.scenes?.length || 1)];
-    const location = activeProject.locations?.[index % (activeProject.locations?.length || 1)];
+  function getContextLabel(index, entry) {
+    const plotSections = activeProject.plotSections || [];
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+
+    const matchedSection = entry?.plotPoint
+      ? plotSections.find((s) => normalize(s.label) === normalize(entry.plotPoint))
+      : null;
+    const sectionId = matchedSection?.id || null;
+
+    function filterBySection(items, fallback) {
+      if (!sectionId) return fallback;
+      const linked = items.filter((item) => {
+        const ids = Array.isArray(item.sectionIds) ? item.sectionIds : (item.sectionId ? [item.sectionId] : []);
+        return ids.includes(sectionId);
+      });
+      return linked.length ? linked : [];
+    }
+
+    const allCharacters = filterBySection(
+      (activeProject.characters || []).filter((c) => c.name),
+      (activeProject.characters || []).filter((c) => c.name),
+    );
+    const candidateScenes = filterBySection(activeProject.scenes || [], activeProject.scenes || []);
+    const candidateLocations = filterBySection(activeProject.locations || [], activeProject.locations || []);
+
+    const scene = candidateScenes[index % (candidateScenes.length || 1)];
+    const location = candidateLocations[index % (candidateLocations.length || 1)];
     const pieces = [];
 
     if (allCharacters.length > 0) {
@@ -464,7 +487,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return batch.map((entry, index) => ({
       id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
       ...entry,
-      context: getContextLabel(index),
+      context: getContextLabel(index, entry),
       assignedChapterId: '',
       answer: '',
       answerInsertedAt: '',

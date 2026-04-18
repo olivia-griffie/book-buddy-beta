@@ -105,6 +105,29 @@ window.getEditorFieldValue = function getEditorFieldValue(field) {
   return plainText ? field.value : '';
 };
 
+function sanitizeClipboardHtml(html) {
+  const allowed = new Set(['strong', 'b', 'em', 'i', 'u', 'p', 'br', 'ul', 'ol', 'li']);
+  const temp = document.createElement('div');
+  temp.innerHTML = html;
+  const root = temp.querySelector('body') || temp;
+
+  function clean(node) {
+    if (node.nodeType !== Node.ELEMENT_NODE) return;
+    const tag = node.tagName.toLowerCase();
+    [...node.childNodes].forEach(clean);
+    if (!allowed.has(tag)) {
+      const parent = node.parentNode;
+      while (node.firstChild) parent.insertBefore(node.firstChild, node);
+      parent.removeChild(node);
+    } else {
+      while (node.attributes.length > 0) node.removeAttribute(node.attributes[0].name);
+    }
+  }
+
+  [...root.childNodes].forEach(clean);
+  return root.innerHTML;
+}
+
 window.initializeTextEditor = function initializeTextEditor(root = document) {
   const textareas = [...root.querySelectorAll('textarea')];
 
@@ -293,6 +316,43 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     editor.addEventListener('mouseup', saveSelection);
     editor.addEventListener('keyup', saveSelection);
     editor.addEventListener('focus', saveSelection);
+
+    editor.addEventListener('paste', (e) => {
+      e.preventDefault();
+      const clipHtml = e.clipboardData.getData('text/html');
+      const clipText = e.clipboardData.getData('text/plain');
+      if (!clipText && !clipHtml) return;
+
+      const plain = clipText || '';
+      document.execCommand('insertHTML', false, plainTextToEditorHtml(plain));
+      syncTextarea(true);
+
+      const hasFormatting = clipHtml && /<(strong|b|em|i|u|ul|ol|li|h[1-6])\b/i.test(clipHtml);
+      if (!hasFormatting) return;
+
+      wrapper.querySelector('.paste-format-pill')?.remove();
+      const pill = document.createElement('div');
+      pill.className = 'paste-format-pill';
+      pill.innerHTML = '<button type="button">Paste with formatting</button>';
+      wrapper.appendChild(pill);
+
+      let gone = false;
+      const dismiss = () => {
+        if (gone) return;
+        gone = true;
+        pill.remove();
+      };
+      const timer = setTimeout(dismiss, 4000);
+
+      pill.querySelector('button').addEventListener('click', () => {
+        clearTimeout(timer);
+        dismiss();
+        document.execCommand('undo');
+        const clean = sanitizeClipboardHtml(clipHtml);
+        document.execCommand('insertHTML', false, clean);
+        syncTextarea(true);
+      });
+    });
 
     applyState();
     syncTextarea(false);

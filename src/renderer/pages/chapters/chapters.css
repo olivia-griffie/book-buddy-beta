@@ -175,11 +175,15 @@
 
 .chapter-selector-row {
   margin-top: 10px;
-  max-width: 480px;
+  max-width: 600px;
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
 }
 
 .chapter-selector-row .field {
   margin: 0;
+  flex: 1;
 }
 
 .chapter-selector-row label {
@@ -443,6 +447,25 @@
   gap: 8px;
 }
 
+.chapter-prompt-answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.chapter-prompt-word-count {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.chapter-prompt-word-count.is-met {
+  color: #2e7d52;
+  font-weight: 600;
+}
+
 .chapter-prompt-footer {
   display: flex;
   flex-wrap: wrap;
@@ -632,6 +655,16 @@
 
 .chapter-panel-challenge .chapter-panel-body {
   border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+.chapter-panel-challenge .btn-ghost {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.chapter-panel-challenge .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Prompt cards inside the challenge panel */

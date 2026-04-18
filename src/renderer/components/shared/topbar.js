@@ -17,12 +17,63 @@ const milestoneDefinitions = [
     },
   },
   {
+    id: 'five-chapters',
+    label: 'Five Chapters',
+    description: 'The story is growing — five chapters in.',
+    isUnlocked(project) {
+      return (project?.chapters || []).length >= 5;
+    },
+  },
+  {
+    id: 'ten-chapters',
+    label: 'Ten Chapters',
+    description: 'Double digits. This manuscript has real shape.',
+    isUnlocked(project) {
+      return (project?.chapters || []).length >= 10;
+    },
+  },
+  {
     id: 'plot-ready',
     label: 'Plot Ready',
     description: 'Your story foundation is taking shape.',
     isUnlocked(project) {
       const workbook = project?.plotWorkbook || {};
       return Boolean(workbook.premise || workbook.stakes || workbook.notes);
+    },
+  },
+  {
+    id: 'story-outlined',
+    label: 'Story Outlined',
+    description: 'The spine of the story is written down.',
+    isUnlocked(project) {
+      const raw = project?.plotWorkbook?.outline || '';
+      const temp = document.createElement('div');
+      temp.innerHTML = raw;
+      return (temp.textContent || temp.innerText || '').trim().length >= 50;
+    },
+  },
+  {
+    id: 'first-character',
+    label: 'First Character',
+    description: 'Your cast is coming to life.',
+    isUnlocked(project) {
+      return (project?.characters || []).length >= 1;
+    },
+  },
+  {
+    id: 'first-scene',
+    label: 'Scene Set',
+    description: 'You built the first scene in the scene bank.',
+    isUnlocked(project) {
+      return (project?.scenes || []).length >= 1;
+    },
+  },
+  {
+    id: 'first-location',
+    label: 'World Builder',
+    description: 'Your story now has a place to live.',
+    isUnlocked(project) {
+      return (project?.locations || []).length >= 1;
     },
   },
   {
@@ -34,11 +85,51 @@ const milestoneDefinitions = [
     },
   },
   {
+    id: 'five-prompt-inserts',
+    label: '5 Prompt Wins',
+    description: 'Five challenges conquered and on the page.',
+    isUnlocked(project) {
+      return (project?.dailyPromptHistory || []).filter((entry) => entry.answerInsertedAt).length >= 5;
+    },
+  },
+  {
+    id: 'one-thousand-words',
+    label: '1K Written',
+    description: 'The first thousand words are always the hardest.',
+    isUnlocked(project) {
+      return Number(project?.currentWordCount || 0) >= 1000;
+    },
+  },
+  {
     id: 'five-thousand-words',
     label: '5K Written',
     description: 'You crossed the 5,000 word mark.',
     isUnlocked(project) {
       return Number(project?.currentWordCount || 0) >= 5000;
+    },
+  },
+  {
+    id: 'ten-thousand-words',
+    label: '10K Written',
+    description: 'Ten thousand words of story on the page.',
+    isUnlocked(project) {
+      return Number(project?.currentWordCount || 0) >= 10000;
+    },
+  },
+  {
+    id: 'twenty-five-thousand-words',
+    label: '25K Written',
+    description: 'A quarter of a novel. Keep going.',
+    isUnlocked(project) {
+      return Number(project?.currentWordCount || 0) >= 25000;
+    },
+  },
+  {
+    id: 'fifty-thousand-words',
+    label: '50K Written',
+    description: 'NaNoWriMo territory. Remarkable.',
+    isUnlocked(project) {
+      return Number(project?.currentWordCount || 0) >= 50000;
     },
   },
   {
@@ -56,6 +147,14 @@ const milestoneDefinitions = [
     description: 'A full week of writing momentum.',
     isUnlocked(project) {
       return computeChallengeStreak(project) >= 7;
+    },
+  },
+  {
+    id: 'thirty-day-streak',
+    label: '30 Day Streak',
+    description: 'A month of showing up. That is discipline.',
+    isUnlocked(project) {
+      return computeChallengeStreak(project) >= 30;
     },
   },
 ];

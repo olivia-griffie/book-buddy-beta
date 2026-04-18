@@ -207,6 +207,8 @@ window.registerPageInit('characters', async function ({ project }) {
     });
   }
 
+  let dragSrcId = null;
+
   function renderList() {
     gallery.innerHTML = characters.length
       ? characters.map((character) => `
@@ -232,11 +234,55 @@ window.registerPageInit('characters', async function ({ project }) {
       `).join('')
       : '';
 
-    gallery.querySelectorAll('[data-gallery-character]').forEach((button) => {
-      button.addEventListener('click', () => {
-        selectedId = button.dataset.galleryCharacter;
+    const cards = [...gallery.querySelectorAll('[data-gallery-character]')];
+
+    cards.forEach((card) => {
+      card.setAttribute('draggable', 'true');
+
+      card.addEventListener('click', () => {
+        selectedId = card.dataset.galleryCharacter;
         renderList();
         renderEditor();
+      });
+
+      card.addEventListener('dragstart', (e) => {
+        dragSrcId = card.dataset.galleryCharacter;
+        card.classList.add('is-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+
+      card.addEventListener('dragend', () => {
+        dragSrcId = null;
+        card.classList.remove('is-dragging');
+        cards.forEach((el) => el.classList.remove('drag-above', 'drag-below'));
+      });
+
+      card.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        cards.forEach((el) => el.classList.remove('drag-above', 'drag-below'));
+        const { top, height } = card.getBoundingClientRect();
+        card.classList.add(e.clientY < top + height / 2 ? 'drag-above' : 'drag-below');
+      });
+
+      card.addEventListener('dragleave', (e) => {
+        if (!card.contains(e.relatedTarget)) {
+          card.classList.remove('drag-above', 'drag-below');
+        }
+      });
+
+      card.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const tgtId = card.dataset.galleryCharacter;
+        if (!dragSrcId || dragSrcId === tgtId) return;
+        const srcIdx = characters.findIndex((c) => c.id === dragSrcId);
+        const [moved] = characters.splice(srcIdx, 1);
+        const { top, height } = card.getBoundingClientRect();
+        const insertAfter = e.clientY >= top + height / 2;
+        const tgtIdx = characters.findIndex((c) => c.id === tgtId);
+        characters.splice(insertAfter ? tgtIdx + 1 : tgtIdx, 0, moved);
+        autosave.touch();
+        renderList();
       });
     });
   }

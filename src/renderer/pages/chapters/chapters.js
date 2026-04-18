@@ -78,9 +78,13 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     lineHeight: 1.6,
     ...chapter,
   }));
-  const characters = (activeProject.characters || []).map((character) => ({ ...character }));
-  const scenes = (activeProject.scenes || []).map((scene) => ({ ...scene }));
-  const locations = (activeProject.locations || []).map((location) => ({ ...location }));
+  function normalizeSectionIds(entity) {
+    const ids = Array.isArray(entity.sectionIds) ? entity.sectionIds : (entity.sectionId ? [entity.sectionId] : []);
+    return { ...entity, sectionIds: ids, sectionId: ids[0] || '' };
+  }
+  const characters = (activeProject.characters || []).map((c) => normalizeSectionIds(c));
+  const scenes = (activeProject.scenes || []).map((s) => normalizeSectionIds(s));
+  const locations = (activeProject.locations || []).map((l) => normalizeSectionIds(l));
   const dailyPromptHistory = (activeProject.dailyPromptHistory || []).map((entry) => ({
     answer: '',
     answerInsertedAt: '',
@@ -152,8 +156,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   function renderSectionLinkCard(type, label, sectionId) {
     const collection = getEntityCollection(type);
-    const linkedItems = collection.filter((entity) => entity.sectionId === sectionId);
-    const selectableItems = collection.filter((entity) => entity.sectionId !== sectionId);
+    const linkedItems = collection.filter((entity) => (entity.sectionIds || []).includes(sectionId));
+    const selectableItems = collection.filter((entity) => !(entity.sectionIds || []).includes(sectionId));
     const singularLabel = label.endsWith('s') ? label.slice(0, -1) : label;
 
     return `
@@ -170,7 +174,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       ? linkedItems.map((entity) => `
                 <span class="plot-section-linked-chip">
                   <span>${escapeHtml(getEntityLabel(type, entity))}</span>
-                  <button class="plot-section-chip-remove" type="button" data-unlink-entity="${type}" data-unlink-id="${entity.id}">×</button>
+                  <button class="plot-section-chip-remove" type="button" data-unlink-entity="${type}" data-unlink-id="${entity.id}" data-unlink-section="${sectionId}">×</button>
                 </span>
               `).join('')
       : '<span class="plot-section-link-empty">None linked yet.</span>'}
@@ -291,8 +295,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const chapter = getSelectedChapter();
     const currentSection = plotSections.find((section) => section.id === chapter?.sectionId);
     const workbook = activeProject.plotWorkbook || {};
-    const visibleCharacters = (characters.filter((character) => !currentSection?.id || character.sectionId === currentSection.id).length
-      ? characters.filter((character) => character.sectionId === currentSection?.id)
+    const visibleCharacters = (characters.filter((character) => !currentSection?.id || (character.sectionIds || []).includes(currentSection.id)).length
+      ? characters.filter((character) => (character.sectionIds || []).includes(currentSection?.id))
       : characters).map((character) => ({
       ...character,
       typeTags: Array.isArray(character.typeTags) ? character.typeTags : [],
@@ -300,11 +304,11 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const visibleScenes = scenes.filter((scene) => (
       !chapter
       || scene.linkedChapterId === chapter.id
-      || scene.sectionId === currentSection?.id
-      || (!scene.linkedChapterId && !scene.sectionId)
+      || (scene.sectionIds || []).includes(currentSection?.id)
+      || (!scene.linkedChapterId && !(scene.sectionIds || []).length)
     ));
-    const visibleLocations = locations.filter((location) => !currentSection?.id || location.sectionId === currentSection.id).length
-      ? locations.filter((location) => location.sectionId === currentSection?.id)
+    const visibleLocations = locations.filter((location) => !currentSection?.id || (location.sectionIds || []).includes(currentSection.id)).length
+      ? locations.filter((location) => (location.sectionIds || []).includes(currentSection?.id))
       : locations;
 
     contextTabs.forEach((tab) => {
@@ -459,7 +463,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           <div class="chapter-prompt-body">
             <p class="prompt-callout">${entry.prompt}</p>
             <div class="chapter-prompt-answer">
-              <label for="chapter-prompt-answer-${entry.id}">Your Answer</label>
+              <div class="chapter-prompt-answer-header">
+                <label for="chapter-prompt-answer-${entry.id}">Your Answer</label>
+                ${entry.requiredWordCount ? `<span class="chapter-prompt-word-count" data-prompt-word-count="${entry.id}" data-required="${entry.requiredWordCount}">0 / ${entry.requiredWordCount} words</span>` : ''}
+              </div>
               <textarea id="chapter-prompt-answer-${entry.id}" data-chapter-prompt-answer="${entry.id}" rows="5">${entry.answer || ''}</textarea>
             </div>
             <div class="chapter-prompt-footer">
@@ -483,9 +490,22 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     window.initializeTextEditor(chapterPromptList);
     prompts.forEach((entry) => {
       const answerField = chapterPromptList.querySelector(`[data-chapter-prompt-answer="${entry.id}"]`);
-      if (answerField) {
-        window.refreshTextEditor(answerField, entry.answer || '');
+      if (!answerField) return;
+      window.refreshTextEditor(answerField, entry.answer || '');
+
+      const countEl = chapterPromptList.querySelector(`[data-prompt-word-count="${entry.id}"]`);
+      if (!countEl) return;
+
+      function updateWordCount() {
+        const value = window.getEditorFieldValue(answerField);
+        const words = window.computeWordCount(value);
+        const required = Number(countEl.dataset.required || 0);
+        countEl.textContent = `${words.toLocaleString()} / ${required.toLocaleString()} words`;
+        countEl.classList.toggle('is-met', words >= required);
       }
+
+      updateWordCount();
+      answerField.addEventListener('input', updateWordCount);
     });
 
     chapterPromptList.querySelectorAll('[data-prompt-save-answer]').forEach((button) => {
@@ -727,7 +747,11 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           return;
         }
 
-        entity.sectionId = input.dataset.linkSection;
+        const ids = entity.sectionIds || [];
+        if (!ids.includes(input.dataset.linkSection)) {
+          entity.sectionIds = [...ids, input.dataset.linkSection];
+          entity.sectionId = entity.sectionIds[0];
+        }
         autosave.touch();
         renderSections();
         renderContextPanel();
@@ -742,7 +766,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           return;
         }
 
-        entity.sectionId = '';
+        entity.sectionIds = (entity.sectionIds || []).filter((id) => id !== button.dataset.unlinkSection);
+        entity.sectionId = entity.sectionIds[0] || '';
         autosave.touch();
         renderSections();
         renderContextPanel();
@@ -821,6 +846,27 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   chapterSelectDropdown?.addEventListener('change', () => {
     if (!chapterSelectDropdown.value) return;
     selectedChapterId = chapterSelectDropdown.value;
+    renderSections();
+    renderEditor();
+    editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('chapter-add-quick')?.addEventListener('click', () => {
+    const defaultSectionId = plotSections[0]?.id || '';
+    const nextChapterNumber = getNextChapterNumber();
+    const newChapter = {
+      id: `chapter-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      title: `Chapter ${nextChapterNumber}`,
+      sectionId: defaultSectionId,
+      targetWords: 0,
+      fontFamily: 'serif',
+      fontSize: 18,
+      lineHeight: 1.6,
+      content: '',
+    };
+    chapters.push(newChapter);
+    selectedChapterId = newChapter.id;
+    autosave.touch();
     renderSections();
     renderEditor();
     editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });

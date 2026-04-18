@@ -149,3 +149,25 @@
 .rich-text-editor-shell ol:last-child {
   margin-bottom: 0;
 }
+
+.paste-format-pill {
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px 2px 0;
+}
+
+.paste-format-pill button {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 20px;
+  background: white;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.paste-format-pill button:hover {
+  border-color: var(--sage);
+  color: var(--ink);
+}
