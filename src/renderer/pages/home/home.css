@@ -602,3 +602,23 @@ body.dark-mode .beta-banner {
 body.dark-mode .project-thumb-actions .upload-trigger {
   background: rgba(22, 24, 31, 0.92);
 }
+
+body.dark-mode .btn-danger-soft {
+  color: #ff8070;
+}
+
+body.dark-mode .btn-danger-soft:hover {
+  background: rgba(255, 100, 80, 0.12);
+  color: #ff9080;
+  border-color: rgba(255, 100, 80, 0.28);
+}
+
+body.dark-mode .btn-sage-soft {
+  background: rgba(79, 242, 201, 0.1);
+  border-color: rgba(79, 242, 201, 0.22);
+}
+
+body.dark-mode .btn-sage-soft:hover {
+  background: rgba(79, 242, 201, 0.18);
+  color: var(--ink);
+}

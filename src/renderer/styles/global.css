@@ -1897,9 +1897,20 @@ body.dark-mode {
   color: var(--ink);
 }
 
-/* Sidebar stays orange-dark — does NOT use --ink (which flips to light text in dark mode) */
+/* Sidebar uses the theme coral/orange in dark mode */
 body.dark-mode .app-sidebar {
-  background: #4a1e00;
+  background: var(--accent-orange);
+}
+
+body.dark-mode .sidebar-link:hover,
+body.dark-mode .sidebar-link.is-active {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(0, 0, 0, 0.22);
+  color: rgba(250, 247, 242, 0.95);
+}
+
+body.dark-mode .sidebar-footer {
+  border-top-color: rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .sidebar-brand-logo {
@@ -1986,8 +1997,32 @@ body.dark-mode .btn-ghost:hover {
 }
 
 body.dark-mode .btn-primary {
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--surface-step);
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+body.dark-mode .btn-primary:hover {
+  background: var(--border);
+  color: var(--ink);
+}
+
+body.dark-mode .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--ink-muted);
+  color: var(--ink);
+}
+
+body.dark-mode .btn-save:hover,
+body.dark-mode .btn-sage:hover {
+  background: #ff5240;
+  color: white;
+}
+
+body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
+  background: rgba(255, 80, 60, 0.12);
+  color: #ff7060;
+  border-color: rgba(255, 80, 60, 0.3);
 }
 
 body.dark-mode .milestone-toast {
