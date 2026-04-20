@@ -177,6 +177,21 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     const startExpanded = editorMode === 'full';
 
     const { html, settings } = parseRichTextValue(textarea.value);
+    const resolvedPreferences = typeof window.resolveEditorPreferences === 'function'
+      ? window.resolveEditorPreferences(window.getCurrentProject?.())
+      : {
+        fontFamily: 'serif',
+        fontSize: 18,
+        lineHeight: 1.7,
+        saveMode: 'autosave',
+      };
+    const experienceState = {
+      fontFamily: resolvedPreferences.fontFamily === 'sans'
+        ? "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+        : "Georgia, 'Times New Roman', serif",
+      fontSize: String(resolvedPreferences.fontSize || 18),
+      lineHeight: String(resolvedPreferences.lineHeight || 1.7),
+    };
     const toolbar = document.createElement('div');
     toolbar.className = `rich-text-toolbar is-${editorMode}`;
     toolbar.innerHTML = `
@@ -242,9 +257,9 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     textarea.hidden = true;
 
     const state = {
-      fontFamily: settings.fontFamily || "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-      fontSize: settings.fontSize || '16',
-      lineHeight: settings.lineHeight || '1.6',
+      fontFamily: settings.fontFamily || '',
+      fontSize: settings.fontSize || '',
+      lineHeight: settings.lineHeight || '',
       textAlign: settings.textAlign || '',
     };
     let savedRange = null;
@@ -280,14 +295,18 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     }
 
     function applyState() {
-      editor.style.fontFamily = state.fontFamily;
-      editor.style.fontSize = `${state.fontSize}px`;
-      editor.style.lineHeight = state.lineHeight;
+      const activeFontFamily = state.fontFamily || experienceState.fontFamily;
+      const activeFontSize = state.fontSize || experienceState.fontSize;
+      const activeLineHeight = state.lineHeight || experienceState.lineHeight;
+
+      editor.style.fontFamily = activeFontFamily;
+      editor.style.fontSize = `${activeFontSize}px`;
+      editor.style.lineHeight = activeLineHeight;
       editor.style.textAlign = state.textAlign;
       normalizeEditorContent();
-      if (familySelect) familySelect.value = state.fontFamily;
-      if (sizeSelect) sizeSelect.value = state.fontSize;
-      if (lineHeightSelect) lineHeightSelect.value = state.lineHeight;
+      if (familySelect) familySelect.value = activeFontFamily;
+      if (sizeSelect) sizeSelect.value = activeFontSize;
+      if (lineHeightSelect) lineHeightSelect.value = activeLineHeight;
     }
 
     function normalizeEditorContent() {
@@ -417,24 +436,36 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       setValue(nextValue) {
         const parsed = parseRichTextValue(nextValue);
         editor.innerHTML = parsed.html || '<p><br></p>';
-        state.fontFamily = parsed.settings.fontFamily || state.fontFamily;
-        state.fontSize = parsed.settings.fontSize || state.fontSize;
-        state.lineHeight = parsed.settings.lineHeight || state.lineHeight;
+        state.fontFamily = parsed.settings.fontFamily || '';
+        state.fontSize = parsed.settings.fontSize || '';
+        state.lineHeight = parsed.settings.lineHeight || '';
         state.textAlign = parsed.settings.textAlign || state.textAlign;
         applyState();
         normalizeEditorContent();
         syncTextarea(false);
       },
-      setPreferences(preferences = {}) {
-        if (preferences.fontFamily) state.fontFamily = preferences.fontFamily;
-        if (preferences.fontSize) state.fontSize = String(preferences.fontSize);
-        if (preferences.lineHeight) state.lineHeight = String(preferences.lineHeight);
-        if (preferences.textAlign !== undefined) state.textAlign = preferences.textAlign;
+      setPreferences(preferences = {}, options = {}) {
+        const persist = options.persist === true;
+        if (persist) {
+          if (preferences.fontFamily) state.fontFamily = preferences.fontFamily;
+          if (preferences.fontSize) state.fontSize = String(preferences.fontSize);
+          if (preferences.lineHeight) state.lineHeight = String(preferences.lineHeight);
+          if (preferences.textAlign !== undefined) state.textAlign = preferences.textAlign;
+        } else {
+          if (preferences.fontFamily) experienceState.fontFamily = preferences.fontFamily;
+          if (preferences.fontSize) experienceState.fontSize = String(preferences.fontSize);
+          if (preferences.lineHeight) experienceState.lineHeight = String(preferences.lineHeight);
+        }
         applyState();
-        syncTextarea(false);
+        if (persist) {
+          syncTextarea(false);
+        }
       },
       getState() {
-        return { ...state };
+        return {
+          ...state,
+          experienceState: { ...experienceState },
+        };
       },
     };
   });

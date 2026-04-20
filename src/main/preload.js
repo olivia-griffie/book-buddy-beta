@@ -1,5 +1,26 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+try {
+  const root = document.documentElement;
+  const cachedRaw = localStorage.getItem('bb-user-preferences-cache');
+  const cachedPreferences = cachedRaw ? JSON.parse(cachedRaw) : {};
+  const appearance = cachedPreferences?.appearance === 'dark' ? 'dark' : 'light';
+  const fontFamily = cachedPreferences?.editorFontFamily === 'sans'
+    ? "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    : "Georgia, 'Times New Roman', serif";
+  const fontSize = Number(cachedPreferences?.editorFontSize || 18);
+  const lineHeight = Number(cachedPreferences?.editorLineHeight || 1.7);
+
+  root.dataset.theme = appearance;
+  root.style.setProperty('--editor-font-family', fontFamily);
+  root.style.setProperty('--editor-font-size', `${fontSize}px`);
+  root.style.setProperty('--editor-line-height', String(lineHeight));
+
+  window.addEventListener('DOMContentLoaded', () => {
+    document.body.classList.toggle('dark-mode', appearance === 'dark');
+  });
+} catch {}
+
 contextBridge.exposeInMainWorld('api', {
   getAllProjects: () => ipcRenderer.invoke('projects:getAll'),
   getCurrentProjectId: () => ipcRenderer.invoke('projects:getCurrentId'),

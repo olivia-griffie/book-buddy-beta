@@ -23,6 +23,7 @@ window.registerPageInit('locations', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
   document.getElementById('locations-page-title').textContent = `${activeProject.title || 'Project'} Locations`;
   window.initializeTextEditor(content);
 
@@ -50,6 +51,7 @@ window.registerPageInit('locations', async function ({ project }) {
     saveMessage.textContent = 'Locations autosaved.';
   }, {
     dirtyText: 'Location changes not saved',
+    mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();

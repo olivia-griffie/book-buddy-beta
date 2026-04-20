@@ -72,6 +72,7 @@ const state = {
   referenceDrawerTab: 'plot',
   sidebarCollapsed: false,
   topbarBadgesVisibleUntil: 0,
+  userPreferences: null,
   saveStatus: {
     tone: 'neutral',
     text: 'Ready to write',
@@ -224,6 +225,77 @@ function buildLocalDayKey(value = new Date()) {
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function getDefaultUserPreferences() {
+  return {
+    appearance: 'light',
+    saveMode: 'autosave',
+    editorFontFamily: 'serif',
+    editorFontSize: 18,
+    editorLineHeight: 1.7,
+  };
+}
+
+function normalizeUserPreferences(preferences = {}) {
+  const defaults = getDefaultUserPreferences();
+  const appearance = preferences?.appearance === 'dark' ? 'dark' : 'light';
+  const saveMode = preferences?.saveMode === 'manual' ? 'manual' : 'autosave';
+  const editorFontFamily = preferences?.editorFontFamily === 'sans' ? 'sans' : 'serif';
+  const editorFontSize = Math.min(28, Math.max(10, Number(preferences?.editorFontSize || defaults.editorFontSize)));
+  const editorLineHeight = Math.min(2.4, Math.max(1.1, Number(preferences?.editorLineHeight || defaults.editorLineHeight)));
+
+  return {
+    appearance,
+    saveMode,
+    editorFontFamily,
+    editorFontSize,
+    editorLineHeight,
+    tabletMode: Boolean(preferences?.tabletMode),
+  };
+}
+
+function getDefaultProjectEditorPreferences() {
+  const defaults = getDefaultUserPreferences();
+  return {
+    useProfileDefaults: true,
+    saveMode: defaults.saveMode,
+    fontFamily: defaults.editorFontFamily,
+    fontSize: defaults.editorFontSize,
+    lineHeight: defaults.editorLineHeight,
+  };
+}
+
+function normalizeProjectEditorPreferences(preferences = {}) {
+  const defaults = getDefaultProjectEditorPreferences();
+  return {
+    useProfileDefaults: preferences?.useProfileDefaults !== false,
+    saveMode: preferences?.saveMode === 'manual' ? 'manual' : defaults.saveMode,
+    fontFamily: preferences?.fontFamily === 'sans' ? 'sans' : defaults.fontFamily,
+    fontSize: Math.min(28, Math.max(10, Number(preferences?.fontSize || defaults.fontSize))),
+    lineHeight: Math.min(2.4, Math.max(1.1, Number(preferences?.lineHeight || defaults.lineHeight))),
+  };
+}
+
+function resolveEditorPreferences(project = null, userPreferences = state.userPreferences || getDefaultUserPreferences()) {
+  const normalizedUserPreferences = normalizeUserPreferences(userPreferences);
+  const projectPreferences = normalizeProjectEditorPreferences(project?.editorPreferences || {});
+
+  if (projectPreferences.useProfileDefaults !== false) {
+    return {
+      saveMode: normalizedUserPreferences.saveMode,
+      fontFamily: normalizedUserPreferences.editorFontFamily,
+      fontSize: normalizedUserPreferences.editorFontSize,
+      lineHeight: normalizedUserPreferences.editorLineHeight,
+    };
+  }
+
+  return {
+    saveMode: projectPreferences.saveMode || normalizedUserPreferences.saveMode,
+    fontFamily: projectPreferences.fontFamily || normalizedUserPreferences.editorFontFamily,
+    fontSize: projectPreferences.fontSize || normalizedUserPreferences.editorFontSize,
+    lineHeight: projectPreferences.lineHeight || normalizedUserPreferences.editorLineHeight,
+  };
 }
 
 function buildCollapseStorageKey(projectId = 'global', sectionId = '') {
@@ -647,30 +719,100 @@ function applyTabletMode(enabled) {
 }
 
 window.isTabletMode = function isTabletMode() {
-  return localStorage.getItem('tabletMode') === 'true';
+  return Boolean(state.userPreferences?.tabletMode);
 };
 
 window.toggleTabletMode = function toggleTabletMode() {
   const next = !window.isTabletMode();
-  localStorage.setItem('tabletMode', String(next));
-  applyTabletMode(next);
-  if (typeof window.renderTopBar === 'function') {
-    window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
-  }
+  window.applyUserPreferences?.({
+    ...(state.userPreferences || {}),
+    tabletMode: next,
+  }, { syncProfile: false }).then(() => {
+    if (typeof window.renderTopBar === 'function') {
+      window.renderTopBar(state.currentPage, getProject(), state.saveStatus);
+    }
+  }).catch(() => {
+    applyTabletMode(next);
+  });
 };
 
 function applyDarkMode(enabled) {
+  document.documentElement.dataset.theme = enabled ? 'dark' : 'light';
   document.body.classList.toggle('dark-mode', enabled);
 }
 
 window.isDarkMode = function isDarkMode() {
-  return localStorage.getItem('darkMode') === 'true';
+  return normalizeUserPreferences(state.userPreferences || {}).appearance === 'dark';
 };
 
 window.toggleDarkMode = function toggleDarkMode() {
-  const next = !window.isDarkMode();
-  localStorage.setItem('darkMode', String(next));
-  applyDarkMode(next);
+  const nextAppearance = window.isDarkMode() ? 'light' : 'dark';
+  window.applyUserPreferences?.({
+    ...(state.userPreferences || {}),
+    appearance: nextAppearance,
+  }).catch(() => {
+    applyDarkMode(nextAppearance === 'dark');
+  });
+};
+
+function applyEditorPreferenceVariables(preferences = {}) {
+  const normalized = normalizeUserPreferences(preferences);
+  const root = document.documentElement;
+  const fontFamily = normalized.editorFontFamily === 'sans'
+    ? "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
+    : "Georgia, 'Times New Roman', serif";
+
+  root.style.setProperty('--editor-font-family', fontFamily);
+  root.style.setProperty('--editor-font-size', `${normalized.editorFontSize}px`);
+  root.style.setProperty('--editor-line-height', String(normalized.editorLineHeight));
+}
+
+async function syncUserPreferencesFromProfile() {
+  let profilePreferences = null;
+  try {
+    const profile = await window.api.profile.get();
+    profilePreferences = profile?.preferences || null;
+  } catch {}
+
+  const normalized = normalizeUserPreferences({
+    ...(state.userPreferences || {}),
+    ...(profilePreferences || {}),
+  });
+
+  state.userPreferences = normalized;
+  localStorage.setItem('bb-user-preferences-cache', JSON.stringify(normalized));
+  applyDarkMode(normalized.appearance === 'dark');
+  applyEditorPreferenceVariables(normalized);
+  applyTabletMode(Boolean(normalized.tabletMode));
+  return normalized;
+}
+
+window.applyUserPreferences = async function applyUserPreferences(preferences = {}, options = {}) {
+  const normalized = normalizeUserPreferences({
+    ...(state.userPreferences || {}),
+    ...(preferences || {}),
+  });
+  state.userPreferences = normalized;
+  localStorage.setItem('bb-user-preferences-cache', JSON.stringify(normalized));
+  applyDarkMode(normalized.appearance === 'dark');
+  applyEditorPreferenceVariables(normalized);
+  applyTabletMode(Boolean(normalized.tabletMode));
+
+  const nextSettings = {
+    ...(await window.api.getSettings().catch(() => ({ tier: 'beta' }))),
+    userPreferences: normalized,
+  };
+  await window.api.saveSettings(nextSettings).catch(() => nextSettings);
+
+  if (options.syncProfile !== false) {
+    await window.api.profile.update({ preferences: normalized }).catch(() => null);
+  }
+
+  return normalized;
+};
+
+window.getUserPreferences = function getUserPreferences() {
+  return normalizeUserPreferences(state.userPreferences || {});
 };
 
 
@@ -1041,6 +1183,13 @@ window.registerBeforeNavigate = function registerBeforeNavigate(hook) {
 window.showProjectNav = () => {};
 window.getCurrentProject = getProject;
 window.setCurrentProject = setCurrentProject;
+window.getDefaultUserPreferences = getDefaultUserPreferences;
+window.normalizeUserPreferences = normalizeUserPreferences;
+window.getDefaultProjectEditorPreferences = getDefaultProjectEditorPreferences;
+window.normalizeProjectEditorPreferences = normalizeProjectEditorPreferences;
+window.resolveEditorPreferences = function resolveEditorPreferencesForProject(project, userPreferences) {
+  return resolveEditorPreferences(project || getProject(), userPreferences || state.userPreferences || getDefaultUserPreferences());
+};
 window.normalizeGenreKey = normalizeGenreKey;
 window.getGenrePromptData = getGenrePromptData;
 window.getProjectResources = buildProjectResources;
@@ -1175,6 +1324,7 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
   let activeSavePromise = null;
   const delay = Number(options.delay || 5000);
   const dirtyText = options.dirtyText || 'Unsaved changes';
+  const mode = options.mode === 'manual' ? 'manual' : 'autosave';
 
   async function runSave() {
     pending = false;
@@ -1216,6 +1366,9 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
 
   function schedule() {
     clearTimeout(timer);
+    if (mode !== 'autosave') {
+      return;
+    }
     timer = setTimeout(() => {
       flush().catch(() => {});
     }, delay);
@@ -1235,6 +1388,7 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
     hasPending() {
       return pending || saving;
     },
+    mode,
   };
 };
 const sessionShownMilestones = new Set();
@@ -1296,6 +1450,12 @@ window.saveProjectData = async function saveProjectData(project, options = {}) {
   return savedProject;
 };
 window.saveSettingsData = async function saveSettingsData(settings) {
+  if (settings?.userPreferences) {
+    return window.applyUserPreferences(settings.userPreferences, {
+      syncProfile: settings.syncProfile !== false,
+    });
+  }
+
   return window.api.saveSettings(settings);
 };
 window.runButtonFeedback = async function runButtonFeedback(button, task, options = {}) {
@@ -1394,6 +1554,7 @@ function initAuthOverlay() {
         document.getElementById('auth-signin-email').value.trim(),
         document.getElementById('auth-signin-password').value,
       );
+      await syncUserPreferencesFromProfile().catch(() => state.userPreferences);
       hideAuthOverlay();
       state.authRequired = false;
       await navigate('home', { project: getProject() });
@@ -1429,6 +1590,7 @@ function initAuthOverlay() {
         document.getElementById('auth-signup-username').value.trim(),
       );
       if (result.session) {
+        await syncUserPreferencesFromProfile().catch(() => state.userPreferences);
         hideAuthOverlay();
         state.authRequired = false;
         await navigate('home', { project: getProject() });
@@ -1470,6 +1632,7 @@ window.authLogout = async function authLogout() {
 };
 
 window.onLoginSuccess = async function onLoginSuccess() {
+  await syncUserPreferencesFromProfile().catch(() => state.userPreferences);
   hideAuthOverlay();
   state.authRequired = false;
   await navigate('home', { project: getProject() });
@@ -1489,12 +1652,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
   scheduleTopbarBadgeRefresh();
 
-  if (window.isTabletMode()) {
-    applyTabletMode(true);
-  }
+  const cachedPreferences = normalizeUserPreferences((() => {
+    try {
+      return JSON.parse(localStorage.getItem('bb-user-preferences-cache') || '{}');
+    } catch {
+      return {};
+    }
+  })());
+  state.userPreferences = cachedPreferences;
+  applyDarkMode(cachedPreferences.appearance === 'dark');
+  applyEditorPreferenceVariables(cachedPreferences);
+  applyTabletMode(Boolean(cachedPreferences.tabletMode));
 
-  if (window.isDarkMode()) {
-    applyDarkMode(true);
+  const storedSettings = await window.api.getSettings().catch(() => ({ tier: 'beta' }));
+  if (storedSettings?.userPreferences) {
+    state.userPreferences = normalizeUserPreferences({
+      ...cachedPreferences,
+      ...storedSettings.userPreferences,
+    });
+    localStorage.setItem('bb-user-preferences-cache', JSON.stringify(state.userPreferences));
+    applyDarkMode(state.userPreferences.appearance === 'dark');
+    applyEditorPreferenceVariables(state.userPreferences);
+    applyTabletMode(Boolean(state.userPreferences.tabletMode));
   }
 
   if (typeof window.renderSidebar === 'function') {
@@ -1515,6 +1694,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     showAuthOverlay();
     return;
   }
+
+  await syncUserPreferencesFromProfile().catch(() => state.userPreferences);
 
   try {
     await navigate('home', { project: getProject() });
@@ -1708,17 +1889,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     try {
-      const allProjects = typeof window.api?.getAllProjects === 'function'
-        ? await window.api.getAllProjects()
-        : [];
-
-      if (allProjects.length >= 1) {
-        if (formMessage) {
-          formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project to create a different one.';
-        }
-        return;
-      }
-
       const formData = new FormData(form);
       const project = {
         id: `project-${Date.now()}`,
@@ -1733,6 +1903,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       plotWorkbook: {},
       dailyWordHistory: [],
       dailySessionHistory: [],
+      editorPreferences: getDefaultProjectEditorPreferences(),
       streakSettings: getDefaultStreakSettings(),
       streakState: {
         current: 0,

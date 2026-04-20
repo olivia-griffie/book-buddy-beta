@@ -3,53 +3,111 @@
     <div>
       <p class="eyebrow">Preferences</p>
       <h1>Settings</h1>
+      <p class="settings-intro">Choose how Book Buddy looks and how the writing workspace behaves before you open a project.</p>
     </div>
   </div>
 
   <div class="settings-grid">
-    <div class="settings-section ui-card ui-card-stack">
+    <form id="profile-preferences-form" class="settings-section ui-card ui-card-stack">
       <div class="ui-card-head">
         <div class="ui-card-copy">
-          <p class="ui-card-kicker">Appearance</p>
-          <h2 class="ui-card-title">Display</h2>
+          <p class="ui-card-kicker">Account Defaults</p>
+          <h2 class="ui-card-title">Writing Preferences</h2>
         </div>
       </div>
-      <div class="settings-rows">
-        <div class="settings-row">
-          <div class="settings-row-copy">
-            <p class="settings-row-label">Dark Mode</p>
-            <p class="settings-row-description">Switch to a darker color scheme to reduce eye strain.</p>
-          </div>
-          <button
-            id="toggle-dark-mode"
-            class="settings-toggle"
-            type="button"
-            role="switch"
-            aria-checked="false"
-            aria-label="Toggle dark mode"
-          >
-            <span class="settings-toggle-thumb"></span>
-          </button>
+      <div class="settings-form-grid">
+        <div class="field">
+          <label for="settings-appearance">Theme</label>
+          <select id="settings-appearance">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
         </div>
+        <div class="field">
+          <label for="settings-save-mode">Default Save Mode</label>
+          <select id="settings-save-mode">
+            <option value="autosave">Autosave</option>
+            <option value="manual">Manual Save</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="settings-editor-font-family">Editor Font</label>
+          <select id="settings-editor-font-family">
+            <option value="serif">Serif</option>
+            <option value="sans">Sans</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="settings-editor-font-size">Editor Font Size</label>
+          <input id="settings-editor-font-size" type="number" min="10" max="28" step="1" />
+        </div>
+        <div class="field">
+          <label for="settings-editor-line-height">Editor Line Height</label>
+          <input id="settings-editor-line-height" type="number" min="1.1" max="2.4" step="0.1" />
+        </div>
+        <div class="field field-checkbox settings-checkbox-field">
+          <label class="settings-inline-check">
+            <input id="toggle-tablet-mode" type="checkbox" />
+            <span>Tablet layout mode</span>
+          </label>
+          <p class="settings-row-description">Keep the app in a tighter writing-friendly layout on larger screens.</p>
+        </div>
+      </div>
+      <div class="settings-actions">
+        <button id="profile-preferences-save" class="btn btn-save" type="submit">Save Defaults</button>
+        <p id="profile-preferences-message" class="form-message" aria-live="polite"></p>
+      </div>
+    </form>
 
-        <div class="settings-row">
-          <div class="settings-row-copy">
-            <p class="settings-row-label">Tablet Mode</p>
-            <p class="settings-row-description">Constrain the layout to a compact tablet-width view.</p>
-          </div>
-          <button
-            id="toggle-tablet-mode"
-            class="settings-toggle"
-            type="button"
-            role="switch"
-            aria-checked="false"
-            aria-label="Toggle tablet mode"
-          >
-            <span class="settings-toggle-thumb"></span>
-          </button>
+    <form id="project-preferences-form" class="settings-section ui-card ui-card-stack">
+      <div class="ui-card-head">
+        <div class="ui-card-copy">
+          <p class="ui-card-kicker">Current Project</p>
+          <h2 class="ui-card-title">Project Overrides</h2>
         </div>
       </div>
-    </div>
+      <div id="project-preferences-empty" class="settings-project-empty" style="display:none;">
+        <p>Open a project to override its writing experience without changing your global defaults.</p>
+      </div>
+      <div id="project-preferences-fields">
+        <div class="field field-checkbox settings-checkbox-field">
+          <label class="settings-inline-check">
+            <input id="project-use-profile-defaults" type="checkbox" />
+            <span>Use profile defaults for this project</span>
+          </label>
+          <p class="settings-row-description">Turn this off if this project needs its own save mode or editor feel.</p>
+        </div>
+        <div id="project-override-grid" class="settings-form-grid">
+          <div class="field">
+            <label for="project-save-mode">Project Save Mode</label>
+            <select id="project-save-mode">
+              <option value="autosave">Autosave</option>
+              <option value="manual">Manual Save</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="project-editor-font-family">Project Editor Font</label>
+            <select id="project-editor-font-family">
+              <option value="serif">Serif</option>
+              <option value="sans">Sans</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="project-editor-font-size">Project Font Size</label>
+            <input id="project-editor-font-size" type="number" min="10" max="28" step="1" />
+          </div>
+          <div class="field">
+            <label for="project-editor-line-height">Project Line Height</label>
+            <input id="project-editor-line-height" type="number" min="1.1" max="2.4" step="0.1" />
+          </div>
+        </div>
+        <div class="settings-actions">
+          <button id="project-preferences-save" class="btn btn-save" type="submit">Save Project Override</button>
+          <p id="project-preferences-message" class="form-message" aria-live="polite"></p>
+        </div>
+      </div>
+    </form>
+
     <div class="settings-section ui-card ui-card-stack">
       <div class="ui-card-head">
         <div class="ui-card-copy">
@@ -76,12 +134,8 @@
         </div>
       </div>
       <div class="settings-about-body">
-        <p class="settings-about-copy">
-          &copy; 2026 Olivia Griffie. All rights reserved.
-        </p>
-        <p class="settings-about-copy">
-          Book Buddy is proprietary software. Unauthorized copying, distribution, or modification is strictly prohibited.
-        </p>
+        <p class="settings-about-copy">&copy; 2026 Olivia Griffie. All rights reserved.</p>
+        <p class="settings-about-copy">Book Buddy is proprietary software. Unauthorized copying, distribution, or modification is strictly prohibited.</p>
       </div>
     </div>
   </div>

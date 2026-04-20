@@ -69,14 +69,20 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = activeProject.title || 'Chapter Workspace';
   document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
+  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || {
+    saveMode: 'autosave',
+    fontFamily: 'serif',
+    fontSize: 18,
+    lineHeight: 1.7,
+  };
 
   const promptData = await window.getGenrePromptData();
   const resources = window.getProjectResources(activeProject, promptData);
   const plotSections = (activeProject.plotSections || resources.plotSections).map((section) => ({ ...section }));
   const chapters = (activeProject.chapters || []).map((chapter) => ({
-    fontFamily: 'serif',
-    fontSize: 18,
-    lineHeight: 1.6,
+    fontFamily: resolvedEditorPreferences.fontFamily,
+    fontSize: resolvedEditorPreferences.fontSize,
+    lineHeight: resolvedEditorPreferences.lineHeight,
     ...chapter,
   }));
   function normalizeSectionIds(entity) {
@@ -102,6 +108,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     saveMessage.textContent = 'Chapter changes autosaved.';
   }, {
     dirtyText: 'Chapter changes not saved',
+    mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();
@@ -230,7 +237,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         fontFamily,
         fontSize: fontSizeInput.value,
         lineHeight: lineHeightInput.value,
-      });
+      }, { persist: false });
       return;
     }
 
@@ -285,9 +292,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     titleInput.value = chapter.title || '';
     sectionSelect.value = chapter.sectionId || plotSections[0]?.id || '';
     targetWordsInput.value = chapter.targetWords || 0;
-    fontFamilyInput.value = chapter.fontFamily || 'serif';
-    fontSizeInput.value = String(chapter.fontSize || 18);
-    lineHeightInput.value = String(chapter.lineHeight || 1.6);
+    fontFamilyInput.value = chapter.fontFamily || resolvedEditorPreferences.fontFamily || 'serif';
+    fontSizeInput.value = String(chapter.fontSize || resolvedEditorPreferences.fontSize || 18);
+    lineHeightInput.value = String(chapter.lineHeight || resolvedEditorPreferences.lineHeight || 1.7);
     contentInput.value = chapter.content || '';
     window.refreshTextEditor(contentInput, chapter.content || '');
 

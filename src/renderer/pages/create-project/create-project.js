@@ -28,8 +28,6 @@ window.registerPageInit('create-project', async function () {
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
   const thumbnailStatus = document.getElementById('project-thumbnail-status');
 
-  let existingProjects = [];
-  let projectLimitsReady = false;
   let thumbnailData = '';
   let projectTags = [];
   let isPublic = false;
@@ -145,10 +143,6 @@ window.registerPageInit('create-project', async function () {
     }
   }
 
-  function syncProjectLimitState() {
-    return existingProjects.length >= 1;
-  }
-
   function syncGoalPreview() {
     const goal = Number(goalInput.value || 0);
     const currentWords = 0;
@@ -195,20 +189,11 @@ window.registerPageInit('create-project', async function () {
       formMessage.textContent = 'Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.';
     }
 
-    try {
-      existingProjects = await window.api.getAllProjects();
-      projectLimitsReady = true;
-      syncProjectLimitState();
-    } catch (error) {
-      projectLimitsReady = false;
-      formMessage.textContent = formMessage.textContent || 'Project settings did not load cleanly. You can still create a project and retry a restart later if needed.';
-    }
   }
 
   renderGenreOptions(fallbackGenres);
   renderThumbnailPreview();
   syncGoalPreview();
-  syncProjectLimitState();
 
   async function handleThumbnailSelection(event) {
     formMessage.textContent = '';
@@ -234,11 +219,6 @@ window.registerPageInit('create-project', async function () {
     event.preventDefault();
     formMessage.textContent = '';
 
-    if (projectLimitsReady && existingProjects.length >= 1) {
-      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project to create a different one.';
-      return;
-    }
-
     const formData = new FormData(form);
     const selectedGenres = getSelectedGenres();
 
@@ -261,6 +241,13 @@ window.registerPageInit('create-project', async function () {
       plotWorkbook: {},
       dailyWordHistory: [],
       dailySessionHistory: [],
+      editorPreferences: window.getDefaultProjectEditorPreferences?.() || {
+        useProfileDefaults: true,
+        saveMode: 'autosave',
+        fontFamily: 'serif',
+        fontSize: 18,
+        lineHeight: 1.7,
+      },
       streakSettings: window.getDefaultStreakSettings?.() || {
         mode: 'words',
         target: 100,

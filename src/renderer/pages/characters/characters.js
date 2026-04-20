@@ -85,6 +85,7 @@ window.registerPageInit('characters', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
   document.getElementById('characters-page-title').textContent = `${activeProject.title || 'Project'} Characters`;
   window.initializeTextEditor(content);
 
@@ -117,6 +118,7 @@ window.registerPageInit('characters', async function ({ project }) {
     saveMessage.textContent = 'Characters autosaved.';
   }, {
     dirtyText: 'Character changes not saved',
+    mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();

@@ -26,6 +26,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   saveButton.style.display = 'inline-flex';
   document.getElementById('plot-page-title').textContent = activeProject.title || 'Plot Builder';
   document.getElementById('plot-page-subtitle').textContent = (activeProject.genres || []).join(' + ');
+  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
 
   const workbook = activeProject.plotWorkbook || {};
   outlineInput.value = workbook.outline || '';
@@ -84,6 +85,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     window.syncReferenceDrawer?.();
   }, {
     dirtyText: 'Plot notes not saved',
+    mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();

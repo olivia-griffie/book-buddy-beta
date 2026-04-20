@@ -28,6 +28,7 @@ window.registerPageInit('scenes', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
   document.getElementById('scenes-page-title').textContent = `${activeProject.title || 'Project'} Scenes`;
   window.initializeTextEditor(content);
 
@@ -54,6 +55,7 @@ window.registerPageInit('scenes', async function ({ project }) {
     saveMessage.textContent = 'Scenes autosaved.';
   }, {
     dirtyText: 'Scene changes not saved',
+    mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();

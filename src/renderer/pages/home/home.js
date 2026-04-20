@@ -1,22 +1,11 @@
 window.registerPageInit('home', async function () {
   const allProjects = await window.api.getAllProjects();
-  const preferredProject = typeof window.choosePreferredProject === 'function'
-    ? window.choosePreferredProject(allProjects, window.getCurrentProject()?.id || null)
-    : (allProjects[0] || null);
-  const visibleProjects = preferredProject ? [preferredProject] : [];
+  const visibleProjects = Array.isArray(allProjects) ? allProjects : [];
   const grid = document.getElementById('projects-grid');
   const empty = document.getElementById('empty-state');
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
   const dashboard = document.getElementById('daily-dashboard');
-
-  function showCreateLimitMessage() {
-    betaBanner.style.display = 'block';
-    betaBanner.innerHTML = `
-      <p class="eyebrow">Beta Limit</p>
-      <p>Book Buddy Beta includes one project slot for now. Delete your current project to start a different one.</p>
-    `;
-  }
 
   async function readImage(file) {
     return new Promise((resolve, reject) => {
@@ -463,11 +452,6 @@ window.registerPageInit('home', async function () {
   }
 
   function handleNewProject() {
-    if (visibleProjects.length >= 1) {
-      showCreateLimitMessage();
-      return;
-    }
-
     window.navigate('create-project', { project: null });
   }
 
@@ -508,10 +492,7 @@ window.registerPageInit('home', async function () {
   }
 
   empty.style.display = 'none';
-  betaBanner.style.display = allProjects.length >= 1 ? 'block' : 'none';
-  if (betaBanner.style.display === 'block') {
-    showCreateLimitMessage();
-  }
+  betaBanner.style.display = 'none';
 
   grid.innerHTML = visibleProjects
     .map((project) => {
