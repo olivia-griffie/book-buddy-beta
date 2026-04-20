@@ -93,9 +93,7 @@
  
 /* Collapsible field wrapper */
 .field-collapsible {
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-  overflow: hidden;
+  align-self: start;
 }
  
 .field-collapsible .field-collapse-trigger {
@@ -114,33 +112,16 @@
   text-transform: uppercase;
   letter-spacing: 0.07em;
   text-align: left;
-  transition: background var(--duration) var(--ease);
+  transition: background var(--duration) var(--ease), color var(--duration) var(--ease);
 }
  
 .field-collapsible .field-collapse-trigger:hover {
   background: #f0ebe1;
 }
  
-.field-collapsible .field-collapse-trigger .collapse-chevron {
-  display: inline-block;
-  font-style: normal;
-  font-size: 0.75rem;
-  transition: transform 0.2s ease;
-  color: var(--ink-muted);
-}
- 
-.field-collapsible.is-open .field-collapse-trigger .collapse-chevron {
-  transform: rotate(180deg);
-}
- 
 .field-collapsible .field-collapse-body {
-  display: none;
-  padding: 12px 14px 14px;
-  background: #fff;
-}
- 
-.field-collapsible.is-open .field-collapse-body {
-  display: block;
+  padding-top: 12px;
+  background: transparent;
 }
  
 .field-collapsible .field-collapse-body label {
@@ -242,7 +223,6 @@ body.dark-mode .field-collapse-trigger:hover {
 }
 
 body.dark-mode .field-collapse-body {
-  background: var(--surface-card);
   border-color: var(--border);
 }
 

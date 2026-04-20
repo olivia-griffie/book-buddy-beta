@@ -527,7 +527,7 @@ window.registerPageInit('home', async function () {
 
   grid.querySelectorAll('.project-card').forEach((card) => {
     card.addEventListener('click', (event) => {
-      if (event.target.closest('button, input, label')) {
+      if (event.target.closest('button, input, label, summary, details')) {
         return;
       }
 
