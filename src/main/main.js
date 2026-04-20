@@ -9,6 +9,7 @@ const {
   getProfile, updateProfile,
   upsertProject, publishChapter, unpublishChapter, getPublishedChapters,
   getPublicProjects, getComments, addComment,
+  getLikes, toggleLike, getAuthorNotifications,
 } = require('./supabase');
 
 
@@ -651,8 +652,47 @@ ipcMain.handle('community:getChapterComments', async (_, { supabaseProjectId, ch
   return getComments(supabaseProjectId, chapterId, session?.access_token);
 });
 
-ipcMain.handle('community:addChapterComment', async (_, { supabaseProjectId, chapterId, body }) => {
+ipcMain.handle('community:addChapterComment', async (_, { supabaseProjectId, chapterId, body, parentId }) => {
   const session = await getValidSession();
   if (!session) throw new Error('Sign in to leave a comment.');
-  return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token);
+  return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token, parentId || null);
+});
+
+ipcMain.handle('community:getLikes', async (_, { supabaseProjectId, chapterId }) => {
+  const session = await getValidSession();
+  return getLikes(supabaseProjectId, chapterId, session?.user?.id || null, session?.access_token);
+});
+
+ipcMain.handle('community:toggleLike', async (_, { supabaseProjectId, chapterId }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to like chapters.');
+  return toggleLike(session.user.id, supabaseProjectId, chapterId, session.access_token);
+});
+
+ipcMain.handle('community:getFavorites', () => {
+  return store.get('favorites', []);
+});
+
+ipcMain.handle('community:toggleFavorite', (_, { supabaseProjectId }) => {
+  const favorites = store.get('favorites', []);
+  const idx = favorites.indexOf(supabaseProjectId);
+  if (idx === -1) {
+    favorites.push(supabaseProjectId);
+  } else {
+    favorites.splice(idx, 1);
+  }
+  store.set('favorites', favorites);
+  return { favorited: idx === -1 };
+});
+
+ipcMain.handle('inbox:getNotifications', async () => {
+  const session = await getValidSession();
+  if (!session) return [];
+  return getAuthorNotifications(session.user.id, session.access_token);
+});
+
+ipcMain.handle('inbox:replyToComment', async (_, { supabaseProjectId, chapterId, parentId, body }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to reply.');
+  return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token, parentId);
 });

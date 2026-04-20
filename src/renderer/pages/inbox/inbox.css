@@ -1,1 +1,166 @@
 .inbox-page { max-width: 680px; }
+
+.inbox-loading {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  padding: 24px 0;
+}
+
+/* ── Feed ───────────────────────────────────────────────────────────────── */
+.inbox-feed {
+  gap: 12px;
+}
+
+.inbox-item {
+  display: flex;
+  gap: 14px;
+  background: white;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  padding: 16px 18px;
+  align-items: flex-start;
+}
+
+.inbox-item-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.inbox-icon-like {
+  background: rgba(224, 85, 85, 0.1);
+  color: #e05555;
+}
+
+.inbox-icon-comment {
+  background: rgba(160, 234, 222, 0.25);
+  color: var(--accent-mint, #52b0a0);
+}
+
+.inbox-item-body {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.inbox-item-text {
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.inbox-item-text em {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.inbox-item-project {
+  color: var(--ink-muted);
+}
+
+.inbox-reply-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--surface-step);
+  color: var(--ink-muted);
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.inbox-item-quote {
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+  border-left: 3px solid var(--border);
+  padding-left: 10px;
+  margin: 0;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.inbox-item-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inbox-item-time {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.inbox-reply-btn {
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-muted);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--duration) var(--ease);
+}
+
+.inbox-reply-btn:hover { color: var(--ink); }
+
+/* ── Inline reply form ──────────────────────────────────────────────────── */
+.inbox-reply-form {
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.inbox-reply-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-step);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border-color var(--duration) var(--ease);
+}
+
+.inbox-reply-input:focus {
+  outline: none;
+  border-color: var(--sage);
+  background: white;
+}
+
+.inbox-reply-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ── Dark mode ──────────────────────────────────────────────────────────── */
+body.dark-mode .inbox-item {
+  background: var(--surface-card);
+  border-color: var(--border);
+}
+
+body.dark-mode .inbox-reply-input {
+  background: var(--surface-input);
+  border-color: var(--border);
+  color: var(--ink);
+}
+
+body.dark-mode .inbox-reply-input:focus {
+  background: var(--surface-card);
+}

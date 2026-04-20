@@ -6,6 +6,10 @@
       <p>Browse stories other writers have published.</p>
     </div>
   </div>
+  <div class="community-filters">
+    <button class="community-filter-btn is-active" type="button" data-community-filter="all">All Stories</button>
+    <button class="community-filter-btn" type="button" data-community-filter="favorites">Favorites</button>
+  </div>
   <div id="community-content" class="community-list" style="display:none;"></div>
   <div id="community-empty" class="empty-state card" style="display:none;">
     <h2>No public stories yet</h2>
@@ -19,7 +23,7 @@
     <div class="chapter-reader-topbar">
       <div class="chapter-reader-topbar-left">
         <button class="chapter-reader-back" id="reader-close" type="button" aria-label="Close reader">
-          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Back
         </button>
         <span class="chapter-reader-breadcrumb">
@@ -37,6 +41,11 @@
             <span id="reader-author-name" class="reader-author-name"></span>
             <span class="reader-meta-sep">·</span>
             <span id="reader-published-at" class="reader-published-at"></span>
+            <span class="reader-meta-sep">·</span>
+            <button id="reader-like-btn" class="reader-like-btn" type="button" aria-label="Like this chapter">
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15" stroke="currentColor" stroke-width="1.7"><path d="M10 17s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 17 8c0 4.65-7 9-7 9z" stroke-linejoin="round"/></svg>
+              <span id="reader-like-count">0</span>
+            </button>
           </div>
         </header>
         <div id="reader-body" class="reader-body"></div>

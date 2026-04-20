@@ -34,5 +34,13 @@ contextBridge.exposeInMainWorld('api', {
     addComment: (args) => ipcRenderer.invoke('community:addComment', args),
     getChapterComments: (args) => ipcRenderer.invoke('community:getChapterComments', args),
     addChapterComment: (args) => ipcRenderer.invoke('community:addChapterComment', args),
+    getLikes: (args) => ipcRenderer.invoke('community:getLikes', args),
+    toggleLike: (args) => ipcRenderer.invoke('community:toggleLike', args),
+    getFavorites: () => ipcRenderer.invoke('community:getFavorites'),
+    toggleFavorite: (args) => ipcRenderer.invoke('community:toggleFavorite', args),
+  },
+  inbox: {
+    getNotifications: () => ipcRenderer.invoke('inbox:getNotifications'),
+    replyToComment: (args) => ipcRenderer.invoke('inbox:replyToComment', args),
   },
 });

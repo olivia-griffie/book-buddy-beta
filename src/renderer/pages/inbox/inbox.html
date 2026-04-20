@@ -3,11 +3,13 @@
     <div>
       <p class="eyebrow">Social</p>
       <h1>Inbox</h1>
-      <p>Messages from other writers will appear here.</p>
+      <p>Likes, comments, and activity on your published stories.</p>
     </div>
   </div>
-  <div class="empty-state card">
-    <h2>Coming Soon</h2>
-    <p>Direct messaging between writers is on the way.</p>
+  <div id="inbox-loading" class="inbox-loading">Loading activity…</div>
+  <div id="inbox-empty" class="empty-state card" style="display:none;">
+    <h2>No activity yet</h2>
+    <p>When readers like or comment on your published chapters, it'll show up here.</p>
   </div>
+  <div id="inbox-feed" class="inbox-feed" style="display:none;"></div>
 </section>
