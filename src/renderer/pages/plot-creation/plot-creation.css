@@ -26,10 +26,6 @@
   margin-top: 16px;
 }
 
-.plot-block[data-plot-block="section-targets"] {
-  overflow: visible;
-}
-
 .plot-block-summary {
   list-style: none;
   display: flex;
@@ -224,9 +220,6 @@
 }
 
 .plot-section-targets-sticky-shell {
-  position: sticky;
-  top: 10px;
-  z-index: 4;
   padding: 0 18px;
   margin-top: 2px;
 }
@@ -235,7 +228,6 @@
   display: flex;
   justify-content: flex-end;
   padding: 8px 0 10px;
-  background: linear-gradient(180deg, rgba(255, 253, 250, 0.98) 0%, rgba(255, 253, 250, 0.94) 75%, rgba(255, 253, 250, 0) 100%);
 }
 
 @media (max-width: 900px) {
@@ -275,12 +267,4 @@ body.dark-mode .plot-section-target-card {
 
 body.dark-mode .plot-section-target-card[open] .plot-section-target-toggle {
   border-bottom-color: var(--border);
-}
-
-body.dark-mode .plot-section-targets-sticky-shell {
-  background: transparent;
-}
-
-body.dark-mode .plot-section-targets-actions {
-  background: linear-gradient(180deg, rgba(35, 38, 48, 0.98) 0%, rgba(35, 38, 48, 0.94) 75%, rgba(35, 38, 48, 0) 100%);
 }

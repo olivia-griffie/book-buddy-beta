@@ -284,9 +284,19 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       editor.style.fontSize = `${state.fontSize}px`;
       editor.style.lineHeight = state.lineHeight;
       editor.style.textAlign = state.textAlign;
+      normalizeEditorContent();
       if (familySelect) familySelect.value = state.fontFamily;
       if (sizeSelect) sizeSelect.value = state.fontSize;
       if (lineHeightSelect) lineHeightSelect.value = state.lineHeight;
+    }
+
+    function normalizeEditorContent() {
+      editor.querySelectorAll('p, ul, ol, li, div, span').forEach((node) => {
+        node.style.color = 'inherit';
+        node.style.fontFamily = 'inherit';
+        node.style.fontSize = 'inherit';
+        node.style.lineHeight = 'inherit';
+      });
     }
 
     function syncTextarea(shouldDispatch = false) {
@@ -305,6 +315,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         editor.focus();
         restoreSelection();
         document.execCommand(button.dataset.command, false);
+        normalizeEditorContent();
         saveSelection();
         syncTextarea(true);
       });
@@ -349,6 +360,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       }
     });
     editor.addEventListener('input', () => {
+      normalizeEditorContent();
       saveSelection();
       syncTextarea(true);
     });
@@ -410,6 +422,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         state.lineHeight = parsed.settings.lineHeight || state.lineHeight;
         state.textAlign = parsed.settings.textAlign || state.textAlign;
         applyState();
+        normalizeEditorContent();
         syncTextarea(false);
       },
       setPreferences(preferences = {}) {

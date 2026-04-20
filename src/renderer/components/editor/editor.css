@@ -95,6 +95,11 @@
   resize: vertical;
 }
 
+.rich-text-editor-shell,
+.rich-text-editor-shell * {
+  color: inherit;
+}
+
 .rich-text-editor.is-collapsed .rich-text-editor-shell {
   display: none;
 }
@@ -167,13 +172,25 @@
 
 .rich-text-editor-shell p,
 .rich-text-editor-shell ul,
-.rich-text-editor-shell ol {
+.rich-text-editor-shell ol,
+.rich-text-editor-shell li {
   margin: 0 0 0.8em;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
 }
 
 .rich-text-editor-shell ul,
 .rich-text-editor-shell ol {
   padding-left: 1.4em;
+  text-align: inherit;
+}
+
+.rich-text-editor-shell li > p,
+.rich-text-editor-shell li > ul,
+.rich-text-editor-shell li > ol {
+  margin-top: 0.3em;
 }
 
 .rich-text-editor-shell p:last-child,

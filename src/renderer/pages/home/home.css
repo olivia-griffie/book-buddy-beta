@@ -319,6 +319,28 @@
   border-top: 1px solid var(--border-soft);
 }
 
+.project-goal-editor.bb-collapse {
+  margin-top: 10px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+.project-goal-editor.bb-collapse > summary {
+  min-height: 0;
+  padding: 0;
+}
+
+.project-goal-editor.bb-collapse .project-goal-editor-panel {
+  padding: 12px 0 0;
+  border-top: none;
+}
+
+.project-goal-editor.bb-collapse .bb-collapse__chevron {
+  font-size: 0.85rem;
+}
+
 .project-goal-copy {
   display: grid;
   gap: 10px;
