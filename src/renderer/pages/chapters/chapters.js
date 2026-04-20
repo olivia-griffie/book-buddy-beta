@@ -283,6 +283,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     applyEditorStyles();
     renderContextPanel();
     renderPromptPanel();
+    renderPublishPanel?.();
 
     editorShell.querySelectorAll('[data-collapse-toggle]').forEach((trigger) => {
       trigger.addEventListener('click', () => {
@@ -907,4 +908,74 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   exportButton.addEventListener('click', async () => {
     await exportProjectBook();
   });
+
+  // Publishing
+  let publishedChapterIds = new Set();
+
+  async function loadPublishedChapters() {
+    try {
+      const rows = await window.api.publishing.getPublished({ projectLocalId: activeProject.id });
+      publishedChapterIds = new Set((rows || []).map((r) => r.chapter_id));
+    } catch {}
+  }
+
+  function renderPublishPanel() {
+    const publishBtn = document.getElementById('chapter-publish-btn');
+    const unpublishBtn = document.getElementById('chapter-unpublish-btn');
+    const statusEl = document.getElementById('chapter-publish-status');
+    if (!publishBtn || !unpublishBtn || !statusEl) return;
+
+    const chapter = getSelectedChapter();
+    if (!chapter) return;
+
+    const isPublished = publishedChapterIds.has(chapter.id);
+    publishBtn.hidden = isPublished;
+    unpublishBtn.hidden = !isPublished;
+    statusEl.textContent = isPublished ? 'This chapter is live in the community.' : '';
+  }
+
+  document.getElementById('chapter-publish-btn')?.addEventListener('click', async () => {
+    const chapter = getSelectedChapter();
+    if (!chapter) return;
+    if (!activeProject.isPublic) {
+      alert('Set the project to Public in project settings before publishing chapters.');
+      return;
+    }
+    const btn = document.getElementById('chapter-publish-btn');
+    btn.disabled = true;
+    btn.textContent = 'Publishing…';
+    try {
+      await window.api.publishing.publishChapter({
+        projectLocalId: activeProject.id,
+        projectContent: activeProject,
+        isPublic: true,
+        chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
+      });
+      publishedChapterIds.add(chapter.id);
+      renderPublishPanel();
+    } catch (err) {
+      alert(err.message || 'Publish failed.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Publish Chapter';
+    }
+  });
+
+  document.getElementById('chapter-unpublish-btn')?.addEventListener('click', async () => {
+    const chapter = getSelectedChapter();
+    if (!chapter) return;
+    const btn = document.getElementById('chapter-unpublish-btn');
+    btn.disabled = true;
+    try {
+      await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId: chapter.id });
+      publishedChapterIds.delete(chapter.id);
+      renderPublishPanel();
+    } catch (err) {
+      alert(err.message || 'Unpublish failed.');
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  await loadPublishedChapters();
 });

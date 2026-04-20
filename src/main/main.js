@@ -5,6 +5,11 @@ const Store = require('electron-store');
 const { setApplicationMenu, buildTextContextMenu } = require('./menu');
 const packageJson = require('../../package.json');
 const { signIn, signUp, refreshSession, signOut } = require('./auth');
+const {
+  getProfile, updateProfile,
+  upsertProject, publishChapter, unpublishChapter, getPublishedChapters,
+  getPublicProjects, getComments, addComment,
+} = require('./supabase');
 
 
 const store = new Store();
@@ -542,4 +547,75 @@ ipcMain.handle('auth:signup', async (_, { email, password, username }) => {
     store.set('auth.session', result.session);
   }
   return result;
+});
+
+// IPC: Profile
+function getSession() {
+  return store.get('auth.session', null);
+}
+
+ipcMain.handle('profile:get', async () => {
+  const session = getSession();
+  if (!session) throw new Error('Not authenticated.');
+  return getProfile(session.user.id, session.access_token);
+});
+
+ipcMain.handle('profile:update', async (_, updates) => {
+  const session = getSession();
+  if (!session) throw new Error('Not authenticated.');
+  return updateProfile(session.user.id, updates, session.access_token);
+});
+
+// IPC: Publishing
+ipcMain.handle('chapters:publishChapter', async (_, { projectLocalId, projectContent, isPublic, chapter }) => {
+  const session = getSession();
+  if (!session) throw new Error('Not authenticated.');
+  const userId = session.user.id;
+  const token = session.access_token;
+
+  const project = await upsertProject(projectLocalId, userId, projectContent, isPublic, token);
+  if (!project?.id) throw new Error('Failed to sync project.');
+
+  store.set(`publishing.${projectLocalId}`, project.id);
+
+  const published = await publishChapter(project.id, chapter.id, chapter.title, chapter.content, token);
+  return { supabaseProjectId: project.id, published };
+});
+
+ipcMain.handle('chapters:unpublishChapter', async (_, { projectLocalId, chapterId }) => {
+  const session = getSession();
+  if (!session) throw new Error('Not authenticated.');
+  const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
+  if (!supabaseProjectId) return null;
+  return unpublishChapter(supabaseProjectId, chapterId, session.access_token);
+});
+
+ipcMain.handle('chapters:getPublished', async (_, { projectLocalId }) => {
+  const session = getSession();
+  if (!session) return [];
+  const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
+  if (!supabaseProjectId) return [];
+  return getPublishedChapters(supabaseProjectId, session.access_token);
+});
+
+// IPC: Community
+ipcMain.handle('community:getProjects', async () => {
+  const session = getSession();
+  return getPublicProjects(session?.access_token);
+});
+
+ipcMain.handle('community:getComments', async (_, { projectLocalId, chapterId }) => {
+  const session = getSession();
+  if (!session) return [];
+  const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
+  if (!supabaseProjectId) return [];
+  return getComments(supabaseProjectId, chapterId, session.access_token);
+});
+
+ipcMain.handle('community:addComment', async (_, { projectLocalId, chapterId, body }) => {
+  const session = getSession();
+  if (!session) throw new Error('Not authenticated.');
+  const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
+  if (!supabaseProjectId) throw new Error('Project not found.');
+  return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token);
 });

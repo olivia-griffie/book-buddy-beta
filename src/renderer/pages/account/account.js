@@ -6,7 +6,7 @@ window.registerPageInit('account', async function () {
   document.querySelectorAll('.account-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
       document.querySelectorAll('.account-tab').forEach((t) => t.classList.remove('is-active'));
-      document.querySelectorAll('.account-tab-panel').forEach((p) => p.hidden = true);
+      document.querySelectorAll('.account-tab-panel').forEach((p) => { p.hidden = true; });
       tab.classList.add('is-active');
       const panel = document.getElementById(`account-tab-${tab.dataset.tab}`);
       if (panel) panel.hidden = false;
@@ -27,11 +27,20 @@ window.registerPageInit('account', async function () {
     btn.textContent = loading ? 'Please wait…' : btn.dataset.label;
   }
 
-  // Store button labels for reset
-  ['signin-submit', 'signup-submit'].forEach((id) => {
+  ['signin-submit', 'signup-submit', 'profile-save-btn'].forEach((id) => {
     const btn = document.getElementById(id);
     if (btn) btn.dataset.label = btn.textContent;
   });
+
+  async function loadProfile() {
+    try {
+      const profile = await window.api.profile.get();
+      if (!profile) return;
+      document.getElementById('profile-display-name').value = profile.display_name || '';
+      document.getElementById('profile-bio').value = profile.bio || '';
+      document.getElementById('profile-avatar-url').value = profile.avatar_url || '';
+    } catch {}
+  }
 
   function showLoggedIn(session) {
     const user = session?.user ?? session;
@@ -41,6 +50,7 @@ window.registerPageInit('account', async function () {
     document.getElementById('account-email').textContent = user?.email || '—';
     loggedOut.hidden = true;
     loggedIn.hidden = false;
+    loadProfile();
   }
 
   function showLoggedOut() {
@@ -70,6 +80,7 @@ window.registerPageInit('account', async function () {
     try {
       const session = await window.api.auth.login(email, password);
       showLoggedIn(session);
+      window.onLoginSuccess?.();
     } catch (err) {
       showError('signin-error', err.message || 'Sign in failed.');
     } finally {
@@ -89,6 +100,7 @@ window.registerPageInit('account', async function () {
       const result = await window.api.auth.signup(email, password, username);
       if (result.session) {
         showLoggedIn(result.session);
+        window.onLoginSuccess?.();
       } else {
         showError('signup-error', 'Account created! Check your email to confirm, then sign in.');
       }
@@ -99,14 +111,31 @@ window.registerPageInit('account', async function () {
     }
   });
 
-  // Sign Out
-  document.getElementById('account-signout')?.addEventListener('click', async () => {
-    await window.api.auth.logout().catch(() => {});
-    showLoggedOut();
+  // Profile save
+  document.getElementById('profile-save-btn')?.addEventListener('click', async () => {
+    const msgEl = document.getElementById('profile-save-message');
+    setLoading('profile-save-btn', true);
+    try {
+      await window.api.profile.update({
+        display_name: document.getElementById('profile-display-name').value.trim() || null,
+        bio: document.getElementById('profile-bio').value.trim() || null,
+        avatar_url: document.getElementById('profile-avatar-url').value.trim() || null,
+      });
+      msgEl.textContent = 'Profile saved.';
+      msgEl.className = 'account-profile-msg is-success';
+      msgEl.hidden = false;
+      setTimeout(() => { msgEl.hidden = true; }, 3000);
+    } catch (err) {
+      msgEl.textContent = err.message || 'Save failed.';
+      msgEl.className = 'account-profile-msg is-error';
+      msgEl.hidden = false;
+    } finally {
+      setLoading('profile-save-btn', false);
+    }
   });
 
-  // Sync (stub)
-  document.getElementById('account-sync-btn')?.addEventListener('click', () => {
-    document.getElementById('account-sync-status').textContent = 'Sync coming soon.';
+  // Sign Out
+  document.getElementById('account-signout')?.addEventListener('click', async () => {
+    await window.authLogout?.();
   });
 });

@@ -32,6 +32,18 @@ window.registerPageInit('create-project', async function () {
   let projectLimitsReady = false;
   let thumbnailData = '';
   let projectTags = [];
+  let isPublic = false;
+
+  const visibilityToggle = document.getElementById('project-visibility-toggle');
+  const visibilityLabel = document.getElementById('project-visibility-label');
+
+  visibilityToggle?.addEventListener('click', () => {
+    isPublic = !isPublic;
+    visibilityToggle.setAttribute('aria-checked', String(isPublic));
+    visibilityLabel.textContent = isPublic
+      ? 'Public — visible in the community and shareable.'
+      : 'Private — only you can see this project.';
+  });
 
   const tagInput = document.getElementById('project-tag-input');
   const addTagBtn = document.getElementById('add-tag-btn');
@@ -248,6 +260,7 @@ window.registerPageInit('create-project', async function () {
       thumbnail: thumbnailData,
       plotWorkbook: {},
       dailyWordHistory: [],
+      isPublic,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

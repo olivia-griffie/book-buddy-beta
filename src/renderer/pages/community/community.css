@@ -1,0 +1,78 @@
+.community-page {
+  max-width: 860px;
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.community-card {
+  padding: 0;
+}
+
+.community-card-subtitle {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  margin: 4px 0 0;
+}
+
+.community-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 20px 12px;
+}
+
+.community-tag {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--surface-step);
+  color: var(--ink-muted);
+  border: 1px solid var(--border-soft);
+}
+
+.community-chapters {
+  border-top: 1px solid var(--border-soft);
+  padding: 12px 20px 20px;
+  display: grid;
+  gap: 8px;
+}
+
+.community-chapters-label {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.community-chapter-btn {
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.community-chapter-btn:hover {
+  background: var(--surface-step);
+  border-color: var(--sage);
+}
+
+.community-loading {
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  padding: 24px 0;
+}
+
+body.dark-mode .community-chapters {
+  border-color: var(--border);
+}

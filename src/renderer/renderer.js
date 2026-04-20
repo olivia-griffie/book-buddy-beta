@@ -49,6 +49,21 @@ const pageRegistry = {
     css: './pages/account/account.css',
     script: './pages/account/account.js',
   },
+  community: {
+    html: './pages/community/community.html',
+    css: './pages/community/community.css',
+    script: './pages/community/community.js',
+  },
+  inbox: {
+    html: './pages/inbox/inbox.html',
+    css: './pages/inbox/inbox.css',
+    script: './pages/inbox/inbox.js',
+  },
+  sharing: {
+    html: './pages/sharing/sharing.html',
+    css: './pages/sharing/sharing.css',
+    script: './pages/sharing/sharing.js',
+  },
 };
 
 const state = {
@@ -753,6 +768,10 @@ async function navigate(page, options = {}) {
     throw new Error(`Unknown page: ${page}`);
   }
 
+  if (state.authRequired && page !== 'account') {
+    return;
+  }
+
   const requestId = ++navigationRequestId;
   state.currentPage = page;
 
@@ -1139,7 +1158,23 @@ async function checkAuth() {
 
 window.authLogout = async function authLogout() {
   await window.api.auth.logout().catch(() => {});
-  showAuthOverlay();
+  state.authRequired = true;
+  await navigate('account');
+};
+
+window.onLoginSuccess = async function onLoginSuccess() {
+  state.authRequired = false;
+  await navigate('home', { project: getProject() });
+  restoreCurrentProjectSelection()
+    .then(async (restoredProject) => {
+      if (!restoredProject) return;
+      if (state.currentPage === 'home') {
+        await navigate('home', { project: restoredProject });
+      } else {
+        syncProjectState(restoredProject);
+      }
+    })
+    .catch(() => {});
 };
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -1161,6 +1196,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.renderTopBar('home', getProject(), state.saveStatus);
   }
   syncReferenceDrawer();
+
+  const isAuthenticated = await checkAuth();
+
+  if (!isAuthenticated) {
+    state.authRequired = true;
+    try {
+      await navigate('account');
+    } catch (error) {
+      console.error('Account page navigation failed.', error);
+    }
+    return;
+  }
 
   try {
     await navigate('home', { project: getProject() });

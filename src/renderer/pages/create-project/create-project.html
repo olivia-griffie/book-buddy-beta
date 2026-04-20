@@ -137,6 +137,26 @@
       <div id="project-tags-list" class="project-tags-list"></div>
     </div>
 
+    <div class="visibility-panel">
+      <div class="visibility-panel-header">
+        <div>
+          <label>Project Visibility</label>
+          <p>Public projects appear in the community and can have published chapters.</p>
+        </div>
+        <button
+          id="project-visibility-toggle"
+          class="settings-toggle"
+          type="button"
+          role="switch"
+          aria-checked="false"
+          aria-label="Make project public"
+        >
+          <span class="settings-toggle-thumb"></span>
+        </button>
+      </div>
+      <p id="project-visibility-label" class="visibility-status">Private — only you can see this project.</p>
+    </div>
+
     <div class="form-actions">
       <p id="form-message" class="form-message" aria-live="polite"></p>
       <button class="btn btn-save" type="submit">Save And Build Plot</button>

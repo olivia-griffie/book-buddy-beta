@@ -144,6 +144,56 @@ body.dark-mode .account-error {
   line-height: 1.5;
 }
 
+/* Profile edit */
+.account-profile-edit-body {
+  padding: 20px 24px 24px;
+}
+
+.account-profile-edit-body .account-fields {
+  margin-bottom: 20px;
+}
+
+.account-field textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color var(--duration) var(--ease);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.account-field textarea:focus {
+  outline: none;
+  border-color: var(--sage);
+}
+
+.account-profile-msg {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  margin-bottom: 16px;
+}
+
+.account-profile-msg.is-success {
+  background: rgba(145, 237, 214, 0.2);
+  color: var(--ink);
+}
+
+.account-profile-msg.is-error {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+body.dark-mode .account-profile-msg.is-error {
+  background: rgba(185, 28, 28, 0.2);
+  color: #fca5a5;
+}
+
 /* Dark mode adjustments */
 body.dark-mode .account-tab.is-active {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);

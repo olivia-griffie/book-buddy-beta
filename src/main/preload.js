@@ -19,4 +19,18 @@ contextBridge.exposeInMainWorld('api', {
     refresh: () => ipcRenderer.invoke('auth:refresh'),
     logout: () => ipcRenderer.invoke('auth:logout'),
   },
+  profile: {
+    get: () => ipcRenderer.invoke('profile:get'),
+    update: (updates) => ipcRenderer.invoke('profile:update', updates),
+  },
+  publishing: {
+    publishChapter: (args) => ipcRenderer.invoke('chapters:publishChapter', args),
+    unpublishChapter: (args) => ipcRenderer.invoke('chapters:unpublishChapter', args),
+    getPublished: (args) => ipcRenderer.invoke('chapters:getPublished', args),
+  },
+  community: {
+    getProjects: () => ipcRenderer.invoke('community:getProjects'),
+    getComments: (args) => ipcRenderer.invoke('community:getComments', args),
+    addComment: (args) => ipcRenderer.invoke('community:addComment', args),
+  },
 });

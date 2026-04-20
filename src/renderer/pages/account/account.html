@@ -82,16 +82,30 @@
       </div>
     </div>
 
-    <div class="account-sync ui-card ui-card-stack">
+    <div class="account-edit-profile ui-card ui-card-stack">
       <div class="ui-card-head">
         <div class="ui-card-copy">
-          <p class="ui-card-kicker">Cloud</p>
-          <h2 class="ui-card-title">Project Sync</h2>
+          <p class="ui-card-kicker">Public Profile</p>
+          <h2 class="ui-card-title">Edit Profile</h2>
         </div>
       </div>
-      <div class="account-sync-body">
-        <p class="account-sync-status" id="account-sync-status">Your projects are saved locally. Sync to back them up to the cloud.</p>
-        <button id="account-sync-btn" class="btn btn-save" type="button">Sync Now</button>
+      <div class="account-form-body account-profile-edit-body">
+        <div id="profile-save-message" class="account-profile-msg" hidden></div>
+        <div class="account-fields">
+          <div class="account-field">
+            <label for="profile-display-name">Display Name</label>
+            <input id="profile-display-name" type="text" maxlength="60" placeholder="Your public name" />
+          </div>
+          <div class="account-field">
+            <label for="profile-bio">Bio</label>
+            <textarea id="profile-bio" rows="3" maxlength="300" placeholder="A short bio visible to other users"></textarea>
+          </div>
+          <div class="account-field">
+            <label for="profile-avatar-url">Avatar URL</label>
+            <input id="profile-avatar-url" type="url" placeholder="https://example.com/avatar.png" />
+          </div>
+        </div>
+        <button id="profile-save-btn" class="btn btn-save" type="button">Save Profile</button>
       </div>
     </div>
   </div>

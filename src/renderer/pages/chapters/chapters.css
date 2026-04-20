@@ -667,6 +667,30 @@
   border-color: rgba(255, 255, 255, 0.8);
 }
 
+.chapter-publish-body {
+  display: grid;
+  gap: 12px;
+}
+
+.chapter-publish-desc {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.chapter-publish-status {
+  font-size: 0.875rem;
+  color: var(--sage);
+  font-weight: 500;
+}
+
+.chapter-publish-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 /* Prompt cards inside the challenge panel */
 .chapter-prompt-card {
   background: rgba(255, 255, 255, 0.08);

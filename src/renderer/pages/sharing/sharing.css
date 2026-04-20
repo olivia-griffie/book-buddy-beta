@@ -1,0 +1,21 @@
+.sharing-page { max-width: 680px; }
+
+.sharing-list { display: grid; gap: 16px; }
+
+.sharing-badge {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.sharing-badge.is-public {
+  background: rgba(145, 237, 214, 0.25);
+  color: var(--ink);
+}
+
+.sharing-badge.is-private {
+  background: var(--surface-step);
+  color: var(--ink-muted);
+}
