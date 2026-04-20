@@ -160,6 +160,12 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
 }
 
+/* Dark mode logo swap */
+body.dark-mode #auth-logo {
+  content: url('../../public/logo-dark.png');
+  filter: invert(1);
+}
+
 /* Dark mode */
 body.dark-mode .auth-card {
   border-color: rgba(255, 255, 255, 0.07);

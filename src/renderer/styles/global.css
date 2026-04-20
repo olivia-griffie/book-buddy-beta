@@ -1914,7 +1914,7 @@ body.dark-mode .sidebar-footer {
 }
 
 body.dark-mode .sidebar-brand-logo {
-  filter: grayscale(1) brightness(3) opacity(0.85);
+  filter: invert(1);
 }
 
 body.dark-mode .app-topbar {
