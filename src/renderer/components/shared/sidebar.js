@@ -131,36 +131,6 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
             ${hasProject ? `<p class="sidebar-project-title">${projectTitle}</p>` : ''}
           </div>
         `}
-        ${hasProject && !isCollapsed ? `
-          <section class="sidebar-project-snapshot">
-            <div class="sidebar-snapshot-grid">
-              <article class="sidebar-snapshot-card">
-                <p class="sidebar-snapshot-label">Genre</p>
-                <p class="sidebar-snapshot-value">${snapshot.genres}</p>
-              </article>
-              <article class="sidebar-snapshot-card">
-                <p class="sidebar-snapshot-label">Word Goal</p>
-                <p class="sidebar-snapshot-value">${snapshot.wordGoal} words</p>
-              </article>
-              <article class="sidebar-snapshot-card">
-                <p class="sidebar-snapshot-label">Target Date</p>
-                <p class="sidebar-snapshot-value">${snapshot.targetDate}</p>
-              </article>
-              <article class="sidebar-snapshot-card">
-                <p class="sidebar-snapshot-label">Story Map</p>
-                <p class="sidebar-snapshot-value">${snapshot.chapterCount} chapters, ${snapshot.characterCount} characters</p>
-              </article>
-            </div>
-            <div class="sidebar-snapshot-leads">
-              <p class="sidebar-snapshot-label">Core Cast</p>
-              <div class="sidebar-snapshot-chip-row">
-                ${snapshot.leadCharacters.length
-                  ? snapshot.leadCharacters.map((characterName) => `<span class="sidebar-snapshot-chip">${characterName}</span>`).join('')
-                  : '<span class="sidebar-snapshot-empty">Add characters to build your cast.</span>'}
-              </div>
-            </div>
-          </section>
-        ` : ''}
       </div>
       <nav class="sidebar-nav">
         ${visibleGroups
