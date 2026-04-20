@@ -101,8 +101,12 @@
             <textarea id="profile-bio" rows="3" maxlength="300" placeholder="A short bio visible to other users"></textarea>
           </div>
           <div class="account-field">
-            <label for="profile-avatar-url">Avatar URL</label>
-            <input id="profile-avatar-url" type="url" placeholder="https://example.com/avatar.png" />
+            <label>Avatar</label>
+            <div id="avatar-picker" class="avatar-picker"></div>
+          </div>
+          <div class="account-field">
+            <label>Border Color</label>
+            <div id="avatar-color-picker" class="avatar-color-picker"></div>
           </div>
         </div>
         <button id="profile-save-btn" class="btn btn-save" type="button">Save Profile</button>

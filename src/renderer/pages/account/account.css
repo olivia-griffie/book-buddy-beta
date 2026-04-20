@@ -194,6 +194,65 @@ body.dark-mode .account-profile-msg.is-error {
   color: #fca5a5;
 }
 
+/* Avatar picker */
+.avatar-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.avatar-option {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  background: var(--surface-step);
+  transition: border-color var(--duration) var(--ease), transform var(--duration) var(--ease);
+  outline: none;
+  flex-shrink: 0;
+}
+
+.avatar-option img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-option.is-selected {
+  border-color: var(--avatar-border, #C97B6E);
+  transform: scale(1.08);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px var(--avatar-border, #C97B6E);
+}
+
+/* Color picker */
+.avatar-color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.avatar-color-swatch {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+  outline: none;
+}
+
+.avatar-color-swatch.is-selected {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 2px white, 0 0 0 4px currentColor;
+  border-color: rgba(0,0,0,0.15);
+}
+
 /* Dark mode adjustments */
 body.dark-mode .account-tab.is-active {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
