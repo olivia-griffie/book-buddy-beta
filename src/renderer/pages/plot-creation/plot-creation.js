@@ -348,10 +348,16 @@ window.registerPageInit('plot-creation', async function ({ project }) {
       })
       .filter(Boolean);
 
+    const combinedHtml = sectionHtml.join('<p><br></p>') || '<p><br></p>';
+    const temp = document.createElement('div');
+    temp.innerHTML = combinedHtml;
+    const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
+
     return {
+      hasContent,
       settings: nextSettings,
       value: window.serializeRichTextValue(
-        sectionHtml.join('<p><br></p>') || '<p><br></p>',
+        combinedHtml,
         nextSettings,
       ),
     };
@@ -359,8 +365,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
   document.getElementById('generate-outline-btn')?.addEventListener('click', () => {
     const nextOutline = buildOutlineFromSections();
-    const nextOutlineText = stripHtml(window.parseRichTextValue?.(nextOutline.value || '')?.html || '');
-    if (!nextOutlineText) return;
+    if (!nextOutline.hasContent) return;
 
     window.refreshTextEditor(outlineInput, nextOutline.value);
     outlineInput.dispatchEvent(new Event('input'));
