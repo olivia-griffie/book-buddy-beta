@@ -405,16 +405,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               `}
           </div>
         ` : ''}
-        <div class="topbar-next-step">
-          <div class="topbar-next-step-copy">
-            <p class="topbar-next-step-kicker">Next Best Step</p>
-            <h3 class="topbar-next-step-title">${nextStep.title}</h3>
-            <p class="topbar-next-step-description">${nextStep.description}</p>
-          </div>
-          <button id="topbar-next-step" class="btn btn-primary" type="button" data-next-step="${nextStep.page}">
-            ${nextStep.label}
-          </button>
-        </div>
       </div>
     </details>
     <div class="topbar-tracker">
