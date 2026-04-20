@@ -24,24 +24,6 @@ const sidebarGroups = [
     ],
   },
   {
-    label: 'Story Building',
-    requiresProject: true,
-    items: [
-      { id: 'plot-creation', label: 'Plot', icon: icons['plot-creation'] },
-      { id: 'characters', label: 'Characters', icon: icons.characters },
-      { id: 'scenes', label: 'Scenes', icon: icons.scenes },
-      { id: 'locations', label: 'Locations', icon: icons.locations },
-    ],
-  },
-  {
-    label: 'Writing',
-    requiresProject: true,
-    items: [
-      { id: 'chapters', label: 'Chapters', icon: icons.chapters },
-      { id: 'daily-prompts', label: 'Challenges', icon: icons['daily-prompts'] },
-    ],
-  },
-  {
     label: 'Social',
     requiresProject: false,
     items: [
