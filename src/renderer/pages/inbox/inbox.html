@@ -3,27 +3,81 @@
     <div>
       <p class="eyebrow">Inbox</p>
       <div class="inbox-title-row">
-        <h1>Notifications</h1>
-        <span id="inbox-unread-badge" class="inbox-unread-badge" style="display:none;">0</span>
+        <h1>Messages & Activity</h1>
       </div>
-      <p class="inbox-hero-copy">Likes and comments on your published writing show up here.</p>
+      <p id="inbox-hero-copy" class="inbox-hero-copy">Private messages and community activity live here.</p>
     </div>
-    <button id="inbox-mark-read" class="btn btn-ghost" type="button" style="display:none;">Mark all read</button>
   </div>
 
-  <div class="inbox-filters" role="tablist" aria-label="Notification filters">
-    <button class="inbox-filter is-active" type="button" data-inbox-filter="all">All</button>
-    <button class="inbox-filter" type="button" data-inbox-filter="comment">Comments</button>
-    <button class="inbox-filter" type="button" data-inbox-filter="like">Likes</button>
-    <button class="inbox-filter" type="button" data-inbox-filter="favorite">Favorites</button>
+  <div class="inbox-mode-tabs" role="tablist" aria-label="Inbox sections">
+    <button id="inbox-tab-messages" class="inbox-mode-tab is-active" type="button" data-inbox-mode="messages">
+      Messages
+      <span id="inbox-unread-badge" class="inbox-unread-badge" style="display:none;">0</span>
+    </button>
+    <button id="inbox-tab-activity" class="inbox-mode-tab" type="button" data-inbox-mode="activity">
+      Activity
+      <span id="inbox-activity-badge" class="inbox-unread-badge inbox-unread-badge-activity" style="display:none;">0</span>
+    </button>
   </div>
 
-  <div id="inbox-loading" class="inbox-loading">Loading activity…</div>
+  <div id="inbox-loading" class="inbox-loading">Loading inbox...</div>
 
   <div id="inbox-empty" class="empty-state card" style="display:none;">
-    <h2>All caught up</h2>
-    <p>New likes, favorites, and comments will appear here.</p>
+    <h2>No messages yet</h2>
+    <p>Use the Message button on a writer card in Community to start a conversation.</p>
   </div>
 
-  <div id="inbox-feed" class="inbox-feed" style="display:none;"></div>
+  <div id="inbox-messages-pane" class="inbox-pane" style="display:none;">
+    <div id="inbox-shell" class="inbox-shell">
+      <aside class="inbox-sidebar">
+        <div class="inbox-sidebar-head">
+          <p class="inbox-sidebar-kicker">Conversations</p>
+        </div>
+        <div id="inbox-thread-list" class="inbox-thread-list"></div>
+      </aside>
+
+      <section class="inbox-thread-panel">
+        <div id="inbox-thread-empty" class="inbox-thread-empty">
+          <h2>Select a conversation</h2>
+          <p>Choose a thread on the left to read messages and reply.</p>
+        </div>
+
+        <div id="inbox-thread-view" class="inbox-thread-view" style="display:none;">
+          <header class="inbox-thread-head">
+            <button id="inbox-back-to-list" class="btn btn-ghost inbox-back-btn" type="button">Back</button>
+            <div class="inbox-thread-head-copy">
+              <p id="inbox-thread-handle" class="inbox-thread-handle"></p>
+              <h2 id="inbox-thread-title" class="inbox-thread-title"></h2>
+            </div>
+          </header>
+
+          <div id="inbox-message-state" class="inbox-message-state" style="display:none;"></div>
+          <div id="inbox-message-list" class="inbox-message-list"></div>
+
+          <form id="inbox-composer" class="inbox-composer">
+            <label class="sr-only" for="inbox-composer-input">Message</label>
+            <textarea id="inbox-composer-input" class="inbox-composer-input" rows="3" placeholder="Write a private message..."></textarea>
+            <div class="inbox-composer-actions">
+              <p class="inbox-composer-help">Private to this conversation.</p>
+              <button id="inbox-send-btn" class="btn btn-save" type="submit">Send</button>
+            </div>
+          </form>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="inbox-activity-pane" class="inbox-pane" style="display:none;">
+    <div class="inbox-activity-head">
+      <div class="inbox-filters" role="tablist" aria-label="Notification filters">
+        <button class="inbox-filter is-active" type="button" data-inbox-filter="all">All</button>
+        <button class="inbox-filter" type="button" data-inbox-filter="comment">Comments</button>
+        <button class="inbox-filter" type="button" data-inbox-filter="like">Likes</button>
+        <button class="inbox-filter" type="button" data-inbox-filter="favorite">Favorites</button>
+      </div>
+      <button id="inbox-mark-read" class="btn btn-ghost" type="button" style="display:none;">Mark all read</button>
+    </div>
+
+    <div id="inbox-feed" class="inbox-feed" style="display:none;"></div>
+  </div>
 </section>

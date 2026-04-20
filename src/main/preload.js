@@ -42,5 +42,10 @@ contextBridge.exposeInMainWorld('api', {
   inbox: {
     getNotifications: () => ipcRenderer.invoke('inbox:getNotifications'),
     replyToComment: (args) => ipcRenderer.invoke('inbox:replyToComment', args),
+    getDirectConversations: () => ipcRenderer.invoke('inbox:getDirectConversations'),
+    getConversationMessages: (args) => ipcRenderer.invoke('inbox:getConversationMessages', args),
+    findOrCreateConversation: (args) => ipcRenderer.invoke('inbox:findOrCreateConversation', args),
+    sendDirectMessage: (args) => ipcRenderer.invoke('inbox:sendDirectMessage', args),
+    markConversationRead: (args) => ipcRenderer.invoke('inbox:markConversationRead', args),
   },
 });

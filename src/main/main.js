@@ -10,6 +10,8 @@ const {
   upsertProject, publishChapter, unpublishChapter, getPublishedChapters,
   getPublicProjects, getComments, addComment,
   getLikes, toggleLike, getAuthorNotifications,
+  getInboxConversations, getConversationMessages,
+  findOrCreateDirectConversation, sendDirectMessage, markConversationRead,
 } = require('./supabase');
 
 
@@ -695,4 +697,34 @@ ipcMain.handle('inbox:replyToComment', async (_, { supabaseProjectId, chapterId,
   const session = await getValidSession();
   if (!session) throw new Error('Sign in to reply.');
   return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token, parentId);
+});
+
+ipcMain.handle('inbox:getDirectConversations', async () => {
+  const session = await getValidSession();
+  if (!session) return [];
+  return getInboxConversations(session.user.id, session.access_token);
+});
+
+ipcMain.handle('inbox:getConversationMessages', async (_, { conversationId }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to view messages.');
+  return getConversationMessages(conversationId, session.user.id, session.access_token);
+});
+
+ipcMain.handle('inbox:findOrCreateConversation', async (_, { otherUserId }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to message writers.');
+  return findOrCreateDirectConversation(session.user.id, otherUserId, session.access_token);
+});
+
+ipcMain.handle('inbox:sendDirectMessage', async (_, { conversationId, body }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to send a message.');
+  return sendDirectMessage(conversationId, session.user.id, body, session.access_token);
+});
+
+ipcMain.handle('inbox:markConversationRead', async (_, { conversationId }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to update messages.');
+  return markConversationRead(conversationId, session.user.id, session.access_token);
 });

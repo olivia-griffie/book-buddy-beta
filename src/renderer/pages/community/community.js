@@ -61,6 +61,7 @@ window.registerPageInit('community', async function () {
 
     return {
       id: project.id,
+      authorId: project.owner_id || project.profiles?.id || null,
       author,
       authorHandle: project.profiles?.username || author.toLowerCase().replace(/\s+/g, '_'),
       title: content.title || 'Untitled',
@@ -76,6 +77,8 @@ window.registerPageInit('community', async function () {
     };
   }
 
+  const session = await window.api.auth.getSession().catch(() => null);
+  const currentUserId = session?.user?.id || session?.id || null;
   let favorites = new Set(await window.api.community.getFavorites().catch(() => []));
   let activeFilter = 'all';
   let query = '';
@@ -100,6 +103,31 @@ window.registerPageInit('community', async function () {
     }
     updateFavoritesBadge();
     renderList();
+  }
+
+  async function messageAuthor(otherUserId) {
+    if (!otherUserId) {
+      return;
+    }
+
+    if (!currentUserId) {
+      alert('Sign in to message other writers.');
+      return;
+    }
+
+    if (otherUserId === currentUserId) {
+      return;
+    }
+
+    try {
+      const conversation = await window.api.inbox.findOrCreateConversation({ otherUserId });
+      if (conversation?.id) {
+        sessionStorage.setItem('bb-inbox-open-conversation', conversation.id);
+      }
+      await window.navigate('inbox', { project: window.getCurrentProject() });
+    } catch (error) {
+      alert(error?.message || 'Could not open a conversation.');
+    }
   }
 
   function closeReader() {
@@ -248,6 +276,12 @@ window.registerPageInit('community', async function () {
     document.getElementById('reader-chapter-title').textContent = chapter.chapter_title || 'Chapter';
     document.getElementById('reader-author-name').textContent = project.profiles?.display_name || project.profiles?.username || 'Unknown Author';
     document.getElementById('reader-published-at').textContent = `Published ${formatDate(chapter.published_at)}`;
+    const messageAuthorBtn = document.getElementById('reader-message-author');
+    if (messageAuthorBtn) {
+      const canMessageAuthor = Boolean(project.owner_id && currentUserId && project.owner_id !== currentUserId);
+      messageAuthorBtn.style.display = canMessageAuthor ? 'inline-flex' : 'none';
+      messageAuthorBtn.dataset.authorId = project.owner_id || '';
+    }
     window.renderRichText?.(document.getElementById('reader-body'), chapter.content, {
       emptyHtml: '<p><em>No content.</em></p>',
     });
@@ -285,6 +319,13 @@ window.registerPageInit('community', async function () {
     } finally {
       submit.disabled = false;
       submit.textContent = 'Post Comment';
+    }
+  });
+
+  document.getElementById('reader-message-author')?.addEventListener('click', () => {
+    const authorId = document.getElementById('reader-message-author')?.dataset.authorId || '';
+    if (authorId) {
+      messageAuthor(authorId);
     }
   });
 
@@ -337,14 +378,25 @@ window.registerPageInit('community', async function () {
             <span class="community-metric">${projectMeta.wordCount.toLocaleString()} words</span>
             <span class="community-metric">${escapeHtml(projectMeta.author)}</span>
           </div>
-          <button
-            class="community-read-btn"
-            type="button"
-            data-read-project="${escapeHtml(projectMeta.id)}"
-            data-read-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}"
-          >
-            Read Latest
-          </button>
+          <div class="community-card-actions">
+            ${projectMeta.authorId && projectMeta.authorId !== currentUserId ? `
+              <button
+                class="btn btn-ghost community-message-btn"
+                type="button"
+                data-message-author="${escapeHtml(projectMeta.authorId)}"
+              >
+                Message
+              </button>
+            ` : ''}
+            <button
+              class="community-read-btn"
+              type="button"
+              data-read-project="${escapeHtml(projectMeta.id)}"
+              data-read-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}"
+            >
+              Read Latest
+            </button>
+          </div>
         </div>
       </article>
     `;
@@ -412,6 +464,10 @@ window.registerPageInit('community', async function () {
 
     grid.querySelectorAll('[data-chapter-id]').forEach((btn) => {
       btn.addEventListener('click', () => openFromDataset(btn.dataset.projectId, btn.dataset.chapterId));
+    });
+
+    grid.querySelectorAll('[data-message-author]').forEach((btn) => {
+      btn.addEventListener('click', () => messageAuthor(btn.dataset.messageAuthor));
     });
   }
 

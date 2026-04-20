@@ -176,6 +176,274 @@ async function getAuthorNotifications(userId, accessToken) {
   return items;
 }
 
+function encodeFilterValue(value) {
+  return encodeURIComponent(String(value ?? ''));
+}
+
+function buildDirectMessagePairKey(leftUserId, rightUserId) {
+  return [String(leftUserId || '').trim(), String(rightUserId || '').trim()]
+    .filter(Boolean)
+    .sort()
+    .join('::');
+}
+
+function buildMessagePreview(body) {
+  return String(body || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 180);
+}
+
+async function ensureConversationParticipant(conversationId, userId, accessToken) {
+  const rows = await restReq(
+    'GET',
+    `conversation_participants?conversation_id=eq.${encodeFilterValue(conversationId)}&user_id=eq.${encodeFilterValue(userId)}&select=id&limit=1`,
+    null,
+    accessToken,
+  );
+  if (!rows?.length) {
+    throw new Error('You do not have access to this conversation.');
+  }
+}
+
+async function getProfilesByIds(userIds, accessToken) {
+  const ids = [...new Set((userIds || []).filter(Boolean))];
+  if (!ids.length) {
+    return {};
+  }
+
+  const rows = await restReq(
+    'GET',
+    `profiles?id=in.(${ids.map(encodeFilterValue).join(',')})&select=id,username,display_name`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  return Object.fromEntries((rows || []).map((profile) => [profile.id, profile]));
+}
+
+async function getInboxConversations(userId, accessToken) {
+  const membershipRows = await restReq(
+    'GET',
+    `conversation_participants?user_id=eq.${encodeFilterValue(userId)}&select=conversation_id`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  const conversationIds = [...new Set((membershipRows || []).map((row) => row.conversation_id).filter(Boolean))];
+  if (!conversationIds.length) {
+    return [];
+  }
+
+  const [conversations, participants, unreadMessages] = await Promise.all([
+    restReq(
+      'GET',
+      `conversations?id=in.(${conversationIds.map(encodeFilterValue).join(',')})&select=id,created_at,updated_at,last_message_at,last_message_preview,participant_key`,
+      null,
+      accessToken,
+    ).catch(() => []),
+    restReq(
+      'GET',
+      `conversation_participants?conversation_id=in.(${conversationIds.map(encodeFilterValue).join(',')})&select=conversation_id,user_id,created_at`,
+      null,
+      accessToken,
+    ).catch(() => []),
+    restReq(
+      'GET',
+      `direct_messages?conversation_id=in.(${conversationIds.map(encodeFilterValue).join(',')})&sender_id=neq.${encodeFilterValue(userId)}&read_at=is.null&select=id,conversation_id`,
+      null,
+      accessToken,
+    ).catch(() => []),
+  ]);
+
+  const participantUserIds = [...new Set((participants || []).map((row) => row.user_id).filter(Boolean))];
+  const profileMap = await getProfilesByIds(participantUserIds, accessToken);
+
+  const participantsByConversation = {};
+  for (const participant of (participants || [])) {
+    (participantsByConversation[participant.conversation_id] ||= []).push({
+      ...participant,
+      profile: profileMap[participant.user_id] || null,
+    });
+  }
+
+  const unreadCountByConversation = {};
+  for (const message of (unreadMessages || [])) {
+    unreadCountByConversation[message.conversation_id] = (unreadCountByConversation[message.conversation_id] || 0) + 1;
+  }
+
+  return (conversations || [])
+    .map((conversation) => {
+      const threadParticipants = participantsByConversation[conversation.id] || [];
+      const otherParticipant = threadParticipants.find((participant) => participant.user_id !== userId) || threadParticipants[0] || null;
+      const otherProfile = otherParticipant?.profile || null;
+      return {
+        id: conversation.id,
+        createdAt: conversation.created_at,
+        updatedAt: conversation.updated_at,
+        lastMessageAt: conversation.last_message_at || conversation.updated_at || conversation.created_at,
+        lastMessagePreview: conversation.last_message_preview || '',
+        unreadCount: unreadCountByConversation[conversation.id] || 0,
+        otherUser: otherParticipant ? {
+          id: otherParticipant.user_id,
+          username: otherProfile?.username || '',
+          displayName: otherProfile?.display_name || otherProfile?.username || 'Unknown writer',
+        } : null,
+      };
+    })
+    .sort((left, right) => new Date(right.lastMessageAt || right.updatedAt || 0) - new Date(left.lastMessageAt || left.updatedAt || 0));
+}
+
+async function getConversationMessages(conversationId, userId, accessToken) {
+  await ensureConversationParticipant(conversationId, userId, accessToken);
+
+  const rows = await restReq(
+    'GET',
+    `direct_messages?conversation_id=eq.${encodeFilterValue(conversationId)}&select=id,conversation_id,sender_id,body,created_at,read_at&order=created_at.asc`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  const profileMap = await getProfilesByIds((rows || []).map((row) => row.sender_id), accessToken);
+
+  return (rows || []).map((row) => ({
+    id: row.id,
+    conversationId: row.conversation_id,
+    senderId: row.sender_id,
+    body: row.body,
+    createdAt: row.created_at,
+    readAt: row.read_at,
+    sender: profileMap[row.sender_id] || null,
+  }));
+}
+
+async function findOrCreateDirectConversation(currentUserId, otherUserId, accessToken) {
+  if (!currentUserId || !otherUserId) {
+    throw new Error('Both participants are required.');
+  }
+
+  if (currentUserId === otherUserId) {
+    throw new Error('You cannot message yourself.');
+  }
+
+  const pairKey = buildDirectMessagePairKey(currentUserId, otherUserId);
+  const existing = await restReq(
+    'GET',
+    `conversations?participant_key=eq.${encodeFilterValue(pairKey)}&select=id,created_at,updated_at,last_message_at,last_message_preview,participant_key&limit=1`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  if (existing?.length) {
+    return existing[0];
+  }
+
+  const timestamp = new Date().toISOString();
+
+  try {
+    const inserted = await restReq(
+      'POST',
+      'conversations',
+      {
+        participant_key: pairKey,
+        created_at: timestamp,
+        updated_at: timestamp,
+        last_message_at: null,
+        last_message_preview: '',
+      },
+      accessToken,
+    );
+
+    const conversation = inserted?.[0];
+    if (!conversation?.id) {
+      throw new Error('Could not create conversation.');
+    }
+
+    await restReq(
+      'POST',
+      'conversation_participants',
+      {
+        conversation_id: conversation.id,
+        user_id: currentUserId,
+        created_at: timestamp,
+      },
+      accessToken,
+    );
+
+    await restReq(
+      'POST',
+      'conversation_participants',
+      {
+        conversation_id: conversation.id,
+        user_id: otherUserId,
+        created_at: timestamp,
+      },
+      accessToken,
+    );
+
+    return conversation;
+  } catch (error) {
+    const message = String(error?.message || '');
+    if (message.includes('duplicate key') || message.includes('unique')) {
+      const retry = await restReq(
+        'GET',
+        `conversations?participant_key=eq.${encodeFilterValue(pairKey)}&select=id,created_at,updated_at,last_message_at,last_message_preview,participant_key&limit=1`,
+        null,
+        accessToken,
+      ).catch(() => []);
+      if (retry?.length) {
+        return retry[0];
+      }
+    }
+    throw error;
+  }
+}
+
+async function sendDirectMessage(conversationId, senderId, body, accessToken) {
+  const trimmedBody = String(body || '').trim();
+  if (!trimmedBody) {
+    throw new Error('Message body cannot be empty.');
+  }
+
+  await ensureConversationParticipant(conversationId, senderId, accessToken);
+
+  const timestamp = new Date().toISOString();
+  const inserted = await restReq(
+    'POST',
+    'direct_messages',
+    {
+      conversation_id: conversationId,
+      sender_id: senderId,
+      body: trimmedBody,
+      created_at: timestamp,
+    },
+    accessToken,
+  );
+
+  await restReq(
+    'PATCH',
+    `conversations?id=eq.${encodeFilterValue(conversationId)}`,
+    {
+      updated_at: timestamp,
+      last_message_at: timestamp,
+      last_message_preview: buildMessagePreview(trimmedBody),
+    },
+    accessToken,
+  );
+
+  return inserted?.[0] || null;
+}
+
+async function markConversationRead(conversationId, currentUserId, accessToken) {
+  await ensureConversationParticipant(conversationId, currentUserId, accessToken);
+  return restReq(
+    'PATCH',
+    `direct_messages?conversation_id=eq.${encodeFilterValue(conversationId)}&sender_id=neq.${encodeFilterValue(currentUserId)}&read_at=is.null`,
+    { read_at: new Date().toISOString() },
+    accessToken,
+  ).catch(() => []);
+}
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -189,4 +457,9 @@ module.exports = {
   getLikes,
   toggleLike,
   getAuthorNotifications,
+  getInboxConversations,
+  getConversationMessages,
+  findOrCreateDirectConversation,
+  sendDirectMessage,
+  markConversationRead,
 };
