@@ -1,5 +1,5 @@
 window.registerPageInit('account', async function () {
-  const AVATAR_COUNT = 12;
+  const AVATAR_COUNT = 11;
   const BORDER_COLORS = ['#ff8360', '#870058', '#a0eade', '#274156', '#cfbcdf'];
   let selectedAvatar = 1;
   let selectedColor = BORDER_COLORS[0];
