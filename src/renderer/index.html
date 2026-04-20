@@ -13,6 +13,62 @@
   <link rel="stylesheet" href="./styles/login.css" />
 </head>
 <body>
+  <!-- Login overlay -->
+  <div id="auth-overlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <img src="../../public/logo-full.png" alt="Book Buddy" style="height:48px;margin-bottom:12px;" />
+        <p class="auth-brand-tagline">Your writer's hub — sign in to continue.</p>
+      </div>
+
+      <div class="auth-tabs">
+        <button class="auth-tab is-active" data-auth-tab="signin" type="button">Sign In</button>
+        <button class="auth-tab" data-auth-tab="signup" type="button">Create Account</button>
+      </div>
+
+      <!-- Sign In -->
+      <div id="auth-panel-signin" class="auth-panel">
+        <div id="auth-signin-error" class="auth-error" role="alert"></div>
+        <form id="auth-signin-form" novalidate>
+          <div class="auth-fields">
+            <div class="auth-field">
+              <label for="auth-signin-email">Email</label>
+              <input id="auth-signin-email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            </div>
+            <div class="auth-field">
+              <label for="auth-signin-password">Password</label>
+              <input id="auth-signin-password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+            </div>
+          </div>
+          <button id="auth-signin-submit" class="auth-submit" type="submit">Sign In</button>
+        </form>
+      </div>
+
+      <!-- Sign Up -->
+      <div id="auth-panel-signup" class="auth-panel" style="display:none;">
+        <div id="auth-signup-error" class="auth-error" role="alert"></div>
+        <form id="auth-signup-form" novalidate>
+          <div class="auth-fields">
+            <div class="auth-field">
+              <label for="auth-signup-email">Email</label>
+              <input id="auth-signup-email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            </div>
+            <div class="auth-field">
+              <label for="auth-signup-username">Username</label>
+              <input id="auth-signup-username" type="text" autocomplete="username" placeholder="writerhandle" required />
+            </div>
+            <div class="auth-field">
+              <label for="auth-signup-password">Password</label>
+              <input id="auth-signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required />
+            </div>
+          </div>
+          <button id="auth-signup-submit" class="auth-submit" type="submit">Create Account</button>
+        </form>
+        <p id="auth-signup-confirm" style="display:none;text-align:center;font-size:0.875rem;color:var(--ink-muted);margin-top:16px;">Account created! Check your email to confirm, then sign in.</p>
+      </div>
+    </div>
+  </div>
+
   <div id="sidebar-backdrop" class="sidebar-backdrop"></div>
   <div class="app-shell">
     <aside id="sidebar-container" class="app-sidebar"></aside>

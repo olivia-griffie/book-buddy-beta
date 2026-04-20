@@ -1123,19 +1123,94 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
 
 function showAuthOverlay() {
   const overlay = document.getElementById('auth-overlay');
-  if (overlay) overlay.classList.remove('is-hidden');
+  if (overlay) overlay.style.display = 'flex';
 }
 
 function hideAuthOverlay() {
   const overlay = document.getElementById('auth-overlay');
-  if (overlay) overlay.classList.add('is-hidden');
+  if (overlay) overlay.style.display = 'none';
 }
 
-function setAuthError(message) {
-  const el = document.getElementById('auth-error');
+function setAuthError(id, message) {
+  const el = document.getElementById(id);
   if (!el) return;
   el.textContent = message || '';
   el.classList.toggle('is-visible', Boolean(message));
+}
+
+function initAuthOverlay() {
+  // Tab switching
+  document.querySelectorAll('[data-auth-tab]').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-auth-tab]').forEach((t) => t.classList.remove('is-active'));
+      document.querySelectorAll('.auth-panel').forEach((p) => { p.style.display = 'none'; });
+      tab.classList.add('is-active');
+      const panel = document.getElementById(`auth-panel-${tab.dataset.authTab}`);
+      if (panel) panel.style.display = 'block';
+    });
+  });
+
+  // Sign in
+  document.getElementById('auth-signin-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setAuthError('auth-signin-error', '');
+    const btn = document.getElementById('auth-signin-submit');
+    btn.disabled = true;
+    btn.textContent = 'Signing in…';
+    try {
+      await window.api.auth.login(
+        document.getElementById('auth-signin-email').value.trim(),
+        document.getElementById('auth-signin-password').value,
+      );
+      hideAuthOverlay();
+      state.authRequired = false;
+      await navigate('home', { project: getProject() });
+      restoreCurrentProjectSelection()
+        .then(async (restoredProject) => {
+          if (!restoredProject) return;
+          if (state.currentPage === 'home') {
+            await navigate('home', { project: restoredProject });
+          } else {
+            syncProjectState(restoredProject);
+          }
+        })
+        .catch(() => {});
+    } catch (err) {
+      setAuthError('auth-signin-error', err.message || 'Sign in failed.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Sign In';
+    }
+  });
+
+  // Sign up
+  document.getElementById('auth-signup-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    setAuthError('auth-signup-error', '');
+    const btn = document.getElementById('auth-signup-submit');
+    btn.disabled = true;
+    btn.textContent = 'Creating account…';
+    try {
+      const result = await window.api.auth.signup(
+        document.getElementById('auth-signup-email').value.trim(),
+        document.getElementById('auth-signup-password').value,
+        document.getElementById('auth-signup-username').value.trim(),
+      );
+      if (result.session) {
+        hideAuthOverlay();
+        state.authRequired = false;
+        await navigate('home', { project: getProject() });
+      } else {
+        document.getElementById('auth-signup-form').style.display = 'none';
+        document.getElementById('auth-signup-confirm').style.display = 'block';
+      }
+    } catch (err) {
+      setAuthError('auth-signup-error', err.message || 'Sign up failed.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Create Account';
+    }
+  });
 }
 
 async function checkAuth() {
@@ -1159,10 +1234,11 @@ async function checkAuth() {
 window.authLogout = async function authLogout() {
   await window.api.auth.logout().catch(() => {});
   state.authRequired = true;
-  await navigate('account');
+  showAuthOverlay();
 };
 
 window.onLoginSuccess = async function onLoginSuccess() {
+  hideAuthOverlay();
   state.authRequired = false;
   await navigate('home', { project: getProject() });
   restoreCurrentProjectSelection()
@@ -1197,15 +1273,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   syncReferenceDrawer();
 
+  initAuthOverlay();
+  hideAuthOverlay();
+
   const isAuthenticated = await checkAuth();
 
   if (!isAuthenticated) {
     state.authRequired = true;
-    try {
-      await navigate('account');
-    } catch (error) {
-      console.error('Account page navigation failed.', error);
-    }
+    showAuthOverlay();
     return;
   }
 

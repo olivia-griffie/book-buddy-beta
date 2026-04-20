@@ -6,62 +6,7 @@
     </div>
   </div>
 
-  <!-- Logged-out state -->
-  <div id="account-logged-out" class="account-panel" hidden>
-    <div class="account-auth-tabs">
-      <button class="account-tab is-active" data-tab="signin">Sign In</button>
-      <button class="account-tab" data-tab="signup">Create Account</button>
-    </div>
-
-    <!-- Sign In -->
-    <div id="account-tab-signin" class="account-tab-panel ui-card ui-card-stack">
-      <div class="account-form-body">
-        <p class="account-form-intro">Sign in to sync your projects to the cloud and enable sharing.</p>
-        <div id="signin-error" class="account-error" role="alert" hidden></div>
-        <form id="signin-form" novalidate>
-          <div class="account-fields">
-            <div class="account-field">
-              <label for="signin-email">Email</label>
-              <input id="signin-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
-            </div>
-            <div class="account-field">
-              <label for="signin-password">Password</label>
-              <input id="signin-password" type="password" name="password" autocomplete="current-password" placeholder="••••••••" required />
-            </div>
-          </div>
-          <button id="signin-submit" class="btn btn-save account-submit" type="submit">Sign In</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Sign Up -->
-    <div id="account-tab-signup" class="account-tab-panel ui-card ui-card-stack" hidden>
-      <div class="account-form-body">
-        <p class="account-form-intro">Create a free account to back up your work and share projects with others.</p>
-        <div id="signup-error" class="account-error" role="alert" hidden></div>
-        <form id="signup-form" novalidate>
-          <div class="account-fields">
-            <div class="account-field">
-              <label for="signup-email">Email</label>
-              <input id="signup-email" type="email" name="email" autocomplete="email" placeholder="you@example.com" required />
-            </div>
-            <div class="account-field">
-              <label for="signup-username">Username</label>
-              <input id="signup-username" type="text" name="username" autocomplete="username" placeholder="writerhandle" required />
-            </div>
-            <div class="account-field">
-              <label for="signup-password">Password</label>
-              <input id="signup-password" type="password" name="password" autocomplete="new-password" placeholder="At least 8 characters" required />
-            </div>
-          </div>
-          <button id="signup-submit" class="btn btn-save account-submit" type="submit">Create Account</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Logged-in state -->
-  <div id="account-logged-in" class="account-panel" hidden>
+  <div id="account-logged-in" class="account-panel">
     <div class="account-profile ui-card ui-card-stack">
       <div class="ui-card-head">
         <div class="ui-card-copy">
