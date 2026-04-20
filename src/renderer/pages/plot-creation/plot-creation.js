@@ -290,28 +290,79 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     return (temp.textContent || temp.innerText || '').trim();
   }
 
-  document.getElementById('generate-outline-btn')?.addEventListener('click', () => {
-    const lines = resources.plotSections
+  function escapeHtml(value = '') {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function buildOutlineFromSections() {
+    const baseSettings = window.parseRichTextValue?.(window.getEditorFieldValue(outlineInput) || '')?.settings || {};
+    let nextSettings = { ...baseSettings };
+
+    const sectionHtml = resources.plotSections
       .map((section) => {
         const notesField = sectionTargets.querySelector(`[data-section-notes="${section.id}"]`);
         const notesRaw = notesField ? window.getEditorFieldValue(notesField) : section.notes || '';
-        const notesText = stripHtml(notesRaw);
-        const hasContent = section.targetWords > 0 || notesText;
-        if (!hasContent) return null;
+        const parsedNotes = window.parseRichTextValue?.(notesRaw || '') || { html: '', settings: {} };
+        const notesText = stripHtml(parsedNotes.html || '');
+        const descText = stripHtml(section.description || '');
+        const hasContent = section.targetWords > 0 || descText || notesText;
+        if (!hasContent) {
+          return '';
+        }
 
-        const parts = [section.label];
-        const descText = stripHtml(section.description);
-        if (descText) parts.push(descText);
-        if (section.targetWords > 0) parts.push(`Target Words: ${section.targetWords}`);
-        if (notesText) parts.push(notesText);
-        return parts.join('\n');
+        if (!nextSettings.fontFamily && parsedNotes.settings?.fontFamily) {
+          nextSettings.fontFamily = parsedNotes.settings.fontFamily;
+        }
+        if (!nextSettings.fontSize && parsedNotes.settings?.fontSize) {
+          nextSettings.fontSize = parsedNotes.settings.fontSize;
+        }
+        if (!nextSettings.lineHeight && parsedNotes.settings?.lineHeight) {
+          nextSettings.lineHeight = parsedNotes.settings.lineHeight;
+        }
+        if (!nextSettings.textAlign && parsedNotes.settings?.textAlign) {
+          nextSettings.textAlign = parsedNotes.settings.textAlign;
+        }
+
+        const blocks = [
+          `<p><strong>${escapeHtml(section.label || 'Untitled Section')}</strong></p>`,
+        ];
+
+        if (descText) {
+          blocks.push(`<p>${escapeHtml(descText)}</p>`);
+        }
+
+        if (section.targetWords > 0) {
+          blocks.push(`<p><em>Target Words: ${Number(section.targetWords || 0).toLocaleString()}</em></p>`);
+        }
+
+        if (notesText) {
+          blocks.push(parsedNotes.html || '<p><br></p>');
+        }
+
+        return blocks.join('');
       })
       .filter(Boolean);
 
-    if (!lines.length) return;
+    return {
+      settings: nextSettings,
+      value: window.serializeRichTextValue(
+        sectionHtml.join('<p><br></p>') || '<p><br></p>',
+        nextSettings,
+      ),
+    };
+  }
 
-    const outlineText = lines.join('\n\n');
-    window.refreshTextEditor(outlineInput, outlineText);
+  document.getElementById('generate-outline-btn')?.addEventListener('click', () => {
+    const nextOutline = buildOutlineFromSections();
+    const nextOutlineText = stripHtml(window.parseRichTextValue?.(nextOutline.value || '')?.html || '');
+    if (!nextOutlineText) return;
+
+    window.refreshTextEditor(outlineInput, nextOutline.value);
     outlineInput.dispatchEvent(new Event('input'));
 
     const outlineBlock = outlineInput.closest('details');

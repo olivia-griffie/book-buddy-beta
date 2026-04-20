@@ -171,6 +171,11 @@
   margin: 0 0 0.8em;
 }
 
+.rich-text-editor-shell ul,
+.rich-text-editor-shell ol {
+  padding-left: 1.4em;
+}
+
 .rich-text-editor-shell p:last-child,
 .rich-text-editor-shell ul:last-child,
 .rich-text-editor-shell ol:last-child {
