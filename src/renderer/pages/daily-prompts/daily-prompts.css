@@ -89,6 +89,8 @@
   background: rgba(79, 242, 201, 0.1);
   border: 1px solid rgba(79, 242, 201, 0.2);
   color: rgba(255, 255, 255, 0.92);
+  border-radius: 1rem;
+  padding: .8rem;
 }
 
 .daily-prompt-card .daily-prompt-status {

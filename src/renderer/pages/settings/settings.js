@@ -24,4 +24,8 @@ window.registerPageInit('settings', function () {
     window.toggleTabletMode?.();
     syncTabletToggle();
   });
+
+  document.getElementById('sign-out-btn')?.addEventListener('click', async () => {
+    await window.authLogout?.();
+  });
 });

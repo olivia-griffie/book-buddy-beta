@@ -4,6 +4,7 @@ const fs = require('fs/promises');
 const Store = require('electron-store');
 const { setApplicationMenu, buildTextContextMenu } = require('./menu');
 const packageJson = require('../../package.json');
+const { signIn, signUp, refreshSession, signOut } = require('./auth');
 
 
 const store = new Store();
@@ -508,4 +509,37 @@ ipcMain.handle('settings:save', (_, settings) => {
 
   store.set('settings', nextSettings);
   return nextSettings;
+});
+
+// IPC: Auth
+ipcMain.handle('auth:getSession', () => {
+  return store.get('auth.session', null);
+});
+
+ipcMain.handle('auth:login', async (_, { email, password }) => {
+  const session = await signIn(email, password);
+  store.set('auth.session', session);
+  return session;
+});
+
+ipcMain.handle('auth:refresh', async () => {
+  const session = store.get('auth.session', null);
+  if (!session?.refresh_token) throw new Error('No session to refresh.');
+  const next = await refreshSession(session.refresh_token);
+  store.set('auth.session', next);
+  return next;
+});
+
+ipcMain.handle('auth:logout', async () => {
+  const session = store.get('auth.session', null);
+  if (session?.access_token) await signOut(session.access_token);
+  store.delete('auth.session');
+});
+
+ipcMain.handle('auth:signup', async (_, { email, password, username }) => {
+  const result = await signUp(email, password, username);
+  if (result.session) {
+    store.set('auth.session', result.session);
+  }
+  return result;
 });

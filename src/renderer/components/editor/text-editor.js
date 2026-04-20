@@ -155,6 +155,8 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     : ''}
       </div>
       <div class="rich-text-toolbar-advanced">
+        <button type="button" class="rich-text-btn" data-command="insertUnorderedList" title="Bullet list">• List</button>
+        <button type="button" class="rich-text-btn" data-command="insertOrderedList" title="Numbered list">1. List</button>
         <button type="button" class="rich-text-btn rich-text-icon-btn" data-command="justifyLeft" title="Align left" aria-label="Align left">
           ${buildAlignmentIcon('left')}
         </button>
@@ -305,6 +307,13 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       collapseBar.querySelector('.rich-text-collapse-chevron').textContent = collapsed ? '▸' : '▾';
     });
 
+    editor.addEventListener('keydown', (e) => {
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        document.execCommand('insertHTML', false, '\u00a0\u00a0\u00a0\u00a0');
+        syncTextarea(true);
+      }
+    });
     editor.addEventListener('input', () => {
       saveSelection();
       syncTextarea(true);

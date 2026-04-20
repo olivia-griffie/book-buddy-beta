@@ -12,4 +12,11 @@ contextBridge.exposeInMainWorld('api', {
   getPromptData: () => ipcRenderer.invoke('data:getPromptData'),
   getSettings: () => ipcRenderer.invoke('settings:get'),
   saveSettings: (settings) => ipcRenderer.invoke('settings:save', settings),
+  auth: {
+    getSession: () => ipcRenderer.invoke('auth:getSession'),
+    login: (email, password) => ipcRenderer.invoke('auth:login', { email, password }),
+    signup: (email, password, username) => ipcRenderer.invoke('auth:signup', { email, password, username }),
+    refresh: () => ipcRenderer.invoke('auth:refresh'),
+    logout: () => ipcRenderer.invoke('auth:logout'),
+  },
 });

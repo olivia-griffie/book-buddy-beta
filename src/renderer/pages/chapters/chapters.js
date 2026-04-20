@@ -568,6 +568,12 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   function renderSections() {
+    const openSectionIds = new Set(
+      [...sectionsList.querySelectorAll('details.plot-section-item[open]')]
+        .map((el) => el.dataset.sectionId)
+        .filter(Boolean),
+    );
+
     sectionsList.innerHTML = plotSections
       .map((section) => {
         const sectionChapters = chapters.filter((chapter) => chapter.sectionId === section.id);
@@ -576,9 +582,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           0,
         );
         const hasSelectedChapter = sectionChapters.some((chapter) => chapter.id === selectedChapterId);
+        const shouldBeOpen = hasSelectedChapter || openSectionIds.has(section.id);
 
         return `
-          <details class="plot-section-item" ${hasSelectedChapter ? 'open' : ''}>
+          <details class="plot-section-item" data-section-id="${section.id}" ${shouldBeOpen ? 'open' : ''}>
             <summary class="plot-section-toggle">
               <div class="plot-section-toggle-copy">
                 <h3>${section.label}</h3>

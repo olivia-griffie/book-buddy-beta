@@ -286,7 +286,8 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         if (!hasContent) return null;
 
         const parts = [section.label];
-        if (section.description) parts.push(section.description);
+        const descText = stripHtml(section.description);
+        if (descText) parts.push(descText);
         if (section.targetWords > 0) parts.push(`Target Words: ${section.targetWords}`);
         if (notesText) parts.push(notesText);
         return parts.join('\n');

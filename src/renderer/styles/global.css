@@ -954,8 +954,8 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-save {
-  background: var(--sage);
-  color: white;
+  background: #91edd6;
+  color: var(--ink);
 }
 
 .btn-save:hover {
@@ -1899,7 +1899,7 @@ body.dark-mode {
 
 /* Sidebar uses the theme coral/orange in dark mode */
 body.dark-mode .app-sidebar {
-  background: var(--accent-orange);
+  background: var(--border-soft);
 }
 
 body.dark-mode .sidebar-link:hover,
@@ -2026,8 +2026,17 @@ body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
 }
 
 body.dark-mode .milestone-toast {
-  background: var(--surface-card);
-  border-color: var(--border);
+  background: var(--surface-step);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+body.dark-mode .milestone-toast-copy h3 {
+  color: var(--ink);
+}
+
+body.dark-mode .milestone-toast-copy p {
+  color: var(--ink-soft);
 }
 
 body.dark-mode .app-text-entry-dialog {

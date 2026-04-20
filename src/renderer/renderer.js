@@ -44,6 +44,11 @@ const pageRegistry = {
     css: './pages/settings/settings.css',
     script: './pages/settings/settings.js',
   },
+  account: {
+    html: './pages/account/account.html',
+    css: './pages/account/account.css',
+    script: './pages/account/account.js',
+  },
 };
 
 const state = {
@@ -304,7 +309,7 @@ function buildProjectResources(project, promptData) {
     return {
       id: existing?.id || `section-${slugify(label) || index + 1}`,
       label: existing?.label ?? label,
-      description: existing != null ? (existing.description ?? beat.description ?? '') : (beat.description || ''),
+      description: beat.description || '',
       targetWords: existing?.targetWords ?? 0,
       notes: existing?.notes || '',
     };
@@ -953,7 +958,7 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
   let timer = null;
   let pending = false;
   let saving = false;
-  const delay = Number(options.delay || 7000);
+  const delay = Number(options.delay || 30000);
   const dirtyText = options.dirtyText || 'Unsaved changes';
 
   async function flush() {
@@ -1097,6 +1102,46 @@ window.runButtonFeedback = async function runButtonFeedback(button, task, option
   }
 };
 
+function showAuthOverlay() {
+  const overlay = document.getElementById('auth-overlay');
+  if (overlay) overlay.classList.remove('is-hidden');
+}
+
+function hideAuthOverlay() {
+  const overlay = document.getElementById('auth-overlay');
+  if (overlay) overlay.classList.add('is-hidden');
+}
+
+function setAuthError(message) {
+  const el = document.getElementById('auth-error');
+  if (!el) return;
+  el.textContent = message || '';
+  el.classList.toggle('is-visible', Boolean(message));
+}
+
+async function checkAuth() {
+  try {
+    const session = await window.api.auth.getSession();
+    if (!session) return false;
+
+    const expiresAt = session.expires_at ? Number(session.expires_at) * 1000 : 0;
+    const isExpired = expiresAt && Date.now() > expiresAt - 60_000;
+
+    if (isExpired) {
+      await window.api.auth.refresh();
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+window.authLogout = async function authLogout() {
+  await window.api.auth.logout().catch(() => {});
+  showAuthOverlay();
+};
+
 document.addEventListener('DOMContentLoaded', async () => {
   state.topbarBadgesVisibleUntil = Date.now() + (3 * 60 * 1000);
   scheduleTopbarBadgeRefresh();
@@ -1108,6 +1153,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (window.isDarkMode()) {
     applyDarkMode(true);
   }
+
+  if (typeof window.renderSidebar === 'function') {
+    window.renderSidebar('home', getProject());
+  }
+  if (typeof window.renderTopBar === 'function') {
+    window.renderTopBar('home', getProject(), state.saveStatus);
+  }
+  syncReferenceDrawer();
+
+  try {
+    await navigate('home', { project: getProject() });
+  } catch (error) {
+    console.error('Initial home navigation failed.', error);
+    renderStartupError(error);
+  }
+
+  restoreCurrentProjectSelection()
+    .then(async (restoredProject) => {
+      if (!restoredProject) return;
+      if (state.currentPage === 'home') {
+        await navigate('home', { project: restoredProject });
+      } else {
+        syncProjectState(restoredProject);
+      }
+    })
+    .catch((error) => {
+      console.error('Background project restore failed.', error);
+    });
 
   document.addEventListener('click', async (event) => {
     if (event.target.closest('[data-edit-project-title]')) {
@@ -1324,36 +1397,4 @@ document.addEventListener('DOMContentLoaded', async () => {
       syncProjectState(project);
     });
   }
-
-  if (typeof window.renderSidebar === 'function') {
-    window.renderSidebar('home', getProject());
-  }
-
-  if (typeof window.renderTopBar === 'function') {
-    window.renderTopBar('home', getProject(), state.saveStatus);
-  }
-  syncReferenceDrawer();
-
-  try {
-    await navigate('home', { project: getProject() });
-  } catch (error) {
-    console.error('Initial home navigation failed.', error);
-    renderStartupError(error);
-  }
-
-  restoreCurrentProjectSelection()
-    .then(async (restoredProject) => {
-      if (!restoredProject) {
-        return;
-      }
-
-      if (state.currentPage === 'home') {
-        await navigate('home', { project: restoredProject });
-      } else {
-        syncProjectState(restoredProject);
-      }
-    })
-    .catch((error) => {
-      console.error('Background project restore failed.', error);
-    });
 });
