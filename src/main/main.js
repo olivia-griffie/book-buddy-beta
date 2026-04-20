@@ -645,3 +645,14 @@ ipcMain.handle('community:addComment', async (_, { projectLocalId, chapterId, bo
   if (!supabaseProjectId) throw new Error('Project not found.');
   return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token);
 });
+
+ipcMain.handle('community:getChapterComments', async (_, { supabaseProjectId, chapterId }) => {
+  const session = await getValidSession();
+  return getComments(supabaseProjectId, chapterId, session?.access_token);
+});
+
+ipcMain.handle('community:addChapterComment', async (_, { supabaseProjectId, chapterId, body }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to leave a comment.');
+  return addComment(session.user.id, supabaseProjectId, chapterId, body, session.access_token);
+});

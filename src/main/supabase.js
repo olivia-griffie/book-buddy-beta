@@ -53,6 +53,7 @@ async function upsertProject(localId, userId, projectContent, isPublic, accessTo
 }
 
 async function publishChapter(supabaseProjectId, chapterId, chapterTitle, content, accessToken) {
+  await restReq('DELETE', `published_chapters?project_id=eq.${supabaseProjectId}&chapter_id=eq.${chapterId}`, null, accessToken).catch(() => {});
   const rows = await restReq('POST', 'published_chapters', {
     project_id: supabaseProjectId,
     chapter_id: chapterId,
@@ -72,14 +73,14 @@ async function getPublishedChapters(supabaseProjectId, accessToken) {
 }
 
 async function getPublicProjects(accessToken) {
-  const projects = await restReq('GET', 'projects?is_public=eq.true&select=id,local_id,content,owner_id,updated_at&order=updated_at.desc', null, accessToken);
+  const projects = await restReq('GET', 'projects?is_public=eq.true&select=id,local_id,content,owner_id,is_public,updated_at&order=updated_at.desc', null, accessToken);
   if (!projects?.length) return [];
 
   const ids = projects.map((p) => p.id).join(',');
 
   const [profiles, chapters] = await Promise.all([
     restReq('GET', `profiles?id=in.(${projects.map((p) => p.owner_id).join(',')})&select=id,username,display_name`, null, accessToken).catch(() => []),
-    restReq('GET', `published_chapters?project_id=in.(${ids})&select=id,project_id,chapter_id,chapter_title,published_at&order=published_at.asc`, null, accessToken).catch(() => []),
+    restReq('GET', `published_chapters?project_id=in.(${ids})&select=id,project_id,chapter_id,chapter_title,content,published_at&order=published_at.asc`, null, accessToken).catch(() => []),
   ]);
 
   const profileMap = Object.fromEntries((profiles || []).map((p) => [p.id, p]));
@@ -96,7 +97,7 @@ async function getPublicProjects(accessToken) {
 }
 
 async function getComments(supabaseProjectId, chapterId, accessToken) {
-  return restReq('GET', `comments?project_id=eq.${supabaseProjectId}&chapter_id=eq.${chapterId}&select=*,profiles(username,display_name,avatar_url)&order=created_at.asc`, null, accessToken);
+  return restReq('GET', `comments?project_id=eq.${supabaseProjectId}&chapter_id=eq.${chapterId}&select=*,profiles!user_id(username,display_name,avatar_url)&order=created_at.asc`, null, accessToken);
 }
 
 async function addComment(userId, supabaseProjectId, chapterId, body, accessToken) {

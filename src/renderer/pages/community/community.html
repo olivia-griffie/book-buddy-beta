@@ -6,10 +6,49 @@
       <p>Browse stories other writers have published.</p>
     </div>
   </div>
-  <div id="community-content" class="community-grid"></div>
+  <div id="community-content" class="community-list" style="display:none;"></div>
   <div id="community-empty" class="empty-state card" style="display:none;">
     <h2>No public stories yet</h2>
     <p>Be the first — publish a chapter from your project to appear here.</p>
   </div>
   <div id="community-loading" class="community-loading">Loading stories…</div>
 </section>
+
+<div id="chapter-reader" class="chapter-reader" style="display:none;" role="dialog" aria-modal="true">
+  <div class="chapter-reader-inner">
+    <div class="chapter-reader-topbar">
+      <div class="chapter-reader-topbar-left">
+        <button class="chapter-reader-back" id="reader-close" type="button" aria-label="Close reader">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="18" height="18"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <span class="chapter-reader-breadcrumb">
+          <span id="reader-project-name"></span>
+          <span class="reader-breadcrumb-sep">›</span>
+          <span id="reader-chapter-name"></span>
+        </span>
+      </div>
+    </div>
+    <div class="chapter-reader-scroll">
+      <article class="chapter-reader-prose">
+        <header class="chapter-reader-header">
+          <h1 id="reader-chapter-title" class="reader-chapter-title"></h1>
+          <div class="reader-meta-row">
+            <span id="reader-author-name" class="reader-author-name"></span>
+            <span class="reader-meta-sep">·</span>
+            <span id="reader-published-at" class="reader-published-at"></span>
+          </div>
+        </header>
+        <div id="reader-body" class="reader-body"></div>
+      </article>
+      <section class="chapter-reader-comments">
+        <h2 class="reader-comments-heading">Comments</h2>
+        <div id="reader-comments-list" class="reader-comments-list"></div>
+        <div class="reader-comment-form">
+          <textarea id="reader-comment-input" class="reader-comment-input" placeholder="Leave a comment…" rows="3"></textarea>
+          <button id="reader-comment-submit" class="btn btn-save" type="button">Post Comment</button>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

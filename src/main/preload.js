@@ -32,5 +32,7 @@ contextBridge.exposeInMainWorld('api', {
     getProjects: () => ipcRenderer.invoke('community:getProjects'),
     getComments: (args) => ipcRenderer.invoke('community:getComments', args),
     addComment: (args) => ipcRenderer.invoke('community:addComment', args),
+    getChapterComments: (args) => ipcRenderer.invoke('community:getChapterComments', args),
+    addChapterComment: (args) => ipcRenderer.invoke('community:addChapterComment', args),
   },
 });
