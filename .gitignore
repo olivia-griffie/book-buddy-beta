@@ -2,6 +2,7 @@ node_modules/
 releases/
 releases-*/
 dist/
+dist-build/
 dist-win/
 dist-win-*/
 out/
