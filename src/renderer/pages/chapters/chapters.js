@@ -107,6 +107,16 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     await autosave.flush();
   });
 
+  function bindChapterPanelState() {
+    content.querySelectorAll('[data-chapter-panel]').forEach((details) => {
+      window.bindPersistentDetailsState?.(details, {
+        projectId: activeProject.id,
+        sectionId: `chapters-panel-${details.dataset.chapterPanel}`,
+        defaultOpen: details.dataset.chapterPanel === 'context',
+      });
+    });
+  }
+
   let selectedChapterId = (chapterId && chapters.some((c) => c.id === chapterId))
     ? chapterId
     : chapters[0]?.id || '';
@@ -289,11 +299,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     renderPromptPanel();
     renderPublishPanel?.();
 
-    editorShell.querySelectorAll('[data-collapse-toggle]').forEach((trigger) => {
-      trigger.addEventListener('click', () => {
-        trigger.closest('.field-collapsible')?.classList.toggle('is-open');
-      });
-    });
   }
 
   function renderContextPanel() {
@@ -573,12 +578,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   function renderSections() {
-    const openSectionIds = new Set(
-      [...sectionsList.querySelectorAll('details.plot-section-item[open]')]
-        .map((el) => el.dataset.sectionId)
-        .filter(Boolean),
-    );
-
     sectionsList.innerHTML = plotSections
       .map((section) => {
         const sectionChapters = chapters.filter((chapter) => chapter.sectionId === section.id);
@@ -586,11 +585,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
           0,
         );
-        const hasSelectedChapter = sectionChapters.some((chapter) => chapter.id === selectedChapterId);
-        const shouldBeOpen = hasSelectedChapter || openSectionIds.has(section.id);
-
         return `
-          <details class="plot-section-item" data-section-id="${section.id}" ${shouldBeOpen ? 'open' : ''}>
+          <details class="plot-section-item bb-collapse" data-section-id="${section.id}">
             <summary class="plot-section-toggle">
               <div class="plot-section-toggle-copy">
                 <h3>${section.label}</h3>
@@ -639,6 +635,18 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         `;
       })
       .join('');
+
+    sectionsList.querySelectorAll('details.plot-section-item').forEach((details) => {
+      const containsSelectedChapter = details.querySelector(`[data-open-chapter="${selectedChapterId}"]`);
+      window.bindPersistentDetailsState?.(details, {
+        projectId: activeProject.id,
+        sectionId: `chapters-section-${details.dataset.sectionId}`,
+        defaultOpen: Boolean(containsSelectedChapter),
+      });
+      if (containsSelectedChapter) {
+        details.open = true;
+      }
+    });
 
     sectionsList.querySelectorAll('[data-target-section]').forEach((input) => {
       input.addEventListener('input', () => {
@@ -892,6 +900,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   populateSectionSelect();
   renderSections();
   renderEditor();
+  bindChapterPanelState();
   contextTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
       contextState.tab = tab.dataset.contextTab;

@@ -24,9 +24,6 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
-  content.querySelectorAll('.plot-block').forEach((block) => {
-    block.open = false;
-  });
   document.getElementById('plot-page-title').textContent = activeProject.title || 'Plot Builder';
   document.getElementById('plot-page-subtitle').textContent = (activeProject.genres || []).join(' + ');
 
@@ -106,22 +103,33 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   const hybridPromptSection = document.getElementById('hybrid-prompts-section');
   const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');
 
+  content.querySelectorAll('.plot-block').forEach((block, index) => {
+    window.bindPersistentDetailsState?.(block, {
+      projectId: activeProject.id,
+      sectionId: `plot-block-${block.dataset.plotBlock || index}`,
+      defaultOpen: (block.dataset.plotBlock || '') === 'outline',
+    });
+  });
+
   function renderSectionTargets() {
     sectionTargets.innerHTML = resources.plotSections.map((section) => `
-      <details class="plot-section-target-card">
+      <details class="plot-section-target-card bb-collapse" data-section-target-card="${section.id}">
         <summary class="plot-section-target-toggle">
-          <div class="plot-section-label-row">
+          <div class="bb-collapse__header">
             <h3 class="plot-section-label" data-section-label-display="${section.id}">${section.label}</h3>
+            <p class="bb-collapse__meta">${Number(section.targetWords || 0).toLocaleString()} word target</p>
+          </div>
+          <span class="plot-section-target-indicator bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+        </summary>
+        <div class="plot-section-target-body bb-collapse__body">
+          <div class="plot-section-target-actions">
             <button
               type="button"
               class="plot-section-label-edit btn btn-ghost"
               data-section-label-edit="${section.id}"
               title="Rename this section"
-            >Rename</button>
+            >Rename Section</button>
           </div>
-          <span class="plot-section-target-indicator" aria-hidden="true"></span>
-        </summary>
-        <div class="plot-section-target-body">
           <div class="field">
             <label for="plot-section-desc-${section.id}">Section Guidance</label>
             <textarea
@@ -143,6 +151,14 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         </div>
       </details>
     `).join('');
+
+    sectionTargets.querySelectorAll('[data-section-target-card]').forEach((details, index) => {
+      window.bindPersistentDetailsState?.(details, {
+        projectId: activeProject.id,
+        sectionId: `plot-section-target-${details.dataset.sectionTargetCard}`,
+        defaultOpen: index === 0,
+      });
+    });
 
     window.initializeTextEditor(sectionTargets);
     resources.plotSections.forEach((section) => {

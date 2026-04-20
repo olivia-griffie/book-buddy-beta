@@ -51,7 +51,7 @@
 
       <div id="chapter-editor-shell" style="display: none;">
 
-        <details class="chapter-panel chapter-panel-challenge">
+        <details class="chapter-panel chapter-panel-challenge bb-collapse" data-chapter-panel="prompts">
           <summary class="chapter-panel-summary">
             <div>
               <p class="eyebrow">Daily Writing Challenge</p>
@@ -59,7 +59,7 @@
             </div>
             <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
           </summary>
-          <div class="chapter-panel-body">
+          <div class="chapter-panel-body bb-collapse__body">
             <div id="chapter-prompt-empty" style="display: none;">
               <p class="chapter-prompt-empty">No active prompts yet. Generate a challenge to write against this chapter.</p>
               <button class="btn btn-ghost" type="button" id="chapter-go-to-challenges">Open Challenges</button>
@@ -132,7 +132,7 @@
           </div>
         </section>
 
-        <details class="chapter-panel chapter-publish-panel">
+        <details class="chapter-panel chapter-publish-panel bb-collapse" data-chapter-panel="publish">
           <summary class="chapter-panel-summary">
             <div>
               <p class="eyebrow">Community</p>
@@ -140,7 +140,7 @@
             </div>
             <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
           </summary>
-          <div class="chapter-panel-body chapter-publish-body">
+          <div class="chapter-panel-body chapter-publish-body bb-collapse__body">
             <p class="chapter-publish-desc">Publishing makes this chapter visible to the community. The project must be set to Public.</p>
             <div id="chapter-publish-status" class="chapter-publish-status"></div>
             <div class="chapter-publish-actions">
@@ -150,7 +150,7 @@
           </div>
         </details>
 
-        <details class="chapter-panel chapter-context-panel">
+        <details class="chapter-panel chapter-context-panel bb-collapse" data-chapter-panel="context">
           <summary class="chapter-panel-summary">
             <div>
               <p class="eyebrow">Writing Context</p>
@@ -158,7 +158,7 @@
             </div>
             <span class="chapter-panel-indicator" aria-hidden="true">⌄</span>
           </summary>
-          <div class="chapter-panel-body">
+          <div class="chapter-panel-body bb-collapse__body">
             <div class="chapter-context-tabs" role="tablist" aria-label="Chapter reference tabs">
               <button class="chapter-context-tab is-active" type="button" role="tab" aria-selected="true" data-context-tab="plot">Plot</button>
               <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="characters">Characters</button>

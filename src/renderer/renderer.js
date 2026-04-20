@@ -226,6 +226,44 @@ function buildLocalDayKey(value = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+function buildCollapseStorageKey(projectId = 'global', sectionId = '') {
+  const normalizedProjectId = String(projectId || 'global').trim() || 'global';
+  const normalizedSectionId = String(sectionId || '').trim();
+  if (!normalizedSectionId) {
+    return '';
+  }
+
+  return `collapse:${normalizedProjectId}:${normalizedSectionId}`;
+}
+
+function bindPersistentDetailsState(details, {
+  projectId = 'global',
+  sectionId = '',
+  defaultOpen = false,
+} = {}) {
+  if (!(details instanceof HTMLElement) || details.tagName !== 'DETAILS') {
+    return '';
+  }
+
+  const storageKey = buildCollapseStorageKey(projectId, sectionId || details.dataset.collapseId || details.id);
+  if (!storageKey) {
+    details.open = Boolean(defaultOpen);
+    return '';
+  }
+
+  const storedValue = localStorage.getItem(storageKey);
+  details.open = storedValue == null ? Boolean(defaultOpen) : storedValue === '1';
+
+  if (details.dataset.collapsePersistBound !== 'true') {
+    details.dataset.collapsePersistBound = 'true';
+    details.addEventListener('toggle', () => {
+      localStorage.setItem(storageKey, details.open ? '1' : '0');
+    });
+  }
+
+  return storageKey;
+}
+
 function updateDailyWritingHistory(nextProject, previousProject) {
   const previousMatches = previousProject?.id && previousProject.id === nextProject?.id;
   const nextWords = Number(nextProject?.currentWordCount || 0);
@@ -1008,6 +1046,8 @@ window.getGenrePromptData = getGenrePromptData;
 window.getProjectResources = buildProjectResources;
 window.computeWordCount = computeWordCount;
 window.buildLocalDayKey = buildLocalDayKey;
+window.buildCollapseStorageKey = buildCollapseStorageKey;
+window.bindPersistentDetailsState = bindPersistentDetailsState;
 window.getDefaultStreakSettings = getDefaultStreakSettings;
 window.computeWritingStreak = computeWritingStreak;
 window.slugify = slugify;

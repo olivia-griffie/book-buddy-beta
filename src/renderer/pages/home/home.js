@@ -125,10 +125,6 @@ window.registerPageInit('home', async function () {
     const history = project.dailyWordHistory || [];
     const sessionHistory = project.dailySessionHistory || [];
     const streakSettings = project.streakSettings || { target: 100 };
-    if (!history.length && !project.targetCompletionDate && !sessionHistory.length && !Number(project?.streakState?.current || 0)) {
-      dashboard.style.display = 'none';
-      return;
-    }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -243,34 +239,65 @@ window.registerPageInit('home', async function () {
             <strong>${goal.toLocaleString()} words</strong>
           </div>
         </section>
-        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
-          <h3>Weekly Writing</h3>
-          <div class="daily-chart">
-            ${weeklyEntries.map((entry) => `
-              <div class="daily-chart-bar-group">
-                <div class="daily-chart-bar-track">
-                  <div class="daily-chart-bar-fill" style="height:${Math.max(10, Math.round((entry.value / maxWeekly) * 100))}%"></div>
-                </div>
-                <span class="daily-chart-bar-value">${entry.value ? entry.value.toLocaleString() : ''}</span>
-                <span class="daily-chart-bar-label">${entry.label}</span>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
-          <h3>28 Day Writing Calendar</h3>
-          <div class="daily-calendar">
-            ${calendarDates.map((entry) => {
-              const intensity = entry.value === 0 ? '0' : entry.value < maxCalendar * 0.34 ? '1' : entry.value < maxCalendar * 0.67 ? '2' : '3';
-              return `
-                <div class="daily-calendar-cell intensity-${intensity}" title="${entry.key}: ${entry.value.toLocaleString()} words">
-                  <span>${entry.dayLabel}</span>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        </section>
       </div>
+      <details class="bb-collapse daily-dashboard-collapse" data-dashboard-collapse="goal">
+        <summary>
+          <div class="bb-collapse__header">
+            <p class="eyebrow">Goal</p>
+            <h3 class="bb-collapse__title">Set daily goal</h3>
+            <p class="bb-collapse__meta">${goal.toLocaleString()} words needed to secure your writing streak each day.</p>
+          </div>
+          <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+        </summary>
+        <div class="bb-collapse__body">
+          <div class="daily-goal-editor">
+            <div class="field">
+              <label for="dashboard-daily-goal">Daily writing goal</label>
+              <input id="dashboard-daily-goal" type="number" min="1" step="25" value="${goal}" />
+            </div>
+            <button class="btn btn-save" type="button" id="dashboard-save-goal">Save Goal</button>
+          </div>
+        </div>
+      </details>
+      <details class="bb-collapse daily-dashboard-collapse" data-dashboard-collapse="insights">
+        <summary>
+          <div class="bb-collapse__header">
+            <p class="eyebrow">Writing Insights</p>
+            <h3 class="bb-collapse__title">Weekly chart and 28-day calendar</h3>
+            <p class="bb-collapse__meta">Open this when you want the broader view without crowding the home screen.</p>
+          </div>
+          <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+        </summary>
+        <div class="bb-collapse__body">
+          <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+            <h3>Weekly Writing</h3>
+            <div class="daily-chart">
+              ${weeklyEntries.map((entry) => `
+                <div class="daily-chart-bar-group">
+                  <div class="daily-chart-bar-track">
+                    <div class="daily-chart-bar-fill" style="height:${Math.max(10, Math.round((entry.value / maxWeekly) * 100))}%"></div>
+                  </div>
+                  <span class="daily-chart-bar-value">${entry.value ? entry.value.toLocaleString() : ''}</span>
+                  <span class="daily-chart-bar-label">${entry.label}</span>
+                </div>
+              `).join('')}
+            </div>
+          </section>
+          <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+            <h3>28 Day Writing Calendar</h3>
+            <div class="daily-calendar">
+              ${calendarDates.map((entry) => {
+                const intensity = entry.value === 0 ? '0' : entry.value < maxCalendar * 0.34 ? '1' : entry.value < maxCalendar * 0.67 ? '2' : '3';
+                return `
+                  <div class="daily-calendar-cell intensity-${intensity}" title="${entry.key}: ${entry.value.toLocaleString()} words">
+                    <span>${entry.dayLabel}</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </section>
+        </div>
+      </details>
       <section class="home-prompt-widget ui-card ui-card-soft ui-card-stack">
         <div class="home-prompt-widget-head">
           <div>
@@ -306,6 +333,30 @@ window.registerPageInit('home', async function () {
         updatedAt: new Date().toISOString(),
       }, { dirtyFields: ['targetCompletionDate'] });
       renderDashboard(project);
+    });
+
+    dashboard.querySelectorAll('[data-dashboard-collapse]').forEach((details) => {
+      window.bindPersistentDetailsState?.(details, {
+        projectId: project.id,
+        sectionId: `home-dashboard-${details.dataset.dashboardCollapse}`,
+        defaultOpen: false,
+      });
+    });
+
+    dashboard.querySelector('#dashboard-save-goal')?.addEventListener('click', async () => {
+      const input = dashboard.querySelector('#dashboard-daily-goal');
+      const nextGoal = Math.max(1, Number(input?.value || goal));
+      const nextProject = await window.saveProjectData({
+        ...project,
+        streakSettings: {
+          ...(project.streakSettings || {}),
+          target: nextGoal,
+        },
+        updatedAt: new Date().toISOString(),
+      }, {
+        dirtyFields: ['streakSettings'],
+      });
+      renderDashboard(nextProject);
     });
 
     dashboard.querySelector('#home-go-to-challenges')?.addEventListener('click', () => {
@@ -419,17 +470,20 @@ window.registerPageInit('home', async function () {
               <div class="goal-progress-track">
                 <div class="goal-progress-fill ${completed ? 'is-complete' : ''}" style="width:${pct}%"></div>
               </div>
-              <div class="project-goal-editor">
-                <div class="project-goal-summary">
+              <details class="project-goal-editor bb-collapse" data-project-goal-details="${project.id}">
+                <summary class="project-goal-summary">
                   <div class="project-goal-copy">
                     <span class="project-goal-label">Word Count Goal</span>
                     <span class="project-goal-value">${(project.wordCountGoal || 0).toLocaleString()} words</span>
                     <span class="project-goal-label">Date To Complete</span>
                     <span class="project-goal-value">${formatShortDate(project.targetCompletionDate)}</span>
                   </div>
-                  <button class="btn btn-ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit</button>
-                </div>
-                <div class="project-goal-editor-panel">
+                  <div class="project-goal-summary-action">
+                    <span class="project-goal-summary-text">Edit project goal</span>
+                    <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+                  </div>
+                </summary>
+                <div class="project-goal-editor-panel bb-collapse__body">
                   <div class="project-goal-editor-row">
                     <div class="field">
                       <label for="goal-${project.id}">Update Goal</label>
@@ -457,7 +511,7 @@ window.registerPageInit('home', async function () {
                     </div>
                   </div>
                 </div>
-              </div>
+              </details>
             </div>
           </div>
           <div class="project-card-actions ui-card-footer">
@@ -695,13 +749,15 @@ window.registerPageInit('home', async function () {
     });
   });
 
-  grid.querySelectorAll('[data-toggle-goal]').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const panel = button.closest('.project-goal-editor')?.querySelector('.project-goal-editor-panel');
-      panel?.classList.toggle('is-open');
-      if (panel?.classList.contains('is-open')) {
-        panel.querySelector('[data-goal-input]')?.focus();
+  grid.querySelectorAll('[data-project-goal-details]').forEach((details) => {
+    window.bindPersistentDetailsState?.(details, {
+      projectId: details.dataset.projectGoalDetails,
+      sectionId: 'home-project-goal',
+      defaultOpen: false,
+    });
+    details.addEventListener('toggle', () => {
+      if (details.open) {
+        details.querySelector('[data-goal-input]')?.focus();
       }
     });
   });

@@ -189,23 +189,13 @@ window.registerPageInit('characters', async function ({ project }) {
     `;
   }
 
-  function initializeCollapsibles() {
-    editorShell.querySelectorAll('[data-collapse-toggle]').forEach((trigger) => {
-      if (trigger.dataset.collapseBound === 'true') {
-        return;
-      }
-
-      trigger.dataset.collapseBound = 'true';
-      const wrapper = trigger.closest('.field-collapsible');
-      trigger.setAttribute('aria-expanded', String(wrapper?.classList.contains('is-open')));
-      trigger.addEventListener('click', () => {
-        const field = trigger.closest('.field-collapsible');
-        if (!field) {
-          return;
-        }
-
-        const isOpen = field.classList.toggle('is-open');
-        trigger.setAttribute('aria-expanded', String(isOpen));
+  function bindCharacterPanels(character) {
+    editorShell.querySelectorAll('[data-character-section]').forEach((details) => {
+      const defaultOpen = ['appearance', 'background'].includes(details.dataset.characterSection);
+      window.bindPersistentDetailsState?.(details, {
+        projectId: activeProject.id,
+        sectionId: `${character?.id || 'character'}:${details.dataset.characterSection}`,
+        defaultOpen,
       });
     });
   }
@@ -359,7 +349,7 @@ window.registerPageInit('characters', async function ({ project }) {
         </div>
       `;
 
-    initializeCollapsibles();
+    bindCharacterPanels(character);
 
     typeTags.querySelectorAll('[data-character-type]').forEach((button) => {
       button.addEventListener('click', () => {

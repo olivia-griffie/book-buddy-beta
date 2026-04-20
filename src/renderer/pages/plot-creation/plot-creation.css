@@ -22,13 +22,6 @@
   margin-bottom: 8px;
 }
 
-.plot-block {
-  border: 1px solid var(--border-soft);
-  border-radius: 14px;
-  background: #fffdfa;
-  overflow: hidden;
-}
-
 .plot-block + .plot-block {
   margin-top: 16px;
 }
@@ -47,18 +40,8 @@
   display: none;
 }
 
-.plot-block-indicator {
-  color: var(--ink-muted);
-  transition: transform var(--duration) var(--ease);
-}
-
-.plot-block[open] .plot-block-indicator {
-  transform: rotate(180deg);
-}
-
 .plot-block-body {
-  padding: 0 18px 18px;
-  border-top: 1px solid var(--border-soft);
+  padding-top: 0;
 }
 
 .plot-outline-field {
@@ -103,28 +86,8 @@
   margin-top: 16px;
 }
 
-.plot-section-target-card {
-  border: 1px solid var(--border-soft);
-  border-radius: 14px;
-  background: var(--surface-soft);
-  overflow: hidden;
-}
-
 .plot-section-target-toggle {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  cursor: pointer;
-}
-
-.plot-section-label-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
+  min-height: 76px;
 }
 
 .plot-section-label {
@@ -136,19 +99,6 @@
   white-space: nowrap;
 }
 
-.plot-section-label-edit {
-  font-size: 0.7rem;
-  padding: 3px 8px;
-  opacity: 0;
-  flex-shrink: 0;
-  transition: opacity var(--duration) var(--ease);
-}
-
-.plot-section-target-card:hover .plot-section-label-edit,
-.plot-section-target-card[open] .plot-section-label-edit {
-  opacity: 1;
-}
-
 .plot-section-description-input {
   font-size: 0.88rem;
   color: var(--ink-muted);
@@ -157,26 +107,18 @@
   min-height: 64px;
 }
 
-.plot-section-target-toggle::-webkit-details-marker {
-  display: none;
+.plot-section-target-actions {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.plot-section-target-card[open] .plot-section-target-toggle {
-  border-bottom: 1px solid var(--border-soft);
-}
-
-.plot-section-target-indicator {
-  color: var(--ink-muted);
-}
-
-.plot-section-target-card[open] .plot-section-target-indicator {
-  transform: rotate(180deg);
+.plot-section-label-edit {
+  font-size: 0.72rem;
+  padding: 4px 10px;
 }
 
 .plot-section-target-body {
-  display: grid;
   gap: 12px;
-  padding: 14px;
 }
 
 .plot-section-target-card h3 {

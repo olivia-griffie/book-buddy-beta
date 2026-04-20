@@ -210,44 +210,12 @@
   color: var(--ink-muted);
 }
 
-.chapter-panel {
-  border: 1px solid var(--border-soft);
-  border-radius: var(--radius-md);
-  background: #fffdfa;
-  overflow: hidden;
-  margin-bottom: 20px;
-}
-
 .chapter-panel-summary {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  cursor: pointer;
-}
-
-.chapter-panel-summary::-webkit-details-marker {
-  display: none;
-}
-
-.chapter-panel-indicator {
-  color: var(--ink-muted);
-  font-size: 1rem;
-  line-height: 1;
-  transition: transform var(--duration) var(--ease);
-}
-
-.chapter-panel[open] .chapter-panel-indicator {
-  transform: rotate(180deg);
+  min-height: 74px;
 }
 
 .chapter-panel-body {
-  display: grid;
   gap: 14px;
-  padding: 0 18px 18px;
-  border-top: 1px solid var(--border-soft);
 }
 
 .chapter-form-grid {
@@ -411,6 +379,14 @@
 
 .chapter-prompt-card[open] .chapter-prompt-toggle {
   border-bottom: 1px solid var(--border-soft);
+}
+
+.chapter-prompt-toggle-static {
+  cursor: default;
+}
+
+.chapter-prompt-card-flat .chapter-prompt-body {
+  padding-top: 0;
 }
 
 .chapter-prompt-toggle-copy {

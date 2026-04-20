@@ -336,19 +336,21 @@
   color: var(--ink);
 }
 
-.project-goal-toggle {
-  padding: 6px 10px;
-  font-size: 0.72rem;
-}
-
 .project-goal-editor-panel {
-  display: none;
   gap: 10px;
   margin-top: 12px;
 }
 
-.project-goal-editor-panel.is-open {
-  display: grid;
+.project-goal-summary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .project-goal-editor-row {
@@ -457,6 +459,23 @@
   display: grid;
   grid-template-columns: 1.2fr 1fr;
   gap: 18px;
+}
+
+.daily-dashboard-collapse + .daily-dashboard-collapse,
+.daily-dashboard-grid + .daily-dashboard-collapse {
+  margin-top: 2px;
+}
+
+.daily-goal-editor {
+  display: flex;
+  gap: 12px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.daily-goal-editor .field {
+  flex: 1;
+  min-width: 220px;
 }
 
 .daily-dashboard-panel {
