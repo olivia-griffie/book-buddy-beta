@@ -1,21 +1,47 @@
 <section class="page community-page">
-  <div class="page-header">
+  <div class="community-hero">
     <div>
-      <p class="eyebrow">Social</p>
-      <h1>Community</h1>
-      <p>Browse stories other writers have published.</p>
+      <p class="eyebrow">Community</p>
+      <h1>Stories in Progress</h1>
+      <p class="community-hero-copy">Read and save works from other writers. Favorites stay private to you.</p>
     </div>
   </div>
-  <div class="community-filters">
-    <button class="community-filter-btn is-active" type="button" data-community-filter="all">All Stories</button>
-    <button class="community-filter-btn" type="button" data-community-filter="favorites">Favorites</button>
+
+  <div class="community-toolbar">
+    <div class="community-tabs" role="tablist" aria-label="Community sections">
+      <button class="community-tab is-active" type="button" data-community-filter="all">Discover</button>
+      <button class="community-tab" type="button" data-community-filter="favorites">
+        Favorites
+        <span id="community-favorites-count" class="community-tab-badge" style="display:none;">0</span>
+      </button>
+    </div>
+    <label class="community-search">
+      <span class="community-search-icon" aria-hidden="true">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+          <circle cx="9" cy="9" r="5.5" stroke="currentColor" stroke-width="1.6"></circle>
+          <path d="M13.2 13.2L17 17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        </svg>
+      </span>
+      <input id="community-search-input" type="search" placeholder="Search by title, author, or genre…" />
+    </label>
   </div>
-  <div id="community-content" class="community-list" style="display:none;"></div>
+
+  <div id="community-favorites-empty" class="community-callout" style="display:none;">
+    <h2>No favorites yet</h2>
+    <p>Tap the heart on any story in Discover to save it here.</p>
+    <button id="community-browse-btn" class="btn btn-primary" type="button">Browse Stories</button>
+  </div>
+
+  <div id="community-content" class="community-grid" style="display:none;"></div>
+
   <div id="community-empty" class="empty-state card" style="display:none;">
     <h2>No public stories yet</h2>
     <p>Be the first — publish a chapter from your project to appear here.</p>
   </div>
+
   <div id="community-loading" class="community-loading">Loading stories…</div>
+
+  <p class="community-privacy-note">Favorites are stored anonymously — authors only see engagement, not who saved them.</p>
 </section>
 
 <div id="chapter-reader" class="chapter-reader" style="display:none;" role="dialog" aria-modal="true">

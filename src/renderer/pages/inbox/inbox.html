@@ -1,15 +1,29 @@
 <section class="page inbox-page">
-  <div class="page-header">
+  <div class="inbox-hero">
     <div>
-      <p class="eyebrow">Social</p>
-      <h1>Inbox</h1>
-      <p>Likes, comments, and activity on your published stories.</p>
+      <p class="eyebrow">Inbox</p>
+      <div class="inbox-title-row">
+        <h1>Notifications</h1>
+        <span id="inbox-unread-badge" class="inbox-unread-badge" style="display:none;">0</span>
+      </div>
+      <p class="inbox-hero-copy">Likes and comments on your published writing show up here.</p>
     </div>
+    <button id="inbox-mark-read" class="btn btn-ghost" type="button" style="display:none;">Mark all read</button>
   </div>
+
+  <div class="inbox-filters" role="tablist" aria-label="Notification filters">
+    <button class="inbox-filter is-active" type="button" data-inbox-filter="all">All</button>
+    <button class="inbox-filter" type="button" data-inbox-filter="comment">Comments</button>
+    <button class="inbox-filter" type="button" data-inbox-filter="like">Likes</button>
+    <button class="inbox-filter" type="button" data-inbox-filter="favorite">Favorites</button>
+  </div>
+
   <div id="inbox-loading" class="inbox-loading">Loading activity…</div>
+
   <div id="inbox-empty" class="empty-state card" style="display:none;">
-    <h2>No activity yet</h2>
-    <p>When readers like or comment on your published chapters, it'll show up here.</p>
+    <h2>All caught up</h2>
+    <p>New likes, favorites, and comments will appear here.</p>
   </div>
+
   <div id="inbox-feed" class="inbox-feed" style="display:none;"></div>
 </section>
