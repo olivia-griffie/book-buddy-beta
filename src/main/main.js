@@ -619,8 +619,15 @@ ipcMain.handle('chapters:getPublished', async (_, { projectLocalId }) => {
 
 // IPC: Community
 ipcMain.handle('community:getProjects', async () => {
-  const session = await getValidSession();
-  return getPublicProjects(session?.access_token);
+  try {
+    const session = await getValidSession();
+    return await getPublicProjects(session?.access_token);
+  } catch (err) {
+    if (err?.message?.includes('infinite recursion') || err?.message?.includes('JWT')) {
+      return getPublicProjects(null);
+    }
+    throw err;
+  }
 });
 
 ipcMain.handle('community:getComments', async (_, { projectLocalId, chapterId }) => {
