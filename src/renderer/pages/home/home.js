@@ -44,6 +44,104 @@ window.registerPageInit('home', async function () {
     });
   }
 
+  function buildProjectCardMarkup({ project, pct, completed, genres, tags, thumb }) {
+    return `
+      <article class="project-card" data-id="${project.id}">
+        <div class="project-card__cover-wrap">
+          <div class="project-card__cover">${thumb}</div>
+          <div class="project-card__cover-actions">
+            <button class="project-card__icon-btn project-card__icon-btn--primary upload-trigger upload-trigger-compact" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change cover image' : 'Upload cover image'}" aria-label="${project.thumbnail ? 'Change cover image' : 'Upload cover image'}">
+              <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+            </button>
+            <button class="project-card__icon-btn" type="button" data-remove-thumbnail="${project.id}" title="Remove cover image" aria-label="Remove cover image" ${project.thumbnail ? '' : 'disabled'}>&times;</button>
+            <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
+          </div>
+        </div>
+        <div class="project-card__body">
+          <div class="project-card__header">
+            <div class="project-card__header-copy">
+              <h3 class="project-card__title" data-project-title="${project.id}">${project.title}</h3>
+              ${project.subtitle ? `<p class="project-card__subtitle">${project.subtitle}</p>` : ''}
+              <div class="project-card__tags">
+                ${genres || '<span class="project-tag project-tag--empty">No genre set</span>'}
+                ${tags}
+              </div>
+            </div>
+            <button class="btn project-card__btn project-card__btn--ghost project-card__btn--small" type="button" data-edit-project-title="${project.id}">Edit Title</button>
+          </div>
+
+          <section class="project-progress">
+            <div class="project-progress__top">
+              <div class="project-progress__stat">
+                <span class="project-progress__percent">${pct}%</span>
+                <span class="project-progress__label">${completed ? 'complete' : 'done'}</span>
+              </div>
+              <div class="project-progress__meta">${(project.currentWordCount || 0).toLocaleString()} of ${(project.wordCountGoal || 0).toLocaleString()} words</div>
+            </div>
+            <div class="project-progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
+              <span class="project-progress__fill" style="width:${pct}%"></span>
+            </div>
+          </section>
+
+          <dl class="project-card__details">
+            <div>
+              <dt>Word Goal</dt>
+              <dd>${(project.wordCountGoal || 0).toLocaleString()} words</dd>
+            </div>
+            <div>
+              <dt>Target Date</dt>
+              <dd>${formatShortDate(project.targetCompletionDate)}</dd>
+            </div>
+          </dl>
+
+          <div class="project-card__settings">
+            <button class="btn project-card__btn project-card__btn--ghost" type="button" data-edit-genres="${project.id}" title="Change genre">Change Genre</button>
+            <button class="btn project-card__btn project-card__btn--ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit Project Goal</button>
+          </div>
+
+          <div class="project-goal-editor" data-project-goal-details="${project.id}">
+            <div class="project-goal-editor-panel">
+              <div class="project-goal-editor-row">
+                <div class="field">
+                  <label for="goal-${project.id}">Update Goal</label>
+                  <input id="goal-${project.id}" type="number" min="0" step="100" value="${project.wordCountGoal || 0}" data-goal-input="${project.id}" />
+                </div>
+                <div class="field">
+                  <label for="target-date-${project.id}">Target Date</label>
+                  <input id="target-date-${project.id}" type="date" value="${project.targetCompletionDate || ''}" data-target-date-input="${project.id}" />
+                </div>
+                <button class="btn btn-save project-card__btn" type="button" data-save-goal="${project.id}">Save Goal</button>
+              </div>
+              <div class="project-tags-editor">
+                <label>Tags</label>
+                <div class="tag-input-row">
+                  <input type="text" class="project-tag-editor-input" data-tag-input="${project.id}" placeholder="Type a tag and press Enter" maxlength="40" autocomplete="off" />
+                  <button type="button" class="btn project-card__btn project-card__btn--ghost" data-tag-add="${project.id}">Add</button>
+                </div>
+                <div class="project-tags-list" data-tags-list="${project.id}">
+                  ${(project.tags || []).map((tag) => `
+                    <span class="project-tag-chip">
+                      <span>${tag}</span>
+                      <button type="button" class="project-tag-remove" data-card-remove-tag="${tag}" data-card-project="${project.id}" aria-label="Remove tag ${tag}">&times;</button>
+                    </span>
+                  `).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="project-card__actions">
+            <button class="btn project-card__btn project-card__btn--primary" type="button" data-open-project="${project.id}">Open Project</button>
+            <button class="btn project-card__btn project-card__btn--secondary" type="button" data-export-project="${project.id}">Export</button>
+            <button class="btn project-card__btn project-card__btn--secondary project-backup-btn" type="button" data-export-backup="${project.id}" title="Save a full backup of this project that can be imported after an app update">Backup Project</button>
+          </div>
+
+          <button class="project-card__delete" type="button" data-delete-project="${project.id}">Delete Project</button>
+        </div>
+      </article>
+    `;
+  }
+
   function computePromptStreak(project) {
     const days = [...new Set(
       (project?.dailyPromptHistory || [])
@@ -422,7 +520,7 @@ window.registerPageInit('home', async function () {
         : 0;
       const completed = project.wordCountGoal > 0 && (project.currentWordCount || 0) >= project.wordCountGoal;
       const genres = (project.genres || [])
-        .map((genre) => `<span class="genre-tag">${genre}</span>`)
+        .map((genre) => `<span class="project-tag">${genre}</span>`)
         .join('');
       const tags = (project.tags || [])
         .map((tag) => `<span class="project-tag-chip project-tag-chip-display">${tag}</span>`)
@@ -431,7 +529,8 @@ window.registerPageInit('home', async function () {
         ? `<img src="${project.thumbnail}" alt="${project.title}" />`
         : '<span class="placeholder-icon">Book</span>';
 
-      return `
+      return buildProjectCardMarkup({ project, pct, completed, genres, tags, thumb });
+      /*
         <div class="project-card ui-card ui-card-interactive" data-id="${project.id}">
           <div class="project-card-head ui-card-head">
             <div class="project-media">
@@ -521,7 +620,7 @@ window.registerPageInit('home', async function () {
             <button class="btn btn-danger-soft" type="button" data-delete-project="${project.id}">Delete</button>
           </div>
         </div>
-      `;
+      */
     })
     .join('');
 

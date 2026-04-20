@@ -225,6 +225,13 @@
   border-bottom: 1px solid var(--border-soft);
 }
 
+.plot-section-targets-toolbar--standalone {
+  margin-top: 12px;
+  margin-bottom: 14px;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--border-soft);
+}
+
 .plot-section-targets-actions {
   display: flex;
   justify-content: flex-end;

@@ -70,7 +70,13 @@
         </div>
       </details>
 
-      <details class="plot-block bb-collapse" data-plot-block="section-targets">
+      <div class="plot-section-targets-toolbar plot-section-targets-toolbar--standalone">
+        <div class="plot-section-targets-actions">
+          <button id="generate-outline-btn" class="btn btn-ghost" type="button">Generate Outline from Section Targets</button>
+        </div>
+      </div>
+
+      <details class="plot-block bb-collapse" data-plot-block="section-targets" open>
         <summary class="plot-block-summary">
           <div class="ui-card-copy">
             <p class="eyebrow">Book Placement</p>
@@ -79,11 +85,6 @@
           <span class="plot-block-indicator" aria-hidden="true">⌄</span>
         </summary>
         <div class="plot-block-body plot-block-body-section-targets">
-          <div class="plot-section-targets-toolbar">
-            <div class="plot-section-targets-actions">
-              <button id="generate-outline-btn" class="btn btn-ghost" type="button">Generate Outline from Section Targets</button>
-            </div>
-          </div>
           <div id="plot-section-targets" class="plot-section-targets"></div>
         </div>
       </details>
