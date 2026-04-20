@@ -103,6 +103,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }, {
     dirtyText: 'Chapter changes not saved',
   });
+  window.registerBeforeNavigate(async () => {
+    await autosave.flush();
+  });
 
   let selectedChapterId = (chapterId && chapters.some((c) => c.id === chapterId))
     ? chapterId

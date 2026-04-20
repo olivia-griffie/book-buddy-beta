@@ -80,6 +80,7 @@ const state = {
 
 const pageInitRegistry = {};
 let activePageScript = null;
+let activeBeforeNavigateHook = null;
 const dataCache = new Map();
 let navigationRequestId = 0;
 let topbarBadgeTimer = null;
@@ -772,6 +773,18 @@ async function navigate(page, options = {}) {
     return;
   }
 
+  const previousPage = state.currentPage;
+  const beforeNavigateHook = activeBeforeNavigateHook;
+  if (typeof beforeNavigateHook === 'function') {
+    await beforeNavigateHook({
+      from: previousPage,
+      to: page,
+      options,
+    });
+  }
+
+  activeBeforeNavigateHook = null;
+
   const requestId = ++navigationRequestId;
   state.currentPage = page;
 
@@ -846,6 +859,13 @@ window.registerPageInit = function registerPageInit(pageName, initFn) {
   }
 
   pageInitRegistry[pageName] = initFn;
+};
+window.registerBeforeNavigate = function registerBeforeNavigate(hook) {
+  if (hook != null && typeof hook !== 'function') {
+    throw new Error('registerBeforeNavigate expected a function.');
+  }
+
+  activeBeforeNavigateHook = hook || null;
 };
 window.showProjectNav = () => {};
 window.getCurrentProject = getProject;
@@ -977,31 +997,46 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
   let timer = null;
   let pending = false;
   let saving = false;
-  const delay = Number(options.delay || 30000);
+  let activeSavePromise = null;
+  const delay = Number(options.delay || 5000);
   const dirtyText = options.dirtyText || 'Unsaved changes';
 
+  async function runSave() {
+    pending = false;
+    saving = true;
+    activeSavePromise = (async () => {
+      try {
+        await saveTask();
+      } catch (error) {
+        setSaveStatus({
+          tone: 'warning',
+          text: error?.message || 'Autosave failed',
+        });
+        throw error;
+      } finally {
+        saving = false;
+        activeSavePromise = null;
+        if (pending) {
+          schedule();
+        }
+      }
+    })();
+
+    return activeSavePromise;
+  }
+
   async function flush() {
-    if (!pending || saving) {
+    clearTimeout(timer);
+
+    if (saving) {
+      return activeSavePromise;
+    }
+
+    if (!pending) {
       return;
     }
 
-    pending = false;
-    saving = true;
-
-    try {
-      await saveTask();
-    } catch (error) {
-      setSaveStatus({
-        tone: 'warning',
-        text: error?.message || 'Autosave failed',
-      });
-      throw error;
-    } finally {
-      saving = false;
-      if (pending) {
-        schedule();
-      }
-    }
+    return runSave();
   }
 
   function schedule() {
@@ -1021,6 +1056,9 @@ window.createAutosaveController = function createAutosaveController(saveTask, op
     cancel() {
       clearTimeout(timer);
       pending = false;
+    },
+    hasPending() {
+      return pending || saving;
     },
   };
 };

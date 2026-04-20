@@ -88,6 +88,9 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   }, {
     dirtyText: 'Plot notes not saved',
   });
+  window.registerBeforeNavigate(async () => {
+    await autosave.flush();
+  });
 
   [outlineInput, premiseInput, stakesInput, notesInput].forEach((field) => {
     field?.addEventListener('input', () => autosave.touch());

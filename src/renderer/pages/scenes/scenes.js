@@ -55,6 +55,9 @@ window.registerPageInit('scenes', async function ({ project }) {
   }, {
     dirtyText: 'Scene changes not saved',
   });
+  window.registerBeforeNavigate(async () => {
+    await autosave.flush();
+  });
 
   fields.linkedChapterId.innerHTML = `
     <option value="">General scene idea</option>

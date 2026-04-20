@@ -51,6 +51,9 @@ window.registerPageInit('locations', async function ({ project }) {
   }, {
     dirtyText: 'Location changes not saved',
   });
+  window.registerBeforeNavigate(async () => {
+    await autosave.flush();
+  });
 
   function getSelectedLocation() {
     return locations.find((location) => location.id === selectedId) || null;

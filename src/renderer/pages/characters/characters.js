@@ -118,6 +118,9 @@ window.registerPageInit('characters', async function ({ project }) {
   }, {
     dirtyText: 'Character changes not saved',
   });
+  window.registerBeforeNavigate(async () => {
+    await autosave.flush();
+  });
 
   function getSelectedCharacter() {
     return characters.find((character) => character.id === selectedId) || null;
