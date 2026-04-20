@@ -2013,10 +2013,18 @@ body.dark-mode .btn-ghost:hover {
   color: var(--ink);
 }
 
+body.dark-mode .btn-save,
+body.dark-mode .btn-sage {
+  background: #a0eade;
+  color: #1a2e28;
+  box-shadow: 0 0 12px rgba(160, 234, 222, 0.25);
+}
+
 body.dark-mode .btn-save:hover,
 body.dark-mode .btn-sage:hover {
-  background: #ff5240;
+  background: #ff8360;
   color: white;
+  box-shadow: 0 0 14px rgba(255, 131, 96, 0.35);
 }
 
 body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
