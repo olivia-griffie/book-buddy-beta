@@ -32,23 +32,11 @@ function getSectionLabelMap(project) {
 
 function buildPlotPanel(project) {
   const workbook = project?.plotWorkbook || {};
-  const raw = workbook.outline || '';
-  const parsed = typeof window.parseRichTextValue === 'function'
-    ? window.parseRichTextValue(raw)
-    : { html: raw };
-  const outlineHtml = parsed.html || '';
-
-  const hasContent = (() => {
-    const temp = document.createElement('div');
-    temp.innerHTML = outlineHtml;
-    return (temp.textContent || temp.innerText || '').trim().length > 0;
-  })();
-
   return `
     <div class="reference-panel-grid">
       <article class="reference-card">
         <p class="reference-card-kicker">Outline</p>
-        <div class="reference-outline-content" id="reference-outline-live">${hasContent ? outlineHtml : '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>'}</div>
+        <div class="reference-outline-content" id="reference-outline-live" data-reference-outline="${encodeURIComponent(workbook.outline || '')}"></div>
       </article>
     </div>
   `;
@@ -223,4 +211,15 @@ window.renderReferenceDrawer = function renderReferenceDrawer(currentProject, op
       window.setReferenceDrawerTab(button.dataset.referenceTab);
     });
   });
+
+  const outlineLive = container.querySelector('#reference-outline-live');
+  if (outlineLive) {
+    window.renderRichText?.(
+      outlineLive,
+      decodeURIComponent(outlineLive.dataset.referenceOutline || ''),
+      {
+        emptyHtml: '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>',
+      },
+    );
+  }
 };

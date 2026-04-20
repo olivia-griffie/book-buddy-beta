@@ -92,6 +92,40 @@ function buildAlignmentIcon(kind) {
 
 window.parseRichTextValue = parseRichTextValue;
 window.serializeRichTextValue = serializeRichTextValue;
+window.renderRichText = function renderRichText(container, rawValue, options = {}) {
+  if (!container) {
+    return {
+      hasContent: false,
+      settings: {},
+      html: '',
+    };
+  }
+
+  const parsed = parseRichTextValue(rawValue || '');
+  const temp = document.createElement('div');
+  temp.innerHTML = parsed.html || '';
+  const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
+
+  container.classList.add('rich-text-rendered');
+
+  if (!hasContent) {
+    container.innerHTML = options.emptyHtml || '<p><br></p>';
+  } else {
+    container.innerHTML = parsed.html || '<p><br></p>';
+  }
+
+  const settings = parsed.settings || {};
+  container.style.fontFamily = settings.fontFamily || '';
+  container.style.fontSize = settings.fontSize ? `${settings.fontSize}px` : '';
+  container.style.lineHeight = settings.lineHeight || '';
+  container.style.textAlign = settings.textAlign || '';
+
+  return {
+    hasContent,
+    settings,
+    html: parsed.html || '',
+  };
+};
 
 window.getEditorFieldValue = function getEditorFieldValue(field) {
   if (!field?._richText) {

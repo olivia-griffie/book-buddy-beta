@@ -261,6 +261,139 @@ function updateDailyWritingHistory(nextProject, previousProject) {
   return history.sort((left, right) => left.date.localeCompare(right.date));
 }
 
+function getDefaultStreakSettings() {
+  return {
+    mode: 'words',
+    target: 100,
+    countRevision: true,
+  };
+}
+
+function normalizeStreakSettings(settings = {}) {
+  return {
+    ...getDefaultStreakSettings(),
+    ...(settings || {}),
+    target: Math.max(1, Number(settings?.target || getDefaultStreakSettings().target)),
+  };
+}
+
+function updateDailySessionHistory(nextProject, previousProject) {
+  const previousMatches = previousProject?.id && previousProject.id === nextProject?.id;
+  const nextWords = Number(nextProject?.currentWordCount || 0);
+  const previousWords = previousMatches ? Number(previousProject?.currentWordCount || 0) : 0;
+  const positiveDelta = Math.max(0, nextWords - previousWords);
+  const todayKey = buildLocalDayKey(new Date());
+  const streakSettings = normalizeStreakSettings(nextProject?.streakSettings);
+  const history = [...(nextProject?.dailySessionHistory || previousProject?.dailySessionHistory || [])]
+    .map((entry) => ({
+      date: entry.date,
+      wordsAdded: Number(entry.wordsAdded || 0),
+      netWords: Number(entry.netWords || 0),
+      sessionCount: Number(entry.sessionCount || 0),
+      streakQualified: Boolean(entry.streakQualified),
+      chaptersTouched: Array.isArray(entry.chaptersTouched) ? [...new Set(entry.chaptersTouched.filter(Boolean))] : [],
+    }))
+    .filter((entry) => entry.date);
+
+  let todayEntry = history.find((entry) => entry.date === todayKey);
+  if (!todayEntry && !positiveDelta) {
+    return history.sort((left, right) => left.date.localeCompare(right.date));
+  }
+
+  if (!todayEntry) {
+    todayEntry = {
+      date: todayKey,
+      wordsAdded: 0,
+      netWords: 0,
+      sessionCount: 0,
+      streakQualified: false,
+      chaptersTouched: [],
+    };
+    history.push(todayEntry);
+  }
+
+  if (positiveDelta > 0) {
+    todayEntry.wordsAdded += positiveDelta;
+    todayEntry.netWords += positiveDelta;
+    todayEntry.sessionCount += 1;
+
+    const touchedChapters = nextProject?.lastSessionMeta?.chapterIds || [];
+    if (touchedChapters.length) {
+      todayEntry.chaptersTouched = [...new Set([...(todayEntry.chaptersTouched || []), ...touchedChapters.filter(Boolean)])];
+    }
+  }
+
+  if (streakSettings.mode === 'session') {
+    todayEntry.streakQualified = todayEntry.sessionCount > 0;
+  } else {
+    todayEntry.streakQualified = todayEntry.wordsAdded >= streakSettings.target;
+  }
+
+  return history.sort((left, right) => left.date.localeCompare(right.date));
+}
+
+function computeWritingStreak(project) {
+  const qualifyingDays = new Set((project?.dailySessionHistory || [])
+    .filter((entry) => entry.streakQualified)
+    .map((entry) => entry.date)
+    .filter(Boolean));
+
+  if (!qualifyingDays.size) {
+    return 0;
+  }
+
+  let streak = 0;
+  const cursor = new Date();
+  cursor.setHours(0, 0, 0, 0);
+
+  while (qualifyingDays.has(buildLocalDayKey(cursor))) {
+    streak += 1;
+    cursor.setDate(cursor.getDate() - 1);
+  }
+
+  return streak;
+}
+
+function buildStreakState(project) {
+  const entries = [...(project?.dailySessionHistory || [])]
+    .filter((entry) => entry?.date)
+    .sort((left, right) => left.date.localeCompare(right.date));
+
+  let best = 0;
+  let running = 0;
+  let previousDate = null;
+  let lastQualifiedDate = '';
+
+  entries.forEach((entry) => {
+    if (!entry.streakQualified) {
+      running = 0;
+      previousDate = null;
+      return;
+    }
+
+    const currentDate = new Date(`${entry.date}T12:00:00`);
+    if (previousDate) {
+      const diff = Math.round((currentDate - previousDate) / (1000 * 60 * 60 * 24));
+      running = diff === 1 ? running + 1 : 1;
+    } else {
+      running = 1;
+    }
+
+    if (running > best) {
+      best = running;
+    }
+
+    previousDate = currentDate;
+    lastQualifiedDate = entry.date;
+  });
+
+  return {
+    current: computeWritingStreak(project),
+    best,
+    lastQualifiedDate,
+  };
+}
+
 function getDefaultBeatOrder() {
   return [
     'Exposition & Initial Setup',
@@ -875,6 +1008,8 @@ window.getGenrePromptData = getGenrePromptData;
 window.getProjectResources = buildProjectResources;
 window.computeWordCount = computeWordCount;
 window.buildLocalDayKey = buildLocalDayKey;
+window.getDefaultStreakSettings = getDefaultStreakSettings;
+window.computeWritingStreak = computeWritingStreak;
 window.slugify = slugify;
 window.choosePreferredProject = choosePreferredProject;
 window.setAppSaveStatus = setSaveStatus;
@@ -1067,15 +1202,34 @@ const sessionShownMilestones = new Set();
 window.saveProjectData = async function saveProjectData(project, options = {}) {
   const previousProject = getProject();
   const previousMilestones = new Set(previousProject?.unlockedMilestones || []);
+  const streakSettings = normalizeStreakSettings(project?.streakSettings || previousProject?.streakSettings);
+  const dailyWordHistory = updateDailyWritingHistory(project, previousProject);
+  const dailySessionHistory = updateDailySessionHistory({
+    ...project,
+    streakSettings,
+    dailyWordHistory,
+  }, previousProject);
+  const streakState = buildStreakState({
+    ...project,
+    streakSettings,
+    dailyWordHistory,
+    dailySessionHistory,
+  });
+  const analyticsProject = {
+    ...project,
+    streakSettings,
+    dailyWordHistory,
+    dailySessionHistory,
+    streakState,
+  };
   const milestoneSnapshot = typeof window.getProjectMilestoneSnapshot === 'function'
-    ? window.getProjectMilestoneSnapshot(project)
-    : { unlockedMilestones: project?.unlockedMilestones || [], visibleBadges: [] };
+    ? window.getProjectMilestoneSnapshot(analyticsProject)
+    : { unlockedMilestones: analyticsProject?.unlockedMilestones || [], visibleBadges: [] };
   const milestoneDefinitions = typeof window.getProjectMilestoneDefinitions === 'function'
     ? window.getProjectMilestoneDefinitions()
     : [];
   const mergedProject = {
-    ...project,
-    dailyWordHistory: updateDailyWritingHistory(project, previousProject),
+    ...analyticsProject,
     unlockedMilestones: milestoneSnapshot.unlockedMilestones,
   };
   const newlyUnlocked = milestoneSnapshot.unlockedMilestones
@@ -1532,15 +1686,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         subtitle: String(formData.get('subtitle') || '').trim(),
         authorName: String(formData.get('authorName') || '').trim(),
         genres: selectedGenres,
-        wordCountGoal: Number(formData.get('wordCountGoal') || 0),
-        targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
-        currentWordCount: 0,
-        thumbnail: String(form.dataset.thumbnailData || ''),
-        plotWorkbook: {},
-        dailyWordHistory: [],
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
+      wordCountGoal: Number(formData.get('wordCountGoal') || 0),
+      targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
+      currentWordCount: 0,
+      thumbnail: String(form.dataset.thumbnailData || ''),
+      plotWorkbook: {},
+      dailyWordHistory: [],
+      dailySessionHistory: [],
+      streakSettings: getDefaultStreakSettings(),
+      streakState: {
+        current: 0,
+        best: 0,
+        lastQualifiedDate: '',
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
       const savedProject = await window.api.saveProject(project);
       window.setCurrentProject(savedProject);

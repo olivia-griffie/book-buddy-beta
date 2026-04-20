@@ -1790,6 +1790,44 @@ body.dark-mode .genre-option {
   font-style: italic;
 }
 
+.rich-text-rendered {
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.rich-text-rendered p {
+  margin: 0 0 0.75rem;
+}
+
+.rich-text-rendered p:last-child {
+  margin-bottom: 0;
+}
+
+.rich-text-rendered ul,
+.rich-text-rendered ol {
+  margin: 0 0 0.75rem;
+  padding-left: 1.25rem;
+}
+
+.rich-text-rendered li + li {
+  margin-top: 0.25rem;
+}
+
+.rich-text-rendered strong,
+.rich-text-rendered b {
+  font-weight: 700;
+}
+
+.rich-text-rendered em,
+.rich-text-rendered i {
+  font-style: italic;
+}
+
+.rich-text-rendered u {
+  text-decoration: underline;
+}
+
 .reference-card-kicker {
   color: var(--ink-muted);
   font-size: 0.72rem;

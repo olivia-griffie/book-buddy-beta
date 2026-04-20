@@ -63,6 +63,11 @@ window.registerPageInit('home', async function () {
     return streak;
   }
 
+  function getTodaySessionEntry(project) {
+    const todayKey = window.buildLocalDayKey(new Date());
+    return (project?.dailySessionHistory || []).find((entry) => entry.date === todayKey) || null;
+  }
+
   function computePace(project) {
     const goal = Number(project.wordCountGoal || 0);
     const current = Number(project.currentWordCount || 0);
@@ -118,7 +123,9 @@ window.registerPageInit('home', async function () {
     }
 
     const history = project.dailyWordHistory || [];
-    if (!history.length && !project.targetCompletionDate) {
+    const sessionHistory = project.dailySessionHistory || [];
+    const streakSettings = project.streakSettings || { target: 100 };
+    if (!history.length && !project.targetCompletionDate && !sessionHistory.length && !Number(project?.streakState?.current || 0)) {
       dashboard.style.display = 'none';
       return;
     }
@@ -157,6 +164,20 @@ window.registerPageInit('home', async function () {
 
     const maxCalendar = Math.max(...calendarDates.map((entry) => entry.value), 1);
     const pace = computePace(project);
+    const writingStreak = Number(project?.streakState?.current || 0);
+    const bestStreak = Number(project?.streakState?.best || 0);
+    const todayEntry = getTodaySessionEntry(project);
+    const wordsToday = Number(todayEntry?.wordsAdded || 0);
+    const goal = Number(streakSettings?.target || 100);
+    const remainingToday = Math.max(0, goal - wordsToday);
+    const streakSecured = Boolean(todayEntry?.streakQualified);
+    const sessionCount = Number(todayEntry?.sessionCount || 0);
+    const touchedCount = Number(todayEntry?.chaptersTouched?.length || 0);
+    const streakTone = streakSecured ? 'success' : 'warning';
+    const streakLabel = streakSecured ? 'Streak secured today' : 'Not secured yet';
+    const streakDetail = streakSecured
+      ? `${wordsToday.toLocaleString()} words logged today.`
+      : `${remainingToday.toLocaleString()} more words to count today.`;
     const streak = computePromptStreak(project);
     const activePrompts = (project.dailyPromptHistory || []).filter((entry) => !entry.answerInsertedAt);
     const todayKey = new Date().toISOString().slice(0, 10);
@@ -185,9 +206,43 @@ window.registerPageInit('home', async function () {
             <span class="daily-dashboard-stat-label">${pace.status}</span>
             <strong>${pace.detail}</strong>
           </div>
+          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${streakTone}">
+            <span class="daily-dashboard-stat-label">${streakLabel}</span>
+            <strong>${streakDetail}</strong>
+          </div>
         </div>
       </div>
       <div class="daily-dashboard-grid">
+        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+          <h3>Today</h3>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Words written</span>
+            <strong>${wordsToday.toLocaleString()} / ${goal.toLocaleString()}</strong>
+          </div>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Sessions logged</span>
+            <strong>${sessionCount.toLocaleString()}</strong>
+          </div>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Chapters touched</span>
+            <strong>${touchedCount.toLocaleString()}</strong>
+          </div>
+        </section>
+        <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
+          <h3>Writing Streak</h3>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Current streak</span>
+            <strong>${writingStreak.toLocaleString()} day${writingStreak === 1 ? '' : 's'}</strong>
+          </div>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Best streak</span>
+            <strong>${bestStreak.toLocaleString()} day${bestStreak === 1 ? '' : 's'}</strong>
+          </div>
+          <div class="daily-dashboard-stat">
+            <span class="daily-dashboard-stat-label">Daily goal</span>
+            <strong>${goal.toLocaleString()} words</strong>
+          </div>
+        </section>
         <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
           <h3>Weekly Writing</h3>
           <div class="daily-chart">
@@ -223,9 +278,9 @@ window.registerPageInit('home', async function () {
             <h3>Today's Prompts</h3>
           </div>
           ${streak > 0 ? `
-            <div class="home-streak-badge ${doneToday ? 'is-active' : 'is-warning'}" title="${doneToday ? 'Streak maintained today' : 'Complete a prompt to keep your streak'}">
+            <div class="home-streak-badge ${doneToday ? 'is-active' : 'is-warning'}" title="${doneToday ? 'Prompt streak maintained today' : 'Complete a prompt to keep your prompt streak'}">
               <span class="home-streak-flame">&#9889;</span>
-              <span>${streak} day streak${doneToday ? '' : ' at risk'}</span>
+              <span>${streak} day prompt streak${doneToday ? '' : ' at risk'}</span>
             </div>
           ` : ''}
         </div>

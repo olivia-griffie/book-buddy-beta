@@ -248,7 +248,9 @@ window.registerPageInit('community', async function () {
     document.getElementById('reader-chapter-title').textContent = chapter.chapter_title || 'Chapter';
     document.getElementById('reader-author-name').textContent = project.profiles?.display_name || project.profiles?.username || 'Unknown Author';
     document.getElementById('reader-published-at').textContent = `Published ${formatDate(chapter.published_at)}`;
-    document.getElementById('reader-body').innerHTML = chapter.content || '<p><em>No content.</em></p>';
+    window.renderRichText?.(document.getElementById('reader-body'), chapter.content, {
+      emptyHtml: '<p><em>No content.</em></p>',
+    });
     document.getElementById('reader-comment-input').value = '';
     likeState = { count: 0, likedByMe: false };
     renderLikeBtn();

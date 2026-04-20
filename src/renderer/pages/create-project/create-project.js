@@ -260,6 +260,17 @@ window.registerPageInit('create-project', async function () {
       thumbnail: thumbnailData,
       plotWorkbook: {},
       dailyWordHistory: [],
+      dailySessionHistory: [],
+      streakSettings: window.getDefaultStreakSettings?.() || {
+        mode: 'words',
+        target: 100,
+        countRevision: true,
+      },
+      streakState: {
+        current: 0,
+        best: 0,
+        lastQualifiedDate: '',
+      },
       isPublic,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

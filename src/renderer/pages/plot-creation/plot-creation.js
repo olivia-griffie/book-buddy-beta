@@ -99,14 +99,9 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   outlineInput?.addEventListener('input', () => {
     const liveTarget = document.getElementById('reference-outline-live');
     if (!liveTarget) return;
-    const raw = outlineInput.value || '';
-    const parsed = window.parseRichTextValue ? window.parseRichTextValue(raw) : { html: raw };
-    const temp = document.createElement('div');
-    temp.innerHTML = parsed.html || '';
-    const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
-    liveTarget.innerHTML = hasContent
-      ? parsed.html
-      : '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>';
+    window.renderRichText?.(liveTarget, outlineInput.value || '', {
+      emptyHtml: '<p class="reference-outline-empty">Start with a broad outline so this panel can mirror the spine of the story.</p>',
+    });
   });
   const hybridPromptSection = document.getElementById('hybrid-prompts-section');
   const hybridPromptGrid = document.getElementById('hybrid-prompt-grid');

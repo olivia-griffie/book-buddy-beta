@@ -146,7 +146,7 @@ const milestoneDefinitions = [
     label: '7 Day Streak',
     description: 'A full week of writing momentum.',
     isUnlocked(project) {
-      return computeChallengeStreak(project) >= 7;
+      return Number(project?.streakState?.current || 0) >= 7;
     },
   },
   {
@@ -154,7 +154,7 @@ const milestoneDefinitions = [
     label: '30 Day Streak',
     description: 'A month of showing up. That is discipline.',
     isUnlocked(project) {
-      return computeChallengeStreak(project) >= 30;
+      return Number(project?.streakState?.current || 0) >= 30;
     },
   },
 ];
@@ -306,7 +306,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   const completedChallenges = (currentProject?.dailyPromptHistory || [])
     .filter((entry) => entry.answerInsertedAt)
     .length;
-  const streak = computeChallengeStreak(currentProject);
+  const streak = Number(currentProject?.streakState?.current || 0);
   const milestoneSnapshot = getProjectMilestoneSnapshot(currentProject);
   const activeStepIndex = workflowSteps.findIndex((step) => step.id === currentPage);
   const saveTone = saveStatus.tone || 'neutral';
@@ -365,7 +365,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               </div>
               <div class="topbar-metric">
                 <span class="topbar-metric-value">${streak}</span>
-                <span class="topbar-metric-label">Day streak</span>
+                <span class="topbar-metric-label">Writing streak</span>
               </div>
             ` : ''}
           </div>

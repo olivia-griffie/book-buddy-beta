@@ -826,6 +826,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
         0,
       ),
+      lastSessionMeta: {
+        chapterIds: selectedChapterId ? [selectedChapterId] : [],
+        source: 'chapters',
+      },
       updatedAt: new Date().toISOString(),
     };
   }
