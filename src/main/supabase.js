@@ -34,9 +34,9 @@ async function updateProfile(userId, updates, accessToken) {
 }
 
 async function upsertProject(localId, userId, projectContent, isPublic, accessToken) {
-  const existing = await restReq('GET', `projects?local_id=eq.${encodeURIComponent(localId)}&user_id=eq.${userId}&select=id`, null, accessToken);
+  const existing = await restReq('GET', `projects?local_id=eq.${encodeURIComponent(localId)}&owner_id=eq.${userId}&select=id`, null, accessToken);
   const row = {
-    user_id: userId,
+    owner_id: userId,
     local_id: localId,
     content: projectContent,
     is_public: isPublic,
@@ -72,7 +72,7 @@ async function getPublishedChapters(supabaseProjectId, accessToken) {
 }
 
 async function getPublicProjects(accessToken) {
-  return restReq('GET', 'projects?is_public=eq.true&select=*,profiles(username,display_name,avatar_url),published_chapters(id,chapter_id,chapter_title,published_at)&order=updated_at.desc', null, accessToken);
+  return restReq('GET', 'projects?is_public=eq.true&select=*,profiles!owner_id(username,display_name,avatar_url),published_chapters(id,chapter_id,chapter_title,published_at)&order=updated_at.desc', null, accessToken);
 }
 
 async function getComments(supabaseProjectId, chapterId, accessToken) {
@@ -81,7 +81,7 @@ async function getComments(supabaseProjectId, chapterId, accessToken) {
 
 async function addComment(userId, supabaseProjectId, chapterId, body, accessToken) {
   const rows = await restReq('POST', 'comments', {
-    user_id: userId,
+    owner_id: userId,
     project_id: supabaseProjectId,
     chapter_id: chapterId,
     body,
