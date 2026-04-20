@@ -319,26 +319,13 @@
   border-top: 1px solid var(--border-soft);
 }
 
-.project-goal-editor.bb-collapse {
-  margin-top: 10px;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  overflow: visible;
+.project-goal-toggle {
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.project-goal-editor.bb-collapse > summary {
-  min-height: 0;
-  padding: 0;
-}
-
-.project-goal-editor.bb-collapse .project-goal-editor-panel {
-  padding: 12px 0 0;
-  border-top: none;
-}
-
-.project-goal-editor.bb-collapse .bb-collapse__chevron {
-  font-size: 0.85rem;
+.project-goal-toggle .bb-collapse__chevron {
+  display: none;
 }
 
 .project-goal-copy {
@@ -361,6 +348,15 @@
 .project-goal-editor-panel {
   gap: 10px;
   margin-top: 12px;
+  display: none;
+  padding: 12px 14px 14px;
+  border: 1px solid var(--border-soft);
+  border-radius: 14px;
+  background: rgba(255, 253, 250, 0.96);
+}
+
+.project-goal-editor-panel.is-open {
+  display: grid;
 }
 
 .project-goal-summary-action {

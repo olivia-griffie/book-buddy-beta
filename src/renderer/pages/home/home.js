@@ -470,20 +470,20 @@ window.registerPageInit('home', async function () {
               <div class="goal-progress-track">
                 <div class="goal-progress-fill ${completed ? 'is-complete' : ''}" style="width:${pct}%"></div>
               </div>
-              <details class="project-goal-editor bb-collapse" data-project-goal-details="${project.id}">
-                <summary class="project-goal-summary">
+              <div class="project-goal-editor" data-project-goal-details="${project.id}">
+                <div class="project-goal-summary">
                   <div class="project-goal-copy">
                     <span class="project-goal-label">Word Count Goal</span>
                     <span class="project-goal-value">${(project.wordCountGoal || 0).toLocaleString()} words</span>
                     <span class="project-goal-label">Date To Complete</span>
                     <span class="project-goal-value">${formatShortDate(project.targetCompletionDate)}</span>
                   </div>
-                  <div class="project-goal-summary-action">
-                    <span class="project-goal-summary-text">Edit project goal</span>
+                  <button class="btn btn-ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">
+                    Edit Project Goal
                     <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
-                  </div>
-                </summary>
-                <div class="project-goal-editor-panel bb-collapse__body">
+                  </button>
+                </div>
+                <div class="project-goal-editor-panel">
                   <div class="project-goal-editor-row">
                     <div class="field">
                       <label for="goal-${project.id}">Update Goal</label>
@@ -511,7 +511,7 @@ window.registerPageInit('home', async function () {
                     </div>
                   </div>
                 </div>
-              </details>
+              </div>
             </div>
           </div>
           <div class="project-card-actions ui-card-footer">
@@ -749,17 +749,36 @@ window.registerPageInit('home', async function () {
     });
   });
 
-  grid.querySelectorAll('[data-project-goal-details]').forEach((details) => {
-    window.bindPersistentDetailsState?.(details, {
-      projectId: details.dataset.projectGoalDetails,
-      sectionId: 'home-project-goal',
-      defaultOpen: false,
-    });
-    details.addEventListener('toggle', () => {
-      if (details.open) {
-        details.querySelector('[data-goal-input]')?.focus();
+  grid.querySelectorAll('[data-toggle-goal]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const editor = button.closest('.project-goal-editor');
+      const panel = editor?.querySelector('.project-goal-editor-panel');
+      if (!editor || !panel) {
+        return;
+      }
+
+      const nextOpen = !panel.classList.contains('is-open');
+      panel.classList.toggle('is-open', nextOpen);
+      button.setAttribute('aria-expanded', String(nextOpen));
+      localStorage.setItem(`collapse:${button.dataset.toggleGoal}:home-project-goal`, nextOpen ? '1' : '0');
+      if (nextOpen) {
+        panel.querySelector('[data-goal-input]')?.focus();
       }
     });
+  });
+
+  grid.querySelectorAll('.project-goal-editor').forEach((editor) => {
+    const toggle = editor.querySelector('[data-toggle-goal]');
+    const panel = editor.querySelector('.project-goal-editor-panel');
+    const projectId = toggle?.dataset.toggleGoal;
+    if (!projectId || !panel || !toggle) {
+      return;
+    }
+
+    const isOpen = localStorage.getItem(`collapse:${projectId}:home-project-goal`) === '1';
+    panel.classList.toggle('is-open', isOpen);
+    toggle.setAttribute('aria-expanded', String(isOpen));
   });
 
   grid.querySelectorAll('[data-save-goal]').forEach((button) => {

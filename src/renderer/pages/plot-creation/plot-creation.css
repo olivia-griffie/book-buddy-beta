@@ -219,15 +219,16 @@
   font-weight: 600;
 }
 
-.plot-section-targets-sticky-shell {
-  padding: 0 18px;
-  margin-top: 2px;
+.plot-section-targets-toolbar {
+  margin-bottom: 12px;
+  padding: 4px 0 2px;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .plot-section-targets-actions {
   display: flex;
   justify-content: flex-end;
-  padding: 8px 0 10px;
+  padding: 0 0 10px;
 }
 
 @media (max-width: 900px) {
@@ -244,6 +245,10 @@
 body.dark-mode .plot-block {
   background: var(--surface-card);
   border-color: var(--border);
+}
+
+body.dark-mode .plot-section-targets-toolbar {
+  border-bottom-color: var(--border);
 }
 
 body.dark-mode .workbook-card textarea {
