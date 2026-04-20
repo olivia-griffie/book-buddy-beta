@@ -72,7 +72,27 @@ async function getPublishedChapters(supabaseProjectId, accessToken) {
 }
 
 async function getPublicProjects(accessToken) {
-  return restReq('GET', 'projects?is_public=eq.true&select=*,profiles!owner_id(username,display_name,avatar_url),published_chapters(id,chapter_id,chapter_title,published_at)&order=updated_at.desc', null, accessToken);
+  const projects = await restReq('GET', 'projects?is_public=eq.true&select=id,local_id,content,owner_id,updated_at&order=updated_at.desc', null, accessToken);
+  if (!projects?.length) return [];
+
+  const ids = projects.map((p) => p.id).join(',');
+
+  const [profiles, chapters] = await Promise.all([
+    restReq('GET', `profiles?id=in.(${projects.map((p) => p.owner_id).join(',')})&select=id,username,display_name`, null, accessToken).catch(() => []),
+    restReq('GET', `published_chapters?project_id=in.(${ids})&select=id,project_id,chapter_id,chapter_title,published_at&order=published_at.asc`, null, accessToken).catch(() => []),
+  ]);
+
+  const profileMap = Object.fromEntries((profiles || []).map((p) => [p.id, p]));
+  const chaptersByProject = {};
+  for (const ch of (chapters || [])) {
+    (chaptersByProject[ch.project_id] ||= []).push(ch);
+  }
+
+  return projects.map((p) => ({
+    ...p,
+    profiles: profileMap[p.owner_id] || null,
+    published_chapters: chaptersByProject[p.id] || [],
+  }));
 }
 
 async function getComments(supabaseProjectId, chapterId, accessToken) {
@@ -81,7 +101,7 @@ async function getComments(supabaseProjectId, chapterId, accessToken) {
 
 async function addComment(userId, supabaseProjectId, chapterId, body, accessToken) {
   const rows = await restReq('POST', 'comments', {
-    owner_id: userId,
+    user_id: userId,
     project_id: supabaseProjectId,
     chapter_id: chapterId,
     body,

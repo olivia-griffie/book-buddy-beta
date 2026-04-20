@@ -334,7 +334,7 @@ window.registerPageInit('home', async function () {
                 <button class="upload-trigger upload-trigger-compact" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}" aria-label="${project.thumbnail ? 'Change thumbnail' : 'Upload thumbnail'}">
                   <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
                 </button>
-                <button class="project-thumb-icon-btn project-thumb-icon-btn-danger" type="button" data-remove-thumbnail="${project.id}" title="Remove thumbnail" aria-label="Remove thumbnail" ${project.thumbnail ? '' : 'disabled'}>X</button>
+                <button class="project-thumb-icon-btn project-thumb-icon-btn-danger" type="button" data-remove-thumbnail="${project.id}" title="Remove thumbnail" aria-label="Remove thumbnail" ${project.thumbnail ? '' : 'disabled'}>×</button>
                 <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
               </div>
             </div>

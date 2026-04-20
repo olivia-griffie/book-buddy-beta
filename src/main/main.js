@@ -554,21 +554,40 @@ function getSession() {
   return store.get('auth.session', null);
 }
 
-ipcMain.handle('profile:get', async () => {
+async function getValidSession() {
   const session = getSession();
+  if (!session) return null;
+
+  const expiresAt = session.expires_at;
+  const nowSecs = Math.floor(Date.now() / 1000);
+  if (expiresAt && nowSecs < expiresAt - 60) return session;
+
+  if (!session.refresh_token) return null;
+  try {
+    const next = await refreshSession(session.refresh_token);
+    store.set('auth.session', next);
+    return next;
+  } catch {
+    store.delete('auth.session');
+    return null;
+  }
+}
+
+ipcMain.handle('profile:get', async () => {
+  const session = await getValidSession();
   if (!session) throw new Error('Not authenticated.');
   return getProfile(session.user.id, session.access_token);
 });
 
 ipcMain.handle('profile:update', async (_, updates) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) throw new Error('Not authenticated.');
   return updateProfile(session.user.id, updates, session.access_token);
 });
 
 // IPC: Publishing
 ipcMain.handle('chapters:publishChapter', async (_, { projectLocalId, projectContent, isPublic, chapter }) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) throw new Error('Not authenticated.');
   const userId = session.user.id;
   const token = session.access_token;
@@ -583,7 +602,7 @@ ipcMain.handle('chapters:publishChapter', async (_, { projectLocalId, projectCon
 });
 
 ipcMain.handle('chapters:unpublishChapter', async (_, { projectLocalId, chapterId }) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) throw new Error('Not authenticated.');
   const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
   if (!supabaseProjectId) return null;
@@ -591,7 +610,7 @@ ipcMain.handle('chapters:unpublishChapter', async (_, { projectLocalId, chapterI
 });
 
 ipcMain.handle('chapters:getPublished', async (_, { projectLocalId }) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) return [];
   const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
   if (!supabaseProjectId) return [];
@@ -600,12 +619,12 @@ ipcMain.handle('chapters:getPublished', async (_, { projectLocalId }) => {
 
 // IPC: Community
 ipcMain.handle('community:getProjects', async () => {
-  const session = getSession();
+  const session = await getValidSession();
   return getPublicProjects(session?.access_token);
 });
 
 ipcMain.handle('community:getComments', async (_, { projectLocalId, chapterId }) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) return [];
   const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
   if (!supabaseProjectId) return [];
@@ -613,7 +632,7 @@ ipcMain.handle('community:getComments', async (_, { projectLocalId, chapterId })
 });
 
 ipcMain.handle('community:addComment', async (_, { projectLocalId, chapterId, body }) => {
-  const session = getSession();
+  const session = await getValidSession();
   if (!session) throw new Error('Not authenticated.');
   const supabaseProjectId = store.get(`publishing.${projectLocalId}`);
   if (!supabaseProjectId) throw new Error('Project not found.');

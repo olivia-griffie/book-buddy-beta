@@ -51,6 +51,6 @@ window.registerPageInit('community', async function () {
 
     grid.style.display = 'grid';
   } catch (err) {
-    loading.textContent = 'Failed to load community stories.';
+    loading.textContent = `Failed to load community stories: ${err?.message || err}`;
   }
 });

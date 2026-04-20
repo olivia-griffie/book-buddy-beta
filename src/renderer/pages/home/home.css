@@ -106,24 +106,35 @@
 }
 
 .project-thumb-actions .upload-trigger {
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--accent-coral);
+  border-color: var(--accent-coral);
+  color: white;
+  box-shadow: 0 2px 8px rgba(255, 106, 90, 0.35);
 }
 
 .project-thumb-actions .upload-trigger:hover {
-  background: white;
+  background: #e85a47;
+  border-color: #e85a47;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 106, 90, 0.45);
+}
+
+.project-thumb-actions .upload-trigger .upload-trigger-icon {
+  filter: brightness(0) invert(1);
 }
 
 .project-thumb-icon-btn-danger {
-  min-width: 42px;
-  height: 42px;
-  padding: 0 10px;
-  border: 1px solid #e4beb2;
+  min-width: 38px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1.5px solid var(--border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
-  color: #a04f3e;
+  background: white;
+  color: var(--ink-muted);
   font-family: var(--font-body);
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 400;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -132,13 +143,13 @@
 }
 
 .project-thumb-icon-btn-danger:hover:not(:disabled) {
-  color: #8f3f2f;
-  border-color: #cf8f7f;
-  background: white;
+  color: #c0392b;
+  border-color: #e4beb2;
+  background: #fff5f4;
 }
 
 .project-thumb-icon-btn-danger:disabled {
-  opacity: 0.45;
+  opacity: 0.35;
   cursor: not-allowed;
 }
 

@@ -1914,7 +1914,7 @@ body.dark-mode .sidebar-footer {
 }
 
 body.dark-mode .sidebar-brand-logo {
-  filter: invert(1);
+  filter: brightness(0) invert(1) !important;
 }
 
 body.dark-mode .app-topbar {
@@ -2027,6 +2027,18 @@ body.dark-mode .btn-sage:hover {
   box-shadow: 0 0 14px rgba(255, 131, 96, 0.35);
 }
 
+body.dark-mode .project-thumb-actions .upload-trigger {
+  background: var(--accent-coral);
+  border-color: var(--accent-coral);
+  box-shadow: 0 2px 8px rgba(255, 106, 90, 0.3);
+}
+
+body.dark-mode .project-thumb-icon-btn-danger {
+  background: var(--surface-card);
+  border-color: var(--border);
+  color: var(--ink-muted);
+}
+
 body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
   background: rgba(255, 80, 60, 0.12);
   color: #ff7060;
@@ -2130,7 +2142,7 @@ body.dark-mode .app-genre-dialog-footer {
 
 body.tablet-mode {
   font-size: 13px;
-  background: #e8e3da;
+  background: var(--cream);
 }
 
 /* Constrain the whole shell to a tablet-width column */

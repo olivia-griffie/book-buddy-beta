@@ -2,6 +2,13 @@
 
 .sharing-list { display: grid; gap: 16px; }
 
+.sharing-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
 .sharing-badge {
   font-size: 0.8rem;
   font-weight: 600;

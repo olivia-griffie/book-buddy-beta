@@ -308,14 +308,15 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     .length;
   const streak = computeChallengeStreak(currentProject);
   const milestoneSnapshot = getProjectMilestoneSnapshot(currentProject);
-  const nextStep = getNextStepRecommendation(currentProject);
   const activeStepIndex = workflowSteps.findIndex((step) => step.id === currentPage);
   const saveTone = saveStatus.tone || 'neutral';
   const saveText = saveStatus.text || 'Ready to write';
   const showBadges = hasProject && window.shouldShowTopbarBadges?.();
 
+  const isTopbarOpen = localStorage.getItem('topbarCollapsed') !== '1';
+
   container.innerHTML = `
-    <details class="topbar-details" open>
+    <details class="topbar-details"${isTopbarOpen ? ' open' : ''}>
       <summary class="topbar-summary">
         <div class="topbar-summary-left">
           <p class="topbar-kicker">${hasProject ? 'Current Workspace' : 'Welcome'}</p>
@@ -436,13 +437,12 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   container.querySelector('#topbar-reference')?.addEventListener('click', () => {
     window.toggleReferenceDrawer();
   });
-  container.querySelector('#topbar-next-step')?.addEventListener('click', () => {
-    if (nextStep.page === 'create-project') {
-      window.navigate('create-project', { project: null });
-      return;
+  container.querySelector('.topbar-details')?.addEventListener('toggle', (e) => {
+    if (e.target.open) {
+      localStorage.removeItem('topbarCollapsed');
+    } else {
+      localStorage.setItem('topbarCollapsed', '1');
     }
-
-    window.navigate(nextStep.page);
   });
 
   container.querySelector('#topbar-export')?.addEventListener('click', async () => {

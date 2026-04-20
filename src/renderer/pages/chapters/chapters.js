@@ -21,6 +21,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   let activeProject = project || window.getCurrentProject();
+  let publishedChapterIds = new Set();
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
@@ -910,7 +911,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   });
 
   // Publishing
-  let publishedChapterIds = new Set();
 
   async function loadPublishedChapters() {
     try {
