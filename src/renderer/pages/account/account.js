@@ -83,11 +83,12 @@ window.registerPageInit('account', async function () {
   async function loadProfile() {
     try {
       const profile = await window.api.profile.get();
-      if (!profile) return;
-      document.getElementById('profile-display-name').value = profile.display_name || '';
-      document.getElementById('profile-bio').value = profile.bio || '';
-      if (profile.avatar_index) selectedAvatar = Number(profile.avatar_index);
-      if (profile.avatar_color) selectedColor = profile.avatar_color;
+      if (profile) {
+        document.getElementById('profile-display-name').value = profile.display_name || '';
+        document.getElementById('profile-bio').value = profile.bio || '';
+        if (profile.avatar_index) selectedAvatar = Number(profile.avatar_index);
+        if (profile.avatar_color) selectedColor = profile.avatar_color;
+      }
     } catch {}
     renderAvatarPicker();
     renderColorPicker();
@@ -101,9 +102,11 @@ window.registerPageInit('account', async function () {
     document.getElementById('account-email').textContent = user?.email || '—';
     loggedOut.hidden = true;
     loggedIn.hidden = false;
-    renderAvatarPicker();
-    renderColorPicker();
-    loadProfile();
+    setTimeout(() => {
+      renderAvatarPicker();
+      renderColorPicker();
+      loadProfile();
+    }, 0);
   }
 
   function showLoggedOut() {
