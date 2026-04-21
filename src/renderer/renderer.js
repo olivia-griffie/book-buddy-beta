@@ -568,7 +568,7 @@ function buildProjectResources(project, promptData) {
     return {
       id: existing?.id || `section-${slugify(label) || index + 1}`,
       label: existing?.label ?? label,
-      description: beat.description || '',
+      description: existing?.description ?? beat.description ?? '',
       targetWords: existing?.targetWords ?? 0,
       notes: existing?.notes || '',
     };

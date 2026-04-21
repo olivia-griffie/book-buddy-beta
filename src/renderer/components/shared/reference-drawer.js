@@ -151,6 +151,7 @@ window.renderReferenceDrawer = function renderReferenceDrawer(currentProject, op
     container.classList.add('is-hidden');
     container.classList.remove('is-open');
     container.setAttribute('aria-hidden', 'true');
+    document.querySelector('.app-workspace')?.classList.remove('has-reference-open');
     return;
   }
 
@@ -173,6 +174,7 @@ window.renderReferenceDrawer = function renderReferenceDrawer(currentProject, op
   container.classList.toggle('is-open', isOpen);
   container.classList.toggle('is-hidden', !isOpen);
   container.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  document.querySelector('.app-workspace')?.classList.toggle('has-reference-open', isOpen);
   container.innerHTML = `
     <div class="reference-drawer">
       <div class="reference-drawer-header">

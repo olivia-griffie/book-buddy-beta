@@ -308,8 +308,12 @@ window.registerPageInit('plot-creation', async function ({ project }) {
           hasContent: false,
           plainText: '',
         };
-        const descText = String(section.description || '').trim();
-        const hasContent = section.targetWords > 0 || descText || notesMeta.hasContent;
+        const rawDesc = section.description || '';
+        const descField = sectionTargets.querySelector(`[data-section-description="${section.id}"]`);
+        const descRaw = descField ? window.getEditorFieldValue(descField) : rawDesc;
+        const parsedDesc = window.parseRichTextValue?.(descRaw || '') || { html: '' };
+        const descMeta = window.getRichTextContentMeta?.(descRaw || '') || { hasContent: false };
+        const hasContent = section.targetWords > 0 || descMeta.hasContent || notesMeta.hasContent;
         if (!hasContent) {
           return '';
         }
@@ -331,8 +335,8 @@ window.registerPageInit('plot-creation', async function ({ project }) {
           `<p><strong>${escapeHtml(section.label || 'Untitled Section')}</strong></p>`,
         ];
 
-        if (descText) {
-          blocks.push(`<p>${escapeHtml(descText)}</p>`);
+        if (descMeta.hasContent) {
+          blocks.push(parsedDesc.html || '');
         }
 
         if (section.targetWords > 0) {
@@ -370,7 +374,24 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
     const outlineBlock = outlineInput.closest('details');
     if (outlineBlock) outlineBlock.open = true;
-    outlineInput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const msg = document.getElementById('generate-outline-message');
+    if (msg) {
+      msg.innerHTML = 'Outline generated. <button class="generate-outline-message__link" type="button">View Outline ↑</button>';
+      msg.hidden = false;
+      msg.classList.remove('generate-outline-message--visible');
+      requestAnimationFrame(() => msg.classList.add('generate-outline-message--visible'));
+
+      msg.querySelector('.generate-outline-message__link')?.addEventListener('click', () => {
+        outlineInput.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+
+      clearTimeout(msg._hideTimer);
+      msg._hideTimer = setTimeout(() => {
+        msg.classList.remove('generate-outline-message--visible');
+        msg.addEventListener('transitionend', () => { msg.hidden = true; }, { once: true });
+      }, 6000);
+    }
   });
 
   saveButton.addEventListener('click', async () => {

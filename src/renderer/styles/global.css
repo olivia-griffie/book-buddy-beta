@@ -294,6 +294,11 @@ body {
 .app-main {
   min-width: 0;
   padding: 32px 32px 40px;
+  transition: padding-right 220ms var(--ease);
+}
+
+.app-workspace.has-reference-open .app-main {
+  padding-right: calc(min(380px, calc(100vw - 320px)) + 24px);
 }
 
 .sidebar {
