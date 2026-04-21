@@ -565,6 +565,7 @@
   display: flex;
   align-items: baseline;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .project-progress__percent {
@@ -578,6 +579,7 @@
 .project-progress__meta {
   font-size: 0.85rem;
   color: #6f7282;
+  white-space: nowrap;
 }
 
 .project-progress__bar {

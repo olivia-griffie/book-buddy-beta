@@ -103,7 +103,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const autosave = window.createAutosaveController(async () => {
     const updatedProject = buildProjectPayload();
     activeProject = await window.saveProjectData(updatedProject, {
-      dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory'],
+      dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
     });
     saveMessage.textContent = 'Chapter changes autosaved.';
   }, {
@@ -537,7 +537,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           ...buildProjectPayload(),
           dailyPromptHistory,
         }, {
-          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory'],
+          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
         });
         chapterPromptMessage.textContent = 'Prompt answer saved.';
         chapterPromptMessage.classList.remove('is-success');
@@ -573,7 +573,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           ...buildProjectPayload(),
           dailyPromptHistory,
         }, {
-          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory'],
+          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
         });
         chapterPromptMessage.textContent = 'Daily prompt submission has been added to the bottom of the selected chapter.';
         chapterPromptMessage.classList.add('is-success');
@@ -966,7 +966,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     await window.runButtonFeedback(saveButton, async () => {
       const updatedProject = buildProjectPayload();
       activeProject = await window.saveProjectData(updatedProject, {
-        dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory'],
+        dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
       });
       saveMessage.textContent = 'Chapters saved.';
     });
