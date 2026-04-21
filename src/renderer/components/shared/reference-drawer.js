@@ -175,6 +175,11 @@ window.renderReferenceDrawer = function renderReferenceDrawer(currentProject, op
   container.classList.toggle('is-hidden', !isOpen);
   container.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
   document.querySelector('.app-workspace')?.classList.toggle('has-reference-open', isOpen);
+
+  const topbar = document.querySelector('.app-topbar');
+  const topbarHeight = topbar ? topbar.getBoundingClientRect().height : 0;
+  container.style.top = `${topbarHeight + 12}px`;
+
   container.innerHTML = `
     <div class="reference-drawer">
       <div class="reference-drawer-header">

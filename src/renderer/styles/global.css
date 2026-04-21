@@ -1711,7 +1711,7 @@ body.dark-mode .genre-option {
 }
 
 .reference-drawer-shell {
-  position: absolute;
+  position: fixed;
   top: 12px;
   right: 12px;
   bottom: 12px;
@@ -2007,7 +2007,6 @@ body.dark-mode .genre-option {
   }
 
   .reference-drawer-shell {
-    top: 16px;
     right: 16px;
     bottom: 16px;
     width: min(360px, calc(100vw - 48px));
