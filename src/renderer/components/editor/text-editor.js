@@ -84,7 +84,7 @@ function normalizeRichTextDescendants(root, options = {}) {
   }
 
   const selectors = options.blockSelectors || 'p, ul, ol, li, div, span, blockquote, pre';
-  const descendants = [root, ...root.querySelectorAll('*')];
+  const descendants = [...root.querySelectorAll('*')];
 
   descendants.forEach((node) => {
     if (!(node instanceof HTMLElement)) {

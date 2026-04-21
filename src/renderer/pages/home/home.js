@@ -39,10 +39,14 @@ window.registerPageInit('home', async function () {
         <div class="project-card__cover-wrap">
           <div class="project-card__cover">${thumb}</div>
           <div class="project-card__cover-actions">
-            <button class="project-card__icon-btn project-card__icon-btn--primary upload-trigger upload-trigger-compact" type="button" data-change-thumbnail="${project.id}" title="${project.thumbnail ? 'Change cover image' : 'Upload cover image'}" aria-label="${project.thumbnail ? 'Change cover image' : 'Upload cover image'}">
-              <img class="upload-trigger-icon" src="../../public/upload.jpg" alt="" />
+            <button class="project-card__cover-btn project-card__cover-btn--upload" type="button" data-change-thumbnail="${project.id}" aria-label="${project.thumbnail ? 'Change cover image' : 'Upload cover image'}">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13V4m0 0L6.5 7.5M10 4l3.5 3.5"/><path d="M3 14v1.5A1.5 1.5 0 0 0 4.5 17h11A1.5 1.5 0 0 0 17 15.5V14"/></svg>
+              <span>${project.thumbnail ? 'Change Cover' : 'Add Cover'}</span>
             </button>
-            <button class="project-card__icon-btn" type="button" data-remove-thumbnail="${project.id}" title="Remove cover image" aria-label="Remove cover image" ${project.thumbnail ? '' : 'disabled'}>&times;</button>
+            ${project.thumbnail ? `<button class="project-card__cover-btn project-card__cover-btn--remove" type="button" data-remove-thumbnail="${project.id}" aria-label="Remove cover image">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h12M8 5V3.5A.5.5 0 0 1 8.5 3h3a.5.5 0 0 1 .5.5V5M6 5l1 10h6l1-10"/></svg>
+              <span>Remove</span>
+            </button>` : ''}
             <input type="file" accept="image/*" data-thumbnail-input="${project.id}" hidden />
           </div>
         </div>
@@ -508,7 +512,7 @@ window.registerPageInit('home', async function () {
         .join('');
       const thumb = project.thumbnail
         ? `<img src="${project.thumbnail}" alt="${project.title}" />`
-        : '<span class="placeholder-icon">Book</span>';
+        : '<span class="placeholder-icon"></span>';
 
       return buildProjectCardMarkup({ project, pct, completed, genres, tags, thumb });
       /*

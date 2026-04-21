@@ -102,7 +102,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
         ${isCollapsed ? '' : `
           <img
             class="sidebar-brand-logo"
-            src="${window.isDarkMode?.() ? '../../public/logo-black.png' : '../../public/logo-color.png'}"
+            src="../../public/logo-color.png"
             alt="Book Buddy"
           />
           <p class="sidebar-kicker">Writer's Hub</p>

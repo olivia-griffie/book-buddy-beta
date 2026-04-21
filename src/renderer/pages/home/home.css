@@ -400,55 +400,56 @@
 .project-card__cover-actions {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-top: -22px;
+  gap: 8px;
+  margin-top: -18px;
   position: relative;
   z-index: 2;
 }
 
-.project-card__icon-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 999px;
-  border: 1px solid rgba(199, 155, 135, 0.45);
-  background: #fff;
-  color: var(--ink-muted);
+.project-card__cover-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(199, 155, 135, 0.5);
+  background: #fff;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 8px 18px rgba(56, 41, 33, 0.08);
+  box-shadow: 0 4px 12px rgba(56, 41, 33, 0.1);
   transition: background var(--duration) var(--ease), border-color var(--duration) var(--ease), transform var(--duration) var(--ease), color var(--duration) var(--ease);
 }
 
-.project-card__icon-btn:hover:not(:disabled) {
+.project-card__cover-btn svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.project-card__cover-btn:hover {
   background: #f6efe8;
-  border-color: rgba(199, 155, 135, 0.7);
+  border-color: rgba(199, 155, 135, 0.8);
   color: var(--ink);
   transform: translateY(-1px);
 }
 
-.project-card__icon-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.project-card__icon-btn--primary {
+.project-card__cover-btn--upload {
   background: #ff7d6d;
   border-color: #ff7d6d;
   color: #fff;
 }
 
-.project-card__icon-btn--primary:hover:not(:disabled) {
+.project-card__cover-btn--upload:hover {
   background: #f26d5c;
   border-color: #f26d5c;
   color: #fff;
 }
 
-.project-card__icon-btn .upload-trigger-icon {
-  width: 18px;
-  height: 18px;
-  filter: brightness(0) invert(1);
+.project-card__cover-btn--remove {
+  background: #fff;
+  color: var(--ink-muted);
 }
 
 .project-card__body {
