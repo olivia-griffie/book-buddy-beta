@@ -1,3 +1,45 @@
+/* ── App loading screen ── */
+.app-loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  background: var(--surface-bg, #f9f5f0);
+  transition: opacity 280ms ease;
+}
+
+.app-loading.is-fading {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-loading-logo {
+  height: 52px;
+}
+
+.app-loading-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(145, 237, 214, 0.3);
+  border-top-color: #91edd6;
+  border-radius: 50%;
+  animation: app-spin 0.75s linear infinite;
+}
+
+@keyframes app-spin {
+  to { transform: rotate(360deg); }
+}
+
+body.dark-mode #app-loading-logo {
+  content: url('../../public/logo-dark.png');
+  filter: invert(1);
+}
+
+/* ── Auth overlay ── */
 .auth-overlay {
   position: fixed;
   inset: 0;
@@ -178,4 +220,41 @@ body.dark-mode .auth-field input {
 
 body.dark-mode .auth-field input:focus {
   border-color: #91edd6;
+}
+
+/* ── Password visibility toggle ── */
+.auth-password-wrap {
+  position: relative;
+}
+
+.auth-password-wrap input {
+  width: 100%;
+  padding-right: 44px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted, #aaa);
+  cursor: pointer;
+  padding: 0;
+  border-radius: 6px;
+  transition: color 150ms ease;
+}
+
+.auth-password-toggle:hover {
+  color: var(--ink-soft, #666);
+}
+
+.auth-password-toggle svg {
+  display: block;
+  flex-shrink: 0;
 }

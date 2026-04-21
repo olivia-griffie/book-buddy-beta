@@ -620,12 +620,16 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
                             data-title-chapter="${chapter.id}"
                           />
                         </div>
-                        <span class="chapter-row-word-count">${window.computeWordCount(chapter.content || '')} words</span>
-                        ${publishedChapterIds.has(chapter.id)
-                          ? `<span class="chapter-row-published-badge">Published</span><button class="chapter-row-unpublish" type="button" data-unpublish-chapter="${chapter.id}">Unpublish</button>`
-                          : `<button class="chapter-row-publish" type="button" data-publish-chapter="${chapter.id}">Publish</button>`
-                        }
-                        <button class="chapter-row-delete" type="button" data-delete-chapter="${chapter.id}" aria-label="Delete ${escapeHtml(chapter.title || 'chapter')}">Delete</button>
+                        <div class="chapter-row-foot">
+                          <span class="chapter-row-word-count">${window.computeWordCount(chapter.content || '')} words</span>
+                          <div class="chapter-row-actions">
+                            ${publishedChapterIds.has(chapter.id)
+                              ? `<span class="chapter-row-published-badge">Published</span><button class="chapter-row-unpublish" type="button" data-unpublish-chapter="${chapter.id}" title="Unpublish this chapter">Unpublish</button>`
+                              : `<button class="chapter-row-publish" type="button" data-publish-chapter="${chapter.id}">Publish</button>`
+                            }
+                            <button class="chapter-row-delete" type="button" data-delete-chapter="${chapter.id}" aria-label="Delete ${escapeHtml(chapter.title || 'chapter')}" title="Delete chapter">&times;</button>
+                          </div>
+                        </div>
                       </div>
                     `)
                     .join('')

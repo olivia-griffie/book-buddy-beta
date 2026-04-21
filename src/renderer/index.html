@@ -13,8 +13,14 @@
   <link rel="stylesheet" href="./styles/login.css" />
 </head>
 <body>
-  <!-- Login overlay -->
-  <div id="auth-overlay" class="auth-overlay">
+  <!-- Loading screen (shown during auth check, hidden after) -->
+  <div id="app-loading" class="app-loading">
+    <img id="app-loading-logo" src="../../public/logo-full.png" alt="Book Buddy" class="app-loading-logo" />
+    <div class="app-loading-spinner"></div>
+  </div>
+
+  <!-- Login overlay (starts hidden; shown only if not authenticated) -->
+  <div id="auth-overlay" class="auth-overlay" style="display:none;">
     <div class="auth-card">
       <div class="auth-brand">
         <img id="auth-logo" src="../../public/logo-full.png" alt="Book Buddy" style="height:48px;margin-bottom:12px;" />
@@ -37,7 +43,10 @@
             </div>
             <div class="auth-field">
               <label for="auth-signin-password">Password</label>
-              <input id="auth-signin-password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+              <div class="auth-password-wrap">
+                <input id="auth-signin-password" type="password" autocomplete="current-password" placeholder="••••••••" required />
+                <button type="button" class="auth-password-toggle" aria-label="Show password" data-target="auth-signin-password"></button>
+              </div>
             </div>
           </div>
           <button id="auth-signin-submit" class="auth-submit" type="submit">Sign In</button>
@@ -59,7 +68,10 @@
             </div>
             <div class="auth-field">
               <label for="auth-signup-password">Password</label>
-              <input id="auth-signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required />
+              <div class="auth-password-wrap">
+                <input id="auth-signup-password" type="password" autocomplete="new-password" placeholder="At least 8 characters" required />
+                <button type="button" class="auth-password-toggle" aria-label="Show password" data-target="auth-signup-password"></button>
+              </div>
             </div>
           </div>
           <button id="auth-signup-submit" class="auth-submit" type="submit">Create Account</button>

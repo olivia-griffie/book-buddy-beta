@@ -267,6 +267,103 @@
   padding: 0 0 10px;
 }
 
+/* ── Linked chapters inside section targets ── */
+.plot-chapter-links {
+  display: grid;
+  gap: 10px;
+  padding-top: 14px;
+  margin-top: 6px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.plot-chapter-links-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.plot-chapter-links-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-soft);
+}
+
+.plot-chapter-links-count {
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+}
+
+.plot-chapter-linked-list {
+  display: grid;
+  gap: 5px;
+}
+
+.plot-chapter-linked-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  background: #f9f5f0;
+}
+
+.plot-chapter-linked-title {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.plot-chapter-linked-words {
+  flex-shrink: 0;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.plot-chapter-unlink {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), color var(--duration) var(--ease);
+}
+
+.plot-chapter-unlink:hover {
+  border-color: #c0392b;
+  color: #c0392b;
+}
+
+.plot-chapter-links-empty {
+  font-size: 0.82rem;
+  color: var(--ink-muted);
+}
+
+.plot-chapter-link-select {
+  width: 100%;
+  font-size: 0.88rem;
+}
+
+body.dark-mode .plot-chapter-linked-row {
+  background: var(--surface-input);
+  border-color: var(--border);
+}
+
 @media (max-width: 900px) {
   .workbook-grid.has-secondary-column {
     grid-template-columns: minmax(0, 1fr);

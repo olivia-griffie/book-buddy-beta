@@ -64,9 +64,12 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     specificPrompts,
     hybridGuides,
   });
+  let chapters = activeProject.chapters || [];
+
   const autosave = window.createAutosaveController(async () => {
     const updatedProject = {
       ...activeProject,
+      chapters,
       plotSections: resources.plotSections,
       plotWorkbook: {
         outline: window.getEditorFieldValue(outlineInput),
@@ -78,8 +81,9 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     };
 
     activeProject = await window.saveProjectData(updatedProject, {
-      dirtyFields: ['plotSections', 'plotWorkbook'],
+      dirtyFields: ['chapters', 'plotSections', 'plotWorkbook'],
     });
+    chapters = activeProject.chapters || [];
     saveMessage.textContent = 'Plot notes autosaved.';
     syncWorkbookLayout();
     window.syncReferenceDrawer?.();
@@ -114,45 +118,78 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   });
 
   function renderSectionTargets() {
-    sectionTargets.innerHTML = resources.plotSections.map((section) => `
-      <details class="plot-section-target-card bb-collapse" data-section-target-card="${section.id}">
-        <summary class="plot-section-target-toggle">
-          <div class="bb-collapse__header">
-            <h3 class="plot-section-label" data-section-label-display="${section.id}">${section.label}</h3>
-            <p class="bb-collapse__meta">${Number(section.targetWords || 0).toLocaleString()} word target</p>
+    sectionTargets.innerHTML = resources.plotSections.map((section) => {
+      const linkedChapters = chapters.filter((ch) => ch.sectionId === section.id);
+      const availableChapters = chapters.filter((ch) => ch.sectionId !== section.id);
+      const linkedCount = linkedChapters.length;
+
+      return `
+        <details class="plot-section-target-card bb-collapse" data-section-target-card="${section.id}">
+          <summary class="plot-section-target-toggle">
+            <div class="bb-collapse__header">
+              <h3 class="plot-section-label" data-section-label-display="${section.id}">${section.label}</h3>
+              <p class="bb-collapse__meta">${Number(section.targetWords || 0).toLocaleString()} word target${linkedCount ? ` &middot; ${linkedCount} chapter${linkedCount !== 1 ? 's' : ''}` : ''}</p>
+            </div>
+            <span class="plot-section-target-indicator bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+          </summary>
+          <div class="plot-section-target-body bb-collapse__body">
+            <div class="plot-section-target-actions">
+              <button
+                type="button"
+                class="plot-section-label-edit btn btn-ghost"
+                data-section-label-edit="${section.id}"
+                title="Rename this section"
+              >Rename Section</button>
+            </div>
+            <div class="field">
+              <label for="plot-section-desc-${section.id}">Section Guidance</label>
+              <textarea
+                id="plot-section-desc-${section.id}"
+                class="plot-section-description-input"
+                rows="3"
+                data-section-description="${section.id}"
+                placeholder="Describe what happens in this section of the story..."
+              >${section.description || ''}</textarea>
+            </div>
+            <div class="field">
+              <label for="plot-section-target-${section.id}">Target Words</label>
+              <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
+            </div>
+            <div class="field">
+              <label for="plot-section-notes-${section.id}">Section Notes</label>
+              <textarea id="plot-section-notes-${section.id}" rows="4" data-section-notes="${section.id}">${section.notes || ''}</textarea>
+            </div>
+            <div class="plot-chapter-links">
+              <div class="plot-chapter-links-head">
+                <span class="plot-chapter-links-label">Linked Chapters</span>
+                ${linkedCount ? `<span class="plot-chapter-links-count">${linkedCount} linked</span>` : ''}
+              </div>
+              ${linkedChapters.length ? `
+                <div class="plot-chapter-linked-list">
+                  ${linkedChapters.map((ch) => `
+                    <div class="plot-chapter-linked-row">
+                      <span class="plot-chapter-linked-title">${escapeHtml(ch.title || 'Untitled Chapter')}</span>
+                      <span class="plot-chapter-linked-words">${window.computeWordCount(ch.content || '')} words</span>
+                      <button type="button" class="plot-chapter-unlink" data-unlink-chapter="${ch.id}" aria-label="Unlink ${escapeHtml(ch.title || 'chapter')}" title="Unlink chapter">&times;</button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : `<p class="plot-chapter-links-empty">No chapters linked to this section yet.</p>`}
+              ${availableChapters.length ? `
+                <div class="field">
+                  <select class="plot-chapter-link-select" data-link-chapter-to="${section.id}">
+                    <option value="">Link a chapter…</option>
+                    ${availableChapters.map((ch) => `
+                      <option value="${ch.id}">${escapeHtml(ch.title || 'Untitled Chapter')}</option>
+                    `).join('')}
+                  </select>
+                </div>
+              ` : ''}
+            </div>
           </div>
-          <span class="plot-section-target-indicator bb-collapse__chevron" aria-hidden="true">âŒ„</span>
-        </summary>
-        <div class="plot-section-target-body bb-collapse__body">
-          <div class="plot-section-target-actions">
-            <button
-              type="button"
-              class="plot-section-label-edit btn btn-ghost"
-              data-section-label-edit="${section.id}"
-              title="Rename this section"
-            >Rename Section</button>
-          </div>
-          <div class="field">
-            <label for="plot-section-desc-${section.id}">Section Guidance</label>
-            <textarea
-              id="plot-section-desc-${section.id}"
-              class="plot-section-description-input"
-              rows="3"
-              data-section-description="${section.id}"
-              placeholder="Describe what happens in this section of the story..."
-            >${section.description || ''}</textarea>
-          </div>
-          <div class="field">
-            <label for="plot-section-target-${section.id}">Target Words</label>
-            <input id="plot-section-target-${section.id}" type="number" min="0" step="100" value="${section.targetWords || 0}" data-section-target="${section.id}" />
-          </div>
-          <div class="field">
-            <label for="plot-section-notes-${section.id}">Section Notes</label>
-            <textarea id="plot-section-notes-${section.id}" rows="4" data-section-notes="${section.id}">${section.notes || ''}</textarea>
-          </div>
-        </div>
-      </details>
-    `).join('');
+        </details>
+      `;
+    }).join('');
 
     sectionTargets.querySelectorAll('[data-section-target-card]').forEach((details, index) => {
       window.bindPersistentDetailsState?.(details, {
@@ -216,6 +253,30 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         section.label = nextLabel.trim();
         const display = sectionTargets.querySelector(`[data-section-label-display="${section.id}"]`);
         if (display) display.textContent = section.label;
+        autosave.touch();
+      });
+    });
+
+    sectionTargets.querySelectorAll('[data-unlink-chapter]').forEach((btn) => {
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        const chapter = chapters.find((ch) => ch.id === btn.dataset.unlinkChapter);
+        if (!chapter) return;
+        chapter.sectionId = null;
+        renderSectionTargets();
+        autosave.touch();
+      });
+    });
+
+    sectionTargets.querySelectorAll('[data-link-chapter-to]').forEach((select) => {
+      select.addEventListener('change', () => {
+        const chapterId = select.value;
+        if (!chapterId) return;
+        const chapter = chapters.find((ch) => ch.id === chapterId);
+        if (!chapter) return;
+        chapter.sectionId = select.dataset.linkChapterTo;
+        renderSectionTargets();
         autosave.touch();
       });
     });
@@ -313,7 +374,8 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         const descRaw = descField ? window.getEditorFieldValue(descField) : rawDesc;
         const parsedDesc = window.parseRichTextValue?.(descRaw || '') || { html: '' };
         const descMeta = window.getRichTextContentMeta?.(descRaw || '') || { hasContent: false };
-        const hasContent = section.targetWords > 0 || descMeta.hasContent || notesMeta.hasContent;
+        const linkedChapters = chapters.filter((ch) => ch.sectionId === section.id);
+        const hasContent = section.targetWords > 0 || descMeta.hasContent || notesMeta.hasContent || linkedChapters.length > 0;
         if (!hasContent) {
           return '';
         }
@@ -345,6 +407,13 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
         if (notesMeta.hasContent) {
           blocks.push(parsedNotes.html || '<p><br></p>');
+        }
+
+        if (linkedChapters.length > 0) {
+          const chapterItems = linkedChapters
+            .map((ch) => `<li>${escapeHtml(ch.title || 'Untitled Chapter')} <em>(${window.computeWordCount(ch.content || '').toLocaleString()} words)</em></li>`)
+            .join('');
+          blocks.push(`<p><strong>Chapters in this section:</strong></p><ul>${chapterItems}</ul>`);
         }
 
         return blocks.join('');
@@ -398,6 +467,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     await window.runButtonFeedback(saveButton, async () => {
       const updatedProject = {
         ...activeProject,
+        chapters,
         plotSections: resources.plotSections,
         plotWorkbook: {
           outline: window.getEditorFieldValue(outlineInput),
@@ -409,8 +479,9 @@ window.registerPageInit('plot-creation', async function ({ project }) {
       };
 
       activeProject = await window.saveProjectData(updatedProject, {
-        dirtyFields: ['plotSections', 'plotWorkbook'],
+        dirtyFields: ['chapters', 'plotSections', 'plotWorkbook'],
       });
+      chapters = activeProject.chapters || [];
       saveMessage.textContent = 'Plot notes saved.';
       syncWorkbookLayout();
       window.syncReferenceDrawer?.();
