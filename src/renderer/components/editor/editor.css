@@ -101,6 +101,9 @@
 .rich-text-editor-shell,
 .rich-text-editor-shell * {
   color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
 .rich-text-editor.is-collapsed .rich-text-editor-shell {
@@ -176,17 +179,24 @@
 .rich-text-editor-shell p,
 .rich-text-editor-shell ul,
 .rich-text-editor-shell ol,
-.rich-text-editor-shell li {
+.rich-text-editor-shell li,
+.rich-text-editor-shell div,
+.rich-text-editor-shell span {
   margin: 0 0 0.8em;
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
   color: inherit;
+  text-align: inherit;
 }
 
 .rich-text-editor-shell ul,
 .rich-text-editor-shell ol {
   padding-left: 1.4em;
+  text-align: inherit;
+}
+
+.rich-text-editor-shell li {
   text-align: inherit;
 }
 

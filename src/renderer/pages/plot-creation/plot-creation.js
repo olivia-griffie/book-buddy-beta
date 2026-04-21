@@ -286,12 +286,6 @@ window.registerPageInit('plot-creation', async function ({ project }) {
 
   renderSectionTargets();
 
-  function stripHtml(value = '') {
-    const temp = document.createElement('div');
-    temp.innerHTML = value;
-    return (temp.textContent || temp.innerText || '').trim();
-  }
-
   function escapeHtml(value = '') {
     return String(value || '')
       .replace(/&/g, '&amp;')
@@ -310,9 +304,12 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         const notesField = sectionTargets.querySelector(`[data-section-notes="${section.id}"]`);
         const notesRaw = notesField ? window.getEditorFieldValue(notesField) : section.notes || '';
         const parsedNotes = window.parseRichTextValue?.(notesRaw || '') || { html: '', settings: {} };
-        const notesText = stripHtml(parsedNotes.html || '');
-        const descText = stripHtml(section.description || '');
-        const hasContent = section.targetWords > 0 || descText || notesText;
+        const notesMeta = window.getRichTextContentMeta?.(notesRaw || '') || {
+          hasContent: false,
+          plainText: '',
+        };
+        const descText = String(section.description || '').trim();
+        const hasContent = section.targetWords > 0 || descText || notesMeta.hasContent;
         if (!hasContent) {
           return '';
         }
@@ -342,7 +339,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
           blocks.push(`<p><em>Target Words: ${Number(section.targetWords || 0).toLocaleString()}</em></p>`);
         }
 
-        if (notesText) {
+        if (notesMeta.hasContent) {
           blocks.push(parsedNotes.html || '<p><br></p>');
         }
 
@@ -351,17 +348,16 @@ window.registerPageInit('plot-creation', async function ({ project }) {
       .filter(Boolean);
 
     const combinedHtml = sectionHtml.join('<p><br></p>') || '<p><br></p>';
-    const temp = document.createElement('div');
-    temp.innerHTML = combinedHtml;
-    const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
+    const serializedValue = window.serializeRichTextValue(
+      combinedHtml,
+      nextSettings,
+    );
+    const hasContent = window.getRichTextContentMeta?.(serializedValue)?.hasContent || false;
 
     return {
       hasContent,
       settings: nextSettings,
-      value: window.serializeRichTextValue(
-        combinedHtml,
-        nextSettings,
-      ),
+      value: serializedValue,
     };
   }
 

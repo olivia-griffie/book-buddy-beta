@@ -247,6 +247,50 @@ body {
   border-top: 1px solid var(--border-soft);
 }
 
+.rich-text-rendered {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.rich-text-rendered,
+.rich-text-rendered * {
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.rich-text-rendered p,
+.rich-text-rendered ul,
+.rich-text-rendered ol,
+.rich-text-rendered li,
+.rich-text-rendered div,
+.rich-text-rendered span {
+  margin: 0 0 0.8em;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  text-align: inherit;
+}
+
+.rich-text-rendered ul,
+.rich-text-rendered ol {
+  padding-left: 1.4em;
+}
+
+.rich-text-rendered li > p,
+.rich-text-rendered li > ul,
+.rich-text-rendered li > ol {
+  margin-top: 0.3em;
+}
+
+.rich-text-rendered p:last-child,
+.rich-text-rendered ul:last-child,
+.rich-text-rendered ol:last-child {
+  margin-bottom: 0;
+}
+
 .app-main {
   min-width: 0;
   padding: 32px 32px 40px;

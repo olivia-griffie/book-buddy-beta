@@ -61,6 +61,47 @@ function serializeRichTextValue(html = '', settings = {}) {
   return wrapper.outerHTML;
 }
 
+function extractRichTextContentMeta(value = '') {
+  const parsed = parseRichTextValue(value || '');
+  const temp = document.createElement('div');
+  temp.innerHTML = parsed.html || '';
+  const plainText = (temp.textContent || temp.innerText || '').replace(/\u00a0/g, ' ').trim();
+  const hasStructuralContent = Boolean(
+    temp.querySelector('img, video, audio, iframe, ul, ol, li, table, blockquote, hr')
+    || temp.querySelector('br'),
+  );
+
+  return {
+    parsed,
+    plainText,
+    hasContent: plainText.length > 0 || hasStructuralContent,
+  };
+}
+
+function normalizeRichTextDescendants(root, options = {}) {
+  if (!root) {
+    return;
+  }
+
+  const selectors = options.blockSelectors || 'p, ul, ol, li, div, span, blockquote, pre';
+  const descendants = [root, ...root.querySelectorAll('*')];
+
+  descendants.forEach((node) => {
+    if (!(node instanceof HTMLElement)) {
+      return;
+    }
+
+    node.style.color = 'inherit';
+    node.style.fontFamily = 'inherit';
+    node.style.fontSize = 'inherit';
+    node.style.lineHeight = 'inherit';
+
+    if (node.matches(selectors)) {
+      node.style.textAlign = 'inherit';
+    }
+  });
+}
+
 function buildAlignmentIcon(kind) {
   const paths = {
     left: `
@@ -92,6 +133,7 @@ function buildAlignmentIcon(kind) {
 
 window.parseRichTextValue = parseRichTextValue;
 window.serializeRichTextValue = serializeRichTextValue;
+window.getRichTextContentMeta = extractRichTextContentMeta;
 window.renderRichText = function renderRichText(container, rawValue, options = {}) {
   if (!container) {
     return {
@@ -101,10 +143,9 @@ window.renderRichText = function renderRichText(container, rawValue, options = {
     };
   }
 
-  const parsed = parseRichTextValue(rawValue || '');
-  const temp = document.createElement('div');
-  temp.innerHTML = parsed.html || '';
-  const hasContent = (temp.textContent || temp.innerText || '').trim().length > 0;
+  const contentMeta = extractRichTextContentMeta(rawValue || '');
+  const parsed = contentMeta.parsed;
+  const hasContent = contentMeta.hasContent;
 
   container.classList.add('rich-text-rendered');
 
@@ -119,6 +160,7 @@ window.renderRichText = function renderRichText(container, rawValue, options = {
   container.style.fontSize = settings.fontSize ? `${settings.fontSize}px` : '';
   container.style.lineHeight = settings.lineHeight || '';
   container.style.textAlign = settings.textAlign || '';
+  normalizeRichTextDescendants(container);
 
   return {
     hasContent,
@@ -132,11 +174,7 @@ window.getEditorFieldValue = function getEditorFieldValue(field) {
     return field?.value ?? '';
   }
 
-  const parsed = parseRichTextValue(field.value);
-  const temp = document.createElement('div');
-  temp.innerHTML = parsed.html || '';
-  const plainText = (temp.textContent || temp.innerText || '').trim();
-  return plainText ? field.value : '';
+  return extractRichTextContentMeta(field.value).hasContent ? field.value : '';
 };
 
 function sanitizeClipboardHtml(html) {
@@ -310,12 +348,24 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
     }
 
     function normalizeEditorContent() {
-      editor.querySelectorAll('p, ul, ol, li, div, span').forEach((node) => {
-        node.style.color = 'inherit';
-        node.style.fontFamily = 'inherit';
-        node.style.fontSize = 'inherit';
-        node.style.lineHeight = 'inherit';
-      });
+      normalizeRichTextDescendants(editor);
+    }
+
+    function applyCommand(command) {
+      editor.focus();
+      restoreSelection();
+      document.execCommand(command, false);
+      normalizeEditorContent();
+      if (['justifyLeft', 'justifyCenter', 'justifyRight'].includes(command)) {
+        state.textAlign = command === 'justifyCenter'
+          ? 'center'
+          : command === 'justifyRight'
+            ? 'right'
+            : 'left';
+        editor.style.textAlign = state.textAlign;
+      }
+      saveSelection();
+      syncTextarea(true);
     }
 
     function syncTextarea(shouldDispatch = false) {
@@ -331,12 +381,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         saveSelection();
       });
       button.addEventListener('click', () => {
-        editor.focus();
-        restoreSelection();
-        document.execCommand(button.dataset.command, false);
-        normalizeEditorContent();
-        saveSelection();
-        syncTextarea(true);
+        applyCommand(button.dataset.command);
       });
     });
 
@@ -375,6 +420,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       if (e.key === 'Tab') {
         e.preventDefault();
         document.execCommand('insertHTML', false, '\u00a0\u00a0\u00a0\u00a0');
+        normalizeEditorContent();
         syncTextarea(true);
       }
     });
@@ -399,6 +445,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
 
       const plain = clipText || '';
       document.execCommand('insertHTML', false, plainTextToEditorHtml(plain));
+      normalizeEditorContent();
       syncTextarea(true);
 
       const hasFormatting = clipHtml && /<(strong|b|em|i|u|ul|ol|li|h[1-6])\b/i.test(clipHtml);
@@ -424,6 +471,7 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
         document.execCommand('undo');
         const clean = sanitizeClipboardHtml(clipHtml);
         document.execCommand('insertHTML', false, clean);
+        normalizeEditorContent();
         syncTextarea(true);
       });
     });
