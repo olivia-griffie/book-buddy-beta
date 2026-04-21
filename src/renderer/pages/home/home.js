@@ -54,42 +54,37 @@ window.registerPageInit('home', async function () {
           <div class="project-card__header">
             <div class="project-card__header-copy">
               <h3 class="project-card__title" data-project-title="${project.id}">${project.title}</h3>
-              ${project.subtitle ? `<p class="project-card__subtitle">${project.subtitle}</p>` : ''}
               <div class="project-card__tags">
                 ${genres || '<span class="project-tag project-tag--empty">No genre set</span>'}
                 ${tags}
               </div>
             </div>
-            <button class="btn project-card__btn project-card__btn--ghost project-card__btn--small" type="button" data-edit-project-title="${project.id}">Edit Title</button>
+            <button class="project-card__edit-title-btn" type="button" data-edit-project-title="${project.id}" title="Edit title">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z"/></svg>
+            </button>
           </div>
 
           <section class="project-progress">
             <div class="project-progress__top">
               <div class="project-progress__stat">
                 <span class="project-progress__percent">${pct}%</span>
-                <span class="project-progress__label">${completed ? 'complete' : 'done'}</span>
+                <span class="project-progress__label">${completed ? 'complete' : 'in progress'}</span>
               </div>
-              <div class="project-progress__meta">${(project.currentWordCount || 0).toLocaleString()} of ${(project.wordCountGoal || 0).toLocaleString()} words</div>
+              <div class="project-progress__meta">${(project.currentWordCount || 0).toLocaleString()} / ${(project.wordCountGoal || 0).toLocaleString()} words</div>
             </div>
             <div class="project-progress__bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}">
               <span class="project-progress__fill" style="width:${pct}%"></span>
             </div>
+            <div class="project-progress__footer">
+              <span>Goal: ${(project.wordCountGoal || 0).toLocaleString()} words</span>
+              <span>Due: ${formatShortDate(project.targetCompletionDate)}</span>
+            </div>
           </section>
 
-          <dl class="project-card__details">
-            <div>
-              <dt>Word Goal</dt>
-              <dd>${(project.wordCountGoal || 0).toLocaleString()} words</dd>
-            </div>
-            <div>
-              <dt>Target Date</dt>
-              <dd>${formatShortDate(project.targetCompletionDate)}</dd>
-            </div>
-          </dl>
-
           <div class="project-card__settings">
-            <button class="btn project-card__btn project-card__btn--ghost" type="button" data-edit-genres="${project.id}" title="Change genre">Change Genre</button>
-            <button class="btn project-card__btn project-card__btn--ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit Project Goal</button>
+            <button class="project-card__text-btn" type="button" data-edit-genres="${project.id}">Change Genre</button>
+            <span class="project-card__settings-divider">·</span>
+            <button class="project-card__text-btn project-goal-toggle" type="button" data-toggle-goal="${project.id}">Edit Goal</button>
           </div>
 
           <div class="project-goal-editor" data-project-goal-details="${project.id}">
@@ -125,11 +120,14 @@ window.registerPageInit('home', async function () {
 
           <div class="project-card__actions">
             <button class="btn project-card__btn project-card__btn--primary" type="button" data-open-project="${project.id}">Open Project</button>
-            <button class="btn project-card__btn project-card__btn--secondary" type="button" data-export-project="${project.id}">Export</button>
-            <button class="btn project-card__btn project-card__btn--secondary project-backup-btn" type="button" data-export-backup="${project.id}" title="Save a full backup of this project that can be imported after an app update">Backup Project</button>
+            <div class="project-card__secondary-actions">
+              <button class="project-card__text-btn" type="button" data-export-project="${project.id}">Export</button>
+              <span class="project-card__settings-divider">·</span>
+              <button class="project-card__text-btn" type="button" data-export-backup="${project.id}">Backup</button>
+              <span class="project-card__settings-divider">·</span>
+              <button class="project-card__text-btn project-card__text-btn--danger" type="button" data-delete-project="${project.id}">Delete</button>
+            </div>
           </div>
-
-          <button class="project-card__delete" type="button" data-delete-project="${project.id}">Delete Project</button>
         </div>
       </article>
     `;

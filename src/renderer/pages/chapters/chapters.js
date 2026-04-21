@@ -304,8 +304,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     applyEditorStyles();
     renderContextPanel();
     renderPromptPanel();
-    renderPublishPanel?.();
-
   }
 
   function renderContextPanel() {
@@ -623,6 +621,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
                           />
                         </div>
                         <span class="chapter-row-word-count">${window.computeWordCount(chapter.content || '')} words</span>
+                        ${publishedChapterIds.has(chapter.id)
+                          ? `<span class="chapter-row-published-badge">Published</span><button class="chapter-row-unpublish" type="button" data-unpublish-chapter="${chapter.id}">Unpublish</button>`
+                          : `<button class="chapter-row-publish" type="button" data-publish-chapter="${chapter.id}">Publish</button>`
+                        }
                         <button class="chapter-row-delete" type="button" data-delete-chapter="${chapter.id}" aria-label="Delete ${escapeHtml(chapter.title || 'chapter')}">Delete</button>
                       </div>
                     `)
@@ -800,6 +802,47 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         renderContextPanel();
       });
     });
+
+    sectionsList.querySelectorAll('[data-publish-chapter]').forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        const chapterId = button.dataset.publishChapter;
+        const chapter = chapters.find((c) => c.id === chapterId);
+        if (!chapter) return;
+        button.disabled = true;
+        button.textContent = 'Publishing…';
+        try {
+          await window.api.publishing.publishChapter({
+            projectLocalId: activeProject.id,
+            projectContent: activeProject,
+            isPublic: true,
+            chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
+          });
+          publishedChapterIds.add(chapter.id);
+          renderSections();
+        } catch (err) {
+          button.disabled = false;
+          button.textContent = 'Publish';
+          saveMessage.textContent = err.message || 'Publish failed.';
+        }
+      });
+    });
+
+    sectionsList.querySelectorAll('[data-unpublish-chapter]').forEach((button) => {
+      button.addEventListener('click', async (event) => {
+        event.stopPropagation();
+        const chapterId = button.dataset.unpublishChapter;
+        button.disabled = true;
+        try {
+          await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId });
+          publishedChapterIds.delete(chapterId);
+          renderSections();
+        } catch (err) {
+          button.disabled = false;
+          saveMessage.textContent = err.message || 'Unpublish failed.';
+        }
+      });
+    });
   }
 
   function syncSelectedChapter() {
@@ -941,64 +984,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       publishedChapterIds = new Set((rows || []).map((r) => r.chapter_id));
     } catch {}
   }
-
-  function renderPublishPanel() {
-    const publishBtn = document.getElementById('chapter-publish-btn');
-    const unpublishBtn = document.getElementById('chapter-unpublish-btn');
-    const statusEl = document.getElementById('chapter-publish-status');
-    if (!publishBtn || !unpublishBtn || !statusEl) return;
-
-    const chapter = getSelectedChapter();
-    if (!chapter) return;
-
-    const isPublished = publishedChapterIds.has(chapter.id);
-    publishBtn.hidden = isPublished;
-    unpublishBtn.hidden = !isPublished;
-    statusEl.textContent = isPublished ? 'This chapter is live in the community.' : '';
-  }
-
-  document.getElementById('chapter-publish-btn')?.addEventListener('click', async () => {
-    const chapter = getSelectedChapter();
-    if (!chapter) return;
-    if (!activeProject.isPublic) {
-      alert('Set the project to Public in project settings before publishing chapters.');
-      return;
-    }
-    const btn = document.getElementById('chapter-publish-btn');
-    btn.disabled = true;
-    btn.textContent = 'Publishing…';
-    try {
-      await window.api.publishing.publishChapter({
-        projectLocalId: activeProject.id,
-        projectContent: activeProject,
-        isPublic: true,
-        chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
-      });
-      publishedChapterIds.add(chapter.id);
-      renderPublishPanel();
-    } catch (err) {
-      alert(err.message || 'Publish failed.');
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Publish Chapter';
-    }
-  });
-
-  document.getElementById('chapter-unpublish-btn')?.addEventListener('click', async () => {
-    const chapter = getSelectedChapter();
-    if (!chapter) return;
-    const btn = document.getElementById('chapter-unpublish-btn');
-    btn.disabled = true;
-    try {
-      await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId: chapter.id });
-      publishedChapterIds.delete(chapter.id);
-      renderPublishPanel();
-    } catch (err) {
-      alert(err.message || 'Unpublish failed.');
-    } finally {
-      btn.disabled = false;
-    }
-  });
 
   await loadPublishedChapters();
 });

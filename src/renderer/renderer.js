@@ -277,7 +277,7 @@ function normalizeProjectEditorPreferences(preferences = {}) {
   };
 }
 
-function resolveEditorPreferences(project = null, userPreferences = state.userPreferences || getDefaultUserPreferences()) {
+function computeEditorPreferences(project = null, userPreferences = state.userPreferences || getDefaultUserPreferences()) {
   const normalizedUserPreferences = normalizeUserPreferences(userPreferences);
   const projectPreferences = normalizeProjectEditorPreferences(project?.editorPreferences || {});
 
@@ -804,9 +804,6 @@ window.applyUserPreferences = async function applyUserPreferences(preferences = 
   };
   await window.api.saveSettings(nextSettings).catch(() => nextSettings);
 
-  if (options.syncProfile !== false) {
-    await window.api.profile.update({ preferences: normalized }).catch(() => null);
-  }
 
   return normalized;
 };
@@ -1188,7 +1185,7 @@ window.normalizeUserPreferences = normalizeUserPreferences;
 window.getDefaultProjectEditorPreferences = getDefaultProjectEditorPreferences;
 window.normalizeProjectEditorPreferences = normalizeProjectEditorPreferences;
 window.resolveEditorPreferences = function resolveEditorPreferencesForProject(project, userPreferences) {
-  return resolveEditorPreferences(project || getProject(), userPreferences || state.userPreferences || getDefaultUserPreferences());
+  return computeEditorPreferences(project || getProject(), userPreferences || state.userPreferences || getDefaultUserPreferences());
 };
 window.normalizeGenreKey = normalizeGenreKey;
 window.getGenrePromptData = getGenrePromptData;
