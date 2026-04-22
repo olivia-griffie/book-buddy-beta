@@ -1,5 +1,25 @@
 const { url: SUPABASE_URL, anonKey: SUPABASE_ANON_KEY } = require('./supabase-config');
 
+async function restUpsert(path, body, accessToken) {
+  const headers = {
+    'apikey': SUPABASE_ANON_KEY,
+    'Content-Type': 'application/json',
+    'Prefer': 'resolution=merge-duplicates,return=representation',
+  };
+  if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`;
+
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    method: 'POST',
+    headers,
+    body: body != null ? JSON.stringify(body) : undefined,
+  });
+
+  if (res.status === 204) return null;
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.message || data?.error || 'Supabase upsert failed');
+  return data;
+}
+
 async function restReq(method, path, body, accessToken) {
   const headers = {
     'apikey': SUPABASE_ANON_KEY,
@@ -444,6 +464,40 @@ async function markConversationRead(conversationId, currentUserId, accessToken) 
   ).catch(() => []);
 }
 
+async function getUserProjects(userId, accessToken) {
+  const rows = await restReq(
+    'GET',
+    `user_projects?user_id=eq.${userId}&select=id,data,updated_at&order=updated_at.desc`,
+    null,
+    accessToken,
+  );
+  return (rows || []).map((row) => ({
+    ...row.data,
+    id: row.id,
+    updatedAt: row.updated_at || row.data?.updatedAt,
+  }));
+}
+
+async function saveUserProject(projectId, userId, projectData, accessToken) {
+  const now = new Date().toISOString();
+  await restUpsert('user_projects', {
+    id: projectId,
+    user_id: userId,
+    data: projectData,
+    updated_at: now,
+    created_at: projectData.createdAt || now,
+  }, accessToken);
+}
+
+async function deleteUserProject(projectId, userId, accessToken) {
+  return restReq(
+    'DELETE',
+    `user_projects?id=eq.${encodeURIComponent(projectId)}&user_id=eq.${encodeURIComponent(userId)}`,
+    null,
+    accessToken,
+  );
+}
+
 module.exports = {
   getProfile,
   updateProfile,
@@ -462,4 +516,7 @@ module.exports = {
   findOrCreateDirectConversation,
   sendDirectMessage,
   markConversationRead,
+  getUserProjects,
+  saveUserProject,
+  deleteUserProject,
 };

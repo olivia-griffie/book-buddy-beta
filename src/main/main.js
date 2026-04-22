@@ -12,6 +12,7 @@ const {
   getLikes, toggleLike, getAuthorNotifications,
   getInboxConversations, getConversationMessages,
   findOrCreateDirectConversation, sendDirectMessage, markConversationRead,
+  getUserProjects, saveUserProject, deleteUserProject,
 } = require('./supabase');
 
 
@@ -376,7 +377,50 @@ app.on('window-all-closed', () => {
 });
 
 // IPC: Projects
-ipcMain.handle('projects:getAll', () => store.get('projects', []));
+ipcMain.handle('projects:getAll', async () => {
+  const session = await getValidSession().catch(() => null);
+
+  if (!session) {
+    return store.get('projects', []);
+  }
+
+  try {
+    const [cloudProjects, localProjects] = await Promise.all([
+      getUserProjects(session.user.id, session.access_token),
+      Promise.resolve(store.get('projects', [])),
+    ]);
+
+    // Merge: prefer whichever copy has a newer updatedAt
+    const merged = new Map();
+    for (const p of localProjects) {
+      merged.set(p.id, p);
+    }
+    for (const p of cloudProjects) {
+      const existing = merged.get(p.id);
+      if (!existing || new Date(p.updatedAt || 0) >= new Date(existing.updatedAt || 0)) {
+        merged.set(p.id, p);
+      }
+    }
+
+    const mergedList = Array.from(merged.values());
+
+    // Upload local projects not yet in the cloud (first-run migration + offline writes)
+    const cloudIds = new Set(cloudProjects.map((p) => p.id));
+    localProjects
+      .filter((p) => !cloudIds.has(p.id))
+      .forEach((p) => {
+        saveUserProject(p.id, session.user.id, p, session.access_token)
+          .catch((err) => console.warn('[cloud] Migration upload failed for', p.id, err.message));
+      });
+
+    store.set('projects', mergedList);
+    return mergedList;
+  } catch (err) {
+    console.warn('[cloud] Failed to fetch projects, using local cache:', err.message);
+    return store.get('projects', []);
+  }
+});
+
 ipcMain.handle('projects:getCurrentId', () => store.get('currentProjectId', null));
 ipcMain.handle('projects:setCurrentId', (_, projectId) => {
   if (projectId) {
@@ -388,15 +432,16 @@ ipcMain.handle('projects:setCurrentId', (_, projectId) => {
   return null;
 });
 
-ipcMain.handle('projects:save', (_, payload) => {
+ipcMain.handle('projects:save', async (_, payload) => {
   const { project, options } = normalizeProjectSaveRequest(payload);
   const dirtyFields = options?.dirtyFields || [];
   const projects = store.get('projects', []);
   const index = projects.findIndex((entry) => entry.id === project.id);
 
+  let mergedProject;
   if (index >= 0) {
     const existingProject = projects[index];
-    const mergedProject = mergeProjectRecord(existingProject, project, dirtyFields);
+    mergedProject = mergeProjectRecord(existingProject, project, dirtyFields);
 
     if (JSON.stringify(existingProject) !== JSON.stringify(mergedProject)) {
       recordProjectBackup(project.id, existingProject);
@@ -407,18 +452,27 @@ ipcMain.handle('projects:save', (_, payload) => {
     if (store.get('currentProjectId') === mergedProject.id) {
       store.set('currentProjectId', mergedProject.id);
     }
-    return mergedProject;
   } else {
+    mergedProject = project;
     projects.push(project);
     store.set('projects', projects);
     if (!store.get('currentProjectId')) {
       store.set('currentProjectId', project.id);
     }
-    return project;
   }
+
+  // Push to cloud without blocking the response
+  getValidSession()
+    .then((session) => {
+      if (!session) return;
+      return saveUserProject(mergedProject.id, session.user.id, mergedProject, session.access_token);
+    })
+    .catch((err) => console.warn('[cloud] Save sync failed:', err.message));
+
+  return mergedProject;
 });
 
-ipcMain.handle('projects:delete', (_, id) => {
+ipcMain.handle('projects:delete', async (_, id) => {
   const projects = store.get('projects', []).filter((project) => project.id !== id);
   store.set('projects', projects);
   if (store.get('currentProjectId') === id) {
@@ -428,6 +482,14 @@ ipcMain.handle('projects:delete', (_, id) => {
       store.delete('currentProjectId');
     }
   }
+
+  // Remove from cloud without blocking
+  getValidSession()
+    .then((session) => {
+      if (!session) return;
+      return deleteUserProject(id, session.user.id, session.access_token);
+    })
+    .catch((err) => console.warn('[cloud] Delete sync failed:', err.message));
 });
 
 ipcMain.handle('projects:exportManuscript', async (_, project) => {

@@ -516,6 +516,17 @@
   color: #1fa887;
 }
 
+.inbox-badge-milestone {
+  background: rgba(255, 184, 0, 0.14);
+  color: #b8860b;
+}
+
+.inbox-type-icon--milestone {
+  background: rgba(255, 184, 0, 0.14);
+  color: #b8860b;
+  font-size: 1.1rem;
+}
+
 .inbox-text em {
   font-style: italic;
   color: var(--ink);

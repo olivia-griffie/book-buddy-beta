@@ -302,23 +302,29 @@
 }
 
 .plot-chapter-linked-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  padding: 8px 10px;
   border: 1px solid var(--border-soft);
   border-radius: 8px;
   background: #f9f5f0;
 }
 
 .plot-chapter-linked-title {
-  flex: 1;
   min-width: 0;
   font-size: 0.82rem;
   color: var(--ink);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.plot-chapter-linked-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
 }
 
 .plot-chapter-linked-words {

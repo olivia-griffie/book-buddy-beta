@@ -240,8 +240,16 @@ window.registerPageInit('inbox', async function () {
   }
 
   function getNotificationTypeLabel(type) {
-    const map = { like: 'Like', favorite: 'Favorite', comment: 'Comment' };
+    const map = { like: 'Like', favorite: 'Favorite', comment: 'Comment', milestone: 'Milestone' };
     return map[type] || 'Notification';
+  }
+
+  function loadMilestoneNotifications() {
+    try {
+      return JSON.parse(localStorage.getItem('bb-milestone-notifications') || '[]');
+    } catch {
+      return [];
+    }
   }
 
   function groupLabel(key, hasUnread) {
@@ -279,6 +287,22 @@ window.registerPageInit('inbox', async function () {
           </div>
           <p class="inbox-text">${escapeHtml(item.note || 'Readers added your project to their favorites.')}</p>
           <p class="inbox-context">${escapeHtml(item.projectTitle)}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function milestoneMarkup(item) {
+    return `
+      <div class="inbox-item-main">
+        <div class="inbox-type-icon inbox-type-icon--milestone" aria-hidden="true">★</div>
+        <div class="inbox-item-body">
+          <div class="inbox-meta">
+            <span class="inbox-badge inbox-badge-milestone">Milestone</span>
+            <span class="inbox-time">${timeAgo(item.createdAt)}</span>
+          </div>
+          <p class="inbox-text">${escapeHtml(item.label)}</p>
+          <p class="inbox-context">${escapeHtml(item.description)}${item.projectTitle ? ` · ${escapeHtml(item.projectTitle)}` : ''}</p>
         </div>
       </div>
     `;
@@ -331,6 +355,7 @@ window.registerPageInit('inbox', async function () {
     if (item.type === 'comment') content = commentMarkup(item);
     if (item.type === 'like') content = likeMarkup(item);
     if (item.type === 'favorite') content = favoriteMarkup(item);
+    if (item.type === 'milestone') content = milestoneMarkup(item);
 
     return `
       <article class="inbox-item ${unread ? 'is-unread' : ''}" data-item-id="${escapeHtml(item.id)}">
@@ -628,7 +653,11 @@ window.registerPageInit('inbox', async function () {
       refreshConversations(preferredConversationId),
     ]);
 
-    notifications = (items || []).map((item) => ({ ...item, type: item.type || 'comment' }));
+    const milestoneNotifications = loadMilestoneNotifications();
+    notifications = [
+      ...milestoneNotifications,
+      ...(items || []).map((item) => ({ ...item, type: item.type || 'comment' })),
+    ].sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
     loading.style.display = 'none';
 
     if (preferredConversationId) {

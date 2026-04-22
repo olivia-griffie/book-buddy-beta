@@ -1272,41 +1272,33 @@ window.setSidebarCollapsed = function setSidebarCollapsed(isCollapsed) {
 window.shouldShowTopbarBadges = function shouldShowTopbarBadges() {
   return Date.now() < Number(state.topbarBadgesVisibleUntil || 0);
 };
-window.showMilestoneCelebration = function showMilestoneCelebration(milestones = []) {
-  if (!milestones.length) {
-    return;
+const MILESTONE_NOTIFICATIONS_KEY = 'bb-milestone-notifications';
+
+window.showMilestoneCelebration = function showMilestoneCelebration(milestones = [], context = {}) {
+  if (!milestones.length) return;
+
+  let existing = [];
+  try { existing = JSON.parse(localStorage.getItem(MILESTONE_NOTIFICATIONS_KEY) || '[]'); } catch { /* */ }
+
+  const existingIds = new Set(existing.map((n) => n.id));
+  const projectTitle = context.projectTitle || '';
+  const projectId = context.projectId || '';
+
+  const fresh = milestones
+    .map((milestone) => ({
+      id: `milestone-${milestone.id}${projectId ? `-${projectId}` : ''}`,
+      type: 'milestone',
+      milestoneId: milestone.id,
+      label: milestone.label,
+      description: milestone.description,
+      projectTitle,
+      createdAt: new Date().toISOString(),
+    }))
+    .filter((n) => !existingIds.has(n.id));
+
+  if (fresh.length) {
+    localStorage.setItem(MILESTONE_NOTIFICATIONS_KEY, JSON.stringify([...fresh, ...existing]));
   }
-
-  let rail = document.getElementById('milestone-toast-rail');
-  if (!rail) {
-    rail = document.createElement('div');
-    rail.id = 'milestone-toast-rail';
-    rail.className = 'milestone-toast-rail';
-    document.body.appendChild(rail);
-  }
-
-  milestones.forEach((milestone, index) => {
-    const toast = document.createElement('article');
-    toast.className = 'milestone-toast';
-    toast.innerHTML = `
-      <div class="milestone-toast-mark" aria-hidden="true">+</div>
-      <div class="milestone-toast-copy">
-        <p class="milestone-toast-kicker">Milestone unlocked</p>
-        <h3>${milestone.label}</h3>
-        <p>${milestone.description}</p>
-      </div>
-    `;
-    rail.appendChild(toast);
-
-    requestAnimationFrame(() => {
-      toast.classList.add('is-visible');
-    });
-
-    setTimeout(() => {
-      toast.classList.remove('is-visible');
-      setTimeout(() => toast.remove(), 260);
-    }, 2600 + (index * 180));
-  });
 };
 window.markAppDirty = function markAppDirty(text = 'Unsaved changes') {
   setSaveStatus({
@@ -1442,7 +1434,10 @@ window.saveProjectData = async function saveProjectData(project, options = {}) {
     text: 'Saved just now',
   });
   if (newlyUnlocked.length) {
-    window.showMilestoneCelebration(newlyUnlocked);
+    window.showMilestoneCelebration(newlyUnlocked, {
+      projectTitle: savedProject.title || mergedProject.title || '',
+      projectId: savedProject.id || mergedProject.id || '',
+    });
   }
   return savedProject;
 };

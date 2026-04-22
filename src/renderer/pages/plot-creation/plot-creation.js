@@ -169,8 +169,10 @@ window.registerPageInit('plot-creation', async function ({ project }) {
                   ${linkedChapters.map((ch) => `
                     <div class="plot-chapter-linked-row">
                       <span class="plot-chapter-linked-title">${escapeHtml(ch.title || 'Untitled Chapter')}</span>
-                      <span class="plot-chapter-linked-words">${window.computeWordCount(ch.content || '')} words</span>
-                      <button type="button" class="plot-chapter-unlink" data-unlink-chapter="${ch.id}" aria-label="Unlink ${escapeHtml(ch.title || 'chapter')}" title="Unlink chapter">&times;</button>
+                      <div class="plot-chapter-linked-foot">
+                        <span class="plot-chapter-linked-words">${window.computeWordCount(ch.content || '')} words</span>
+                        <button type="button" class="plot-chapter-unlink" data-unlink-chapter="${ch.id}" aria-label="Unlink ${escapeHtml(ch.title || 'chapter')}" title="Unlink chapter">&times;</button>
+                      </div>
                     </div>
                   `).join('')}
                 </div>
