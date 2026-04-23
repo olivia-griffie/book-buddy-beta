@@ -75,7 +75,7 @@ function getSidebarSnapshot(currentProject) {
 
 let inboxBadgeRefreshTimer = null;
 
-async function refreshInboxSidebarBadge() {
+async function performInboxSidebarBadgeRefresh() {
   const container = document.getElementById('sidebar-container');
   const inboxButton = container?.querySelector('[data-page="inbox"]');
   const icon = inboxButton?.querySelector('.sidebar-link-icon');
@@ -123,16 +123,16 @@ function ensureInboxBadgeAutoRefresh() {
   }
 
   inboxBadgeRefreshTimer = window.setInterval(() => {
-    refreshInboxSidebarBadge().catch(() => {});
+    performInboxSidebarBadgeRefresh().catch(() => {});
   }, 30000);
 
   window.addEventListener('focus', () => {
-    refreshInboxSidebarBadge().catch(() => {});
+    performInboxSidebarBadgeRefresh().catch(() => {});
   });
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      refreshInboxSidebarBadge().catch(() => {});
+      performInboxSidebarBadgeRefresh().catch(() => {});
     }
   });
 }
@@ -237,9 +237,9 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
   });
 
   ensureInboxBadgeAutoRefresh();
-  refreshInboxSidebarBadge().catch(() => {});
+  performInboxSidebarBadgeRefresh().catch(() => {});
 };
 
 window.refreshInboxSidebarBadge = function refreshInboxSidebarBadgeBridge() {
-  return refreshInboxSidebarBadge();
+  return performInboxSidebarBadgeRefresh();
 };
