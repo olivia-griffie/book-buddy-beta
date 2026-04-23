@@ -14,67 +14,69 @@
   </div>
 
   <div id="daily-prompts-content" class="daily-prompts-layout" style="display: none;">
-    <section class="card ui-card ui-card-stack prompt-controls-card">
+    <section class="card ui-card ui-card-stack daily-prompts-sprint-card">
       <div class="section-heading ui-card-head">
         <div class="ui-card-copy">
           <p class="eyebrow">Prompt Controls</p>
           <h2 class="card-heading">Today's Setup</h2>
         </div>
       </div>
-      <div class="daily-prompt-controls">
-        <div class="field">
-          <label for="prompt-count">Prompt Count</label>
-          <select id="prompt-count">
-            <option value="1" selected>1 prompt</option>
-            <option value="3">3 prompts</option>
-            <option value="5">5 prompts</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="prompt-mode">Prompt Style</label>
-          <select id="prompt-mode">
-            <option value="sequential">Sequential Order</option>
-            <option value="wild">Wild Style</option>
-          </select>
-        </div>
-      </div>
-      <div class="prompt-controls-actions">
-        <button id="generate-prompts" class="btn btn-primary" type="button">Generate Prompts</button>
-      </div>
-      <p id="daily-prompts-status" class="form-message" aria-live="polite"></p>
-    </section>
-
-    <section class="card ui-card ui-card-stack prompt-results-card">
-      <div class="section-heading ui-card-head">
-        <div class="ui-card-copy">
-          <p class="eyebrow">Prompt Results</p>
-          <h2 class="card-heading">Today's Writing Sprint</h2>
-        </div>
-      </div>
-      <div class="prompt-tab-strip" id="prompt-view-tabs">
-        <button class="prompt-tab is-active" type="button" data-prompt-tab="active">
-          Active <span id="prompt-tab-active-count" class="prompt-tab-count"></span>
-        </button>
-        <button class="prompt-tab" type="button" data-prompt-tab="history">
-          History <span id="prompt-tab-history-count" class="prompt-tab-count"></span>
-        </button>
-      </div>
-      <div id="daily-prompts-progress" class="goal-progress-card daily-prompts-progress-card max-620" style="display: none;">
-        <div class="goal-progress-head">
-          <div id="daily-prompts-progress-icon" class="progress-status-icon" aria-hidden="true">...</div>
-          <div>
-            <div class="goal-progress-meta">
-              <span id="daily-prompts-progress-percent" class="goal-progress-percent">0%</span>
-              <span id="daily-prompts-progress-state" class="goal-progress-state">not started</span>
-            </div>
-            <p id="daily-prompts-progress-caption" class="goal-progress-caption">0 of 0 prompts completed</p>
+      <div class="daily-prompts-sprint-body">
+        <div class="daily-prompt-controls">
+          <div class="field">
+            <label for="prompt-count">Prompt Count</label>
+            <select id="prompt-count">
+              <option value="1" selected>1 prompt</option>
+              <option value="3">3 prompts</option>
+              <option value="5">5 prompts</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="prompt-mode">Prompt Style</label>
+            <select id="prompt-mode">
+              <option value="sequential">Sequential Order</option>
+              <option value="wild">Wild Style</option>
+            </select>
           </div>
         </div>
-        <div class="goal-progress-track">
-          <div id="daily-prompts-progress-fill" class="goal-progress-fill"></div>
+        <div class="prompt-controls-actions">
+          <button id="generate-prompts" class="btn btn-primary" type="button">Generate Prompts</button>
         </div>
+        <p id="daily-prompts-status" class="form-message" aria-live="polite"></p>
+
+        <div class="daily-prompts-divider"></div>
+
+        <div class="section-heading daily-prompts-results-head">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Prompt Results</p>
+            <h2 class="card-heading">Today's Writing Sprint</h2>
+          </div>
+        </div>
+        <div class="prompt-tab-strip" id="prompt-view-tabs">
+          <button class="prompt-tab is-active" type="button" data-prompt-tab="active">
+            Active <span id="prompt-tab-active-count" class="prompt-tab-count"></span>
+          </button>
+          <button class="prompt-tab" type="button" data-prompt-tab="history">
+            History <span id="prompt-tab-history-count" class="prompt-tab-count"></span>
+          </button>
+        </div>
+        <div id="daily-prompts-progress" class="goal-progress-card daily-prompts-progress-card max-620" style="display: none;">
+          <div class="goal-progress-head">
+            <div id="daily-prompts-progress-icon" class="progress-status-icon" aria-hidden="true">...</div>
+            <div>
+              <div class="goal-progress-meta">
+                <span id="daily-prompts-progress-percent" class="goal-progress-percent">0%</span>
+                <span id="daily-prompts-progress-state" class="goal-progress-state">not started</span>
+              </div>
+              <p id="daily-prompts-progress-caption" class="goal-progress-caption">0 of 0 prompts completed</p>
+            </div>
+          </div>
+          <div class="goal-progress-track">
+            <div id="daily-prompts-progress-fill" class="goal-progress-fill"></div>
+          </div>
+        </div>
+        <div id="prompt-results-grid" class="prompt-results-grid"></div>
       </div>
-      <div id="prompt-results-grid" class="prompt-results-grid"></div>
     </section>
   </div>
 </section>

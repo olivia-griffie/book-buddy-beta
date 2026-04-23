@@ -8,9 +8,13 @@
   gap: 24px;
 }
 
-.prompt-controls-card,
-.prompt-results-card {
+.daily-prompts-sprint-card {
   padding: 24px;
+}
+
+.daily-prompts-sprint-body {
+  display: grid;
+  gap: 18px;
 }
 
 .daily-prompt-controls {
@@ -21,7 +25,17 @@
 }
 
 .prompt-controls-actions {
-  margin-top: 18px;
+  margin-top: 4px;
+}
+
+.daily-prompts-divider {
+  height: 1px;
+  background: var(--border-soft);
+  margin: 2px 0;
+}
+
+.daily-prompts-results-head {
+  padding-top: 2px;
 }
 
 .prompt-results-grid {

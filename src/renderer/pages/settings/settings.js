@@ -4,6 +4,7 @@ window.registerPageInit('settings', function () {
   const projectFields = document.getElementById('project-preferences-fields');
   const projectEmpty = document.getElementById('project-preferences-empty');
   const projectOverrideGrid = document.getElementById('project-override-grid');
+  const projectKicker = document.getElementById('project-preferences-kicker');
 
   const profileAppearance = document.getElementById('settings-appearance');
   const profileSaveMode = document.getElementById('settings-save-mode');
@@ -44,9 +45,17 @@ window.registerPageInit('settings', function () {
 
   function fillProjectForm() {
     if (!activeProject) {
+      if (projectKicker) {
+        projectKicker.textContent = 'Current Project';
+      }
       projectFields.style.display = 'none';
       projectEmpty.style.display = 'block';
       return;
+    }
+
+    if (projectKicker) {
+      const projectTitle = String(activeProject.title || 'Untitled Project').trim() || 'Untitled Project';
+      projectKicker.textContent = `Current Project: ${projectTitle}`;
     }
 
     projectFields.style.display = 'block';
@@ -114,9 +123,10 @@ window.registerPageInit('settings', function () {
       });
       activeProject = savedProject;
       window.setCurrentProject(savedProject);
+      const projectTitle = String(savedProject.title || 'Untitled Project').trim() || 'Untitled Project';
       projectMessage.textContent = projectDefaultsToggle.checked
-        ? 'This project now follows your profile defaults.'
-        : 'Project writing overrides saved.';
+        ? `${projectTitle} now follows your profile defaults.`
+        : `${projectTitle} project writing overrides saved.`;
       fillProjectForm();
     });
   });

@@ -75,22 +75,29 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = activeProject.title || 'Chapter Workspace';
   document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
-  const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || {
-    saveMode: 'autosave',
-    fontFamily: 'serif',
-    fontSize: 18,
-    lineHeight: 1.7,
-  };
+  function getResolvedEditorPreferences(projectOverride = activeProject) {
+    return window.resolveEditorPreferences?.(projectOverride) || {
+      saveMode: 'autosave',
+      fontFamily: 'serif',
+      fontSize: 18,
+      lineHeight: 1.7,
+    };
+  }
+
+  const resolvedEditorPreferences = getResolvedEditorPreferences();
 
   const promptData = await window.getGenrePromptData();
   const resources = window.getProjectResources(activeProject, promptData);
   const plotSections = (activeProject.plotSections || resources.plotSections).map((section) => ({ ...section }));
-  const chapters = (activeProject.chapters || []).map((chapter) => ({
-    fontFamily: resolvedEditorPreferences.fontFamily,
-    fontSize: resolvedEditorPreferences.fontSize,
-    lineHeight: resolvedEditorPreferences.lineHeight,
-    ...chapter,
-  }));
+  const chapters = (activeProject.chapters || []).map((chapter) => {
+    const {
+      fontFamily: legacyFontFamily,
+      fontSize: legacyFontSize,
+      lineHeight: legacyLineHeight,
+      ...rest
+    } = chapter || {};
+    return { ...rest };
+  });
   function normalizeSectionIds(entity) {
     const ids = Array.isArray(entity.sectionIds) ? entity.sectionIds : (entity.sectionId ? [entity.sectionId] : []);
     return { ...entity, sectionIds: ids, sectionId: ids[0] || '' };
@@ -357,6 +364,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   function renderEditor() {
     const chapter = getSelectedChapter();
+    const chapterEditorPreferences = getResolvedEditorPreferences();
     populateChapterDropdown();
 
     if (!chapter) {
@@ -375,9 +383,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     titleInput.value = chapter.title || '';
     sectionSelect.value = chapter.sectionId || plotSections[0]?.id || '';
     targetWordsInput.value = chapter.targetWords || 0;
-    fontFamilyInput.value = chapter.fontFamily || resolvedEditorPreferences.fontFamily || 'serif';
-    fontSizeInput.value = String(chapter.fontSize || resolvedEditorPreferences.fontSize || 18);
-    lineHeightInput.value = String(chapter.lineHeight || resolvedEditorPreferences.lineHeight || 1.7);
+    fontFamilyInput.value = chapterEditorPreferences.fontFamily || 'serif';
+    fontSizeInput.value = String(chapterEditorPreferences.fontSize || 18);
+    lineHeightInput.value = String(chapterEditorPreferences.lineHeight || 1.7);
     contentInput.value = chapter.content || '';
     window.refreshTextEditor(contentInput, chapter.content || '');
 
@@ -838,9 +846,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           title: `Chapter ${nextChapterNumber}`,
           sectionId: button.dataset.section,
           targetWords: 0,
-          fontFamily: 'serif',
-          fontSize: 18,
-          lineHeight: 1.6,
           content: '',
         };
 
@@ -931,9 +936,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     chapter.title = titleInput.value.trim();
     chapter.sectionId = sectionSelect.value;
     chapter.targetWords = Number(targetWordsInput.value || 0);
-    chapter.fontFamily = fontFamilyInput.value;
-    chapter.fontSize = Number(fontSizeInput.value || 18);
-    chapter.lineHeight = Number(lineHeightInput.value || 1.6);
     chapter.content = window.getEditorFieldValue(contentInput);
 
     const currentWords = window.computeWordCount(chapter.content);
@@ -949,6 +951,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   function buildProjectPayload() {
+    const resolvedPreferences = getResolvedEditorPreferences();
     return {
       ...activeProject,
       plotSections,
@@ -957,6 +960,12 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       scenes,
       locations,
       dailyPromptHistory,
+      editorPreferences: {
+        ...(window.normalizeProjectEditorPreferences?.(activeProject.editorPreferences || {}) || activeProject.editorPreferences || {}),
+        fontFamily: fontFamilyInput.value || resolvedPreferences.fontFamily,
+        fontSize: Number(fontSizeInput.value || resolvedPreferences.fontSize || 18),
+        lineHeight: Number(lineHeightInput.value || resolvedPreferences.lineHeight || 1.7),
+      },
       currentWordCount: chapters.reduce(
         (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
         0,
@@ -1010,9 +1019,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       title: `Chapter ${nextChapterNumber}`,
       sectionId: defaultSectionId,
       targetWords: 0,
-      fontFamily: 'serif',
-      fontSize: 18,
-      lineHeight: 1.6,
       content: '',
     };
     chapters.push(newChapter);

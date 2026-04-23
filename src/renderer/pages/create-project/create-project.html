@@ -143,22 +143,36 @@
           <label>Project Visibility</label>
           <p>Public projects appear in the community and can have published chapters.</p>
         </div>
+      </div>
+      <div class="visibility-choice-group" role="radiogroup" aria-label="Project visibility">
         <button
-          id="project-visibility-toggle"
-          class="settings-toggle"
+          id="project-visibility-private"
+          class="visibility-choice is-active"
           type="button"
-          role="switch"
-          aria-checked="false"
-          aria-label="Make project public"
+          role="radio"
+          aria-checked="true"
+          data-visibility-choice="private"
         >
-          <span class="settings-toggle-thumb"></span>
+          <span class="visibility-choice-title">Private</span>
+          <span class="visibility-choice-copy">Only you can see this project while you build it.</span>
+        </button>
+        <button
+          id="project-visibility-public"
+          class="visibility-choice"
+          type="button"
+          role="radio"
+          aria-checked="false"
+          data-visibility-choice="public"
+        >
+          <span class="visibility-choice-title">Public</span>
+          <span class="visibility-choice-copy">Your project can appear in Community and support published chapters.</span>
         </button>
       </div>
       <p id="project-visibility-label" class="visibility-status">Private — only you can see this project.</p>
     </div>
 
     <div class="form-actions">
-      <p id="form-message" class="form-message" aria-live="polite"></p>
+      <p id="form-message" class="form-message" aria-live="polite" hidden></p>
       <button class="btn btn-save" type="submit">Save And Build Plot</button>
     </div>
   </form>

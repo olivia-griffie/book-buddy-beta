@@ -24,40 +24,50 @@ window.registerPageInit('create-project', async function () {
   const goalIcon = document.getElementById('project-goal-icon');
   const titleInput = document.getElementById('project-title');
   const thumbnailInput = document.getElementById('project-thumbnail');
-  const thumbnailTrigger = document.getElementById('project-thumbnail-trigger');
   const thumbnailPreview = document.getElementById('project-thumbnail-preview');
   const thumbnailStatus = document.getElementById('project-thumbnail-status');
+  const visibilityLabel = document.getElementById('project-visibility-label');
+  const visibilityChoices = [...document.querySelectorAll('[data-visibility-choice]')];
+  const tagInput = document.getElementById('project-tag-input');
+  const addTagBtn = document.getElementById('add-tag-btn');
+  const tagsList = document.getElementById('project-tags-list');
 
   let thumbnailData = '';
   let projectTags = [];
   let isPublic = false;
 
-  const visibilityToggle = document.getElementById('project-visibility-toggle');
-  const visibilityLabel = document.getElementById('project-visibility-label');
+  function setFormMessage(message = '') {
+    if (!formMessage) return;
+    formMessage.textContent = message;
+    formMessage.hidden = !message;
+  }
 
-  visibilityToggle?.addEventListener('click', () => {
-    isPublic = !isPublic;
-    visibilityToggle.setAttribute('aria-checked', String(isPublic));
-    visibilityLabel.textContent = isPublic
-      ? 'Public — visible in the community and shareable.'
-      : 'Private — only you can see this project.';
-  });
+  function syncVisibilityChoiceState() {
+    visibilityChoices.forEach((button) => {
+      const choiceIsPublic = button.dataset.visibilityChoice === 'public';
+      const isActive = choiceIsPublic === isPublic;
+      button.classList.toggle('is-active', isActive);
+      button.setAttribute('aria-checked', String(isActive));
+    });
 
-  const tagInput = document.getElementById('project-tag-input');
-  const addTagBtn = document.getElementById('add-tag-btn');
-  const tagsList = document.getElementById('project-tags-list');
+    if (visibilityLabel) {
+      visibilityLabel.textContent = isPublic
+        ? 'Public - visible in the community and ready for published chapters.'
+        : 'Private - only you can see this project.';
+    }
+  }
 
   function renderTags() {
     tagsList.innerHTML = projectTags.map((tag) => `
       <span class="project-tag-chip">
         <span>${tag}</span>
-        <button type="button" class="project-tag-remove" data-remove-tag="${tag}" aria-label="Remove tag ${tag}">×</button>
+        <button type="button" class="project-tag-remove" data-remove-tag="${tag}" aria-label="Remove tag ${tag}">x</button>
       </span>
     `).join('');
 
     tagsList.querySelectorAll('[data-remove-tag]').forEach((btn) => {
       btn.addEventListener('click', () => {
-        projectTags = projectTags.filter((t) => t !== btn.dataset.removeTag);
+        projectTags = projectTags.filter((tag) => tag !== btn.dataset.removeTag);
         renderTags();
       });
     });
@@ -138,8 +148,11 @@ window.registerPageInit('create-project', async function () {
     thumbnailPreview.innerHTML = thumbnailData
       ? `<img src="${thumbnailData}" alt="Project thumbnail preview" />`
       : '<span class="placeholder-icon">Book</span>';
+
     if (thumbnailStatus) {
-      thumbnailStatus.textContent = thumbnailData ? 'Image selected and ready for this project.' : 'No image selected yet.';
+      thumbnailStatus.textContent = thumbnailData
+        ? 'Image selected and ready for this project.'
+        : 'No image selected yet.';
     }
   }
 
@@ -186,27 +199,34 @@ window.registerPageInit('create-project', async function () {
         renderGenreOptions(promptGenres);
       }
     } catch (error) {
-      formMessage.textContent = 'Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.';
+      setFormMessage('Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.');
     }
-
   }
 
   renderGenreOptions(fallbackGenres);
   renderThumbnailPreview();
   syncGoalPreview();
+  syncVisibilityChoiceState();
+
+  visibilityChoices.forEach((button) => {
+    button.addEventListener('click', () => {
+      isPublic = button.dataset.visibilityChoice === 'public';
+      syncVisibilityChoiceState();
+    });
+  });
 
   async function handleThumbnailSelection(event) {
-    formMessage.textContent = '';
+    setFormMessage('');
 
     try {
       await readThumbnail(event.target.files?.[0]);
       if (event.target.files?.[0]) {
-        formMessage.textContent = 'Thumbnail selected.';
+        setFormMessage('Thumbnail selected.');
       }
     } catch (error) {
       thumbnailData = '';
       renderThumbnailPreview();
-      formMessage.textContent = error.message;
+      setFormMessage(error.message);
     }
   }
 
@@ -217,13 +237,13 @@ window.registerPageInit('create-project', async function () {
 
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
-    formMessage.textContent = '';
+    setFormMessage('');
 
     const formData = new FormData(form);
     const selectedGenres = getSelectedGenres();
 
     if (!selectedGenres.length) {
-      formMessage.textContent = 'Choose at least one genre.';
+      setFormMessage('Choose at least one genre.');
       return;
     }
 
@@ -264,7 +284,7 @@ window.registerPageInit('create-project', async function () {
     };
 
     if (!project.title) {
-      formMessage.textContent = 'Add a project title before continuing.';
+      setFormMessage('Add a project title before continuing.');
       titleInput?.focus();
       return;
     }
@@ -274,7 +294,7 @@ window.registerPageInit('create-project', async function () {
       window.setCurrentProject(savedProject);
       await window.navigate('plot-creation', { project: savedProject });
     } catch (error) {
-      formMessage.textContent = error?.message || 'Project creation failed. Please try again.';
+      setFormMessage(error?.message || 'Project creation failed. Please try again.');
     }
   });
 

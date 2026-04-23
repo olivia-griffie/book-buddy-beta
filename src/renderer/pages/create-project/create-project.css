@@ -188,7 +188,7 @@
   background: var(--surface-step);
   border: 1px solid var(--border-soft);
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .visibility-panel-header {
@@ -216,6 +216,51 @@
   margin: 0;
 }
 
+.visibility-choice-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.visibility-choice {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  background: #fffdfa;
+  color: var(--ink);
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+  transition: border-color var(--duration) var(--ease), background var(--duration) var(--ease), box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
+}
+
+.visibility-choice:hover,
+.visibility-choice:focus-visible {
+  border-color: rgba(255, 138, 61, 0.45);
+  box-shadow: 0 8px 20px rgba(73, 52, 37, 0.06);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.visibility-choice.is-active {
+  border-color: rgba(255, 138, 61, 0.58);
+  background: linear-gradient(180deg, rgba(255, 245, 238, 0.96) 0%, rgba(255, 250, 246, 1) 100%);
+  box-shadow: 0 10px 24px rgba(255, 138, 61, 0.12);
+}
+
+.visibility-choice-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.visibility-choice-copy {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--ink-muted);
+}
+
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -225,6 +270,10 @@
 
 .form-message {
   min-height: 24px;
+}
+
+.form-message[hidden] {
+  display: none;
 }
 
 .form-actions .btn-save {
@@ -253,4 +302,9 @@ body.dark-mode .genre-option {
 body.dark-mode .genre-panel,
 body.dark-mode .tags-panel {
   color: var(--ink);
+}
+
+body.dark-mode .visibility-choice {
+  background: var(--surface-input);
+  border-color: var(--border);
 }
