@@ -68,8 +68,20 @@ window.registerPageInit('sharing', async function () {
         const project = allProjects.find((p) => p.id === projectId);
         if (!project) return;
 
-        project.isPublic = nextPublic;
-        const savedProject = await window.api.saveProject(project);
+        const savedProject = await window.saveProjectData({
+          ...project,
+          isPublic: nextPublic,
+          updatedAt: new Date().toISOString(),
+        }, {
+          dirtyFields: ['isPublic'],
+        });
+
+        await window.api.publishing.syncProjectVisibility({
+          projectLocalId: savedProject.id,
+          projectContent: savedProject,
+          isPublic: nextPublic,
+        }).catch(() => null);
+
         if (currentProject?.id === savedProject?.id) {
           currentProject = savedProject;
           window.setCurrentProject(savedProject);

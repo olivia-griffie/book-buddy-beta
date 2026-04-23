@@ -48,6 +48,7 @@ contextBridge.exposeInMainWorld('api', {
     publishChapter: (args) => ipcRenderer.invoke('chapters:publishChapter', args),
     unpublishChapter: (args) => ipcRenderer.invoke('chapters:unpublishChapter', args),
     getPublished: (args) => ipcRenderer.invoke('chapters:getPublished', args),
+    syncProjectVisibility: (args) => ipcRenderer.invoke('publishing:syncProjectVisibility', args),
   },
   community: {
     getProjects: () => ipcRenderer.invoke('community:getProjects'),

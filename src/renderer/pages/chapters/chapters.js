@@ -21,7 +21,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   let activeProject = project || window.getCurrentProject();
-  let publishedChapterIds = new Set();
+  let publishedChapterIds = new Set(activeProject?.publishedChapterIds || []);
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
@@ -315,6 +315,16 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     chapterPublishToggle.textContent = isPublished ? 'Unpublish Chapter' : 'Publish Chapter';
   }
 
+  async function persistPublishedChapterState() {
+    activeProject = await window.saveProjectData({
+      ...buildProjectPayload(),
+      publishedChapterIds: [...publishedChapterIds],
+      updatedAt: new Date().toISOString(),
+    }, {
+      dirtyFields: ['publishedChapterIds'],
+    });
+  }
+
   async function publishChapter(chapterId) {
     const chapter = chapters.find((entry) => entry.id === chapterId);
     if (!chapter) {
@@ -348,6 +358,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
     });
     publishedChapterIds.add(chapter.id);
+    await persistPublishedChapterState();
     saveMessage.textContent = `"${chapter.title || 'Chapter'}" published.`;
     renderSections();
     renderEditor();
@@ -357,6 +368,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const chapter = chapters.find((entry) => entry.id === chapterId);
     await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId });
     publishedChapterIds.delete(chapterId);
+    await persistPublishedChapterState();
     saveMessage.textContent = `"${chapter?.title || 'Chapter'}" unpublished.`;
     renderSections();
     renderEditor();
@@ -960,6 +972,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       scenes,
       locations,
       dailyPromptHistory,
+      publishedChapterIds: [...publishedChapterIds],
       editorPreferences: {
         ...(window.normalizeProjectEditorPreferences?.(activeProject.editorPreferences || {}) || activeProject.editorPreferences || {}),
         fontFamily: fontFamilyInput.value || resolvedPreferences.fontFamily,
@@ -1095,10 +1108,31 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   // Publishing
 
   async function loadPublishedChapters() {
+    const localPublishedIds = new Set(activeProject?.publishedChapterIds || []);
     try {
       const rows = await window.api.publishing.getPublished({ projectLocalId: activeProject.id });
-      publishedChapterIds = new Set((rows || []).map((r) => r.chapter_id));
+      const remotePublishedIds = new Set((rows || []).map((r) => r.chapter_id));
+      publishedChapterIds = remotePublishedIds;
+
+      const localIds = [...localPublishedIds].sort();
+      const remoteIds = [...remotePublishedIds].sort();
+      const changed = localIds.length !== remoteIds.length
+        || localIds.some((id, index) => id !== remoteIds[index]);
+
+      if (changed) {
+        activeProject = await window.api.saveProject({
+          ...activeProject,
+          publishedChapterIds: remoteIds,
+          updatedAt: activeProject.updatedAt || new Date().toISOString(),
+        }, {
+          dirtyFields: ['publishedChapterIds'],
+        });
+        window.setCurrentProject(activeProject);
+      }
     } catch {}
+    if (!publishedChapterIds.size && localPublishedIds.size) {
+      publishedChapterIds = localPublishedIds;
+    }
   }
 
   await loadPublishedChapters();

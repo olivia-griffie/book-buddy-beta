@@ -1945,6 +1945,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       plotWorkbook: {},
       dailyWordHistory: [],
       dailySessionHistory: [],
+      publishedChapterIds: [],
       editorPreferences: getDefaultProjectEditorPreferences(),
       streakSettings: getDefaultStreakSettings(),
       streakState: {

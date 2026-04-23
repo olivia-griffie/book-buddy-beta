@@ -682,6 +682,16 @@ ipcMain.handle('chapters:getPublished', async (_, { projectLocalId }) => {
   return getPublishedChapters(supabaseProjectId, session.access_token);
 });
 
+ipcMain.handle('publishing:syncProjectVisibility', async (_, { projectLocalId, projectContent, isPublic }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Not authenticated.');
+  const project = await upsertProject(projectLocalId, session.user.id, projectContent, Boolean(isPublic), session.access_token);
+  if (project?.id) {
+    store.set(`publishing.${projectLocalId}`, project.id);
+  }
+  return project;
+});
+
 // IPC: Community
 ipcMain.handle('community:getProjects', async () => {
   try {

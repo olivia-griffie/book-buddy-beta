@@ -261,6 +261,7 @@ window.registerPageInit('create-project', async function () {
       plotWorkbook: {},
       dailyWordHistory: [],
       dailySessionHistory: [],
+      publishedChapterIds: [],
       editorPreferences: window.getDefaultProjectEditorPreferences?.() || {
         useProfileDefaults: true,
         saveMode: 'autosave',

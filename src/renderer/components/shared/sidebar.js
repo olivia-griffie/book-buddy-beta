@@ -73,6 +73,70 @@ function getSidebarSnapshot(currentProject) {
   };
 }
 
+let inboxBadgeRefreshTimer = null;
+
+async function refreshInboxSidebarBadge() {
+  const container = document.getElementById('sidebar-container');
+  const inboxButton = container?.querySelector('[data-page="inbox"]');
+  const icon = inboxButton?.querySelector('.sidebar-link-icon');
+  if (!icon) {
+    return;
+  }
+
+  icon.querySelector('.sidebar-badge-inbox')?.remove();
+
+  try {
+    const [session, notifications, conversations] = await Promise.all([
+      window.api?.auth?.getSession?.().catch(() => null),
+      window.api?.inbox?.getNotifications?.().catch(() => []),
+      window.api?.inbox?.getDirectConversations?.().catch(() => []),
+    ]);
+
+    if (!session) {
+      return;
+    }
+
+    let readIds = new Set();
+    try {
+      readIds = new Set(JSON.parse(localStorage.getItem('bb-inbox-read-items') || '[]'));
+    } catch {}
+
+    const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
+    const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
+    const totalUnread = activityUnread + messageUnread;
+
+    if (!totalUnread) {
+      return;
+    }
+
+    const badge = document.createElement('span');
+    badge.className = 'sidebar-badge sidebar-badge-inbox';
+    badge.setAttribute('aria-label', `${totalUnread} unread inbox item${totalUnread === 1 ? '' : 's'}`);
+    badge.textContent = totalUnread > 9 ? '9+' : String(totalUnread);
+    icon.appendChild(badge);
+  } catch {}
+}
+
+function ensureInboxBadgeAutoRefresh() {
+  if (inboxBadgeRefreshTimer) {
+    return;
+  }
+
+  inboxBadgeRefreshTimer = window.setInterval(() => {
+    refreshInboxSidebarBadge().catch(() => {});
+  }, 30000);
+
+  window.addEventListener('focus', () => {
+    refreshInboxSidebarBadge().catch(() => {});
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      refreshInboxSidebarBadge().catch(() => {});
+    }
+  });
+}
+
 window.renderSidebar = function renderSidebar(currentPage, currentProject) {
   const container = document.getElementById('sidebar-container');
   if (!container) {
@@ -172,40 +236,10 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
     });
   });
 
-  const inboxButton = container.querySelector('[data-page="inbox"]');
-  if (inboxButton) {
-    const icon = inboxButton.querySelector('.sidebar-link-icon');
-    const existingBadge = icon?.querySelector('.sidebar-badge-inbox');
-    existingBadge?.remove();
+  ensureInboxBadgeAutoRefresh();
+  refreshInboxSidebarBadge().catch(() => {});
+};
 
-    Promise.all([
-      window.api?.auth?.getSession?.().catch(() => null),
-      window.api?.inbox?.getNotifications?.().catch(() => []),
-      window.api?.inbox?.getDirectConversations?.().catch(() => []),
-    ]).then(([session, notifications, conversations]) => {
-      if (!session || !icon) {
-        return;
-      }
-
-      let readIds = new Set();
-      try {
-        readIds = new Set(JSON.parse(localStorage.getItem('bb-inbox-read-items') || '[]'));
-      } catch {}
-
-      const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
-      const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
-      const totalUnread = activityUnread + messageUnread;
-
-      icon.querySelector('.sidebar-badge-inbox')?.remove();
-      if (!totalUnread) {
-        return;
-      }
-
-      const badge = document.createElement('span');
-      badge.className = 'sidebar-badge sidebar-badge-inbox';
-      badge.setAttribute('aria-label', `${totalUnread} unread inbox item${totalUnread === 1 ? '' : 's'}`);
-      badge.textContent = totalUnread > 9 ? '9+' : String(totalUnread);
-      icon.appendChild(badge);
-    }).catch(() => {});
-  }
+window.refreshInboxSidebarBadge = function refreshInboxSidebarBadgeBridge() {
+  return refreshInboxSidebarBadge();
 };
