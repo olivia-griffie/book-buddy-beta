@@ -24,6 +24,7 @@ window.registerPageInit('inbox', async function () {
   const feed = document.getElementById('inbox-feed');
   const markReadBtn = document.getElementById('inbox-mark-read');
   const storageKey = 'bb-inbox-read-items';
+  const unreadStateKey = 'bb-inbox-unread-state';
   const openConversationKey = 'bb-inbox-open-conversation';
   const avatarPalette = ['#ff6a5a', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
 
@@ -67,6 +68,21 @@ window.registerPageInit('inbox', async function () {
 
   function saveReadState(nextReadIds) {
     localStorage.setItem(storageKey, JSON.stringify([...nextReadIds]));
+  }
+
+  function persistUnreadState() {
+    const nextState = {
+      activityUnread: getActivityUnreadCount(),
+      messageUnread: getMessageUnreadCount(),
+      totalUnread: getActivityUnreadCount() + getMessageUnreadCount(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    try {
+      localStorage.setItem(unreadStateKey, JSON.stringify(nextState));
+    } catch {}
+
+    window.setInboxSidebarBadgeCount?.(nextState);
   }
 
   function getInitials(name) {
@@ -143,6 +159,7 @@ window.registerPageInit('inbox', async function () {
     activityBadge.textContent = activityCount;
     activityBadge.style.display = activityCount ? 'inline-flex' : 'none';
     markReadBtn.style.display = activeMode === 'activity' && activityCount ? 'inline-flex' : 'none';
+    persistUnreadState();
   }
 
   function getConversationById(conversationId) {
@@ -562,6 +579,7 @@ window.registerPageInit('inbox', async function () {
       loadingConversationId = '';
       renderMessagesLayout();
       updateBadges();
+      window.refreshInboxSidebarBadge?.().catch(() => {});
     }
   }
 
@@ -636,6 +654,7 @@ window.registerPageInit('inbox', async function () {
       sendingConversationId = '';
       renderMessagesLayout();
       updateBadges();
+      window.refreshInboxSidebarBadge?.().catch(() => {});
     }
   });
 
@@ -648,6 +667,7 @@ window.registerPageInit('inbox', async function () {
     filteredNotifications().forEach((item) => readIds.add(item.id));
     saveReadState(readIds);
     renderActivityFeed();
+    window.refreshInboxSidebarBadge?.().catch(() => {});
   });
 
   document.querySelectorAll('[data-inbox-filter]').forEach((button) => {

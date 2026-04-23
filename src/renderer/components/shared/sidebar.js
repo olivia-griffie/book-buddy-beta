@@ -74,8 +74,38 @@ function getSidebarSnapshot(currentProject) {
 }
 
 let inboxBadgeRefreshTimer = null;
+const INBOX_BADGE_CACHE_KEY = 'bb-inbox-unread-state';
 
-async function performInboxSidebarBadgeRefresh() {
+function normalizeInboxUnreadState(value) {
+  const activityUnread = Math.max(0, Number(value?.activityUnread || 0));
+  const messageUnread = Math.max(0, Number(value?.messageUnread || 0));
+  const totalUnread = Math.max(0, Number(value?.totalUnread ?? (activityUnread + messageUnread)));
+  return {
+    activityUnread,
+    messageUnread,
+    totalUnread,
+    updatedAt: value?.updatedAt || '',
+  };
+}
+
+function readCachedInboxUnreadState() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(INBOX_BADGE_CACHE_KEY) || '{}');
+    return normalizeInboxUnreadState(raw);
+  } catch {
+    return normalizeInboxUnreadState({});
+  }
+}
+
+function writeCachedInboxUnreadState(nextState) {
+  const normalized = normalizeInboxUnreadState(nextState);
+  try {
+    localStorage.setItem(INBOX_BADGE_CACHE_KEY, JSON.stringify(normalized));
+  } catch {}
+  return normalized;
+}
+
+function renderInboxSidebarBadgeCount(count) {
   const container = document.getElementById('sidebar-container');
   const inboxButton = container?.querySelector('[data-page="inbox"]');
   const icon = inboxButton?.querySelector('.sidebar-link-icon');
@@ -84,7 +114,18 @@ async function performInboxSidebarBadgeRefresh() {
   }
 
   icon.querySelector('.sidebar-badge-inbox')?.remove();
+  if (!count) {
+    return;
+  }
 
+  const badge = document.createElement('span');
+  badge.className = 'sidebar-badge sidebar-badge-inbox';
+  badge.setAttribute('aria-label', `${count} unread inbox item${count === 1 ? '' : 's'}`);
+  badge.textContent = count > 9 ? '9+' : String(count);
+  icon.appendChild(badge);
+}
+
+async function performInboxSidebarBadgeRefresh() {
   try {
     const [session, notifications, conversations] = await Promise.all([
       window.api?.auth?.getSession?.().catch(() => null),
@@ -104,16 +145,13 @@ async function performInboxSidebarBadgeRefresh() {
     const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
     const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
     const totalUnread = activityUnread + messageUnread;
-
-    if (!totalUnread) {
-      return;
-    }
-
-    const badge = document.createElement('span');
-    badge.className = 'sidebar-badge sidebar-badge-inbox';
-    badge.setAttribute('aria-label', `${totalUnread} unread inbox item${totalUnread === 1 ? '' : 's'}`);
-    badge.textContent = totalUnread > 9 ? '9+' : String(totalUnread);
-    icon.appendChild(badge);
+    writeCachedInboxUnreadState({
+      activityUnread,
+      messageUnread,
+      totalUnread,
+      updatedAt: new Date().toISOString(),
+    });
+    renderInboxSidebarBadgeCount(totalUnread);
   } catch {}
 }
 
@@ -237,9 +275,19 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
   });
 
   ensureInboxBadgeAutoRefresh();
+  renderInboxSidebarBadgeCount(readCachedInboxUnreadState().totalUnread);
   performInboxSidebarBadgeRefresh().catch(() => {});
 };
 
 window.refreshInboxSidebarBadge = function refreshInboxSidebarBadgeBridge() {
   return performInboxSidebarBadgeRefresh();
+};
+
+window.setInboxSidebarBadgeCount = function setInboxSidebarBadgeCountBridge(countOrState) {
+  const normalized = writeCachedInboxUnreadState(
+    typeof countOrState === 'object' && countOrState !== null
+      ? countOrState
+      : { totalUnread: countOrState }
+  );
+  renderInboxSidebarBadgeCount(normalized.totalUnread);
 };
