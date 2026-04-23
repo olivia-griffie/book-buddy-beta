@@ -379,7 +379,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
                 Reference
               </button>
             ` : ''}
-            ${hasProject ? '<button id="topbar-export" class="btn btn-ghost" type="button">Export</button>' : ''}
             ${hasProject ? '<button id="topbar-quick-prompt" class="btn btn-ghost" type="button" title="Jump to Writing Challenges">Quick Prompt</button>' : ''}
             <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
           </div>
@@ -445,29 +444,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     }
   });
 
-  container.querySelector('#topbar-export')?.addEventListener('click', async () => {
-    if (!currentProject || typeof window.api?.exportProjectManuscript !== 'function') {
-      window.setAppSaveStatus({
-        tone: 'warning',
-        text: 'Export is unavailable in this app session.',
-      });
-      return;
-    }
-
-    try {
-      window.setAppSaveStatus({ tone: 'saving', text: 'Preparing export...' });
-      const result = await window.api.exportProjectManuscript(currentProject);
-      window.setAppSaveStatus({
-        tone: result?.canceled ? 'neutral' : 'success',
-        text: result?.canceled ? 'Export canceled.' : 'Export complete.',
-      });
-    } catch (error) {
-      window.setAppSaveStatus({
-        tone: 'warning',
-        text: error?.message || 'Export failed.',
-      });
-    }
-  });
 
   const bubble = container.querySelector('#topbar-collapse-bubble');
   if (bubble) {

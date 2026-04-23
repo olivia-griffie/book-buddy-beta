@@ -25,6 +25,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
+  const saveTopButton = document.getElementById('save-chapters-top');
   const exportButton = document.getElementById('export-chapters');
   const createButton = document.getElementById('chapters-create-project');
   const sectionsList = document.getElementById('plot-sections-list');
@@ -61,6 +62,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     emptyState.style.display = 'grid';
     content.style.display = 'none';
     saveButton.style.display = 'none';
+    saveTopButton.style.display = 'none';
     exportButton.style.display = 'none';
     return;
   }
@@ -68,6 +70,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
+  saveTopButton.style.display = 'inline-flex';
   exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = activeProject.title || 'Chapter Workspace';
   document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
@@ -1052,14 +1055,22 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     field.addEventListener('input', syncSelectedChapter);
   });
 
-  saveButton.addEventListener('click', async () => {
-    await window.runButtonFeedback(saveButton, async () => {
+  async function handleSaveChapters(button) {
+    await window.runButtonFeedback(button, async () => {
       const updatedProject = buildProjectPayload();
       activeProject = await window.saveProjectData(updatedProject, {
         dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
       });
       saveMessage.textContent = 'Chapters saved.';
     });
+  }
+
+  saveButton.addEventListener('click', async () => {
+    await handleSaveChapters(saveButton);
+  });
+
+  saveTopButton?.addEventListener('click', async () => {
+    await handleSaveChapters(saveTopButton);
   });
 
   exportButton.addEventListener('click', async () => {

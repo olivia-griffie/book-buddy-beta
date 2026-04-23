@@ -21,18 +21,19 @@
 }
 
 .plot-sections-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .plot-section-item {
   border: 1px solid var(--border-soft);
-  border-radius: 16px;
-  background: #fffdfa;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fffdfa 0%, #fff8f2 100%);
   overflow: hidden;
   animation: chapterRise 0.32s var(--ease) both;
-  align-self: start;
+  align-self: stretch;
+  box-shadow: 0 10px 24px rgba(73, 52, 37, 0.05);
 }
 
 .plot-section-toggle {
@@ -40,8 +41,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: 14px 15px;
+  gap: 16px;
+  min-height: 72px;
+  padding: 18px 22px;
   cursor: pointer;
 }
 
@@ -51,41 +53,57 @@
 
 .plot-section-item[open] .plot-section-toggle {
   border-bottom: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.55);
 }
 
 .plot-section-toggle-copy {
   display: grid;
-  gap: 4px;
+  gap: 6px;
   min-width: 0;
 }
 
 .plot-section-toggle-copy h3 {
-  font-size: 1rem;
+  font-size: 1.02rem;
   line-height: 1.2;
+}
+
+.plot-section-toggle-copy p {
+  margin: 0;
+  color: var(--ink-muted);
+  font-size: 0.84rem;
 }
 
 .plot-section-toggle-indicator {
   color: var(--ink-muted);
-  font-size: 1rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.86);
+  font-size: 0.92rem;
   line-height: 1;
   flex-shrink: 0;
-  transition: transform var(--duration) var(--ease);
+  transition: transform var(--duration) var(--ease), border-color var(--duration) var(--ease), background var(--duration) var(--ease);
 }
 
 .plot-section-item[open] .plot-section-toggle-indicator {
   transform: rotate(180deg);
+  border-color: rgba(255, 138, 61, 0.3);
+  background: rgba(255, 138, 61, 0.1);
 }
 
 .plot-section-body {
-  padding: 14px 15px;
+  padding: 18px 22px 22px;
   display: grid;
-  gap: 12px;
+  gap: 16px;
 }
 
 .plot-section-head {
   display: grid;
   justify-content: start;
-  gap: 8px;
+  gap: 10px;
 }
 
 .plot-section-head .field {
@@ -98,16 +116,16 @@
 
 .chapter-list {
   display: grid;
-  gap: 6px;
+  gap: 10px;
 }
 
 .chapter-row {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   border: 1px solid var(--border-soft);
-  border-radius: 12px;
-  padding: 10px 12px;
-  background: white;
+  border-radius: 16px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.94);
   cursor: pointer;
   transition: border-color var(--duration) var(--ease), box-shadow var(--duration) var(--ease), transform var(--duration) var(--ease);
 }
@@ -292,11 +310,31 @@
 }
 
 .chapter-publish-toggle {
-  min-height: 38px;
-  padding: 0 14px;
-  font-size: 0.76rem;
-  letter-spacing: 0.05em;
+  min-height: 42px;
+  padding: 0 18px;
+  border-color: var(--accent-coral);
+  background: linear-gradient(135deg, #ff8a61 0%, #ff6b5f 100%);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(255, 107, 95, 0.22);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), background var(--duration) var(--ease), border-color var(--duration) var(--ease);
+}
+
+.chapter-publish-toggle:hover,
+.chapter-publish-toggle:focus-visible {
+  border-color: #f05d52;
+  background: linear-gradient(135deg, #ff7d57 0%, #f05d52 100%);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(255, 107, 95, 0.28);
+  transform: translateY(-1px);
+}
+
+.chapter-publish-toggle:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(255, 107, 95, 0.22);
 }
 
 .chapter-editor-note,
@@ -360,6 +398,10 @@
 
 .chapter-context-panel {
   margin-bottom: 24px;
+}
+
+.chapter-panel-challenge {
+  margin-bottom: 16px;
 }
 
 .chapter-context-panel .chapter-panel-body {
@@ -766,7 +808,7 @@
   line-height: 1.5;
 }
 
-.chapter-publish-status {
+.chapter-publish-body .chapter-publish-status {
   font-size: 0.875rem;
   color: var(--sage);
   font-weight: 500;
