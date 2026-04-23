@@ -343,7 +343,15 @@ window.registerPageInit('community', async function () {
     `).join('');
 
     return `
-      <article class="community-card" data-project-id="${escapeHtml(projectMeta.id)}">
+      <article
+        class="community-card"
+        data-project-id="${escapeHtml(projectMeta.id)}"
+        data-open-project="${escapeHtml(projectMeta.id)}"
+        data-open-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}"
+        tabindex="0"
+        role="button"
+        aria-label="Read ${escapeHtml(projectMeta.title)} by ${escapeHtml(projectMeta.author)}"
+      >
         <div class="community-card-header">
           <div class="community-author">
             <div class="community-author-avatar" style="background:${projectMeta.avatarColor};">${escapeHtml(projectMeta.initials)}</div>
@@ -460,6 +468,27 @@ window.registerPageInit('community', async function () {
 
     grid.querySelectorAll('[data-read-project]').forEach((btn) => {
       btn.addEventListener('click', () => openFromDataset(btn.dataset.readProject, btn.dataset.readChapter));
+    });
+
+    grid.querySelectorAll('[data-open-project]').forEach((card) => {
+      const openCard = () => openFromDataset(card.dataset.openProject, card.dataset.openChapter);
+
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('button, a, input, textarea, select, label')) {
+          return;
+        }
+        openCard();
+      });
+
+      card.addEventListener('keydown', (event) => {
+        if (event.target !== card) {
+          return;
+        }
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCard();
+        }
+      });
     });
 
     grid.querySelectorAll('[data-chapter-id]').forEach((btn) => {

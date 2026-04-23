@@ -1,6 +1,7 @@
 window.registerPageInit('sharing', async function () {
   const list = document.getElementById('sharing-list');
   const empty = document.getElementById('sharing-empty');
+  const status = document.getElementById('sharing-status');
 
   function escapeHtml(str) {
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -60,7 +61,15 @@ window.registerPageInit('sharing', async function () {
         if (!badge) return;
         badge.textContent = nextPublic ? 'Public' : 'Private';
         badge.className = `sharing-badge ${nextPublic ? 'is-public' : 'is-private'}`;
+        if (status) {
+          status.textContent = nextPublic ? 'Project is now Public' : 'Project is now Private';
+          status.classList.remove('is-error');
+        }
       } catch (err) {
+        if (status) {
+          status.textContent = err.message || 'Failed to update visibility.';
+          status.classList.add('is-error');
+        }
         alert(err.message || 'Failed to update visibility.');
       } finally {
         btn.disabled = false;

@@ -17,7 +17,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       return fallback;
     }
 
-    return text.length > 180 ? `${text.slice(0, 177)}...` : text;
+    return text.length > 320 ? `${text.slice(0, 317)}...` : text;
   }
 
   let activeProject = project || window.getCurrentProject();
@@ -50,6 +50,8 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const chapterProgressCaption = document.getElementById('chapter-progress-caption');
   const chapterProgressFill = document.getElementById('chapter-progress-fill');
   const chapterProgressIcon = document.getElementById('chapter-progress-icon');
+  const chapterPublishStatus = document.getElementById('chapter-publish-status');
+  const chapterPublishToggle = document.getElementById('chapter-publish-toggle');
   const contextContent = document.getElementById('chapter-context-content');
   const contextTabs = [...document.querySelectorAll('[data-context-tab]')];
 
@@ -273,6 +275,74 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       .join('');
   }
 
+  function syncSelectedChapterPublishUI() {
+    const chapter = getSelectedChapter();
+    if (!chapterPublishStatus || !chapterPublishToggle) {
+      return;
+    }
+
+    if (!chapter) {
+      chapterPublishStatus.textContent = 'Draft';
+      chapterPublishStatus.classList.remove('is-published');
+      chapterPublishToggle.disabled = true;
+      chapterPublishToggle.textContent = 'Publish Chapter';
+      return;
+    }
+
+    const isPublished = publishedChapterIds.has(chapter.id);
+    chapterPublishStatus.textContent = isPublished ? 'Published' : 'Draft';
+    chapterPublishStatus.classList.toggle('is-published', isPublished);
+    chapterPublishToggle.disabled = false;
+    chapterPublishToggle.textContent = isPublished ? 'Unpublish Chapter' : 'Publish Chapter';
+  }
+
+  async function publishChapter(chapterId) {
+    const chapter = chapters.find((entry) => entry.id === chapterId);
+    if (!chapter) {
+      return;
+    }
+
+    if (!activeProject?.isPublic) {
+      const confirmed = window.confirm(
+        'This story is set to private, and you just tried to publish a chapter. Automatically make project Public?\n\n*Note, only published chapters will be visible.',
+      );
+
+      if (!confirmed) {
+        saveMessage.textContent = 'Chapter publish canceled. The project is still private.';
+        throw new Error('Chapter publish canceled.');
+      }
+
+      activeProject = await window.saveProjectData({
+        ...buildProjectPayload(),
+        isPublic: true,
+        updatedAt: new Date().toISOString(),
+      }, {
+        dirtyFields: ['isPublic', 'plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+      });
+      saveMessage.textContent = 'Project is now public. Publishing chapter...';
+    }
+
+    await window.api.publishing.publishChapter({
+      projectLocalId: activeProject.id,
+      projectContent: activeProject,
+      isPublic: Boolean(activeProject.isPublic),
+      chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
+    });
+    publishedChapterIds.add(chapter.id);
+    saveMessage.textContent = `"${chapter.title || 'Chapter'}" published.`;
+    renderSections();
+    renderEditor();
+  }
+
+  async function unpublishChapter(chapterId) {
+    const chapter = chapters.find((entry) => entry.id === chapterId);
+    await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId });
+    publishedChapterIds.delete(chapterId);
+    saveMessage.textContent = `"${chapter?.title || 'Chapter'}" unpublished.`;
+    renderSections();
+    renderEditor();
+  }
+
   function renderEditor() {
     const chapter = getSelectedChapter();
     populateChapterDropdown();
@@ -281,6 +351,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
       if (chapterProgressCard) chapterProgressCard.style.display = 'none';
+      syncSelectedChapterPublishUI();
       return;
     }
 
@@ -302,6 +373,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     currentWordsInput.value = currentWords.toLocaleString();
     setProgress(currentWords, chapter.targetWords);
     applyEditorStyles();
+    syncSelectedChapterPublishUI();
     renderContextPanel();
     renderPromptPanel();
   }
@@ -811,19 +883,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       button.addEventListener('click', async (event) => {
         event.stopPropagation();
         const chapterId = button.dataset.publishChapter;
-        const chapter = chapters.find((c) => c.id === chapterId);
-        if (!chapter) return;
         button.disabled = true;
         button.textContent = 'Publishing…';
         try {
-          await window.api.publishing.publishChapter({
-            projectLocalId: activeProject.id,
-            projectContent: activeProject,
-            isPublic: true,
-            chapter: { id: chapter.id, title: chapter.title || 'Untitled', content: chapter.content || '' },
-          });
-          publishedChapterIds.add(chapter.id);
-          renderSections();
+          await publishChapter(chapterId);
         } catch (err) {
           button.disabled = false;
           button.textContent = 'Publish';
@@ -838,9 +901,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         const chapterId = button.dataset.unpublishChapter;
         button.disabled = true;
         try {
-          await window.api.publishing.unpublishChapter({ projectLocalId: activeProject.id, chapterId });
-          publishedChapterIds.delete(chapterId);
-          renderSections();
+          await unpublishChapter(chapterId);
         } catch (err) {
           button.disabled = false;
           saveMessage.textContent = err.message || 'Unpublish failed.';
@@ -948,6 +1009,31 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     renderSections();
     renderEditor();
     editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  chapterPublishToggle?.addEventListener('click', async () => {
+    const chapter = getSelectedChapter();
+    if (!chapter) {
+      return;
+    }
+
+    const isPublished = publishedChapterIds.has(chapter.id);
+    chapterPublishToggle.disabled = true;
+    chapterPublishToggle.textContent = isPublished ? 'Unpublishing…' : 'Publishing…';
+
+    try {
+      if (isPublished) {
+        await unpublishChapter(chapter.id);
+      } else {
+        await publishChapter(chapter.id);
+      }
+    } catch (error) {
+      saveMessage.textContent = error?.message || (isPublished ? 'Unpublish failed.' : 'Publish failed.');
+      syncSelectedChapterPublishUI();
+    } finally {
+      chapterPublishToggle.disabled = false;
+      syncSelectedChapterPublishUI();
+    }
   });
 
   window.initializeTextEditor(document.getElementById('chapters-content'));

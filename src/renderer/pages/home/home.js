@@ -668,13 +668,20 @@ window.registerPageInit('home', async function () {
       });
       if (!nextGenres) return;
 
+      const completedPromptHistory = (project.dailyPromptHistory || []).filter((entry) => entry.answerInsertedAt);
       const updatedProject = {
         ...project,
         genres: nextGenres,
+        dailyPromptHistory: completedPromptHistory,
+        dailyPromptState: {
+          ...(project.dailyPromptState || {}),
+          cursor: 0,
+          lastGeneratedAt: '',
+        },
         updatedAt: new Date().toISOString(),
       };
 
-      await window.saveProjectData(updatedProject, { dirtyFields: ['genres'] });
+      await window.saveProjectData(updatedProject, { dirtyFields: ['genres', 'dailyPromptHistory', 'dailyPromptState'] });
       await window.navigate('home', { project: window.getCurrentProject() });
     });
   });

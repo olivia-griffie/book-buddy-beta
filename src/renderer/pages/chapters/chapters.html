@@ -7,7 +7,6 @@
     </div>
     <div class="page-header-actions">
       <button id="export-chapters" class="btn btn-ghost" type="button">Export Book</button>
-      <button id="save-chapters" class="btn btn-save" type="button">Save Chapters</button>
     </div>
   </div>
 
@@ -78,6 +77,10 @@
               </div>
               <h3 class="card-heading">Chapter Settings And Draft</h3>
             </div>
+            <div class="chapter-publish-controls">
+              <span id="chapter-publish-status" class="chapter-publish-status">Draft</span>
+              <button id="chapter-publish-toggle" class="btn btn-ghost chapter-publish-toggle" type="button">Publish Chapter</button>
+            </div>
           </div>
           <div class="chapter-form-grid">
             <div class="field">
@@ -129,6 +132,9 @@
           <div class="field chapter-draft-field">
             <label for="chapter-content">Chapter Draft</label>
             <textarea id="chapter-content" rows="18" data-editor-mode="full"></textarea>
+          </div>
+          <div class="chapter-writing-actions">
+            <button id="save-chapters" class="btn btn-save" type="button">Save Chapters</button>
           </div>
         </section>
 

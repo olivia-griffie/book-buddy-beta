@@ -264,6 +264,41 @@
   gap: 8px;
 }
 
+.chapter-publish-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.chapter-publish-status {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: rgba(255, 138, 61, 0.14);
+  color: var(--accent-coral);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.chapter-publish-status.is-published {
+  background: rgba(90, 143, 106, 0.14);
+  color: var(--sage, #5a8f6a);
+}
+
+.chapter-publish-toggle {
+  min-height: 38px;
+  padding: 0 14px;
+  font-size: 0.76rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
 .chapter-editor-note,
 .plot-sections-note {
   margin-top: 6px;
@@ -317,14 +352,25 @@
   gap: 8px;
 }
 
+.chapter-writing-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 6px;
+}
+
 .chapter-context-panel {
   margin-bottom: 24px;
+}
+
+.chapter-context-panel .chapter-panel-body {
+  padding-top: 18px;
 }
 
 .chapter-context-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+  margin-top: 4px;
 }
 
 .chapter-context-tab {
@@ -366,6 +412,8 @@
   border-radius: 12px;
   background: white;
   animation: chapterRise 0.34s var(--ease) both;
+  align-content: start;
+  min-height: 220px;
 }
 
 .chapter-context-card h4 {
@@ -376,6 +424,7 @@
 .chapter-context-card p {
   margin: 0;
   color: var(--ink-muted);
+  line-height: 1.7;
 }
 
 .chapter-context-meta {
@@ -413,6 +462,7 @@
 .chapter-prompt-list {
   display: grid;
   gap: 16px;
+  margin-top: 8px;
 }
 
 .chapter-prompt-card {
@@ -691,6 +741,7 @@
 
 .chapter-panel-challenge .chapter-panel-body {
   border-top-color: rgba(255, 255, 255, 0.12);
+  padding-top: 14px;
 }
 
 .chapter-panel-challenge .btn-ghost {

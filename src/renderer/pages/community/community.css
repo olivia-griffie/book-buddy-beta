@@ -137,6 +137,7 @@
   border: 1px solid var(--border-soft);
   border-radius: 18px;
   box-shadow: var(--shadow-card);
+  cursor: pointer;
   transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration) var(--ease);
 }
 
@@ -144,6 +145,14 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-lift);
   border-color: rgba(255, 126, 184, 0.28);
+}
+
+.community-card:focus-visible {
+  outline: 3px solid rgba(255, 106, 90, 0.18);
+  outline-offset: 3px;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(255, 126, 184, 0.32);
 }
 
 .community-card-header {
