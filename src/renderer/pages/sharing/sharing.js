@@ -7,7 +7,25 @@ window.registerPageInit('sharing', async function () {
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  const projects = await window.api.getAllProjects().catch(() => []);
+  let currentProject = window.getCurrentProject?.() || null;
+
+  function getMergedProjects(projects = []) {
+    if (!currentProject?.id) {
+      return projects;
+    }
+
+    return projects.map((project) => {
+      if (project.id !== currentProject.id) {
+        return project;
+      }
+
+      const currentUpdatedAt = new Date(currentProject.updatedAt || 0).getTime();
+      const projectUpdatedAt = new Date(project.updatedAt || 0).getTime();
+      return currentUpdatedAt >= projectUpdatedAt ? { ...project, ...currentProject } : project;
+    });
+  }
+
+  const projects = getMergedProjects(await window.api.getAllProjects().catch(() => []));
 
   if (!projects.length) {
     empty.style.display = 'block';
@@ -46,12 +64,16 @@ window.registerPageInit('sharing', async function () {
 
       btn.disabled = true;
       try {
-        const allProjects = await window.api.getAllProjects();
+        const allProjects = getMergedProjects(await window.api.getAllProjects());
         const project = allProjects.find((p) => p.id === projectId);
         if (!project) return;
 
         project.isPublic = nextPublic;
-        await window.api.saveProject(project);
+        const savedProject = await window.api.saveProject(project);
+        if (currentProject?.id === savedProject?.id) {
+          currentProject = savedProject;
+          window.setCurrentProject(savedProject);
+        }
 
         // Update UI
         btn.dataset.isPublic = String(nextPublic);

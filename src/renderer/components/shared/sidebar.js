@@ -171,4 +171,41 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
       window.navigate(button.dataset.page);
     });
   });
+
+  const inboxButton = container.querySelector('[data-page="inbox"]');
+  if (inboxButton) {
+    const icon = inboxButton.querySelector('.sidebar-link-icon');
+    const existingBadge = icon?.querySelector('.sidebar-badge-inbox');
+    existingBadge?.remove();
+
+    Promise.all([
+      window.api?.auth?.getSession?.().catch(() => null),
+      window.api?.inbox?.getNotifications?.().catch(() => []),
+      window.api?.inbox?.getDirectConversations?.().catch(() => []),
+    ]).then(([session, notifications, conversations]) => {
+      if (!session || !icon) {
+        return;
+      }
+
+      let readIds = new Set();
+      try {
+        readIds = new Set(JSON.parse(localStorage.getItem('bb-inbox-read-items') || '[]'));
+      } catch {}
+
+      const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
+      const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
+      const totalUnread = activityUnread + messageUnread;
+
+      icon.querySelector('.sidebar-badge-inbox')?.remove();
+      if (!totalUnread) {
+        return;
+      }
+
+      const badge = document.createElement('span');
+      badge.className = 'sidebar-badge sidebar-badge-inbox';
+      badge.setAttribute('aria-label', `${totalUnread} unread inbox item${totalUnread === 1 ? '' : 's'}`);
+      badge.textContent = totalUnread > 9 ? '9+' : String(totalUnread);
+      icon.appendChild(badge);
+    }).catch(() => {});
+  }
 };

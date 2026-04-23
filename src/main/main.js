@@ -8,8 +8,8 @@ const { signIn, signUp, refreshSession, signOut } = require('./auth');
 const {
   getProfile, updateProfile,
   upsertProject, publishChapter, unpublishChapter, getPublishedChapters,
-  getPublicProjects, getComments, addComment,
-  getLikes, toggleLike, getAuthorNotifications,
+  getPublicProjects, getCommunityPrompts, createCommunityPrompt, getComments, addComment,
+  getLikes, toggleLike, getPromptFavorites, togglePromptFavorite, recordCommunityPromptCompletion, getAuthorNotifications,
   getInboxConversations, getConversationMessages,
   findOrCreateDirectConversation, sendDirectMessage, markConversationRead,
   getUserProjects, saveUserProject, deleteUserProject,
@@ -695,6 +695,17 @@ ipcMain.handle('community:getProjects', async () => {
   }
 });
 
+ipcMain.handle('community:getPrompts', async () => {
+  const session = await getValidSession().catch(() => null);
+  return getCommunityPrompts(session?.access_token);
+});
+
+ipcMain.handle('community:createPrompt', async (_, prompt) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to share a prompt.');
+  return createCommunityPrompt(session.user.id, prompt, session.access_token);
+});
+
 ipcMain.handle('community:getComments', async (_, { projectLocalId, chapterId }) => {
   const session = await getValidSession();
   if (!session) return [];
@@ -747,6 +758,24 @@ ipcMain.handle('community:toggleFavorite', (_, { supabaseProjectId }) => {
   }
   store.set('favorites', favorites);
   return { favorited: idx === -1 };
+});
+
+ipcMain.handle('community:getPromptFavorites', async () => {
+  const session = await getValidSession().catch(() => null);
+  if (!session) return [];
+  return getPromptFavorites(session.user.id, session.access_token);
+});
+
+ipcMain.handle('community:togglePromptFavorite', async (_, { promptId }) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to save prompts.');
+  return togglePromptFavorite(session.user.id, promptId, session.access_token);
+});
+
+ipcMain.handle('community:recordPromptCompletion', async (_, completion) => {
+  const session = await getValidSession();
+  if (!session) throw new Error('Sign in to complete community prompts.');
+  return recordCommunityPromptCompletion(session.user.id, completion, session.access_token);
 });
 
 ipcMain.handle('inbox:getNotifications', async () => {

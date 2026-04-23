@@ -3,14 +3,32 @@ window.registerPageInit('community', async function () {
   const empty = document.getElementById('community-empty');
   const loading = document.getElementById('community-loading');
   const reader = document.getElementById('chapter-reader');
+  const promptReader = document.getElementById('community-prompt-reader');
   const searchInput = document.getElementById('community-search-input');
   const favoritesCount = document.getElementById('community-favorites-count');
   const favoritesEmpty = document.getElementById('community-favorites-empty');
+  const promptsEmpty = document.getElementById('community-prompts-empty');
+  const promptFormCard = document.getElementById('community-prompt-form-card');
+  const promptForm = document.getElementById('community-prompt-form');
+  const promptGenreInput = document.getElementById('community-prompt-genre');
+  const promptPlotPointInput = document.getElementById('community-prompt-plot-point');
+  const promptCalloutInput = document.getElementById('community-prompt-callout');
+  const promptTargetWordsInput = document.getElementById('community-prompt-target-words');
+  const promptFormMessage = document.getElementById('community-prompt-form-message');
+  const promptUseMessage = document.getElementById('community-prompt-use-message');
+  const promptProjectSelect = document.getElementById('community-prompt-project-select');
+  const promptChapterSelect = document.getElementById('community-prompt-chapter-select');
+  const promptUseBtn = document.getElementById('community-prompt-use-btn');
+  const promptFavoriteToggle = document.getElementById('community-prompt-favorite-toggle');
 
   const avatarColors = ['#ff6a5a', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
 
   function escapeHtml(str) {
-    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   function stripHtml(value) {
@@ -27,8 +45,7 @@ window.registerPageInit('community', async function () {
   function formatDateTime(iso) {
     if (!iso) return '';
     const d = new Date(iso);
-    return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
-      + ' at ' + d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+    return `${d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })} at ${d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })}`;
   }
 
   function getInitials(author) {
@@ -50,7 +67,7 @@ window.registerPageInit('community', async function () {
     const chapterText = stripHtml(project.published_chapters?.[0]?.content || '');
     if (!chapterText) return 'Published chapters from this story are now available in the community reader.';
     if (chapterText.length <= 180) return chapterText;
-    return `${chapterText.slice(0, 177).trimEnd()}…`;
+    return `${chapterText.slice(0, 177).trimEnd()}...`;
   }
 
   function buildProjectMeta(project, index) {
@@ -77,16 +94,40 @@ window.registerPageInit('community', async function () {
     };
   }
 
+  function buildPromptMeta(prompt, index) {
+    const author = prompt.profiles?.display_name || prompt.profiles?.username || 'Unknown Writer';
+    return {
+      id: prompt.id,
+      authorId: prompt.user_id,
+      author,
+      authorHandle: prompt.profiles?.username || author.toLowerCase().replace(/\s+/g, '_'),
+      genre: prompt.genre || '',
+      plotPoint: prompt.plot_point || 'Community Prompt',
+      prompt: prompt.prompt || '',
+      targetWordCount: Number(prompt.target_word_count || 0),
+      createdAt: prompt.created_at,
+      updatedAt: prompt.updated_at,
+      initials: getInitials(author),
+      avatarColor: avatarColors[index % avatarColors.length],
+      raw: prompt,
+    };
+  }
+
   const session = await window.api.auth.getSession().catch(() => null);
   const currentUserId = session?.user?.id || session?.id || null;
+
   let favorites = new Set(await window.api.community.getFavorites().catch(() => []));
+  let promptFavorites = new Set(await window.api.community.getPromptFavorites().catch(() => []));
   let activeFilter = 'all';
   let query = '';
   let allProjects = [];
+  let allPrompts = [];
+  let localProjects = [];
 
   let activeProject = null;
   let activeChapter = null;
   let likeState = { count: 0, likedByMe: false };
+  let activePrompt = null;
 
   function updateFavoritesBadge() {
     const count = favorites.size;
@@ -94,30 +135,40 @@ window.registerPageInit('community', async function () {
     favoritesCount.style.display = count ? 'inline-flex' : 'none';
   }
 
+  function setSearchPlaceholder() {
+    if (!searchInput) return;
+    searchInput.placeholder = activeFilter === 'prompts'
+      ? 'Search prompts by genre, section, author, or callout...'
+      : 'Search by title, author, or genre...';
+  }
+
   async function toggleFavorite(supabaseProjectId) {
     const result = await window.api.community.toggleFavorite({ supabaseProjectId });
-    if (result.favorited) {
-      favorites.add(supabaseProjectId);
-    } else {
-      favorites.delete(supabaseProjectId);
-    }
+    if (result.favorited) favorites.add(supabaseProjectId);
+    else favorites.delete(supabaseProjectId);
     updateFavoritesBadge();
     renderList();
   }
 
-  async function messageAuthor(otherUserId) {
-    if (!otherUserId) {
+  async function togglePromptFavorite(promptId) {
+    if (!currentUserId) {
+      alert('Sign in to save prompts.');
       return;
     }
+    const result = await window.api.community.togglePromptFavorite({ promptId });
+    if (result.favorited) promptFavorites.add(promptId);
+    else promptFavorites.delete(promptId);
+    syncPromptFavoriteButton();
+    renderList();
+  }
 
+  async function messageAuthor(otherUserId) {
+    if (!otherUserId) return;
     if (!currentUserId) {
       alert('Sign in to message other writers.');
       return;
     }
-
-    if (otherUserId === currentUserId) {
-      return;
-    }
+    if (otherUserId === currentUserId) return;
 
     try {
       const conversation = await window.api.inbox.findOrCreateConversation({ otherUserId });
@@ -135,9 +186,17 @@ window.registerPageInit('community', async function () {
     document.body.style.overflow = '';
   }
 
+  function closePromptReader() {
+    promptReader.style.display = 'none';
+    promptUseMessage.textContent = '';
+    document.body.style.overflow = '';
+  }
+
   document.getElementById('reader-close')?.addEventListener('click', closeReader);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && reader.style.display !== 'none') closeReader();
+  document.getElementById('community-prompt-close')?.addEventListener('click', closePromptReader);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && reader.style.display !== 'none') closeReader();
+    if (event.key === 'Escape' && promptReader.style.display !== 'none') closePromptReader();
   });
 
   async function loadLikes(supabaseProjectId, chapterId) {
@@ -179,7 +238,7 @@ window.registerPageInit('community', async function () {
 
   async function loadComments(supabaseProjectId, chapterId) {
     const list = document.getElementById('reader-comments-list');
-    list.innerHTML = '<p class="reader-comments-loading">Loading comments…</p>';
+    list.innerHTML = '<p class="reader-comments-loading">Loading comments...</p>';
     try {
       const comments = await window.api.community.getChapterComments({ supabaseProjectId, chapterId });
       renderComments(list, comments || [], supabaseProjectId, chapterId);
@@ -190,7 +249,7 @@ window.registerPageInit('community', async function () {
 
   function renderComments(list, comments, supabaseProjectId, chapterId) {
     if (!comments.length) {
-      list.innerHTML = '<p class="reader-no-comments">No comments yet — be the first!</p>';
+      list.innerHTML = '<p class="reader-no-comments">No comments yet - be the first!</p>';
       return;
     }
 
@@ -209,7 +268,7 @@ window.registerPageInit('community', async function () {
         <p class="reader-comment-body">${escapeHtml(c.content)}</p>
         <button class="reader-reply-btn" type="button" data-reply-to="${escapeHtml(c.id)}">Reply</button>
         <div class="reader-reply-form" id="reply-form-${escapeHtml(c.id)}" style="display:none;">
-          <textarea class="reader-comment-input reply-input" placeholder="Write a reply…" rows="2"></textarea>
+          <textarea class="reader-comment-input reply-input" placeholder="Write a reply..." rows="2"></textarea>
           <div class="reader-reply-actions">
             <button class="btn btn-save reply-submit-btn" type="button" data-submit-reply="${escapeHtml(c.id)}">Post Reply</button>
             <button class="btn btn-ghost reply-cancel-btn" type="button" data-cancel-reply="${escapeHtml(c.id)}">Cancel</button>
@@ -249,7 +308,7 @@ window.registerPageInit('community', async function () {
         const body = input?.value.trim();
         if (!body) return;
         btn.disabled = true;
-        btn.textContent = 'Posting…';
+        btn.textContent = 'Posting...';
         try {
           await window.api.community.addChapterComment({
             supabaseProjectId,
@@ -305,7 +364,7 @@ window.registerPageInit('community', async function () {
     const body = input.value.trim();
     if (!body || !activeProject || !activeChapter) return;
     submit.disabled = true;
-    submit.textContent = 'Posting…';
+    submit.textContent = 'Posting...';
     try {
       await window.api.community.addChapterComment({
         supabaseProjectId: activeProject.id,
@@ -388,45 +447,247 @@ window.registerPageInit('community', async function () {
           </div>
           <div class="community-card-actions">
             ${projectMeta.authorId && projectMeta.authorId !== currentUserId ? `
-              <button
-                class="btn btn-ghost community-message-btn"
-                type="button"
-                data-message-author="${escapeHtml(projectMeta.authorId)}"
-              >
-                Message
-              </button>
+              <button class="btn btn-ghost community-message-btn" type="button" data-message-author="${escapeHtml(projectMeta.authorId)}">Message</button>
             ` : ''}
-            <button
-              class="community-read-btn"
-              type="button"
-              data-read-project="${escapeHtml(projectMeta.id)}"
-              data-read-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}"
-            >
-              Read Latest
-            </button>
+            <button class="community-read-btn" type="button" data-read-project="${escapeHtml(projectMeta.id)}" data-read-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}">Read Latest</button>
           </div>
         </div>
       </article>
     `;
   }
 
-  function renderList() {
-    const normalizedQuery = query.trim().toLowerCase();
+  function promptCardMarkup(promptMeta) {
+    const isFav = promptFavorites.has(promptMeta.id);
+    return `
+      <article
+        class="community-card community-prompt-card"
+        data-open-prompt="${escapeHtml(promptMeta.id)}"
+        tabindex="0"
+        role="button"
+        aria-label="Open prompt by ${escapeHtml(promptMeta.author)}"
+      >
+        <div class="community-card-header">
+          <div class="community-author">
+            <div class="community-author-avatar" style="background:${promptMeta.avatarColor};">${escapeHtml(promptMeta.initials)}</div>
+            <div class="community-author-meta">
+              <p class="community-author-name">Author: ${escapeHtml(promptMeta.author)}</p>
+              <h2 class="community-card-title">${escapeHtml(promptMeta.plotPoint || 'Community Prompt')}</h2>
+            </div>
+          </div>
+          <button
+            class="community-favorite-btn ${isFav ? 'is-favorited' : ''}"
+            type="button"
+            data-prompt-favorite="${escapeHtml(promptMeta.id)}"
+            aria-label="${isFav ? 'Remove prompt from favorites' : 'Save prompt for later'}"
+          >
+            <svg viewBox="0 0 20 20" fill="${isFav ? 'currentColor' : 'none'}" xmlns="http://www.w3.org/2000/svg" width="16" height="16" stroke="currentColor" stroke-width="1.6"><path d="M10 17s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 17 8c0 4.65-7 9-7 9z" stroke-linejoin="round"/></svg>
+            <span>${isFav ? 'Saved' : 'Save'}</span>
+          </button>
+        </div>
+        <div class="community-tags">
+          <span class="community-tag">${escapeHtml(promptMeta.genre)}</span>
+          ${promptMeta.targetWordCount ? `<span class="community-tag">${promptMeta.targetWordCount.toLocaleString()} words</span>` : ''}
+        </div>
+        <p class="prompt-callout">${escapeHtml(promptMeta.prompt)}</p>
+        <div class="community-card-footer">
+          <div class="community-metrics">
+            <span class="community-metric">${escapeHtml(promptMeta.author)}</span>
+            <span class="community-metric">${escapeHtml(formatDate(promptMeta.createdAt))}</span>
+          </div>
+          <div class="community-card-actions">
+            ${promptMeta.authorId && promptMeta.authorId !== currentUserId ? `
+              <button class="btn btn-ghost community-message-btn" type="button" data-message-author="${escapeHtml(promptMeta.authorId)}">Message</button>
+            ` : ''}
+            <button class="community-read-btn" type="button" data-open-prompt-btn="${escapeHtml(promptMeta.id)}">Use Prompt</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }
 
-    const filtered = allProjects.filter((projectMeta) => {
-      const matchesFavorites = activeFilter === 'favorites' ? favorites.has(projectMeta.id) : true;
-      const haystack = [
-        projectMeta.title,
-        projectMeta.author,
-        projectMeta.authorHandle,
-        projectMeta.blurb,
-        ...(projectMeta.genres || []),
-      ].join(' ').toLowerCase();
-      const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
-      return matchesFavorites && matchesQuery;
-    });
+  async function loadLocalProjects() {
+    localProjects = await window.api.getAllProjects().catch(() => []);
+    return localProjects;
+  }
 
+  function syncPromptFavoriteButton() {
+    if (!activePrompt || !promptFavoriteToggle) return;
+    const isFav = promptFavorites.has(activePrompt.id);
+    promptFavoriteToggle.classList.toggle('is-favorited', isFav);
+    promptFavoriteToggle.innerHTML = isFav ? 'Saved' : 'Save';
+  }
+
+  function populatePromptChapterOptions(projectId) {
+    const project = localProjects.find((entry) => entry.id === projectId);
+    const chapters = project?.chapters || [];
+    promptChapterSelect.innerHTML = chapters.length
+      ? chapters.map((chapter) => `<option value="${chapter.id}">${escapeHtml(chapter.title || 'Untitled Chapter')}</option>`).join('')
+      : '<option value="">No chapters yet</option>';
+    promptChapterSelect.disabled = !chapters.length;
+  }
+
+  async function openPromptReader(promptMeta) {
+    activePrompt = promptMeta;
+    document.getElementById('community-prompt-reader-genre').textContent = promptMeta.genre || 'Community Prompt';
+    document.getElementById('community-prompt-reader-title').textContent = promptMeta.plotPoint || 'Community Prompt';
+    document.getElementById('community-prompt-reader-author').textContent = promptMeta.author;
+    document.getElementById('community-prompt-reader-target').textContent = promptMeta.targetWordCount
+      ? `${promptMeta.targetWordCount.toLocaleString()} word target`
+      : 'No target word count';
+    document.getElementById('community-prompt-reader-callout').textContent = promptMeta.prompt || '';
+    promptUseMessage.textContent = '';
+
+    await loadLocalProjects();
+    promptProjectSelect.innerHTML = localProjects.length
+      ? localProjects.map((project) => `<option value="${project.id}">${escapeHtml(project.title || 'Untitled Project')}</option>`).join('')
+      : '<option value="">No projects available</option>';
+    promptProjectSelect.disabled = !localProjects.length;
+    populatePromptChapterOptions(promptProjectSelect.value);
+    syncPromptFavoriteButton();
+
+    promptReader.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    promptReader.querySelector('.chapter-reader-scroll')?.scrollTo(0, 0);
+  }
+
+  promptProjectSelect?.addEventListener('change', () => {
+    populatePromptChapterOptions(promptProjectSelect.value);
+  });
+
+  promptFavoriteToggle?.addEventListener('click', () => {
+    if (activePrompt) {
+      togglePromptFavorite(activePrompt.id);
+    }
+  });
+
+  promptUseBtn?.addEventListener('click', async () => {
+    if (!activePrompt) return;
+    const projectId = promptProjectSelect.value;
+    const chapterId = promptChapterSelect.value;
+    const targetProject = localProjects.find((project) => project.id === projectId);
+
+    if (!targetProject) {
+      promptUseMessage.textContent = 'Choose a project first.';
+      return;
+    }
+
+    if (!chapterId) {
+      promptUseMessage.textContent = 'Choose a chapter to assign this prompt to.';
+      return;
+    }
+
+    const existingActivePrompt = (targetProject.dailyPromptHistory || []).find((entry) => (
+      entry.source === 'community'
+      && entry.sourcePromptId === activePrompt.id
+      && !entry.answerInsertedAt
+    ));
+
+    const importedPrompt = existingActivePrompt || {
+      id: `community-prompt-${activePrompt.id}-${Date.now()}`,
+      genre: activePrompt.genre,
+      plotPoint: activePrompt.plotPoint,
+      prompt: activePrompt.prompt,
+      context: `Shared by ${activePrompt.author}.`,
+      assignedChapterId: chapterId,
+      answer: '',
+      answerInsertedAt: '',
+      requiredWordCount: Number(activePrompt.targetWordCount || 0),
+      insertedWordCount: 0,
+      source: 'community',
+      sourcePromptId: activePrompt.id,
+      sourceAuthorId: activePrompt.authorId,
+      sourceAuthorName: activePrompt.author,
+    };
+
+    importedPrompt.assignedChapterId = chapterId;
+
+    const nextHistory = existingActivePrompt
+      ? (targetProject.dailyPromptHistory || []).map((entry) => (entry === existingActivePrompt ? importedPrompt : entry))
+      : [importedPrompt, ...(targetProject.dailyPromptHistory || []).filter((entry) => !entry.answerInsertedAt), ...(targetProject.dailyPromptHistory || []).filter((entry) => entry.answerInsertedAt)];
+
+    promptUseMessage.textContent = 'Opening this prompt in Daily Prompts...';
+
+    try {
+      const savedProject = await window.api.saveProject({
+        ...targetProject,
+        dailyPromptHistory: nextHistory,
+        updatedAt: new Date().toISOString(),
+      }, {
+        dirtyFields: ['dailyPromptHistory'],
+      });
+      window.setCurrentProject(savedProject);
+      closePromptReader();
+      await window.navigate('daily-prompts', { project: savedProject });
+    } catch (error) {
+      promptUseMessage.textContent = error?.message || 'Could not add this prompt to your project.';
+    }
+  });
+
+  function openPromptComposer() {
+    if (!currentUserId) {
+      alert('Sign in to share a community prompt.');
+      return;
+    }
+    promptFormCard.style.display = 'grid';
+    promptCalloutInput?.focus();
+    promptFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function populatePromptGenreOptions() {
+    const fallbackGenres = ['Contemporary', 'Fantasy', 'Historical Fiction', 'Horror', 'Literary Fiction', 'Memoir', 'Mystery', 'Romance', 'Science Fiction', 'Short Story', 'Thriller'];
+    window.getGenrePromptData()
+      .then((data) => {
+        const genres = [...new Set((data?.genrePrompts || []).map((entry) => entry.genre).filter(Boolean))]
+          .filter((genre) => !String(genre).includes('-') && !String(genre).toLowerCase().includes(' x '))
+          .sort((left, right) => left.localeCompare(right));
+        const source = genres.length ? genres : fallbackGenres;
+        promptGenreInput.innerHTML = source.map((genre) => `<option value="${genre}">${genre}</option>`).join('');
+      })
+      .catch(() => {
+        promptGenreInput.innerHTML = fallbackGenres.map((genre) => `<option value="${genre}">${genre}</option>`).join('');
+      });
+  }
+
+  promptForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    promptFormMessage.textContent = '';
+
+    if (!currentUserId) {
+      promptFormMessage.textContent = 'Sign in to share a prompt.';
+      return;
+    }
+
+    const payload = {
+      genre: promptGenreInput.value,
+      plotPoint: promptPlotPointInput.value.trim(),
+      prompt: promptCalloutInput.value.trim(),
+      targetWordCount: Number(promptTargetWordsInput.value || 0),
+    };
+
+    if (!payload.genre || !payload.plotPoint || !payload.prompt) {
+      promptFormMessage.textContent = 'Add a genre, section target, and prompt callout before saving.';
+      return;
+    }
+
+    try {
+      await window.api.community.createPrompt(payload);
+      const prompts = await window.api.community.getPrompts();
+      allPrompts = (prompts || []).map(buildPromptMeta);
+      promptPlotPointInput.value = '';
+      promptCalloutInput.value = '';
+      promptTargetWordsInput.value = '500';
+      promptFormMessage.textContent = 'Community prompt shared.';
+      activeFilter = 'prompts';
+      renderList();
+    } catch (error) {
+      promptFormMessage.textContent = error?.message || 'Could not share this prompt.';
+    }
+  });
+
+  function renderStoryList(filtered) {
     updateFavoritesBadge();
+    promptFormCard.style.display = 'none';
+    promptsEmpty.style.display = 'none';
 
     if (activeFilter === 'favorites' && !filtered.length && favorites.size === 0) {
       favoritesEmpty.style.display = 'block';
@@ -440,12 +701,12 @@ window.registerPageInit('community', async function () {
       if (activeFilter === 'favorites') {
         empty.querySelector('h2').textContent = 'No matching favorites';
         empty.querySelector('p').textContent = 'Try a different search, or save stories from Discover to see them here.';
-      } else if (normalizedQuery) {
+      } else if (query.trim()) {
         empty.querySelector('h2').textContent = 'No stories match that search';
         empty.querySelector('p').textContent = 'Try another title, author, or genre.';
       } else {
         empty.querySelector('h2').textContent = 'No public stories yet';
-        empty.querySelector('p').textContent = 'Be the first — publish a chapter from your project to appear here.';
+        empty.querySelector('p').textContent = 'Be the first - publish a chapter from your project to appear here.';
       }
       return;
     }
@@ -472,18 +733,12 @@ window.registerPageInit('community', async function () {
 
     grid.querySelectorAll('[data-open-project]').forEach((card) => {
       const openCard = () => openFromDataset(card.dataset.openProject, card.dataset.openChapter);
-
       card.addEventListener('click', (event) => {
-        if (event.target.closest('button, a, input, textarea, select, label')) {
-          return;
-        }
+        if (event.target.closest('button, a, input, textarea, select, label')) return;
         openCard();
       });
-
       card.addEventListener('keydown', (event) => {
-        if (event.target !== card) {
-          return;
-        }
+        if (event.target !== card) return;
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           openCard();
@@ -498,6 +753,98 @@ window.registerPageInit('community', async function () {
     grid.querySelectorAll('[data-message-author]').forEach((btn) => {
       btn.addEventListener('click', () => messageAuthor(btn.dataset.messageAuthor));
     });
+  }
+
+  function renderPromptList(filtered) {
+    favoritesEmpty.style.display = 'none';
+    empty.style.display = 'none';
+    promptFormCard.style.display = 'grid';
+
+    if (!allPrompts.length) {
+      grid.style.display = 'none';
+      promptsEmpty.style.display = 'block';
+      return;
+    }
+
+    promptsEmpty.style.display = 'none';
+
+    if (!filtered.length) {
+      grid.style.display = 'none';
+      empty.style.display = 'block';
+      empty.querySelector('h2').textContent = 'No prompts match that search';
+      empty.querySelector('p').textContent = 'Try another author, genre, section target, or prompt phrase.';
+      return;
+    }
+
+    grid.style.display = 'grid';
+    grid.innerHTML = filtered.map(promptCardMarkup).join('');
+
+    const openPromptById = (promptId) => {
+      const promptMeta = allPrompts.find((item) => item.id === promptId);
+      if (promptMeta) openPromptReader(promptMeta);
+    };
+
+    grid.querySelectorAll('[data-prompt-favorite]').forEach((btn) => {
+      btn.addEventListener('click', () => togglePromptFavorite(btn.dataset.promptFavorite));
+    });
+
+    grid.querySelectorAll('[data-open-prompt-btn]').forEach((btn) => {
+      btn.addEventListener('click', () => openPromptById(btn.dataset.openPromptBtn));
+    });
+
+    grid.querySelectorAll('[data-open-prompt]').forEach((card) => {
+      const openCard = () => openPromptById(card.dataset.openPrompt);
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('button, a, input, textarea, select, label')) return;
+        openCard();
+      });
+      card.addEventListener('keydown', (event) => {
+        if (event.target !== card) return;
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCard();
+        }
+      });
+    });
+
+    grid.querySelectorAll('[data-message-author]').forEach((btn) => {
+      btn.addEventListener('click', () => messageAuthor(btn.dataset.messageAuthor));
+    });
+  }
+
+  function renderList() {
+    const normalizedQuery = query.trim().toLowerCase();
+    setSearchPlaceholder();
+
+    if (activeFilter === 'prompts') {
+      const filteredPrompts = allPrompts.filter((promptMeta) => {
+        const haystack = [
+          promptMeta.genre,
+          promptMeta.plotPoint,
+          promptMeta.prompt,
+          promptMeta.author,
+          promptMeta.authorHandle,
+        ].join(' ').toLowerCase();
+        return !normalizedQuery || haystack.includes(normalizedQuery);
+      });
+      renderPromptList(filteredPrompts);
+      return;
+    }
+
+    const filteredStories = allProjects.filter((projectMeta) => {
+      const matchesFavorites = activeFilter === 'favorites' ? favorites.has(projectMeta.id) : true;
+      const haystack = [
+        projectMeta.title,
+        projectMeta.author,
+        projectMeta.authorHandle,
+        projectMeta.blurb,
+        ...(projectMeta.genres || []),
+      ].join(' ').toLowerCase();
+      const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
+      return matchesFavorites && matchesQuery;
+    });
+
+    renderStoryList(filteredStories);
   }
 
   function setFilter(filter) {
@@ -518,21 +865,30 @@ window.registerPageInit('community', async function () {
   });
 
   document.getElementById('community-browse-btn')?.addEventListener('click', () => setFilter('all'));
+  document.getElementById('community-empty-add-prompt')?.addEventListener('click', openPromptComposer);
+
+  populatePromptGenreOptions();
 
   try {
-    const projects = await window.api.community.getProjects();
+    const [projects, prompts] = await Promise.all([
+      window.api.community.getProjects(),
+      window.api.community.getPrompts(),
+    ]);
     loading.style.display = 'none';
     allProjects = (projects || [])
       .filter((project) => project.is_public && project.published_chapters?.length)
       .map(buildProjectMeta);
+    allPrompts = (prompts || []).map(buildPromptMeta);
 
-    if (!allProjects.length) {
+    if (!allProjects.length && !allPrompts.length) {
       empty.style.display = 'block';
+      empty.querySelector('h2').textContent = 'Nothing in Community yet';
+      empty.querySelector('p').textContent = 'Publish a chapter or share a prompt to get the community started.';
       return;
     }
 
     renderList();
   } catch (err) {
-    loading.textContent = `Failed to load community stories: ${err?.message || err}`;
+    loading.textContent = `Failed to load community: ${err?.message || err}`;
   }
 });

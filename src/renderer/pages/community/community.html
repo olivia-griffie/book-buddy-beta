@@ -14,6 +14,7 @@
         Favorites
         <span id="community-favorites-count" class="community-tab-badge" style="display:none;">0</span>
       </button>
+      <button class="community-tab" type="button" data-community-filter="prompts">Prompts</button>
     </div>
     <label class="community-search">
       <span class="community-search-icon" aria-hidden="true">
@@ -26,10 +27,48 @@
     </label>
   </div>
 
+  <section id="community-prompt-form-card" class="community-prompt-form-card card ui-card ui-card-stack" style="display:none;">
+    <div class="section-heading ui-card-head">
+      <div class="ui-card-copy">
+        <p class="eyebrow">Share A Prompt</p>
+        <h2 class="card-heading">Add A Community Prompt</h2>
+      </div>
+    </div>
+    <form id="community-prompt-form" class="community-prompt-form">
+      <div class="community-prompt-form-grid">
+        <div class="field">
+          <label for="community-prompt-genre">Genre</label>
+          <select id="community-prompt-genre"></select>
+        </div>
+        <div class="field">
+          <label for="community-prompt-plot-point">Section Target</label>
+          <input id="community-prompt-plot-point" type="text" maxlength="120" placeholder="Core Conflict, Midpoint, Climax..." />
+        </div>
+        <div class="field">
+          <label for="community-prompt-target-words">Target Word Count</label>
+          <input id="community-prompt-target-words" type="number" min="0" step="50" value="500" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="community-prompt-callout">Prompt Callout</label>
+        <textarea id="community-prompt-callout" rows="4" placeholder="Write the challenge or question other writers should answer."></textarea>
+      </div>
+      <div class="community-prompt-form-actions">
+        <p id="community-prompt-form-message" class="form-message" aria-live="polite"></p>
+        <button id="community-prompt-submit" class="btn btn-save" type="submit">Share Prompt</button>
+      </div>
+    </form>
+  </section>
+
   <div id="community-favorites-empty" class="community-callout" style="display:none;">
     <h2>No favorites yet</h2>
     <p>Tap the heart on any story in Discover to save it here.</p>
     <button id="community-browse-btn" class="btn btn-primary" type="button">Browse Stories</button>
+  </div>
+
+  <div id="community-prompts-empty" class="community-callout" style="display:none;">
+    <h2>No Community Prompts yet</h2>
+    <p><button id="community-empty-add-prompt" class="community-inline-link" type="button">Click here to add one</button></p>
   </div>
 
   <div id="community-content" class="community-grid" style="display:none;"></div>
@@ -86,6 +125,65 @@
           <button id="reader-comment-submit" class="btn btn-save" type="button">Post Comment</button>
         </div>
       </section>
+    </div>
+  </div>
+</div>
+
+<div id="community-prompt-reader" class="chapter-reader community-prompt-reader" style="display:none;" role="dialog" aria-modal="true">
+  <div class="chapter-reader-inner">
+    <div class="chapter-reader-topbar">
+      <div class="chapter-reader-topbar-left">
+        <button class="chapter-reader-back" id="community-prompt-close" type="button" aria-label="Close prompt">
+          <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Back
+        </button>
+        <span class="chapter-reader-breadcrumb">
+          <span>Community</span>
+          <span class="reader-breadcrumb-sep">›</span>
+          <span>Prompt</span>
+        </span>
+      </div>
+    </div>
+    <div class="chapter-reader-scroll">
+      <article class="chapter-reader-prose community-prompt-sheet">
+        <header class="chapter-reader-header">
+          <p id="community-prompt-reader-genre" class="genre-pill"></p>
+          <h1 id="community-prompt-reader-title" class="reader-chapter-title"></h1>
+          <div class="reader-meta-row">
+            <span class="reader-author-name">Author</span>
+            <span id="community-prompt-reader-author" class="reader-author-name"></span>
+            <span class="reader-meta-sep">·</span>
+            <span id="community-prompt-reader-target"></span>
+          </div>
+        </header>
+        <div class="community-prompt-callout-shell">
+          <p id="community-prompt-reader-callout" class="prompt-callout"></p>
+        </div>
+        <section class="community-prompt-use-card">
+          <div class="community-prompt-use-copy">
+            <p class="eyebrow">Use This Prompt</p>
+            <h2 class="card-heading">Send It To A Project</h2>
+            <p>Choose a project and chapter. This will open the prompt in Daily Prompts with the same answer-and-insert flow as generated prompts.</p>
+          </div>
+          <div class="community-prompt-use-grid">
+            <div class="field">
+              <label for="community-prompt-project-select">Project</label>
+              <select id="community-prompt-project-select"></select>
+            </div>
+            <div class="field">
+              <label for="community-prompt-chapter-select">Chapter</label>
+              <select id="community-prompt-chapter-select"></select>
+            </div>
+          </div>
+          <div class="community-prompt-use-actions">
+            <p id="community-prompt-use-message" class="form-message" aria-live="polite"></p>
+            <div class="community-card-actions">
+              <button id="community-prompt-favorite-toggle" class="community-favorite-btn" type="button">Save</button>
+              <button id="community-prompt-use-btn" class="btn btn-save" type="button">Open In Daily Prompts</button>
+            </div>
+          </div>
+        </section>
+      </article>
     </div>
   </div>
 </div>

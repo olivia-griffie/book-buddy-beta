@@ -1,5 +1,7 @@
 window.registerPageInit('daily-prompts', async function ({ project }) {
   let activeProject = project || window.getCurrentProject();
+  const session = await window.api.auth.getSession().catch(() => null);
+  const currentUserId = session?.user?.id || session?.id || null;
   const emptyState = document.getElementById('daily-prompts-empty-state');
   const content = document.getElementById('daily-prompts-content');
   const createButton = document.getElementById('daily-prompts-create-project');
@@ -426,6 +428,21 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         }, {
           dirtyFields: ['chapters', 'dailyPromptHistory', 'currentWordCount'],
         });
+
+        if (
+          promptEntry.source === 'community'
+          && promptEntry.sourcePromptId
+          && promptEntry.sourceAuthorId
+          && promptEntry.sourceAuthorId !== currentUserId
+        ) {
+          await window.api.community.recordPromptCompletion({
+            promptId: promptEntry.sourcePromptId,
+            authorId: promptEntry.sourceAuthorId,
+            projectTitle: activeProject.title || 'Untitled Project',
+            chapterTitle: chapters[chapterIndex]?.title || 'Untitled Chapter',
+            wordCount: insertedWordCount,
+          }).catch(() => {});
+        }
 
         const isComplete = insertedWordCount >= requiredWordCount;
         setStatusMessage(

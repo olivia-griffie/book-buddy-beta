@@ -117,6 +117,42 @@
   margin-bottom: 16px;
 }
 
+.community-inline-link {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--accent-coral);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.community-prompt-form-card {
+  padding: 24px;
+}
+
+.community-prompt-form {
+  display: grid;
+  gap: 16px;
+}
+
+.community-prompt-form-grid,
+.community-prompt-use-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.community-prompt-form-actions,
+.community-prompt-use-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+}
+
 .community-loading {
   color: var(--ink-muted);
   font-size: 0.9rem;
@@ -153,6 +189,77 @@
   transform: translateY(-2px);
   box-shadow: var(--shadow-lift);
   border-color: rgba(255, 126, 184, 0.32);
+}
+
+.community-prompt-card {
+  background: #1a4a6b;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: white;
+}
+
+.community-prompt-card .community-author-name,
+.community-prompt-card .community-card-title,
+.community-prompt-card .community-blurb,
+.community-prompt-card .community-metric,
+.community-prompt-card .community-tag {
+  color: white;
+}
+
+.community-prompt-card .community-tag {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.community-prompt-card .community-card-footer {
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+.community-prompt-card .community-favorite-btn,
+.community-prompt-card .community-read-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: white;
+}
+
+.community-prompt-card .prompt-callout {
+  background: rgba(79, 242, 201, 0.12);
+  border: 1px solid rgba(79, 242, 201, 0.24);
+  border-radius: 16px;
+  padding: 14px 16px;
+  color: rgba(255, 255, 255, 0.94);
+  margin: 0;
+}
+
+.community-prompt-card .community-card-title {
+  font-size: 1.05rem;
+}
+
+.community-prompt-sheet {
+  display: grid;
+  gap: 24px;
+}
+
+.community-prompt-sheet .prompt-callout {
+  margin: 0;
+  padding: 18px 20px;
+  border-radius: 18px;
+  background: rgba(79, 242, 201, 0.1);
+  border: 1px solid rgba(79, 242, 201, 0.22);
+  color: var(--ink);
+  line-height: 1.7;
+}
+
+.community-prompt-callout-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.community-prompt-use-card {
+  display: grid;
+  gap: 18px;
+  padding: 22px;
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  background: var(--surface-card);
 }
 
 .community-card-header {

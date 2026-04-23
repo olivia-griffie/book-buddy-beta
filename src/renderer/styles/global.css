@@ -593,6 +593,11 @@ body {
   animation: badgePop 0.3s var(--ease) both;
 }
 
+.sidebar-badge-inbox {
+  background: linear-gradient(135deg, #ff6a5a 0%, #ff8a3d 100%);
+  box-shadow: 0 0 0 2px rgba(24, 31, 45, 0.85);
+}
+
 @keyframes badgePop {
   from { transform: scale(0); opacity: 0; }
   to { transform: scale(1); opacity: 1; }

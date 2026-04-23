@@ -150,17 +150,134 @@ async function toggleLike(userId, supabaseProjectId, chapterId, accessToken) {
   return { liked: true };
 }
 
+async function getCommunityPrompts(accessToken) {
+  const rows = await restReq(
+    'GET',
+    'community_prompts?select=id,user_id,genre,plot_point,prompt,target_word_count,created_at,updated_at,profiles!user_id(id,username,display_name)&order=updated_at.desc',
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  return (rows || []).map((row) => ({
+    id: row.id,
+    user_id: row.user_id,
+    genre: row.genre,
+    plot_point: row.plot_point,
+    prompt: row.prompt,
+    target_word_count: Number(row.target_word_count || 0),
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+    profiles: row.profiles || null,
+  }));
+}
+
+async function createCommunityPrompt(userId, prompt, accessToken) {
+  const timestamp = new Date().toISOString();
+  const rows = await restReq(
+    'POST',
+    'community_prompts',
+    {
+      user_id: userId,
+      genre: String(prompt?.genre || '').trim(),
+      plot_point: String(prompt?.plotPoint || '').trim(),
+      prompt: String(prompt?.prompt || '').trim(),
+      target_word_count: Number(prompt?.targetWordCount || 0),
+      created_at: timestamp,
+      updated_at: timestamp,
+    },
+    accessToken,
+  );
+
+  return rows?.[0] || null;
+}
+
+async function getPromptFavorites(userId, accessToken) {
+  if (!userId) {
+    return [];
+  }
+
+  const rows = await restReq(
+    'GET',
+    `community_prompt_favorites?user_id=eq.${encodeFilterValue(userId)}&select=prompt_id`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  return (rows || []).map((row) => row.prompt_id).filter(Boolean);
+}
+
+async function togglePromptFavorite(userId, promptId, accessToken) {
+  const existing = await restReq(
+    'GET',
+    `community_prompt_favorites?user_id=eq.${encodeFilterValue(userId)}&prompt_id=eq.${encodeFilterValue(promptId)}&select=id&limit=1`,
+    null,
+    accessToken,
+  ).catch(() => []);
+
+  if (existing?.length) {
+    await restReq('DELETE', `community_prompt_favorites?id=eq.${encodeFilterValue(existing[0].id)}`, null, accessToken);
+    return { favorited: false };
+  }
+
+  await restReq(
+    'POST',
+    'community_prompt_favorites',
+    {
+      user_id: userId,
+      prompt_id: promptId,
+      created_at: new Date().toISOString(),
+    },
+    accessToken,
+  );
+  return { favorited: true };
+}
+
+async function recordCommunityPromptCompletion(userId, completion, accessToken) {
+  const promptId = String(completion?.promptId || '').trim();
+  const authorId = String(completion?.authorId || '').trim();
+  if (!promptId || !authorId || !userId || authorId === userId) {
+    return null;
+  }
+
+  const rows = await restReq(
+    'POST',
+    'community_prompt_completions',
+    {
+      prompt_id: promptId,
+      author_id: authorId,
+      responder_id: userId,
+      project_title: String(completion?.projectTitle || '').trim(),
+      chapter_title: String(completion?.chapterTitle || '').trim(),
+      word_count: Number(completion?.wordCount || 0),
+      created_at: new Date().toISOString(),
+    },
+    accessToken,
+  );
+
+  return rows?.[0] || null;
+}
+
 async function getAuthorNotifications(userId, accessToken) {
   const projects = await restReq('GET', `projects?owner_id=eq.${userId}&select=id,content`, null, accessToken).catch(() => []);
-  if (!projects?.length) return [];
-
   const ids = projects.map((p) => p.id).join(',');
   const projectMap = Object.fromEntries(projects.map((p) => [p.id, p.content?.title || 'Untitled']));
 
-  const [pubChapters, comments, likes] = await Promise.all([
-    restReq('GET', `published_chapters?project_id=in.(${ids})&select=chapter_id,chapter_title,project_id`, null, accessToken).catch(() => []),
-    restReq('GET', `comments?project_id=in.(${ids})&select=id,content,chapter_ref,created_at,project_id,parent_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => []),
-    restReq('GET', `likes?project_id=in.(${ids})&select=id,chapter_ref,created_at,project_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => []),
+  const [pubChapters, comments, likes, promptCompletions] = await Promise.all([
+    ids
+      ? restReq('GET', `published_chapters?project_id=in.(${ids})&select=chapter_id,chapter_title,project_id`, null, accessToken).catch(() => [])
+      : Promise.resolve([]),
+    ids
+      ? restReq('GET', `comments?project_id=in.(${ids})&select=id,content,chapter_ref,created_at,project_id,parent_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
+      : Promise.resolve([]),
+    ids
+      ? restReq('GET', `likes?project_id=in.(${ids})&select=id,chapter_ref,created_at,project_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
+      : Promise.resolve([]),
+    restReq(
+      'GET',
+      `community_prompt_completions?author_id=eq.${encodeFilterValue(userId)}&select=id,prompt_id,project_title,chapter_title,word_count,created_at,community_prompts!prompt_id(prompt,genre,plot_point),profiles!responder_id(username,display_name)&order=created_at.desc&limit=40`,
+      null,
+      accessToken,
+    ).catch(() => []),
   ]);
 
   const chapterMap = {};
@@ -190,6 +307,19 @@ async function getAuthorNotifications(userId, accessToken) {
       chapterTitle: chapterMap[`${l.project_id}:${l.chapter_ref}`] || 'Chapter',
       author: l.profiles?.display_name || l.profiles?.username || 'Anonymous',
       createdAt: l.created_at,
+    })),
+    ...(promptCompletions || []).map((entry) => ({
+      type: 'prompt',
+      id: entry.id,
+      promptId: entry.prompt_id,
+      prompt: entry.community_prompts?.prompt || '',
+      genre: entry.community_prompts?.genre || '',
+      plotPoint: entry.community_prompts?.plot_point || '',
+      projectTitle: entry.project_title || 'Untitled',
+      chapterTitle: entry.chapter_title || 'Chapter',
+      wordCount: Number(entry.word_count || 0),
+      author: entry.profiles?.display_name || entry.profiles?.username || 'Anonymous',
+      createdAt: entry.created_at,
     })),
   ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
@@ -506,10 +636,15 @@ module.exports = {
   unpublishChapter,
   getPublishedChapters,
   getPublicProjects,
+  getCommunityPrompts,
+  createCommunityPrompt,
   getComments,
   addComment,
   getLikes,
   toggleLike,
+  getPromptFavorites,
+  togglePromptFavorite,
+  recordCommunityPromptCompletion,
   getAuthorNotifications,
   getInboxConversations,
   getConversationMessages,

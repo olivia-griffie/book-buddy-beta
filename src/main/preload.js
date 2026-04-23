@@ -51,6 +51,8 @@ contextBridge.exposeInMainWorld('api', {
   },
   community: {
     getProjects: () => ipcRenderer.invoke('community:getProjects'),
+    getPrompts: () => ipcRenderer.invoke('community:getPrompts'),
+    createPrompt: (prompt) => ipcRenderer.invoke('community:createPrompt', prompt),
     getComments: (args) => ipcRenderer.invoke('community:getComments', args),
     addComment: (args) => ipcRenderer.invoke('community:addComment', args),
     getChapterComments: (args) => ipcRenderer.invoke('community:getChapterComments', args),
@@ -59,6 +61,9 @@ contextBridge.exposeInMainWorld('api', {
     toggleLike: (args) => ipcRenderer.invoke('community:toggleLike', args),
     getFavorites: () => ipcRenderer.invoke('community:getFavorites'),
     toggleFavorite: (args) => ipcRenderer.invoke('community:toggleFavorite', args),
+    getPromptFavorites: () => ipcRenderer.invoke('community:getPromptFavorites'),
+    togglePromptFavorite: (args) => ipcRenderer.invoke('community:togglePromptFavorite', args),
+    recordPromptCompletion: (args) => ipcRenderer.invoke('community:recordPromptCompletion', args),
   },
   inbox: {
     getNotifications: () => ipcRenderer.invoke('inbox:getNotifications'),

@@ -240,7 +240,7 @@ window.registerPageInit('inbox', async function () {
   }
 
   function getNotificationTypeLabel(type) {
-    const map = { like: 'Like', favorite: 'Favorite', comment: 'Comment', milestone: 'Milestone' };
+    const map = { like: 'Like', favorite: 'Favorite', comment: 'Comment', prompt: 'Prompt', milestone: 'Milestone' };
     return map[type] || 'Notification';
   }
 
@@ -308,6 +308,28 @@ window.registerPageInit('inbox', async function () {
     `;
   }
 
+  function promptMarkup(item) {
+    return `
+      <div class="inbox-item-main">
+        <div class="inbox-avatar" style="background:${getAvatarColor(item.id)};">${escapeHtml(getInitials(item.author))}</div>
+        <div class="inbox-item-body">
+          <div class="inbox-meta">
+            <span class="inbox-actor">@${escapeHtml(item.author)}</span>
+            <span class="inbox-badge inbox-badge-favorite">Prompt</span>
+            <span class="inbox-time">${timeAgo(item.createdAt)}</span>
+          </div>
+          <p class="inbox-text">completed your prompt challenge${item.wordCount ? ` with ${Number(item.wordCount).toLocaleString()} words` : ''}</p>
+          <p class="inbox-context">${escapeHtml(item.plotPoint || item.genre || 'Community Prompt')} · ${escapeHtml(item.projectTitle || 'Untitled')} · ${escapeHtml(item.chapterTitle || 'Chapter')}</p>
+          ${item.prompt ? `
+            <blockquote class="inbox-quote">
+              <p>${escapeHtml(item.prompt)}</p>
+            </blockquote>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  }
+
   function commentMarkup(item) {
     const isOpen = Boolean(replyOpen[item.id]);
     const savedReply = savedReplies[item.id];
@@ -354,6 +376,7 @@ window.registerPageInit('inbox', async function () {
     let content = '';
     if (item.type === 'comment') content = commentMarkup(item);
     if (item.type === 'like') content = likeMarkup(item);
+    if (item.type === 'prompt') content = promptMarkup(item);
     if (item.type === 'favorite') content = favoriteMarkup(item);
     if (item.type === 'milestone') content = milestoneMarkup(item);
 
