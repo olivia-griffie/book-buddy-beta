@@ -235,19 +235,32 @@ window.registerPageInit('home', async function () {
 
     const maxWeekly = Math.max(...weeklyEntries.map((entry) => entry.value), 1);
 
-    const calendarDates = Array.from({ length: 28 }, (_, index) => {
-      const date = new Date(today);
-      date.setDate(today.getDate() - (27 - index));
-      const dateKey = window.buildLocalDayKey(date);
-      const entry = history.find((item) => item.date === dateKey);
-      return {
-        key: dateKey,
-        dayLabel: String(date.getDate()),
-        value: Number(entry?.wordsWritten || 0),
-      };
-    });
+    const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+    const monthEnd = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    const daysInMonth = monthEnd.getDate();
+    const startWeekday = monthStart.getDay();
+    const weekdayLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const monthLabel = monthStart.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+    const calendarDates = [
+      ...Array.from({ length: startWeekday }, (_, index) => ({
+        key: `blank-start-${index}`,
+        isPlaceholder: true,
+      })),
+      ...Array.from({ length: daysInMonth }, (_, index) => {
+        const date = new Date(today.getFullYear(), today.getMonth(), index + 1);
+        const dateKey = window.buildLocalDayKey(date);
+        const entry = history.find((item) => item.date === dateKey);
+        return {
+          key: dateKey,
+          isPlaceholder: false,
+          isToday: dateKey === window.buildLocalDayKey(today),
+          dayLabel: String(date.getDate()),
+          value: Number(entry?.wordsWritten || 0),
+        };
+      }),
+    ];
 
-    const maxCalendar = Math.max(...calendarDates.map((entry) => entry.value), 1);
+    const maxCalendar = Math.max(...calendarDates.filter((entry) => !entry.isPlaceholder).map((entry) => entry.value), 1);
     const pace = computePace(project);
     const writingStreak = Number(project?.streakState?.current || 0);
     const bestStreak = Number(project?.streakState?.best || 0);
@@ -352,7 +365,7 @@ window.registerPageInit('home', async function () {
         <summary>
           <div class="bb-collapse__header">
             <p class="eyebrow">Writing Insights</p>
-            <h3 class="bb-collapse__title">Weekly chart and 28-day calendar</h3>
+            <h3 class="bb-collapse__title">Weekly chart and monthly calendar</h3>
             <p class="bb-collapse__meta">Open this when you want the broader view without crowding the home screen.</p>
           </div>
           <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
@@ -373,12 +386,21 @@ window.registerPageInit('home', async function () {
             </div>
           </section>
           <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
-            <h3>28 Day Writing Calendar</h3>
+            <div class="daily-calendar-head">
+              <h3>${monthLabel} Writing Calendar</h3>
+              <span class="daily-calendar-subtitle">Aligned to the real month layout</span>
+            </div>
+            <div class="daily-calendar-weekdays">
+              ${weekdayLabels.map((label) => `<span>${label}</span>`).join('')}
+            </div>
             <div class="daily-calendar">
               ${calendarDates.map((entry) => {
+                if (entry.isPlaceholder) {
+                  return '<div class="daily-calendar-cell daily-calendar-cell--blank" aria-hidden="true"></div>';
+                }
                 const intensity = entry.value === 0 ? '0' : entry.value < maxCalendar * 0.34 ? '1' : entry.value < maxCalendar * 0.67 ? '2' : '3';
                 return `
-                  <div class="daily-calendar-cell intensity-${intensity}" title="${entry.key}: ${entry.value.toLocaleString()} words">
+                  <div class="daily-calendar-cell intensity-${intensity} ${entry.isToday ? 'is-today' : ''}" title="${entry.key}: ${entry.value.toLocaleString()} words">
                     <span>${entry.dayLabel}</span>
                   </div>
                 `;
@@ -413,16 +435,51 @@ window.registerPageInit('home', async function () {
       </section>
     `;
 
-    dashboard.querySelector('[data-dashboard-date-input]')?.addEventListener('change', async (event) => {
-      const newDate = event.target.value;
-      project.targetCompletionDate = newDate;
-      await window.saveProjectData({
-        ...project,
-        targetCompletionDate: newDate,
-        updatedAt: new Date().toISOString(),
-      }, { dirtyFields: ['targetCompletionDate'] });
-      renderDashboard(project);
-    });
+    const dashboardDateInput = dashboard.querySelector('[data-dashboard-date-input]');
+    if (dashboardDateInput) {
+      let pendingDateValue = dashboardDateInput.value || '';
+
+      const commitDashboardDate = async () => {
+        const newDate = String(pendingDateValue || '').trim();
+        if (newDate !== '' && newDate.length !== 10) {
+          return;
+        }
+        if (newDate === String(project.targetCompletionDate || '')) {
+          return;
+        }
+
+        project.targetCompletionDate = newDate;
+        const savedProject = await window.saveProjectData({
+          ...project,
+          targetCompletionDate: newDate,
+          updatedAt: new Date().toISOString(),
+        }, { dirtyFields: ['targetCompletionDate'] });
+        renderDashboard(savedProject);
+      };
+
+      dashboardDateInput.addEventListener('input', (event) => {
+        pendingDateValue = event.target.value;
+      });
+
+      dashboardDateInput.addEventListener('change', async (event) => {
+        pendingDateValue = event.target.value;
+        await commitDashboardDate();
+      });
+
+      dashboardDateInput.addEventListener('blur', async () => {
+        await commitDashboardDate();
+      });
+
+      dashboardDateInput.addEventListener('keydown', async (event) => {
+        if (event.key !== 'Enter') {
+          return;
+        }
+
+        event.preventDefault();
+        pendingDateValue = event.currentTarget.value;
+        await commitDashboardDate();
+      });
+    }
 
     dashboard.querySelectorAll('[data-dashboard-collapse]').forEach((details) => {
       window.bindPersistentDetailsState?.(details, {
@@ -841,7 +898,10 @@ window.registerPageInit('home', async function () {
   grid.querySelectorAll('[data-toggle-goal]').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.stopPropagation();
-      const editor = button.closest('.project-goal-editor');
+      const projectId = button.dataset.toggleGoal;
+      const editor = projectId
+        ? grid.querySelector(`.project-goal-editor[data-project-goal-details="${projectId}"]`)
+        : button.closest('.project-goal-editor');
       const panel = editor?.querySelector('.project-goal-editor-panel');
       if (!editor || !panel) {
         return;
@@ -850,7 +910,12 @@ window.registerPageInit('home', async function () {
       const nextOpen = !panel.classList.contains('is-open');
       panel.classList.toggle('is-open', nextOpen);
       button.setAttribute('aria-expanded', String(nextOpen));
-      localStorage.setItem(`collapse:${button.dataset.toggleGoal}:home-project-goal`, nextOpen ? '1' : '0');
+      if (projectId) {
+        localStorage.setItem(`collapse:${projectId}:home-project-goal`, nextOpen ? '1' : '0');
+      }
+      grid.querySelectorAll(`[data-toggle-goal="${projectId}"]`).forEach((toggle) => {
+        toggle.setAttribute('aria-expanded', String(nextOpen));
+      });
       if (nextOpen) {
         panel.querySelector('[data-goal-input]')?.focus();
       }

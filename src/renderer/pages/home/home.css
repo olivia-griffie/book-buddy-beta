@@ -888,6 +888,34 @@
   gap: 8px;
 }
 
+.daily-calendar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.daily-calendar-subtitle {
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+}
+
+.daily-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.daily-calendar-weekdays span {
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
 .daily-calendar-cell {
   aspect-ratio: 1 / 1;
   border-radius: 10px;
@@ -897,6 +925,11 @@
   background: #f6f1e8;
   color: var(--ink-muted);
   font-size: 0.78rem;
+}
+
+.daily-calendar-cell--blank {
+  border-color: transparent;
+  background: transparent;
 }
 
 .daily-calendar-cell.intensity-1 {
@@ -914,6 +947,10 @@
   background: var(--accent-coral);
   border-color: var(--accent-coral);
   color: white;
+}
+
+.daily-calendar-cell.is-today {
+  box-shadow: 0 0 0 2px rgba(255, 106, 90, 0.2);
 }
 
 .home-prompt-widget {

@@ -206,6 +206,24 @@ function computeWordCount(text = '') {
   return trimmed ? trimmed.split(/\s+/).length : 0;
 }
 
+function computeProjectWordCount(project = {}) {
+  const chapterWords = Array.isArray(project?.chapters)
+    ? project.chapters.reduce((sum, chapter) => sum + computeWordCount(chapter?.content || ''), 0)
+    : 0;
+
+  const activePromptWords = Array.isArray(project?.dailyPromptHistory)
+    ? project.dailyPromptHistory.reduce((sum, entry) => {
+      if (!entry || entry.answerInsertedAt) {
+        return sum;
+      }
+
+      return sum + computeWordCount(entry.answer || '');
+    }, 0)
+    : 0;
+
+  return chapterWords + activePromptWords;
+}
+
 async function readFileAsDataUrl(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -1384,22 +1402,30 @@ const sessionShownMilestones = new Set();
 
 window.saveProjectData = async function saveProjectData(project, options = {}) {
   const previousProject = getProject();
+  const effectiveCurrentWordCount = computeProjectWordCount({
+    ...previousProject,
+    ...project,
+  });
   const previousMilestones = new Set(previousProject?.unlockedMilestones || []);
   const streakSettings = normalizeStreakSettings(project?.streakSettings || previousProject?.streakSettings);
-  const dailyWordHistory = updateDailyWritingHistory(project, previousProject);
-  const dailySessionHistory = updateDailySessionHistory({
+  const normalizedProject = {
     ...project,
+    currentWordCount: effectiveCurrentWordCount,
+  };
+  const dailyWordHistory = updateDailyWritingHistory(normalizedProject, previousProject);
+  const dailySessionHistory = updateDailySessionHistory({
+    ...normalizedProject,
     streakSettings,
     dailyWordHistory,
   }, previousProject);
   const streakState = buildStreakState({
-    ...project,
+    ...normalizedProject,
     streakSettings,
     dailyWordHistory,
     dailySessionHistory,
   });
   const analyticsProject = {
-    ...project,
+    ...normalizedProject,
     streakSettings,
     dailyWordHistory,
     dailySessionHistory,

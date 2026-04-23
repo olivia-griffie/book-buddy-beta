@@ -42,7 +42,7 @@
         </div>
         <div class="field">
           <label for="community-prompt-plot-point">Section Target</label>
-          <input id="community-prompt-plot-point" type="text" maxlength="120" placeholder="Core Conflict, Midpoint, Climax..." />
+          <select id="community-prompt-plot-point"></select>
         </div>
         <div class="field">
           <label for="community-prompt-target-words">Target Word Count</label>
@@ -107,12 +107,14 @@
             <span class="reader-meta-sep">·</span>
             <span id="reader-published-at" class="reader-published-at"></span>
             <span class="reader-meta-sep">·</span>
-            <button id="reader-message-author" class="btn btn-ghost reader-message-author" type="button" style="display:none;">Message</button>
-            <span class="reader-meta-sep">·</span>
             <button id="reader-like-btn" class="reader-like-btn" type="button" aria-label="Like this chapter">
               <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15" stroke="currentColor" stroke-width="1.7"><path d="M10 17s-7-4.35-7-9a4 4 0 0 1 7-2.65A4 4 0 0 1 17 8c0 4.65-7 9-7 9z" stroke-linejoin="round"/></svg>
               <span id="reader-like-count">0</span>
             </button>
+          </div>
+          <div id="reader-author-contact" class="reader-author-contact" style="display:none;">
+            <p id="reader-author-contact-text" class="reader-author-contact-text"></p>
+            <button id="reader-message-author" class="btn btn-save reader-message-author" type="button">Message Author</button>
           </div>
         </header>
         <div id="reader-body" class="reader-body"></div>

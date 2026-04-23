@@ -123,11 +123,30 @@ window.registerPageInit('community', async function () {
   let allProjects = [];
   let allPrompts = [];
   let localProjects = [];
+  let promptPlotPointsByGenre = {};
 
   let activeProject = null;
   let activeChapter = null;
   let likeState = { count: 0, likedByMe: false };
   let activePrompt = null;
+
+  function canMessageAuthor(authorId) {
+    return Boolean(authorId && currentUserId && authorId !== currentUserId);
+  }
+
+  function shouldShowAuthorContact(authorId) {
+    return Boolean(authorId && authorId !== currentUserId);
+  }
+
+  function authorContactMarkup(authorId) {
+    if (!shouldShowAuthorContact(authorId)) return '';
+
+    if (canMessageAuthor(authorId)) {
+      return `<button class="btn btn-save community-message-primary" type="button" data-message-author="${escapeHtml(authorId)}">Message</button>`;
+    }
+
+    return `<button class="btn btn-ghost community-message-primary is-disabled" type="button" data-message-signin="true" aria-disabled="true">Sign In</button>`;
+  }
 
   function updateFavoritesBadge() {
     const count = favorites.size;
@@ -336,10 +355,21 @@ window.registerPageInit('community', async function () {
     document.getElementById('reader-author-name').textContent = project.profiles?.display_name || project.profiles?.username || 'Unknown Author';
     document.getElementById('reader-published-at').textContent = `Published ${formatDate(chapter.published_at)}`;
     const messageAuthorBtn = document.getElementById('reader-message-author');
-    if (messageAuthorBtn) {
-      const canMessageAuthor = Boolean(project.owner_id && currentUserId && project.owner_id !== currentUserId);
-      messageAuthorBtn.style.display = canMessageAuthor ? 'inline-flex' : 'none';
+    const authorContactShell = document.getElementById('reader-author-contact');
+    const authorContactText = document.getElementById('reader-author-contact-text');
+    const authorName = project.profiles?.display_name || project.profiles?.username || 'this author';
+    if (messageAuthorBtn && authorContactShell && authorContactText) {
+      const showAuthorContact = shouldShowAuthorContact(project.owner_id);
+      authorContactShell.style.display = showAuthorContact ? 'flex' : 'none';
+      messageAuthorBtn.style.display = showAuthorContact ? 'inline-flex' : 'none';
       messageAuthorBtn.dataset.authorId = project.owner_id || '';
+      messageAuthorBtn.dataset.requiresSignin = currentUserId ? 'false' : 'true';
+      messageAuthorBtn.textContent = canMessageAuthor(project.owner_id) ? 'Message Author' : 'Sign In To Message';
+      messageAuthorBtn.classList.toggle('btn-save', canMessageAuthor(project.owner_id));
+      messageAuthorBtn.classList.toggle('btn-ghost', !canMessageAuthor(project.owner_id));
+      authorContactText.textContent = canMessageAuthor(project.owner_id)
+        ? `Want to ask ${authorName} about this chapter or their story?`
+        : `Sign in to privately message ${authorName} about this chapter.`;
     }
     window.renderRichText?.(document.getElementById('reader-body'), chapter.content, {
       emptyHtml: '<p><em>No content.</em></p>',
@@ -382,7 +412,12 @@ window.registerPageInit('community', async function () {
   });
 
   document.getElementById('reader-message-author')?.addEventListener('click', () => {
-    const authorId = document.getElementById('reader-message-author')?.dataset.authorId || '';
+    const button = document.getElementById('reader-message-author');
+    if (button?.dataset.requiresSignin === 'true') {
+      alert('Sign in to privately message other writers.');
+      return;
+    }
+    const authorId = button?.dataset.authorId || '';
     if (authorId) {
       messageAuthor(authorId);
     }
@@ -415,7 +450,10 @@ window.registerPageInit('community', async function () {
           <div class="community-author">
             <div class="community-author-avatar" style="background:${projectMeta.avatarColor};">${escapeHtml(projectMeta.initials)}</div>
             <div class="community-author-meta">
-              <p class="community-author-name">@${escapeHtml(projectMeta.authorHandle)}</p>
+              <div class="community-author-line">
+                <p class="community-author-name">@${escapeHtml(projectMeta.authorHandle)}</p>
+                ${authorContactMarkup(projectMeta.authorId)}
+              </div>
               <h2 class="community-card-title">${escapeHtml(projectMeta.title)}</h2>
             </div>
           </div>
@@ -435,10 +473,10 @@ window.registerPageInit('community', async function () {
             ${projectMeta.genres.map((genre) => `<span class="community-tag">${escapeHtml(genre)}</span>`).join('')}
           </div>
         ` : ''}
-        <p class="community-blurb">${escapeHtml(projectMeta.blurb)}</p>
         <div class="community-chapter-strip">
           ${chaptersMarkup}
         </div>
+        <p class="community-blurb">${escapeHtml(projectMeta.blurb)}</p>
         <div class="community-card-footer">
           <div class="community-metrics">
             <span class="community-metric">${projectMeta.chapterCount} chapter${projectMeta.chapterCount === 1 ? '' : 's'}</span>
@@ -446,9 +484,6 @@ window.registerPageInit('community', async function () {
             <span class="community-metric">${escapeHtml(projectMeta.author)}</span>
           </div>
           <div class="community-card-actions">
-            ${projectMeta.authorId && projectMeta.authorId !== currentUserId ? `
-              <button class="btn btn-ghost community-message-btn" type="button" data-message-author="${escapeHtml(projectMeta.authorId)}">Message</button>
-            ` : ''}
             <button class="community-read-btn" type="button" data-read-project="${escapeHtml(projectMeta.id)}" data-read-chapter="${escapeHtml(projectMeta.latestChapter?.chapter_id || '')}">Read Latest</button>
           </div>
         </div>
@@ -470,7 +505,10 @@ window.registerPageInit('community', async function () {
           <div class="community-author">
             <div class="community-author-avatar" style="background:${promptMeta.avatarColor};">${escapeHtml(promptMeta.initials)}</div>
             <div class="community-author-meta">
-              <p class="community-author-name">Author: ${escapeHtml(promptMeta.author)}</p>
+              <div class="community-author-line">
+                <p class="community-author-name">Author: ${escapeHtml(promptMeta.author)}</p>
+                ${authorContactMarkup(promptMeta.authorId)}
+              </div>
               <h2 class="community-card-title">${escapeHtml(promptMeta.plotPoint || 'Community Prompt')}</h2>
             </div>
           </div>
@@ -495,9 +533,6 @@ window.registerPageInit('community', async function () {
             <span class="community-metric">${escapeHtml(formatDate(promptMeta.createdAt))}</span>
           </div>
           <div class="community-card-actions">
-            ${promptMeta.authorId && promptMeta.authorId !== currentUserId ? `
-              <button class="btn btn-ghost community-message-btn" type="button" data-message-author="${escapeHtml(promptMeta.authorId)}">Message</button>
-            ` : ''}
             <button class="community-read-btn" type="button" data-open-prompt-btn="${escapeHtml(promptMeta.id)}">Use Prompt</button>
           </div>
         </div>
@@ -633,20 +668,54 @@ window.registerPageInit('community', async function () {
     promptFormCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  function syncPromptPlotPointOptions() {
+    const selectedGenre = promptGenreInput?.value || '';
+    const normalizeGenre = window.normalizeGenreKey || ((value) => String(value || '').trim().toLowerCase());
+    const genreKey = normalizeGenre(selectedGenre);
+    const plotPoints = promptPlotPointsByGenre[genreKey] || [];
+
+    if (!promptPlotPointInput) {
+      return;
+    }
+
+    promptPlotPointInput.innerHTML = plotPoints.length
+      ? plotPoints.map((plotPoint) => `<option value="${escapeHtml(plotPoint)}">${escapeHtml(plotPoint)}</option>`).join('')
+      : '<option value="">No section targets available</option>';
+
+    promptPlotPointInput.disabled = !plotPoints.length;
+  }
+
   function populatePromptGenreOptions() {
     const fallbackGenres = ['Contemporary', 'Fantasy', 'Historical Fiction', 'Horror', 'Literary Fiction', 'Memoir', 'Mystery', 'Romance', 'Science Fiction', 'Short Story', 'Thriller'];
     window.getGenrePromptData()
       .then((data) => {
+        const genreBeatRows = data?.genrePrompts || [];
         const genres = [...new Set((data?.genrePrompts || []).map((entry) => entry.genre).filter(Boolean))]
           .filter((genre) => !String(genre).includes('-') && !String(genre).toLowerCase().includes(' x '))
           .sort((left, right) => left.localeCompare(right));
+        const normalizeGenre = window.normalizeGenreKey || ((value) => String(value || '').trim().toLowerCase());
+        promptPlotPointsByGenre = genres.reduce((accumulator, genre) => {
+          const genreKey = normalizeGenre(genre);
+          accumulator[genreKey] = [...new Set(
+            genreBeatRows
+              .filter((entry) => normalizeGenre(entry.genre) === genreKey)
+              .map((entry) => String(entry.plotPoint || '').trim())
+              .filter(Boolean),
+          )];
+          return accumulator;
+        }, {});
         const source = genres.length ? genres : fallbackGenres;
         promptGenreInput.innerHTML = source.map((genre) => `<option value="${genre}">${genre}</option>`).join('');
+        syncPromptPlotPointOptions();
       })
       .catch(() => {
         promptGenreInput.innerHTML = fallbackGenres.map((genre) => `<option value="${genre}">${genre}</option>`).join('');
+        promptPlotPointsByGenre = {};
+        syncPromptPlotPointOptions();
       });
   }
+
+  promptGenreInput?.addEventListener('change', syncPromptPlotPointOptions);
 
   promptForm?.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -673,7 +742,7 @@ window.registerPageInit('community', async function () {
       await window.api.community.createPrompt(payload);
       const prompts = await window.api.community.getPrompts();
       allPrompts = (prompts || []).map(buildPromptMeta);
-      promptPlotPointInput.value = '';
+      syncPromptPlotPointOptions();
       promptCalloutInput.value = '';
       promptTargetWordsInput.value = '500';
       promptFormMessage.textContent = 'Community prompt shared.';
@@ -753,6 +822,12 @@ window.registerPageInit('community', async function () {
     grid.querySelectorAll('[data-message-author]').forEach((btn) => {
       btn.addEventListener('click', () => messageAuthor(btn.dataset.messageAuthor));
     });
+
+    grid.querySelectorAll('[data-message-signin]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        alert('Sign in to privately message other writers.');
+      });
+    });
   }
 
   function renderPromptList(filtered) {
@@ -809,6 +884,12 @@ window.registerPageInit('community', async function () {
 
     grid.querySelectorAll('[data-message-author]').forEach((btn) => {
       btn.addEventListener('click', () => messageAuthor(btn.dataset.messageAuthor));
+    });
+
+    grid.querySelectorAll('[data-message-signin]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        alert('Sign in to privately message other writers.');
+      });
     });
   }
 
