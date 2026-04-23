@@ -16,6 +16,23 @@
 
   <div id="plot-content" class="plot-content" style="display: none;">
     <section class="card ui-card ui-card-stack workbook-card">
+      <details class="plot-block bb-collapse" data-plot-block="section-targets" open>
+        <summary class="plot-block-summary">
+          <div class="ui-card-copy">
+            <p class="eyebrow">Book Placement</p>
+            <h2>Section Targets</h2>
+          </div>
+          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+        </summary>
+        <div class="plot-block-body plot-block-body-section-targets">
+          <div class="plot-section-targets-toolbar">
+            <button id="generate-outline-btn" class="btn btn-save generate-outline-btn" type="button">Generate Outline from Section Targets</button>
+            <p id="generate-outline-message" class="generate-outline-message" aria-live="polite" hidden></p>
+          </div>
+          <div id="plot-section-targets" class="plot-section-targets"></div>
+        </div>
+      </details>
+
       <details class="plot-block bb-collapse" data-plot-block="outline">
         <summary class="plot-block-summary">
           <div class="ui-card-copy">
@@ -66,23 +83,6 @@
           <div class="field field-full">
             <label for="plot-notes">Plot Notes</label>
             <textarea id="plot-notes" rows="5"></textarea>
-          </div>
-        </div>
-      </details>
-
-      <details class="plot-block bb-collapse" data-plot-block="section-targets" open>
-        <summary class="plot-block-summary">
-          <div class="ui-card-copy">
-            <p class="eyebrow">Book Placement</p>
-            <h2>Section Targets</h2>
-          </div>
-          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="plot-block-body plot-block-body-section-targets">
-          <div id="plot-section-targets" class="plot-section-targets"></div>
-          <div class="plot-section-targets-toolbar">
-            <button id="generate-outline-btn" class="btn btn-ghost" type="button">Generate Outline from Section Targets</button>
-            <p id="generate-outline-message" class="generate-outline-message" aria-live="polite" hidden></p>
           </div>
         </div>
       </details>
