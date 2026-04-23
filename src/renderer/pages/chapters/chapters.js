@@ -28,6 +28,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const saveTopButton = document.getElementById('save-chapters-top');
   const exportButton = document.getElementById('export-chapters');
   const createButton = document.getElementById('chapters-create-project');
+  const plotSectionsPanel = document.getElementById('plot-sections-panel');
   const sectionsList = document.getElementById('plot-sections-list');
   const saveMessage = document.getElementById('chapters-save-message');
   const editorShell = document.getElementById('chapter-editor-shell');
@@ -127,6 +128,14 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         defaultOpen: details.dataset.chapterPanel === 'context',
       });
     });
+
+    if (plotSectionsPanel) {
+      window.bindPersistentDetailsState?.(plotSectionsPanel, {
+        projectId: activeProject.id,
+        sectionId: 'chapters-section-targets-panel',
+        defaultOpen: true,
+      });
+    }
   }
 
   let selectedChapterId = (chapterId && chapters.some((c) => c.id === chapterId))

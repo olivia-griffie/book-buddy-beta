@@ -1,6 +1,6 @@
 {
   "name": "book-buddy-beta",
-  "version": "1.3.9",
+  "version": "1.3.10",
   "description": "Book Buddy Beta – Manuscript organization and daily writing challenge app",
   "main": "src/main/main.js",
   "author": "Olivia Griffie",

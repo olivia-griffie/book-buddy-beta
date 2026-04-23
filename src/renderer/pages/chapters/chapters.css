@@ -20,6 +20,26 @@
   padding: 24px;
 }
 
+.plot-sections-card {
+  padding: 0;
+  overflow: visible;
+}
+
+.plot-sections-summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+.plot-sections-summary::-webkit-details-marker {
+  display: none;
+}
+
+.plot-sections-body {
+  display: grid;
+  gap: 16px;
+  padding: 0 24px 24px;
+}
+
 .plot-sections-list {
   display: flex;
   flex-direction: column;
@@ -383,6 +403,10 @@
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
   background: #fffdfa;
+}
+
+.chapters-layout:has(.plot-sections-card:not([open])) .chapter-writing-workspace {
+  min-height: min(76vh, 980px);
 }
 
 .chapter-draft-field {

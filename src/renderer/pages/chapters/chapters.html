@@ -164,16 +164,19 @@
       </div>
     </section>
 
-    <section class="card ui-card ui-card-stack plot-sections-card">
-      <div class="section-heading ui-card-head">
+    <details id="plot-sections-panel" class="card ui-card ui-card-stack plot-sections-card bb-collapse" open>
+      <summary class="section-heading ui-card-head chapter-panel-summary plot-sections-summary">
         <div class="ui-card-copy">
           <p class="eyebrow">Chapter Picker</p>
           <h2>Section Targets</h2>
           <p class="plot-sections-note ui-card-description">Open a plot area, then connect chapters, scenes, characters, and locations to it.</p>
         </div>
+        <span class="chapter-panel-indicator plot-sections-indicator" aria-hidden="true">⌄</span>
+      </summary>
+      <div class="plot-sections-body bb-collapse__body">
+        <div id="plot-sections-list" class="plot-sections-list"></div>
+        <p id="chapters-save-message" class="form-message" aria-live="polite"></p>
       </div>
-      <div id="plot-sections-list" class="plot-sections-list"></div>
-      <p id="chapters-save-message" class="form-message" aria-live="polite"></p>
-    </section>
+    </details>
   </div>
 </section>
