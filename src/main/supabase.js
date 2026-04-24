@@ -92,6 +92,10 @@ async function getPublishedChapters(supabaseProjectId, accessToken) {
   return restReq('GET', `published_chapters?project_id=eq.${supabaseProjectId}&select=*&order=published_at.asc`, null, accessToken);
 }
 
+async function clearPublishedChaptersForProject(supabaseProjectId, accessToken) {
+  return restReq('DELETE', `published_chapters?project_id=eq.${encodeFilterValue(supabaseProjectId)}`, null, accessToken);
+}
+
 async function getPublicProjects(accessToken) {
   const projects = await restReq('GET', 'projects?is_public=eq.true&select=id,local_id,content,owner_id,is_public,updated_at&order=updated_at.desc', null, accessToken);
   if (!projects?.length) return [];
@@ -635,6 +639,7 @@ module.exports = {
   publishChapter,
   unpublishChapter,
   getPublishedChapters,
+  clearPublishedChaptersForProject,
   getPublicProjects,
   getCommunityPrompts,
   createCommunityPrompt,

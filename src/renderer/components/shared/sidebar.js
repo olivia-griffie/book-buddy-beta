@@ -75,6 +75,7 @@ function getSidebarSnapshot(currentProject) {
 
 let inboxBadgeRefreshTimer = null;
 const INBOX_BADGE_CACHE_KEY = 'bb-inbox-unread-state';
+const INBOX_BADGE_REFRESH_MIN_INTERVAL_MS = 15000;
 
 function normalizeInboxUnreadState(value) {
   const activityUnread = Math.max(0, Number(value?.activityUnread || 0));
@@ -125,17 +126,42 @@ function renderInboxSidebarBadgeCount(count) {
   icon.appendChild(badge);
 }
 
-async function performInboxSidebarBadgeRefresh() {
+async function performInboxSidebarBadgeRefresh({ force = false } = {}) {
   try {
-    const [session, notifications, conversations] = await Promise.all([
-      window.api?.auth?.getSession?.().catch(() => null),
-      window.api?.inbox?.getNotifications?.().catch(() => []),
-      window.api?.inbox?.getDirectConversations?.().catch(() => []),
-    ]);
+    const cachedState = readCachedInboxUnreadState();
+    if (!force && cachedState.updatedAt) {
+      const age = Date.now() - new Date(cachedState.updatedAt).getTime();
+      if (!Number.isNaN(age) && age < INBOX_BADGE_REFRESH_MIN_INTERVAL_MS) {
+        renderInboxSidebarBadgeCount(cachedState.totalUnread);
+        return cachedState;
+      }
+    }
+
+    const session = await window.api?.auth?.getSession?.();
 
     if (!session) {
-      return;
+      const clearedState = writeCachedInboxUnreadState({
+        activityUnread: 0,
+        messageUnread: 0,
+        totalUnread: 0,
+        updatedAt: new Date().toISOString(),
+      });
+      renderInboxSidebarBadgeCount(0);
+      return clearedState;
     }
+
+    const [notificationsResult, conversationsResult] = await Promise.allSettled([
+      window.api?.inbox?.getNotifications?.(),
+      window.api?.inbox?.getDirectConversations?.(),
+    ]);
+
+    if (notificationsResult.status !== 'fulfilled' || conversationsResult.status !== 'fulfilled') {
+      renderInboxSidebarBadgeCount(cachedState.totalUnread);
+      return cachedState;
+    }
+
+    const notifications = notificationsResult.value || [];
+    const conversations = conversationsResult.value || [];
 
     let readIds = new Set();
     try {
@@ -145,14 +171,19 @@ async function performInboxSidebarBadgeRefresh() {
     const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
     const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
     const totalUnread = activityUnread + messageUnread;
-    writeCachedInboxUnreadState({
+    const nextState = writeCachedInboxUnreadState({
       activityUnread,
       messageUnread,
       totalUnread,
       updatedAt: new Date().toISOString(),
     });
     renderInboxSidebarBadgeCount(totalUnread);
-  } catch {}
+    return nextState;
+  } catch {
+    const cachedState = readCachedInboxUnreadState();
+    renderInboxSidebarBadgeCount(cachedState.totalUnread);
+    return cachedState;
+  }
 }
 
 function ensureInboxBadgeAutoRefresh() {
@@ -161,16 +192,16 @@ function ensureInboxBadgeAutoRefresh() {
   }
 
   inboxBadgeRefreshTimer = window.setInterval(() => {
-    performInboxSidebarBadgeRefresh().catch(() => {});
+    performInboxSidebarBadgeRefresh({ force: true }).catch(() => {});
   }, 30000);
 
   window.addEventListener('focus', () => {
-    performInboxSidebarBadgeRefresh().catch(() => {});
+    performInboxSidebarBadgeRefresh({ force: true }).catch(() => {});
   });
 
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden) {
-      performInboxSidebarBadgeRefresh().catch(() => {});
+      performInboxSidebarBadgeRefresh({ force: true }).catch(() => {});
     }
   });
 }
@@ -280,7 +311,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
 };
 
 window.refreshInboxSidebarBadge = function refreshInboxSidebarBadgeBridge() {
-  return performInboxSidebarBadgeRefresh();
+  return performInboxSidebarBadgeRefresh({ force: true });
 };
 
 window.setInboxSidebarBadgeCount = function setInboxSidebarBadgeCountBridge(countOrState) {

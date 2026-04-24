@@ -7,7 +7,7 @@ const packageJson = require('../../package.json');
 const { signIn, signUp, refreshSession, signOut } = require('./auth');
 const {
   getProfile, updateProfile,
-  upsertProject, publishChapter, unpublishChapter, getPublishedChapters,
+  upsertProject, publishChapter, unpublishChapter, getPublishedChapters, clearPublishedChaptersForProject,
   getPublicProjects, getCommunityPrompts, createCommunityPrompt, getComments, addComment,
   getLikes, toggleLike, getPromptFavorites, togglePromptFavorite, recordCommunityPromptCompletion, getAuthorNotifications,
   getInboxConversations, getConversationMessages,
@@ -688,6 +688,24 @@ ipcMain.handle('publishing:syncProjectVisibility', async (_, { projectLocalId, p
   const project = await upsertProject(projectLocalId, session.user.id, projectContent, Boolean(isPublic), session.access_token);
   if (project?.id) {
     store.set(`publishing.${projectLocalId}`, project.id);
+    if (!isPublic) {
+      await clearPublishedChaptersForProject(project.id, session.access_token).catch(() => null);
+    } else {
+      const publishedIds = new Set(projectContent?.publishedChapterIds || []);
+      const chapters = Array.isArray(projectContent?.chapters) ? projectContent.chapters : [];
+      const publishedChapters = chapters.filter((chapter) => publishedIds.has(chapter?.id));
+
+      await clearPublishedChaptersForProject(project.id, session.access_token).catch(() => null);
+      for (const chapter of publishedChapters) {
+        await publishChapter(
+          project.id,
+          chapter.id,
+          chapter.title || 'Untitled',
+          chapter.content || '',
+          session.access_token,
+        );
+      }
+    }
   }
   return project;
 });
