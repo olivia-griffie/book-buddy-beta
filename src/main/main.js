@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs/promises');
 const Store = require('electron-store');
@@ -359,9 +360,51 @@ function createWindow() {
   }
 }
 
+function setupAutoUpdater() {
+  if (process.argv.includes('--dev')) return;
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  setTimeout(() => {
+    autoUpdater.checkForUpdates().catch((err) => {
+      console.warn('[updater] Check failed:', err.message);
+    });
+  }, 3000);
+
+  setInterval(() => {
+    autoUpdater.checkForUpdates().catch(() => {});
+  }, 2 * 60 * 60 * 1000);
+
+  autoUpdater.on('update-available', (info) => {
+    mainWindow?.webContents.send('update:available', {
+      version: info.version,
+      releaseNotes: info.releaseNotes || '',
+    });
+  });
+
+  autoUpdater.on('download-progress', (progress) => {
+    mainWindow?.webContents.send('update:progress', {
+      percent: Math.round(progress.percent),
+    });
+  });
+
+  autoUpdater.on('update-downloaded', (info) => {
+    mainWindow?.webContents.send('update:ready', {
+      version: info.version,
+      releaseNotes: info.releaseNotes || '',
+    });
+  });
+
+  autoUpdater.on('error', (err) => {
+    console.warn('[updater] Error:', err.message);
+  });
+}
+
 app.whenReady().then(() => {
   setApplicationMenu();
   createWindow();
+  setupAutoUpdater();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
@@ -846,4 +889,12 @@ ipcMain.handle('inbox:markConversationRead', async (_, { conversationId }) => {
   const session = await getValidSession();
   if (!session) throw new Error('Sign in to update messages.');
   return markConversationRead(conversationId, session.user.id, session.access_token);
+});
+
+ipcMain.handle('updater:installNow', () => {
+  autoUpdater.quitAndInstall(false, true);
+});
+
+ipcMain.handle('updater:dismiss', () => {
+  return true;
 });

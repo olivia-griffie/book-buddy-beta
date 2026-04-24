@@ -12,6 +12,8 @@
     "build:mac": "electron-builder --mac",
     "build:win": "electron-builder --win",
     "release:win": "node build-win.js",
+    "release:mac": "node build-mac.js",
+    "release:all": "node build-win.js && node build-mac.js",
     "build:all": "electron-builder --mac --win",
     "pack": "electron-builder --dir"
   },
@@ -21,11 +23,18 @@
   },
   "dependencies": {
     "electron-context-menu": "^4.1.2",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "electron-updater": "^6.3.9"
   },
   "build": {
     "appId": "com.oliviagriffie.bookbuddybeta",
     "productName": "Book Buddy Beta",
+    "publish": {
+      "provider": "github",
+      "owner": "OLIVIAGRIFFIE",
+      "repo": "book-buddy-beta",
+      "releaseType": "release"
+    },
     "directories": {
       "buildResources": "public",
       "output": "releases"
@@ -39,15 +48,14 @@
       "category": "public.app-category.productivity",
       "icon": "public/icon.png",
       "target": [
-        "dmg",
-        "zip"
+        { "target": "dmg", "arch": ["x64", "arm64"] },
+        { "target": "zip", "arch": ["x64", "arm64"] }
       ]
     },
     "win": {
       "icon": "public/icon.ico",
-      "target": [
-        "nsis"
-      ]
+      "publisherName": "Olivia Griffie",
+      "target": [{ "target": "nsis", "arch": ["x64"] }]
     },
     "nsis": {
       "oneClick": false,

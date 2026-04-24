@@ -75,4 +75,16 @@ contextBridge.exposeInMainWorld('api', {
     sendDirectMessage: (args) => ipcRenderer.invoke('inbox:sendDirectMessage', args),
     markConversationRead: (args) => ipcRenderer.invoke('inbox:markConversationRead', args),
   },
+  updater: {
+    onUpdateAvailable: (cb) => ipcRenderer.on('update:available', (_, data) => cb(data)),
+    onUpdateProgress: (cb) => ipcRenderer.on('update:progress', (_, data) => cb(data)),
+    onUpdateReady: (cb) => ipcRenderer.on('update:ready', (_, data) => cb(data)),
+    installNow: () => ipcRenderer.invoke('updater:installNow'),
+    dismiss: () => ipcRenderer.invoke('updater:dismiss'),
+    removeListeners: () => {
+      ipcRenderer.removeAllListeners('update:available');
+      ipcRenderer.removeAllListeners('update:progress');
+      ipcRenderer.removeAllListeners('update:ready');
+    },
+  },
 });

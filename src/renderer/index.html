@@ -13,6 +13,55 @@
   <link rel="stylesheet" href="./styles/login.css" />
 </head>
 <body>
+  <div id="update-banner" style="
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: #2f3545;
+    color: #fff7f3;
+    padding: 12px 20px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    box-shadow: 0 -4px 20px rgba(47,53,69,0.25);
+    transform: translateY(100%);
+    transition: transform 280ms ease;
+  ">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span id="update-banner-icon">⬇</span>
+      <span id="update-banner-text">Downloading update...</span>
+    </div>
+    <div style="display:flex; gap:8px; flex-shrink:0;">
+      <button id="update-install-btn" style="
+        display: none;
+        padding: 6px 14px;
+        background: #ff6a5a;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+      ">Restart &amp; Update</button>
+      <button id="update-dismiss-btn" style="
+        padding: 6px 10px;
+        background: transparent;
+        color: rgba(255,247,243,0.6);
+        border: 1px solid rgba(255,247,243,0.2);
+        border-radius: 6px;
+        font-family: inherit;
+        font-size: 0.8rem;
+        cursor: pointer;
+      ">Later</button>
+    </div>
+  </div>
+
   <!-- Loading screen (shown during auth check, hidden after) -->
   <div id="app-loading" class="app-loading">
     <img id="app-loading-logo" src="../../public/logo-full.png" alt="Book Buddy" class="app-loading-logo" />
@@ -97,5 +146,6 @@
   <script src="./components/shared/project-store.js"></script>
   <script src="./components/editor/text-editor.js"></script>
   <script src="./renderer.js"></script>
+  <script src="./updater.js"></script>
 </body>
 </html>
