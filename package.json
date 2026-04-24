@@ -54,7 +54,6 @@
     },
     "win": {
       "icon": "public/icon.ico",
-      "publisherName": "Olivia Griffie",
       "target": [{ "target": "nsis", "arch": ["x64"] }]
     },
     "nsis": {
