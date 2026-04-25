@@ -31,7 +31,7 @@
     "productName": "Book Buddy Beta",
     "publish": {
       "provider": "github",
-      "owner": "OLIVIAGRIFFIE",
+      "owner": "olivia-griffie",
       "repo": "book-buddy-beta",
       "releaseType": "release"
     },
