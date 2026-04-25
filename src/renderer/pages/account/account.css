@@ -153,6 +153,18 @@ body.dark-mode .account-error {
   margin-bottom: 20px;
 }
 
+.account-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.account-save-status {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
 .account-field textarea {
   padding: 10px 12px;
   border: 1px solid var(--border-soft);

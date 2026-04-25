@@ -16,6 +16,26 @@ window.registerPageInit('account', async function () {
     }
   } catch {}
 
+  document.getElementById('profile-save')?.addEventListener('click', async () => {
+    const displayName = document.getElementById('profile-display-name').value.trim();
+    const bio = document.getElementById('profile-bio').value.trim();
+    const statusEl = document.getElementById('profile-save-status');
+    const saveBtn = document.getElementById('profile-save');
+
+    saveBtn.disabled = true;
+    statusEl.textContent = 'Saving...';
+
+    try {
+      await window.api.profile.update({ display_name: displayName, bio });
+      statusEl.textContent = 'Saved!';
+      setTimeout(() => { statusEl.textContent = ''; }, 2500);
+    } catch {
+      statusEl.textContent = 'Could not save. Try again.';
+    } finally {
+      saveBtn.disabled = false;
+    }
+  });
+
   document.getElementById('account-signout')?.addEventListener('click', async () => {
     await window.authLogout?.();
   });
