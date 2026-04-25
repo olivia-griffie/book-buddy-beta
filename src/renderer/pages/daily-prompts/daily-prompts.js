@@ -645,29 +645,49 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     const count = Number(countInput.value || 1);
     const mode = modeInput.value;
 
-    let batch = [];
     if (mode === 'sequential') {
       const source = resources.sequentialSource.length ? resources.sequentialSource : resources.promptPool;
-      batch = Array.from(
+      const batch = Array.from(
         { length: count },
         (_, offset) => source[(dailyState.cursor + offset) % source.length],
       ).filter(Boolean);
       dailyState.cursor += count;
-    } else {
-      batch = weightedPick(resources.promptPool, count, activeProject);
+
+      return batch.map((entry, index) => {
+        const prompt = personalizePrompt(entry.prompt, activeProject);
+        return {
+          id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
+          ...entry,
+          prompt,
+          context: getContextLabel(index, entry),
+          assignedChapterId: '',
+          answer: '',
+          answerInsertedAt: '',
+          requiredWordCount: extractPromptWordTarget(prompt),
+          insertedWordCount: 0,
+        };
+      });
     }
 
-    return batch.map((entry, index) => {
-      const personalizedPrompt = personalizePrompt(entry.prompt, activeProject);
+    const selected = window.selectScoredPrompts({
+      taggedPool:    resources.taggedPrompts,
+      fallbackPool:  resources.promptPool,
+      project:       activeProject,
+      count,
+      recentHistory: activeProject.dailyPromptHistory || [],
+    });
+
+    return selected.map((entry, index) => {
+      // eslint-disable-next-line no-unused-vars
+      const { _score, ...rest } = entry;
       return {
         id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
-        ...entry,
-        prompt: personalizedPrompt,
+        ...rest,
         context: getContextLabel(index, entry),
         assignedChapterId: '',
         answer: '',
         answerInsertedAt: '',
-        requiredWordCount: extractPromptWordTarget(personalizedPrompt),
+        requiredWordCount: extractPromptWordTarget(rest.prompt),
         insertedWordCount: 0,
       };
     });

@@ -121,16 +121,18 @@ async function getGenrePromptData() {
     return window.api.getPromptData();
   }
 
-  const [genrePrompts, specificPrompts, hybridGuides] = await Promise.all([
+  const [genrePrompts, specificPrompts, hybridGuides, taggedPrompts] = await Promise.all([
     loadJson('../data/prompts/genre_prompts.json'),
     loadJson('../data/prompts/specific_genre_prompts.json'),
     loadJson('../data/defaults/hybrid_genres.json'),
+    loadJson('../data/prompts/tagged_prompts.json'),
   ]);
 
   return {
     genrePrompts,
     specificPrompts,
     hybridGuides,
+    taggedPrompts,
   };
 }
 
@@ -612,6 +614,7 @@ function buildProjectResources(project, promptData) {
     plotSections,
     promptPool,
     sequentialSource,
+    taggedPrompts: promptData.taggedPrompts || [],
   };
 }
 
