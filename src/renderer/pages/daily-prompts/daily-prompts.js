@@ -96,6 +96,79 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return shuffled.slice(0, count);
   }
 
+  function getActiveSceneTags(proj) {
+    const scenes = proj.scenes || [];
+    const plotSections = proj.plotSections || [];
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+
+    // Find the section that matches the current cursor position
+    const pool = resources.promptPool;
+    const currentEntry = pool[dailyState.cursor % (pool.length || 1)];
+    const matchedSection = currentEntry?.plotPoint
+      ? plotSections.find((s) => normalize(s.label) === normalize(currentEntry.plotPoint))
+      : null;
+
+    const linkedScenes = matchedSection
+      ? scenes.filter((scene) => {
+        const ids = Array.isArray(scene.sectionIds) ? scene.sectionIds : (scene.sectionId ? [scene.sectionId] : []);
+        return ids.includes(matchedSection.id);
+      })
+      : scenes;
+
+    return [...new Set(linkedScenes.flatMap((s) => s.tags || []).map((t) => t.toLowerCase()))];
+  }
+
+  function getCharacterNarrativeTags(proj) {
+    return [...new Set(
+      (proj.characters || []).flatMap((c) => c.narrativeTags || []).map((t) => t.toLowerCase()),
+    )];
+  }
+
+  function scorePromptEntry(entry, proj) {
+    let score = 0;
+    const promptText = (entry.prompt || '').toLowerCase();
+    const plotPointText = (entry.plotPoint || '').toLowerCase();
+
+    const projectTags = (proj.tags || []).map((t) => t.toLowerCase());
+    if (projectTags.some((t) => plotPointText.includes(t))) score += 2;
+    if (projectTags.some((t) => promptText.includes(t))) score += 1;
+
+    const activeSceneTags = getActiveSceneTags(proj);
+    activeSceneTags.forEach((tag) => {
+      if (promptText.includes(tag)) score += 3;
+    });
+
+    const narrativeTags = getCharacterNarrativeTags(proj);
+    narrativeTags.forEach((tag) => {
+      if (promptText.includes(tag)) score += 2;
+    });
+
+    return score;
+  }
+
+  function weightedPick(pool, count, proj) {
+    const scored = pool.map((entry) => ({
+      entry,
+      weight: scorePromptEntry(entry, proj) + 1, // +1 so every entry has a non-zero chance
+    }));
+
+    const picked = [];
+    const remaining = [...scored];
+
+    while (remaining.length && picked.length < count) {
+      const total = remaining.reduce((sum, item) => sum + item.weight, 0);
+      let rand = Math.random() * total;
+      const idx = remaining.findIndex((item) => {
+        rand -= item.weight;
+        return rand <= 0;
+      });
+      const chosen = remaining.splice(idx === -1 ? remaining.length - 1 : idx, 1)[0];
+      picked.push(chosen.entry);
+    }
+
+    return picked;
+  }
+
   const CHARACTER_ROLE_LABELS = {
     protagonist: 'Protagonist',
     antagonist: 'Antagonist',
@@ -543,11 +616,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       ).filter(Boolean);
       dailyState.cursor += count;
     } else {
-      const pool = [...resources.promptPool];
-      while (pool.length && batch.length < count) {
-        const index = Math.floor(Math.random() * pool.length);
-        batch.push(pool.splice(index, 1)[0]);
-      }
+      batch = weightedPick(resources.promptPool, count, activeProject);
     }
 
     return batch.map((entry, index) => ({
