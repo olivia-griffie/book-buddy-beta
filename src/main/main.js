@@ -401,10 +401,25 @@ function setupAutoUpdater() {
   });
 }
 
+function checkNewVersion() {
+  const currentVersion = app.getVersion();
+  const lastSeen = store.get('lastSeenVersion');
+  if (lastSeen !== currentVersion) {
+    store.set('lastSeenVersion', currentVersion);
+    mainWindow?.webContents.once('did-finish-load', () => {
+      mainWindow.webContents.send('app:newVersion', {
+        version: currentVersion,
+        previousVersion: lastSeen || null,
+      });
+    });
+  }
+}
+
 app.whenReady().then(() => {
   setApplicationMenu();
   createWindow();
   setupAutoUpdater();
+  checkNewVersion();
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {

@@ -48,3 +48,32 @@
     hideBanner();
   });
 })();
+
+(function () {
+  const overlay = document.getElementById('whats-new-overlay');
+  const headline = document.getElementById('whats-new-headline');
+  const featureList = document.getElementById('whats-new-features');
+  const dismissBtn = document.getElementById('whats-new-dismiss');
+
+  function showWhatsNew(version) {
+    const entry = window.CHANGELOG?.[version];
+    if (!entry) return;
+
+    headline.textContent = entry.headline;
+    featureList.innerHTML = entry.features
+      .map((f) => `<li>${f}</li>`)
+      .join('');
+
+    overlay.style.display = 'flex';
+  }
+
+  dismissBtn.addEventListener('click', () => {
+    overlay.style.display = 'none';
+  });
+
+  if (window.api?.onNewVersion) {
+    window.api.onNewVersion((data) => {
+      showWhatsNew(data.version);
+    });
+  }
+})();

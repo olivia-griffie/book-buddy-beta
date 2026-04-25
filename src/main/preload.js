@@ -75,6 +75,7 @@ contextBridge.exposeInMainWorld('api', {
     sendDirectMessage: (args) => ipcRenderer.invoke('inbox:sendDirectMessage', args),
     markConversationRead: (args) => ipcRenderer.invoke('inbox:markConversationRead', args),
   },
+  onNewVersion: (cb) => ipcRenderer.on('app:newVersion', (_, data) => cb(data)),
   updater: {
     onUpdateAvailable: (cb) => ipcRenderer.on('update:available', (_, data) => cb(data)),
     onUpdateProgress: (cb) => ipcRenderer.on('update:progress', (_, data) => cb(data)),

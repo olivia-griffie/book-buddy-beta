@@ -140,11 +140,62 @@
     </div>
   </div>
 
+  <!-- What's New modal -->
+  <div id="whats-new-overlay" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: rgba(47,38,31,0.45);
+    align-items: center;
+    justify-content: center;
+  ">
+    <div style="
+      background: #faf7f2;
+      border-radius: 14px;
+      padding: 36px 40px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 8px 40px rgba(47,38,31,0.18);
+      font-family: 'DM Sans', sans-serif;
+      color: #2f261f;
+    ">
+      <h2 id="whats-new-headline" style="
+        font-family: 'Lora', Georgia, serif;
+        font-size: 1.35rem;
+        font-weight: 700;
+        margin: 0 0 18px;
+        color: #2f261f;
+      "></h2>
+      <ul id="whats-new-features" style="
+        margin: 0 0 28px;
+        padding-left: 20px;
+        line-height: 1.7;
+        font-size: 0.95rem;
+        color: #5a4a3a;
+      "></ul>
+      <button id="whats-new-dismiss" style="
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background: #ff6a5a;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+      ">Got it</button>
+    </div>
+  </div>
+
   <script src="./components/shared/sidebar.js"></script>
   <script src="./components/shared/topbar.js"></script>
   <script src="./components/shared/reference-drawer.js"></script>
   <script src="./components/shared/project-store.js"></script>
   <script src="./components/editor/text-editor.js"></script>
+  <script src="./changelog.js"></script>
   <script src="./renderer.js"></script>
   <script src="./updater.js"></script>
 </body>
