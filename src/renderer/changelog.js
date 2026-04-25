@@ -1,4 +1,12 @@
 window.CHANGELOG = {
+  '1.3.13': {
+    headline: 'Welcome to version 1.3.13!',
+    features: [
+      'Display name — set your public name from Account → Edit Profile',
+      'Fixed collapse chevron symbol',
+      'Improved update download progress',
+    ],
+  },
   '1.3.11': {
     headline: 'Welcome to version 1.3.11!',
     features: [
