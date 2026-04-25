@@ -40,7 +40,35 @@
       <div id="scene-editor-shell" style="display: none;">
         <div class="entity-form-grid">
           <div class="field"><label for="scene-title">Title</label><input id="scene-title" type="text" maxlength="35" /></div>
-          <div class="field"><label for="scene-tags">Tags</label><input id="scene-tags" type="text" placeholder="comma, separated, tags" /></div>
+          <div class="field field-full">
+            <label>Scene Tags</label>
+            <div class="scene-tag-groups">
+              <div class="scene-tag-group">
+                <p class="scene-tag-group-label">Opening</p>
+                <div class="scene-tag-buttons" role="group" aria-label="Opening tags">
+                  <button class="character-type-tag" type="button" data-scene-tag="Setup" aria-pressed="false">Setup</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Disruption" aria-pressed="false">Disruption</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Flashback" aria-pressed="false">Flashback</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Internal Conflict" aria-pressed="false">Internal Conflict</button>
+                </div>
+              </div>
+              <div class="scene-tag-group">
+                <p class="scene-tag-group-label">Turning Point</p>
+                <div class="scene-tag-buttons" role="group" aria-label="Turning point tags">
+                  <button class="character-type-tag" type="button" data-scene-tag="Revelation" aria-pressed="false">Revelation</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Crisis" aria-pressed="false">Crisis</button>
+                </div>
+              </div>
+              <div class="scene-tag-group">
+                <p class="scene-tag-group-label">Closing</p>
+                <div class="scene-tag-buttons" role="group" aria-label="Closing tags">
+                  <button class="character-type-tag" type="button" data-scene-tag="Climax" aria-pressed="false">Climax</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Aftermath" aria-pressed="false">Aftermath</button>
+                  <button class="character-type-tag" type="button" data-scene-tag="Resolution" aria-pressed="false">Resolution</button>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="field">
             <label for="scene-image">Scene Image</label>
             <input id="scene-image" class="file-input-hidden" type="file" accept="image/*" />

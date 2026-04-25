@@ -38,11 +38,29 @@ window.registerPageInit('scenes', async function ({ project }) {
 
   const fields = {
     title: document.getElementById('scene-title'),
-    tags: document.getElementById('scene-tags'),
     linkedChapterId: document.getElementById('scene-linked-chapter'),
     summary: document.getElementById('scene-summary'),
     other: document.getElementById('scene-other'),
   };
+
+  function getSceneTagButtons() {
+    return [...document.querySelectorAll('[data-scene-tag]')];
+  }
+
+  function readSceneTags() {
+    return getSceneTagButtons()
+      .filter((btn) => btn.getAttribute('aria-pressed') === 'true')
+      .map((btn) => btn.dataset.sceneTag);
+  }
+
+  function applySceneTags(tags) {
+    const active = new Set(tags || []);
+    getSceneTagButtons().forEach((btn) => {
+      const selected = active.has(btn.dataset.sceneTag);
+      btn.classList.toggle('is-selected', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
   const autosave = window.createAutosaveController(async () => {
     activeProject = await window.saveProjectData({
       ...activeProject,
@@ -171,7 +189,7 @@ window.registerPageInit('scenes', async function ({ project }) {
       deleteButton.style.display = 'inline-flex';
     }
     fields.title.value = scene.title || '';
-    fields.tags.value = (scene.tags || []).join(', ');
+    applySceneTags(scene.tags || []);
     fields.linkedChapterId.value = scene.linkedChapterId || '';
     fields.summary.value = scene.summary || '';
     fields.other.value = scene.other || '';
@@ -188,7 +206,7 @@ window.registerPageInit('scenes', async function ({ project }) {
     }
 
     scene.title = fields.title.value.trim();
-    scene.tags = fields.tags.value.split(',').map((tag) => tag.trim()).filter(Boolean);
+    scene.tags = readSceneTags();
     scene.linkedChapterId = fields.linkedChapterId.value;
     scene.summary = String(window.getEditorFieldValue(fields.summary) || '').trim();
     scene.other = String(window.getEditorFieldValue(fields.other) || '').trim();
@@ -227,6 +245,15 @@ window.registerPageInit('scenes', async function ({ project }) {
   Object.values(fields).forEach((field) => {
     field.addEventListener('input', syncScene);
     field.addEventListener('change', syncScene);
+  });
+
+  document.getElementById('scene-editor-shell').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-scene-tag]');
+    if (!btn) return;
+    const pressed = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+    btn.classList.toggle('is-selected', !pressed);
+    syncScene();
   });
 
   imageInput.addEventListener('change', async (event) => {

@@ -168,6 +168,25 @@ window.registerPageInit('characters', async function ({ project }) {
       .map((item) => String(item)))];
   }
 
+  function getNarrativeTagButtons() {
+    return [...document.querySelectorAll('[data-narrative-tag]')];
+  }
+
+  function applyNarrativeTags(tags) {
+    const active = new Set(tags || []);
+    getNarrativeTagButtons().forEach((btn) => {
+      const selected = active.has(btn.dataset.narrativeTag);
+      btn.classList.toggle('is-selected', selected);
+      btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
+    });
+  }
+
+  function readNarrativeTags() {
+    return getNarrativeTagButtons()
+      .filter((btn) => btn.getAttribute('aria-pressed') === 'true')
+      .map((btn) => btn.dataset.narrativeTag);
+  }
+
   function getCharacterTypeLabels(character) {
     return normalizeCharacterTypes(character?.typeTags).map((typeId) => (
       characterTypeDefinitions.find((type) => type.id === typeId)?.label || typeId
@@ -351,6 +370,8 @@ window.registerPageInit('characters', async function ({ project }) {
         </div>
       `;
 
+    applyNarrativeTags(character.narrativeTags || []);
+
     bindCharacterPanels(character);
 
     typeTags.querySelectorAll('[data-character-type]').forEach((button) => {
@@ -369,6 +390,7 @@ window.registerPageInit('characters', async function ({ project }) {
         autosave.touch();
       });
     });
+
   }
 
   function syncCharacter() {
@@ -378,6 +400,7 @@ window.registerPageInit('characters', async function ({ project }) {
     }
 
     character.typeTags = normalizeCharacterTypes(character.typeTags);
+    character.narrativeTags = readNarrativeTags();
     Object.entries(textFields).forEach(([key, field]) => {
       character[key] = String(window.getEditorFieldValue(field) || '').trim();
     });
@@ -409,6 +432,7 @@ window.registerPageInit('characters', async function ({ project }) {
       secrets: '',
       desires: '',
       typeTags: [],
+      narrativeTags: [],
       chapterIntro: '',
       deathScene: '',
       romanceScenes: '',
@@ -426,6 +450,18 @@ window.registerPageInit('characters', async function ({ project }) {
   Object.values(linkFields).forEach((field) => {
     field.addEventListener('input', syncCharacter);
     field.addEventListener('change', syncCharacter);
+  });
+
+  document.getElementById('character-editor-shell').addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-narrative-tag]');
+    if (!btn) return;
+    const character = getSelectedCharacter();
+    if (!character) return;
+    const pressed = btn.getAttribute('aria-pressed') === 'true';
+    btn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
+    btn.classList.toggle('is-selected', !pressed);
+    character.narrativeTags = readNarrativeTags();
+    autosave.touch();
   });
 
   imageInput.addEventListener('change', async (event) => {

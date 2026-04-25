@@ -504,6 +504,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
                   ${(character.typeTags || []).slice(0, 3).map((tag) => `
                     <span class="chapter-context-pill">${escapeHtml(tag.replace(/-/g, ' '))}</span>
                   `).join('')}
+                  ${(character.narrativeTags || []).slice(0, 2).map((tag) => `
+                    <span class="chapter-context-pill">${escapeHtml(tag)}</span>
+                  `).join('')}
                 </div>
                 <p>${escapeHtml(excerptRichText(character.desires || character.background || character.other, 'No reference notes yet.'))}</p>
               </article>

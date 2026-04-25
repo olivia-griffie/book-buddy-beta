@@ -158,9 +158,11 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
 
       const charParts = picked.map((c) => {
         const primaryRole = (c.typeTags || []).find((t) => CHARACTER_ROLE_LABELS[t]);
-        return primaryRole
+        const narrativePart = (c.narrativeTags || []).slice(0, 2).join(', ');
+        const base = primaryRole
           ? `${CHARACTER_ROLE_LABELS[primaryRole]}: ${c.name}`
           : `Character: ${c.name}`;
+        return narrativePart ? `${base} (${narrativePart})` : base;
       });
       pieces.push(charParts.join(' | '));
     }
