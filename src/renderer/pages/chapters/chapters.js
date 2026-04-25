@@ -313,6 +313,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     chapterPublishStatus.classList.toggle('is-published', isPublished);
     chapterPublishToggle.disabled = false;
     chapterPublishToggle.textContent = isPublished ? 'Unpublish Chapter' : 'Publish Chapter';
+    chapterPublishToggle.classList.toggle('is-published', isPublished);
   }
 
   async function persistPublishedChapterState() {

@@ -357,6 +357,19 @@
   box-shadow: 0 8px 18px rgba(255, 107, 95, 0.22);
 }
 
+.chapter-publish-toggle.is-published {
+  border-color: #3ab87a;
+  background: linear-gradient(135deg, #4ecf8e 0%, #2fa86d 100%);
+  box-shadow: 0 10px 22px rgba(46, 168, 109, 0.22);
+}
+
+.chapter-publish-toggle.is-published:hover,
+.chapter-publish-toggle.is-published:focus-visible {
+  border-color: #27996a;
+  background: linear-gradient(135deg, #3ec280 0%, #27996a 100%);
+  box-shadow: 0 14px 28px rgba(46, 168, 109, 0.28);
+}
+
 .chapter-editor-note,
 .plot-sections-note {
   margin-top: 6px;
