@@ -151,6 +151,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     mode: resolvedEditorPreferences.saveMode,
   });
   window.registerBeforeNavigate(async () => {
+    flushPromptAnswers();
     await autosave.flush();
   });
 
@@ -435,6 +436,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     applyEditorStyles();
     syncSelectedChapterPublishUI();
     renderContextPanel();
+    flushPromptAnswers();
     renderPromptPanel();
   }
 
@@ -568,6 +570,20 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const nextHtml = `${parsedChapter.html || '<p><br></p>'}${parsedAnswer.html || ''}`;
     chapter.content = window.serializeRichTextValue(nextHtml, parsedChapter.settings || {});
     return true;
+  }
+
+  function flushPromptAnswers() {
+    chapterPromptList.querySelectorAll('[data-chapter-prompt-answer]').forEach((field) => {
+      const entry = dailyPromptHistory.find((e) => e.id === field.dataset.chapterPromptAnswer);
+      if (!entry) return;
+      const value = window.getEditorFieldValue ? window.getEditorFieldValue(field) : field.value;
+      if (value && value !== entry.answer) {
+        entry.answer = value;
+        if (!entry.assignedChapterId && selectedChapterId) {
+          entry.assignedChapterId = selectedChapterId;
+        }
+      }
+    });
   }
 
   function renderPromptPanel() {

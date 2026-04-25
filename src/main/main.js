@@ -448,15 +448,22 @@ ipcMain.handle('projects:getAll', async () => {
       Promise.resolve(store.get('projects', [])),
     ]);
 
-    // Merge: prefer whichever copy has a newer updatedAt
+    // Merge: cloud wins only if meaningfully newer (>30s) to protect offline edits
+    const CLOUD_WIN_THRESHOLD_MS = 30 * 1000;
     const merged = new Map();
     for (const p of localProjects) {
       merged.set(p.id, p);
     }
     for (const p of cloudProjects) {
       const existing = merged.get(p.id);
-      if (!existing || new Date(p.updatedAt || 0) >= new Date(existing.updatedAt || 0)) {
+      if (!existing) {
         merged.set(p.id, p);
+      } else {
+        const cloudTime = new Date(p.updatedAt || 0).getTime();
+        const localTime = new Date(existing.updatedAt || 0).getTime();
+        if (cloudTime - localTime > CLOUD_WIN_THRESHOLD_MS) {
+          merged.set(p.id, p);
+        }
       }
     }
 
