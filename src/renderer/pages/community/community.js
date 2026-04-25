@@ -206,7 +206,10 @@ window.registerPageInit('community', async function () {
       }
       await window.navigate('inbox', { project: window.getCurrentProject() });
     } catch (error) {
-      alert(error?.message || 'Could not open a conversation.');
+      const isAuthError = /auth|sign.?in|session|unauthorized|jwt|token/i.test(error?.message || '');
+      alert(isAuthError
+        ? 'Your session has expired. Please sign out and back in to send messages.'
+        : error?.message || 'Could not open a conversation.');
     }
   }
 
@@ -567,8 +570,13 @@ window.registerPageInit('community', async function () {
     const chapters = project?.chapters || [];
     promptChapterSelect.innerHTML = chapters.length
       ? chapters.map((chapter) => `<option value="${chapter.id}">${escapeHtml(chapter.title || 'Untitled Chapter')}</option>`).join('')
-      : '<option value="">No chapters yet</option>';
+      : '<option value="">No chapters yet — add one in Chapters first</option>';
     promptChapterSelect.disabled = !chapters.length;
+    if (!chapters.length) {
+      promptUseMessage.textContent = 'This project has no chapters yet. Add a chapter in the Chapters page first, then come back to assign this prompt.';
+    } else {
+      promptUseMessage.textContent = '';
+    }
   }
 
   async function openPromptReader(promptMeta) {

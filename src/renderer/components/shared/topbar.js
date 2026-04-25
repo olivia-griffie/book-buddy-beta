@@ -342,15 +342,15 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               <path d="M10 3v14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
             </svg>
           </span>
+          ${!localStorage.getItem('topbarHintDismissed') ? `
+            <div class="topbar-collapse-bubble" id="topbar-collapse-bubble" role="status" aria-live="polite">
+              <span>Click here to collapse header</span>
+              <button type="button" class="topbar-collapse-bubble-close" aria-label="Dismiss hint">×</button>
+            </div>
+          ` : ''}
           <span class="topbar-summary-chevron" aria-hidden="true">▾</span>
         </div>
       </summary>
-      ${!localStorage.getItem('topbarHintDismissed') ? `
-        <div class="topbar-collapse-bubble" id="topbar-collapse-bubble" role="status" aria-live="polite">
-          <span>Click here to collapse header</span>
-          <button type="button" class="topbar-collapse-bubble-close" aria-label="Dismiss hint">×</button>
-        </div>
-      ` : ''}
       <div class="topbar-shell">
         <div class="topbar-main">
           <div class="topbar-metrics">

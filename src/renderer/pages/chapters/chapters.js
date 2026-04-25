@@ -1115,6 +1115,10 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   populateSectionSelect();
   renderSections();
   renderEditor();
+  if (chapterPublishToggle && getSelectedChapter()) {
+    chapterPublishToggle.disabled = true;
+    chapterPublishToggle.textContent = 'Loading…';
+  }
   bindChapterPanelState();
   contextTabs.forEach((tab) => {
     tab.addEventListener('click', () => {
@@ -1180,4 +1184,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   }
 
   await loadPublishedChapters();
+  renderSections();
+  syncSelectedChapterPublishUI();
 });

@@ -252,7 +252,14 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         });
         if (!nextLabel?.trim()) return;
 
-        section.label = nextLabel.trim();
+        const trimmed = nextLabel.trim();
+        const duplicate = resources.plotSections.some((s) => s.id !== section.id && s.label.toLowerCase() === trimmed.toLowerCase());
+        if (duplicate) {
+          window.requestTextEntry?.({ title: 'Name already used', label: 'A section with that name already exists. Choose a different name.', value: trimmed, confirmLabel: 'OK', placeholder: '' });
+          return;
+        }
+
+        section.label = trimmed;
         const display = sectionTargets.querySelector(`[data-section-label-display="${section.id}"]`);
         if (display) display.textContent = section.label;
         autosave.touch();

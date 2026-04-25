@@ -1315,7 +1315,8 @@ window.showMilestoneCelebration = function showMilestoneCelebration(milestones =
     .filter((n) => !existingIds.has(n.id));
 
   if (fresh.length) {
-    localStorage.setItem(MILESTONE_NOTIFICATIONS_KEY, JSON.stringify([...fresh, ...existing]));
+    const MAX = 50;
+    localStorage.setItem(MILESTONE_NOTIFICATIONS_KEY, JSON.stringify([...fresh, ...existing].slice(0, MAX)));
   }
 };
 window.markAppDirty = function markAppDirty(text = 'Unsaved changes') {

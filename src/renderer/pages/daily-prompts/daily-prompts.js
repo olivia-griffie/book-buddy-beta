@@ -96,6 +96,17 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return shuffled.slice(0, count);
   }
 
+  const CHARACTER_ROLE_LABELS = {
+    protagonist: 'Protagonist',
+    antagonist: 'Antagonist',
+    'love-interest': 'Love Interest',
+    confidant: 'Confidant',
+    deuteragonist: 'Deuteragonist',
+    foil: 'Foil',
+    tertiary: 'Character',
+  };
+  const CHARACTER_ROLE_ORDER = ['protagonist', 'love-interest', 'antagonist', 'confidant', 'deuteragonist', 'foil', 'tertiary'];
+
   function getContextLabel(index, entry) {
     const plotSections = activeProject.plotSections || [];
     const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
@@ -126,16 +137,40 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     const pieces = [];
 
     if (allCharacters.length > 0) {
-      const maxCharacters = Math.min(3, allCharacters.length);
-      const characterCount = allCharacters.length === 1
+      // Sort by role priority so protagonist always surfaces first
+      const sorted = [...allCharacters].sort((a, b) => {
+        const aRole = (a.typeTags || []).find((t) => CHARACTER_ROLE_ORDER.includes(t));
+        const bRole = (b.typeTags || []).find((t) => CHARACTER_ROLE_ORDER.includes(t));
+        const aIdx = aRole !== undefined ? CHARACTER_ROLE_ORDER.indexOf(aRole) : Infinity;
+        const bIdx = bRole !== undefined ? CHARACTER_ROLE_ORDER.indexOf(bRole) : Infinity;
+        return aIdx - bIdx;
+      });
+
+      const maxCharacters = Math.min(3, sorted.length);
+      const characterCount = sorted.length === 1
         ? 1
         : Math.floor(Math.random() * maxCharacters) + 1;
-      const picked = pickRandom(allCharacters, characterCount);
-      const label = picked.length === 1 ? 'Character' : 'Characters';
-      pieces.push(`${label}: ${picked.map((c) => c.name).join(', ')}`);
+
+      // Always include the top-priority character; fill the rest randomly
+      const top = sorted.slice(0, 1);
+      const rest = pickRandom(sorted.slice(1), Math.max(0, characterCount - 1));
+      const picked = [...top, ...rest];
+
+      const charParts = picked.map((c) => {
+        const primaryRole = (c.typeTags || []).find((t) => CHARACTER_ROLE_LABELS[t]);
+        return primaryRole
+          ? `${CHARACTER_ROLE_LABELS[primaryRole]}: ${c.name}`
+          : `Character: ${c.name}`;
+      });
+      pieces.push(charParts.join(' | '));
     }
 
-    if (scene?.title) pieces.push(`Scene: ${scene.title}`);
+    if (scene?.title) {
+      const sceneTags = (scene.tags || []).filter(Boolean).slice(0, 3);
+      pieces.push(sceneTags.length
+        ? `Scene: ${scene.title} [${sceneTags.join(', ')}]`
+        : `Scene: ${scene.title}`);
+    }
     if (location?.name) pieces.push(`Location: ${location.name}`);
     return pieces.length ? pieces.join(' | ') : 'Use this anywhere in the draft.';
   }

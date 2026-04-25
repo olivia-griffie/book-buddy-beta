@@ -97,6 +97,7 @@ body {
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
+  position: relative;
 }
 
 .topbar-summary-chevron {
@@ -139,9 +140,8 @@ body {
 
 .topbar-collapse-bubble {
   position: absolute;
-  top: 100%;
-  right: 80px;
-  margin-top: -2px;
+  top: calc(100% + 10px);
+  right: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -161,7 +161,7 @@ body {
   content: '';
   position: absolute;
   top: -6px;
-  right: 60px;
+  right: 22px;
   border: 6px solid transparent;
   border-bottom-color: var(--ink);
   border-top: none;
