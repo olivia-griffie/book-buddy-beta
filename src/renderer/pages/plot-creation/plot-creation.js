@@ -130,7 +130,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
               <h3 class="plot-section-label" data-section-label-display="${section.id}">${section.label}</h3>
               <p class="bb-collapse__meta">${Number(section.targetWords || 0).toLocaleString()} word target${linkedCount ? ` &middot; ${linkedCount} chapter${linkedCount !== 1 ? 's' : ''}` : ''}</p>
             </div>
-            <span class="plot-section-target-indicator bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+            <span class="plot-section-target-indicator bb-collapse__chevron" aria-hidden="true">▾</span>
           </summary>
           <div class="plot-section-target-body bb-collapse__body">
             <div class="plot-section-target-actions">

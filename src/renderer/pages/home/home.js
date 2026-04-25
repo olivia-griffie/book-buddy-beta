@@ -349,7 +349,7 @@ window.registerPageInit('home', async function () {
             <h3 class="bb-collapse__title">Set daily goal</h3>
             <p class="bb-collapse__meta">${goal.toLocaleString()} words needed to secure your writing streak each day.</p>
           </div>
-          <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+          <span class="bb-collapse__chevron" aria-hidden="true">▾</span>
         </summary>
         <div class="bb-collapse__body">
           <div class="daily-goal-editor">
@@ -368,7 +368,7 @@ window.registerPageInit('home', async function () {
             <h3 class="bb-collapse__title">Weekly chart and monthly calendar</h3>
             <p class="bb-collapse__meta">Open this when you want the broader view without crowding the home screen.</p>
           </div>
-          <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+          <span class="bb-collapse__chevron" aria-hidden="true">▾</span>
         </summary>
         <div class="bb-collapse__body">
           <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
@@ -619,7 +619,7 @@ window.registerPageInit('home', async function () {
                   </div>
                   <button class="btn btn-ghost project-goal-toggle" type="button" data-toggle-goal="${project.id}">
                     Edit Project Goal
-                    <span class="bb-collapse__chevron" aria-hidden="true">âŒ„</span>
+                    <span class="bb-collapse__chevron" aria-hidden="true">▾</span>
                   </button>
                 </div>
                 <div class="project-goal-editor-panel">
