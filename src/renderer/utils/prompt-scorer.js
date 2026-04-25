@@ -76,6 +76,103 @@ const SCENE_TAG_MAP = {
   'ending':             'Resolution',
 };
 
+// Maps storyBeatTags → mood tones (used to infer entry mood when moodTone is absent)
+const BEAT_TO_MOOD = {
+  'Setup':             ['reflective'],
+  'Disruption':        ['tense'],
+  'Internal Conflict': ['vulnerable', 'dark'],
+  'Flashback':         ['reflective'],
+  'Revelation':        ['tense', 'paranoid'],
+  'Crisis':            ['tense', 'dread'],
+  'Climax':            ['tense', 'driven'],
+  'Aftermath':         ['reflective', 'hopeful'],
+  'Resolution':        ['hopeful', 'reflective'],
+};
+
+// Maps characterTags → mood tones (for entry mood inference)
+const CHAR_TAG_TO_MOOD = {
+  'Protagonist Focus':      ['driven'],
+  'Antagonist Presence':    ['tense', 'dark'],
+  'Relationship Tension':   ['intimate', 'tense'],
+  'Mentorship':             ['hopeful', 'intimate'],
+  'Internal Struggle':      ['vulnerable', 'dark'],
+  'Emotional Vulnerability':['vulnerable', 'intimate'],
+  'Identity Conflict':      ['vulnerable', 'paranoid'],
+  'Character Growth':       ['transformative', 'hopeful'],
+  'Moral Dilemma':          ['dark', 'vulnerable'],
+  'Redemption Arc':         ['hopeful', 'transformative'],
+  'Transformation':         ['transformative'],
+  'Isolation':              ['dark', 'paranoid'],
+  'Rebellion':              ['tense', 'driven'],
+  'Guilt':                  ['dark', 'vulnerable'],
+  'Fear-Driven':            ['tense', 'dread'],
+  'Obsession':              ['driven', 'dark'],
+  'Ambition':               ['driven'],
+};
+
+// Maps project signals (narrative tags, roles, scene beats) → mood tones for extraction
+const SIGNAL_TO_MOOD = {
+  // from character narrativeTags (already normalized lowercase)
+  'guilt':                   ['dark', 'vulnerable'],
+  'haunted':                 ['dark', 'dread'],
+  'fear-driven':             ['tense', 'dread'],
+  'fear':                    ['tense', 'dread'],
+  'obsession':               ['driven', 'dark'],
+  'obsessive':               ['driven', 'dark'],
+  'ambition':                ['driven'],
+  'ambitious':               ['driven'],
+  'emotional vulnerability':  ['vulnerable', 'intimate'],
+  'vulnerability':           ['vulnerable'],
+  'emotional':               ['vulnerable'],
+  'redemption arc':          ['hopeful', 'transformative'],
+  'redemption':              ['hopeful', 'transformative'],
+  'character growth':        ['transformative', 'hopeful'],
+  'growth':                  ['transformative', 'hopeful'],
+  'transformation':          ['transformative'],
+  'isolation':               ['dark', 'paranoid'],
+  'isolated':                ['dark', 'paranoid'],
+  'rebellion':               ['tense', 'driven'],
+  'rebel':                   ['tense', 'driven'],
+  'defiant':                 ['tense', 'driven'],
+  'internal struggle':       ['vulnerable', 'dark'],
+  'conflicted':              ['vulnerable', 'dark'],
+  'identity conflict':       ['vulnerable', 'paranoid'],
+  'identity crisis':         ['vulnerable', 'paranoid'],
+  'moral dilemma':           ['dark', 'vulnerable'],
+  'morally grey':            ['dark', 'vulnerable'],
+  'relationship tension':    ['intimate', 'tense'],
+  'tension':                 ['tense'],
+  'mentorship':              ['hopeful', 'intimate'],
+  'mentor':                  ['hopeful', 'intimate'],
+  // from character typeTags (already lowercase)
+  'protagonist':             ['driven'],
+  'antagonist':              ['tense', 'dark'],
+  'love-interest':           ['intimate'],
+  'confidant':               ['intimate', 'hopeful'],
+  // from mapped storyBeatTags (already normalized)
+  'setup':                   ['reflective'],
+  'disruption':              ['tense'],
+  'internal conflict':       ['vulnerable', 'dark'],
+  'flashback':               ['reflective'],
+  'revelation':              ['tense', 'paranoid'],
+  'crisis':                  ['tense', 'dread'],
+  'climax':                  ['tense', 'driven'],
+  'aftermath':               ['reflective', 'hopeful'],
+  'resolution':              ['hopeful'],
+};
+
+// Genre-level baseline moods (fallback when no other signals are present)
+const GENRE_MOOD_BASELINE = {
+  'memoir':                 ['reflective'],
+  'horror':                 ['dread'],
+  'high fantasy':           ['driven'],
+  'action':                 ['driven'],
+  'mystery':                ['tense'],
+  'psychological thriller': ['paranoid', 'tense'],
+  'romance':                ['intimate'],
+  'romance fantasy':        ['intimate', 'hopeful'],
+};
+
 const DRAFT_POSITION_BEATS = [
   { max: 0.12, tags: ['Setup'] },
   { max: 0.25, tags: ['Disruption', 'Internal Conflict'] },
@@ -125,6 +222,57 @@ function extractProjectTags(project) {
   return (project.tags || []).map((t) => String(t).toLowerCase().trim()).filter(Boolean);
 }
 
+function extractMoodTags(project) {
+  const moods = new Set();
+  const characters = project.characters || [];
+  const scenes = project.scenes || [];
+  const genres = (project.genres || []).map((g) => String(g).toLowerCase());
+
+  // Genre baseline
+  genres.forEach((g) => {
+    const baseline = Object.entries(GENRE_MOOD_BASELINE).find(([k]) => g.includes(k));
+    if (baseline) baseline[1].forEach((m) => moods.add(m));
+  });
+
+  // Character signals: typeTags + narrativeTags
+  characters.forEach((char) => {
+    (char.typeTags || []).forEach((role) => {
+      (SIGNAL_TO_MOOD[role.toLowerCase()] || []).forEach((m) => moods.add(m));
+    });
+    (char.narrativeTags || []).forEach((tag) => {
+      (SIGNAL_TO_MOOD[tag.toLowerCase().trim()] || []).forEach((m) => moods.add(m));
+    });
+  });
+
+  // Scene beat signals
+  scenes.forEach((scene) => {
+    (scene.tags || []).forEach((tag) => {
+      const normalized = tag.toLowerCase().trim();
+      const beatKey = SCENE_TAG_MAP[normalized];
+      if (beatKey) {
+        (SIGNAL_TO_MOOD[beatKey.toLowerCase()] || []).forEach((m) => moods.add(m));
+      }
+    });
+  });
+
+  return [...moods];
+}
+
+// Derives effective mood tones for a prompt entry.
+// Uses explicit moodTone if present; otherwise infers from storyBeatTags and characterTags.
+function deriveEntryMoodTags(entry) {
+  if (entry.moodTone?.length) return entry.moodTone;
+
+  const moods = new Set();
+  (entry.storyBeatTags || []).forEach((tag) => {
+    (BEAT_TO_MOOD[tag] || []).forEach((m) => moods.add(m));
+  });
+  (entry.characterTags || []).forEach((tag) => {
+    (CHAR_TAG_TO_MOOD[tag] || []).forEach((m) => moods.add(m));
+  });
+  return [...moods];
+}
+
 function extractDraftPositionTags(project) {
   const goal = Number(project.wordCountGoal || 0);
   const current = Number(project.currentWordCount || 0);
@@ -141,20 +289,30 @@ function scoreEntry(entry, signals) {
 
   const entryCharTags = new Set(entry.characterTags || []);
   const entryBeatTags = new Set(entry.storyBeatTags || []);
+  const entryMoodTags = new Set(deriveEntryMoodTags(entry));
   const entryPromptText = (entry.prompt || '').toLowerCase();
 
+  // Draft position match — highest weight, a writer mid-draft shouldn't get Exposition prompts
   signals.draftPositionTags.forEach((tag) => {
     if (entryBeatTags.has(tag)) score += 10;
   });
 
+  // Scene beat tags — active scene defines the emotional territory
   signals.sceneBeatTags.forEach((tag) => {
     if (entryBeatTags.has(tag)) score += 7;
   });
 
+  // Mood tone intersection — atmosphere the writer is working in
+  signals.moodTags.forEach((mood) => {
+    if (entryMoodTags.has(mood)) score += 4;
+  });
+
+  // Character tag intersection — character context shapes the voice
   signals.characterTags.forEach((tag) => {
     if (entryCharTags.has(tag)) score += 5;
   });
 
+  // Project-level tag fuzzy match — lowest confidence signal
   signals.projectTags.forEach((tag) => {
     if (entryPromptText.includes(tag)) score += 2;
   });
@@ -248,6 +406,7 @@ function selectScoredPrompts({ taggedPool, fallbackPool, project, count = 1, rec
   const signals = {
     characterTags:     extractCharacterTags(project),
     sceneBeatTags:     extractSceneBeatTags(project),
+    moodTags:          extractMoodTags(project),
     projectTags:       extractProjectTags(project),
     draftPositionTags: extractDraftPositionTags(project),
   };
@@ -266,6 +425,7 @@ function debugTopScored(taggedPool, project, topN = 10) {
   const signals = {
     characterTags:     extractCharacterTags(project),
     sceneBeatTags:     extractSceneBeatTags(project),
+    moodTags:          extractMoodTags(project),
     projectTags:       extractProjectTags(project),
     draftPositionTags: extractDraftPositionTags(project),
   };
