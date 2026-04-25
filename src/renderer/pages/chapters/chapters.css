@@ -269,6 +269,20 @@
   align-items: start;
   flex-wrap: wrap;
   gap: 20px;
+  user-select: none;
+}
+
+.chapter-editor-collapse-chevron {
+  font-size: 1.1rem;
+  color: var(--ink-muted);
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+.chapter-editor-card.is-collapsed #chapter-editor-shell,
+.chapter-editor-card.is-collapsed #chapter-editor-empty {
+  display: none !important;
 }
 
 .chapter-selector-row {

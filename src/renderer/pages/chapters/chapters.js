@@ -57,6 +57,33 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const contextContent = document.getElementById('chapter-context-content');
   const contextTabs = [...document.querySelectorAll('[data-context-tab]')];
 
+  const chapterEditorCard = document.querySelector('#chapters-content > section');
+  const chapterEditorHeadToggle = document.getElementById('chapter-editor-head-toggle');
+  const chapterEditorCollapseKey = 'collapse:chapters:editor-card';
+
+  function setChapterEditorCollapsed(collapsed) {
+    chapterEditorCard.classList.toggle('is-collapsed', collapsed);
+    chapterEditorHeadToggle.setAttribute('aria-expanded', String(!collapsed));
+    const chevron = chapterEditorHeadToggle.querySelector('.chapter-editor-collapse-chevron');
+    if (chevron) chevron.textContent = collapsed ? '▸' : '▾';
+    localStorage.setItem(chapterEditorCollapseKey, collapsed ? '1' : '0');
+  }
+
+  const initialCollapsed = localStorage.getItem(chapterEditorCollapseKey) === '1';
+  setChapterEditorCollapsed(initialCollapsed);
+
+  chapterEditorHeadToggle?.addEventListener('click', (e) => {
+    if (e.target.closest('select, button, input')) return;
+    setChapterEditorCollapsed(!chapterEditorCard.classList.contains('is-collapsed'));
+  });
+
+  chapterEditorHeadToggle?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setChapterEditorCollapsed(!chapterEditorCard.classList.contains('is-collapsed'));
+    }
+  });
+
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
   if (!activeProject) {
