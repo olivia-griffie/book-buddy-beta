@@ -146,6 +146,44 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return score;
   }
 
+  function getProtagonist(proj) {
+    return (proj.characters || []).find((c) => (c.typeTags || []).includes('protagonist')) || null;
+  }
+
+  function getAntagonist(proj) {
+    return (proj.characters || []).find((c) => (c.typeTags || []).includes('antagonist')) || null;
+  }
+
+  function getLoveInterest(proj) {
+    return (proj.characters || []).find((c) => (c.typeTags || []).includes('love-interest')) || null;
+  }
+
+  function getMostRecentLocation(proj) {
+    const locations = proj.locations || [];
+    return locations[locations.length - 1] || null;
+  }
+
+  function getActiveScene(proj) {
+    const scenes = proj.scenes || [];
+    return scenes[scenes.length - 1] || null;
+  }
+
+  function personalizePrompt(promptText, proj) {
+    const protagonist = getProtagonist(proj);
+    const antagonist = getAntagonist(proj);
+    const loveInterest = getLoveInterest(proj);
+    const location = getMostRecentLocation(proj);
+    const scene = getActiveScene(proj);
+
+    return promptText
+      .replace(/\bthe protagonist\b/gi, protagonist?.name || 'the protagonist')
+      .replace(/\bthe antagonist\b/gi, antagonist?.name || 'the antagonist')
+      .replace(/\bthe love interest\b/gi, loveInterest?.name || 'the love interest')
+      .replace(/\ba key location\b/gi, location?.name || 'a key location')
+      .replace(/\bthe location\b/gi, location?.name || 'the location')
+      .replace(/\bthe scene\b/gi, scene?.title || 'the scene');
+  }
+
   function weightedPick(pool, count, proj) {
     const scored = pool.map((entry) => ({
       entry,
@@ -619,16 +657,20 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       batch = weightedPick(resources.promptPool, count, activeProject);
     }
 
-    return batch.map((entry, index) => ({
-      id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
-      ...entry,
-      context: getContextLabel(index, entry),
-      assignedChapterId: '',
-      answer: '',
-      answerInsertedAt: '',
-      requiredWordCount: extractPromptWordTarget(entry.prompt),
-      insertedWordCount: 0,
-    }));
+    return batch.map((entry, index) => {
+      const personalizedPrompt = personalizePrompt(entry.prompt, activeProject);
+      return {
+        id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
+        ...entry,
+        prompt: personalizedPrompt,
+        context: getContextLabel(index, entry),
+        assignedChapterId: '',
+        answer: '',
+        answerInsertedAt: '',
+        requiredWordCount: extractPromptWordTarget(personalizedPrompt),
+        insertedWordCount: 0,
+      };
+    });
   }
 
   generateButton.addEventListener('click', async () => {
