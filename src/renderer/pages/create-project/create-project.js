@@ -28,13 +28,20 @@ window.registerPageInit('create-project', async function () {
   const thumbnailStatus = document.getElementById('project-thumbnail-status');
   const visibilityLabel = document.getElementById('project-visibility-label');
   const visibilityChoices = [...document.querySelectorAll('[data-visibility-choice]')];
-  const tagInput = document.getElementById('project-tag-input');
-  const addTagBtn = document.getElementById('add-tag-btn');
-  const tagsList = document.getElementById('project-tags-list');
+  const tagManagerContainer = document.getElementById('create-project-tag-manager');
 
   let thumbnailData = '';
-  let projectTags = [];
   let isPublic = false;
+
+  let tagManager = null;
+  if (tagManagerContainer) {
+    tagManager = window.createTagManager({
+      container: tagManagerContainer,
+      initialTags: [],
+      label: 'Story Tags',
+      hint: 'Add tags so readers can find your story — tropes, tone, fandom, anything.',
+    });
+  }
 
   function setFormMessage(message = '') {
     if (!formMessage) return;
@@ -43,6 +50,7 @@ window.registerPageInit('create-project', async function () {
   }
 
   function syncVisibilityChoiceState() {
+
     visibilityChoices.forEach((button) => {
       const choiceIsPublic = button.dataset.visibilityChoice === 'public';
       const isActive = choiceIsPublic === isPublic;
@@ -56,41 +64,6 @@ window.registerPageInit('create-project', async function () {
         : 'Private - only you can see this project.';
     }
   }
-
-  function renderTags() {
-    tagsList.innerHTML = projectTags.map((tag) => `
-      <span class="project-tag-chip">
-        <span>${tag}</span>
-        <button type="button" class="project-tag-remove" data-remove-tag="${tag}" aria-label="Remove tag ${tag}">x</button>
-      </span>
-    `).join('');
-
-    tagsList.querySelectorAll('[data-remove-tag]').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        projectTags = projectTags.filter((tag) => tag !== btn.dataset.removeTag);
-        renderTags();
-      });
-    });
-  }
-
-  function addTag() {
-    const raw = tagInput.value.replace(/,/g, '').trim();
-    if (!raw) return;
-    if (!projectTags.includes(raw)) {
-      projectTags = [...projectTags, raw];
-      renderTags();
-    }
-    tagInput.value = '';
-    tagInput.focus();
-  }
-
-  tagInput?.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter' || event.key === ',') {
-      event.preventDefault();
-      addTag();
-    }
-  });
-  addTagBtn?.addEventListener('click', addTag);
 
   function normalizeGenre(value = '') {
     if (typeof window.normalizeGenreKey === 'function') {
@@ -253,7 +226,7 @@ window.registerPageInit('create-project', async function () {
       subtitle: String(formData.get('subtitle') || '').trim(),
       authorName: String(formData.get('authorName') || '').trim(),
       genres: selectedGenres,
-      tags: projectTags,
+      tags: tagManager?.getTags() ?? [],
       wordCountGoal: Number(formData.get('wordCountGoal') || 0),
       targetCompletionDate: String(formData.get('targetCompletionDate') || '').trim(),
       currentWordCount: 0,

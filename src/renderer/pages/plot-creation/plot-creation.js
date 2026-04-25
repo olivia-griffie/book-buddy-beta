@@ -66,11 +66,25 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   });
   let chapters = activeProject.chapters || [];
 
+  const tagManagerContainer = document.getElementById('plot-tag-manager');
+  let plotTagManager = null;
+  if (tagManagerContainer) {
+    plotTagManager = window.createTagManager({
+      container: tagManagerContainer,
+      initialTags: activeProject.tags || [],
+      label: 'Story Tags',
+      hint: 'Tags help readers find your story in the community. Free-form — type anything.',
+      onChange: () => autosave.touch(),
+    });
+    tagManagerContainer.querySelector('.tm-root')?.classList.add('tm-inline');
+  }
+
   const autosave = window.createAutosaveController(async () => {
     const updatedProject = {
       ...activeProject,
       chapters,
       plotSections: resources.plotSections,
+      tags: plotTagManager?.getTags() ?? activeProject.tags ?? [],
       plotWorkbook: {
         outline: window.getEditorFieldValue(outlineInput),
         premise: window.getEditorFieldValue(premiseInput),
@@ -81,7 +95,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     };
 
     activeProject = await window.saveProjectData(updatedProject, {
-      dirtyFields: ['chapters', 'plotSections', 'plotWorkbook'],
+      dirtyFields: ['chapters', 'plotSections', 'plotWorkbook', 'tags'],
     });
     chapters = activeProject.chapters || [];
     saveMessage.textContent = 'Plot notes autosaved.';
@@ -478,6 +492,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         ...activeProject,
         chapters,
         plotSections: resources.plotSections,
+        tags: plotTagManager?.getTags() ?? activeProject.tags ?? [],
         plotWorkbook: {
           outline: window.getEditorFieldValue(outlineInput),
           premise: window.getEditorFieldValue(premiseInput),
@@ -488,7 +503,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
       };
 
       activeProject = await window.saveProjectData(updatedProject, {
-        dirtyFields: ['chapters', 'plotSections', 'plotWorkbook'],
+        dirtyFields: ['chapters', 'plotSections', 'plotWorkbook', 'tags'],
       });
       chapters = activeProject.chapters || [];
       saveMessage.textContent = 'Plot notes saved.';

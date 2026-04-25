@@ -93,6 +93,7 @@ window.registerPageInit('community', async function () {
       authorHandle: project.profiles?.username || author.toLowerCase().replace(/\s+/g, '_'),
       title: content.title || 'Untitled',
       genres: content.genres || [],
+      tags: content.tags || [],
       blurb: buildBlurb(project),
       initials: getInitials(author),
       avatarColor: getAvatarColor(project.owner_id || project.profiles?.id),
@@ -139,6 +140,7 @@ window.registerPageInit('community', async function () {
   let activeChapter = null;
   let likeState = { count: 0, likedByMe: false };
   let activePrompt = null;
+  let activeTagFilters = new Set();
 
   function canMessageAuthor(authorId) {
     return Boolean(authorId && currentUserId && authorId !== currentUserId);
@@ -486,6 +488,17 @@ window.registerPageInit('community', async function () {
             ${projectMeta.genres.map((genre) => `<span class="community-tag">${escapeHtml(genre)}</span>`).join('')}
           </div>
         ` : ''}
+        ${projectMeta.tags?.length ? `
+          <div class="community-card-tags">
+            ${projectMeta.tags.slice(0, 5).map((tag) => `
+              <button
+                type="button"
+                class="community-card-tag ${activeTagFilters.has(tag.toLowerCase()) ? 'is-active' : ''}"
+                data-tag-filter="${escapeHtml(tag.toLowerCase())}"
+              >${escapeHtml(tag)}</button>
+            `).join('')}
+          </div>
+        ` : ''}
         <div class="community-chapter-strip">
           ${chaptersMarkup}
         </div>
@@ -771,6 +784,38 @@ window.registerPageInit('community', async function () {
     }
   });
 
+  function renderTagFilterBar() {
+    const bar = document.getElementById('community-tag-filter-bar');
+    const activeFiltersEl = document.getElementById('community-active-tag-filters');
+    if (!bar || !activeFiltersEl) return;
+
+    if (activeTagFilters.size === 0) {
+      bar.style.display = 'none';
+      return;
+    }
+
+    bar.style.display = 'flex';
+    activeFiltersEl.innerHTML = [...activeTagFilters].map((tag) => `
+      <button type="button" class="community-tag-filter-chip" data-filter-tag="${escapeHtml(tag)}">
+        ${escapeHtml(tag)} <span aria-hidden="true">&times;</span>
+      </button>
+    `).join('');
+
+    activeFiltersEl.querySelectorAll('[data-filter-tag]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        activeTagFilters.delete(btn.dataset.filterTag);
+        renderTagFilterBar();
+        renderList();
+      });
+    });
+  }
+
+  document.getElementById('community-clear-tag-filters')?.addEventListener('click', () => {
+    activeTagFilters.clear();
+    renderTagFilterBar();
+    renderList();
+  });
+
   function renderStoryList(filtered) {
     updateFavoritesBadge();
     promptFormCard.style.display = 'none';
@@ -804,6 +849,20 @@ window.registerPageInit('community', async function () {
 
     grid.querySelectorAll('[data-fav-btn]').forEach((btn) => {
       btn.addEventListener('click', () => toggleFavorite(btn.dataset.favBtn));
+    });
+
+    grid.querySelectorAll('[data-tag-filter]').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tag = btn.dataset.tagFilter;
+        if (activeTagFilters.has(tag)) {
+          activeTagFilters.delete(tag);
+        } else {
+          activeTagFilters.add(tag);
+        }
+        renderTagFilterBar();
+        renderList();
+      });
     });
 
     const openFromDataset = (projectId, chapterId) => {
@@ -938,9 +997,13 @@ window.registerPageInit('community', async function () {
         projectMeta.authorHandle,
         projectMeta.blurb,
         ...(projectMeta.genres || []),
+        ...(projectMeta.tags || []),
       ].join(' ').toLowerCase();
       const matchesQuery = !normalizedQuery || haystack.includes(normalizedQuery);
-      return matchesFavorites && matchesQuery;
+      const matchesTags = activeTagFilters.size === 0 || [...activeTagFilters].every((filterTag) =>
+        (projectMeta.tags || []).some((pt) => pt.toLowerCase().includes(filterTag)),
+      );
+      return matchesFavorites && matchesQuery && matchesTags;
     });
 
     renderStoryList(filteredStories);

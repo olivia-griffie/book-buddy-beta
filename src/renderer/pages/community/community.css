@@ -842,3 +842,96 @@ body.dark-mode .community-card-footer {
     padding: 0 16px;
   }
 }
+
+/* ——————————————————————————————————————————————————————————————————————————
+   Tag filter bar
+—————————————————————————————————————————————————————————————————————————— */
+
+.community-tag-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.community-tag-filter-label {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.community-active-tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.community-tag-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 138, 61, 0.12);
+  border: 1px solid rgba(255, 138, 61, 0.4);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.community-tag-filter-chip:hover {
+  background: rgba(255, 138, 61, 0.22);
+}
+
+/* ——————————————————————————————————————————————————————————————————————————
+   Story card tags (clickable, below genre pills)
+—————————————————————————————————————————————————————————————————————————— */
+
+.community-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.community-card-tag {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-step, #f8f2ea);
+  color: var(--ink-muted);
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.community-card-tag:hover {
+  border-color: rgba(79, 242, 201, 0.5);
+  background: rgba(79, 242, 201, 0.09);
+  color: var(--ink);
+}
+
+.community-card-tag.is-active {
+  background: rgba(255, 138, 61, 0.12);
+  border-color: rgba(255, 138, 61, 0.45);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+body.dark-mode .community-card-tag {
+  background: var(--surface-input);
+  border-color: var(--border);
+  color: var(--ink-muted);
+}
+
+body.dark-mode .community-card-tag:hover {
+  color: var(--ink);
+}
