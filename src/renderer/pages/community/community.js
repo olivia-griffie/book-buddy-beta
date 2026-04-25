@@ -23,6 +23,16 @@ window.registerPageInit('community', async function () {
 
   const avatarColors = ['#ff6a5a', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
 
+  function getAvatarColor(id) {
+    const value = String(id || '');
+    let hash = 0;
+    for (let i = 0; i < value.length; i += 1) {
+      hash = ((hash << 5) - hash) + value.charCodeAt(i);
+      hash |= 0;
+    }
+    return avatarColors[Math.abs(hash) % avatarColors.length];
+  }
+
   function escapeHtml(str) {
     return String(str || '')
       .replace(/&/g, '&amp;')
@@ -85,7 +95,7 @@ window.registerPageInit('community', async function () {
       genres: content.genres || [],
       blurb: buildBlurb(project),
       initials: getInitials(author),
-      avatarColor: avatarColors[index % avatarColors.length],
+      avatarColor: getAvatarColor(project.owner_id || project.profiles?.id),
       chapterCount: chapters.length,
       wordCount: countWords(project),
       latestChapter,
@@ -108,7 +118,7 @@ window.registerPageInit('community', async function () {
       createdAt: prompt.created_at,
       updatedAt: prompt.updated_at,
       initials: getInitials(author),
-      avatarColor: avatarColors[index % avatarColors.length],
+      avatarColor: getAvatarColor(prompt.user_id || prompt.profiles?.id),
       raw: prompt,
     };
   }

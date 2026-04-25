@@ -277,7 +277,7 @@ window.registerPageInit('inbox', async function () {
   function likeMarkup(item) {
     return `
       <div class="inbox-item-main">
-        <div class="inbox-avatar" style="background:${getAvatarColor(item.id)};">${escapeHtml(getInitials(item.author))}</div>
+        <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
             <span class="inbox-actor">@${escapeHtml(item.author)}</span>
@@ -328,7 +328,7 @@ window.registerPageInit('inbox', async function () {
   function promptMarkup(item) {
     return `
       <div class="inbox-item-main">
-        <div class="inbox-avatar" style="background:${getAvatarColor(item.id)};">${escapeHtml(getInitials(item.author))}</div>
+        <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
             <span class="inbox-actor">@${escapeHtml(item.author)}</span>
@@ -354,7 +354,7 @@ window.registerPageInit('inbox', async function () {
 
     return `
       <div class="inbox-item-main">
-        <div class="inbox-avatar" style="background:${getAvatarColor(item.id)};">${escapeHtml(getInitials(item.author))}</div>
+        <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
             <span class="inbox-actor">@${escapeHtml(item.author)}</span>

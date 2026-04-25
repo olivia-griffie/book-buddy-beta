@@ -271,14 +271,14 @@ async function getAuthorNotifications(userId, accessToken) {
       ? restReq('GET', `published_chapters?project_id=in.(${ids})&select=chapter_id,chapter_title,project_id`, null, accessToken).catch(() => [])
       : Promise.resolve([]),
     ids
-      ? restReq('GET', `comments?project_id=in.(${ids})&select=id,content,chapter_ref,created_at,project_id,parent_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
+      ? restReq('GET', `comments?project_id=in.(${ids})&select=id,content,chapter_ref,created_at,project_id,parent_id,profiles!user_id(id,username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
       : Promise.resolve([]),
     ids
-      ? restReq('GET', `likes?project_id=in.(${ids})&select=id,chapter_ref,created_at,project_id,profiles!user_id(username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
+      ? restReq('GET', `likes?project_id=in.(${ids})&select=id,chapter_ref,created_at,project_id,profiles!user_id(id,username,display_name)&order=created_at.desc&limit=40`, null, accessToken).catch(() => [])
       : Promise.resolve([]),
     restReq(
       'GET',
-      `community_prompt_completions?author_id=eq.${encodeFilterValue(userId)}&select=id,prompt_id,project_title,chapter_title,word_count,created_at,community_prompts!prompt_id(prompt,genre,plot_point),profiles!responder_id(username,display_name)&order=created_at.desc&limit=40`,
+      `community_prompt_completions?author_id=eq.${encodeFilterValue(userId)}&select=id,prompt_id,project_title,chapter_title,word_count,created_at,community_prompts!prompt_id(prompt,genre,plot_point),profiles!responder_id(id,username,display_name)&order=created_at.desc&limit=40`,
       null,
       accessToken,
     ).catch(() => []),
@@ -293,6 +293,7 @@ async function getAuthorNotifications(userId, accessToken) {
     ...(comments || []).map((c) => ({
       type: 'comment',
       id: c.id,
+      userId: c.profiles?.id || null,
       parentId: c.parent_id || null,
       projectId: c.project_id,
       projectTitle: projectMap[c.project_id] || 'Untitled',
@@ -305,6 +306,7 @@ async function getAuthorNotifications(userId, accessToken) {
     ...(likes || []).map((l) => ({
       type: 'like',
       id: l.id,
+      userId: l.profiles?.id || null,
       projectId: l.project_id,
       projectTitle: projectMap[l.project_id] || 'Untitled',
       chapterId: l.chapter_ref,
@@ -315,6 +317,7 @@ async function getAuthorNotifications(userId, accessToken) {
     ...(promptCompletions || []).map((entry) => ({
       type: 'prompt',
       id: entry.id,
+      userId: entry.profiles?.id || null,
       promptId: entry.prompt_id,
       prompt: entry.community_prompts?.prompt || '',
       genre: entry.community_prompts?.genre || '',
