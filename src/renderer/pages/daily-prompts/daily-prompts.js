@@ -293,11 +293,22 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     }
   }
 
+  function getSectionDescription(entry) {
+    const plotSections = activeProject.plotSections || [];
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+    const matched = entry?.plotPoint
+      ? plotSections.find((s) => normalize(s.label) === normalize(entry.plotPoint))
+      : null;
+    return matched?.description ? String(matched.description).trim() : '';
+  }
+
   function renderPromptCards(entries) {
     resultsGrid.innerHTML = entries.length
-      ? entries.map((entry, index) => `
+      ? entries.map((entry, index) => {
+        const sectionDesc = getSectionDescription(entry);
+        return `
         <article class="beat-card daily-prompt-card ui-card ui-card-soft ui-card-stack">
-          <h4>${index + 1}. ${entry.plotPoint}</h4>
+          <h4>${index + 1}. ${entry.plotPoint}${sectionDesc ? `: <span class="prompt-section-desc">${sectionDesc}</span>` : ''}</h4>
           <p class="genre-pill">${entry.genre}</p>
           <p class="prompt-callout">${entry.prompt}</p>
           <p>${entry.context || 'Use this anywhere in the draft.'}</p>
@@ -334,7 +345,8 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
             </p>
           </div>
         </article>
-      `).join('')
+      `;
+      }).join('')
       : '<p>No prompts found for this project yet.</p>';
 
     window.initializeTextEditor(resultsGrid);

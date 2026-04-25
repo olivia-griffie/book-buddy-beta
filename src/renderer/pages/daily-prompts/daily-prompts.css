@@ -99,6 +99,12 @@
 }
 
 
+.daily-prompt-card h4 .prompt-section-desc {
+  font-weight: 400;
+  opacity: 0.75;
+  font-size: 0.9em;
+}
+
 .daily-prompt-card .prompt-callout {
   background: rgba(79, 242, 201, 0.1);
   border: 1px solid rgba(79, 242, 201, 0.2);
