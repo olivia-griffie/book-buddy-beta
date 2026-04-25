@@ -365,6 +365,12 @@ function setupAutoUpdater() {
 
   autoUpdater.autoDownload = true;
   autoUpdater.autoInstallOnAppQuit = true;
+  autoUpdater.logger = null;
+  autoUpdater.signals.progress((progress) => {
+    mainWindow?.webContents.send('update:progress', {
+      percent: Math.round(progress.percent),
+    });
+  });
 
   setTimeout(() => {
     autoUpdater.checkForUpdates().catch((err) => {
@@ -380,12 +386,6 @@ function setupAutoUpdater() {
     mainWindow?.webContents.send('update:available', {
       version: info.version,
       releaseNotes: info.releaseNotes || '',
-    });
-  });
-
-  autoUpdater.on('download-progress', (progress) => {
-    mainWindow?.webContents.send('update:progress', {
-      percent: Math.round(progress.percent),
     });
   });
 
