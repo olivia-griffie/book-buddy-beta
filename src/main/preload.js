@@ -36,7 +36,7 @@ contextBridge.exposeInMainWorld('api', {
   auth: {
     getSession: () => ipcRenderer.invoke('auth:getSession'),
     login: (email, password) => ipcRenderer.invoke('auth:login', { email, password }),
-    signup: (email, password, username) => ipcRenderer.invoke('auth:signup', { email, password, username }),
+    signup: (email, password, displayName) => ipcRenderer.invoke('auth:signup', { email, password, displayName }),
     refresh: () => ipcRenderer.invoke('auth:refresh'),
     logout: () => ipcRenderer.invoke('auth:logout'),
   },

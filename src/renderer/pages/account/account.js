@@ -3,8 +3,8 @@ window.registerPageInit('account', async function () {
     const session = await window.api.auth.getSession();
     const user = session?.user ?? session;
     const meta = user?.user_metadata || {};
-    document.getElementById('account-display-name').textContent = meta.username || user?.email || 'Your Account';
-    document.getElementById('account-username').textContent = meta.username || '—';
+    document.getElementById('account-display-name').textContent = meta.display_name || 'Your Account';
+    document.getElementById('account-profile-display-name').textContent = meta.display_name || '---';
     document.getElementById('account-email').textContent = user?.email || '—';
   } catch {}
 

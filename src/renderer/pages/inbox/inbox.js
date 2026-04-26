@@ -26,12 +26,12 @@ window.registerPageInit('inbox', async function () {
   const storageKey = 'bb-inbox-read-items';
   const unreadStateKey = 'bb-inbox-unread-state';
   const openConversationKey = 'bb-inbox-open-conversation';
-  const avatarPalette = ['#ff6a5a', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
+  const avatarPalette = ['#ff4d95', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
 
   const session = await window.api.auth.getSession().catch(() => null);
   const currentUser = session?.user || session || null;
   const currentUserId = currentUser?.id || null;
-  const currentUserName = currentUser?.user_metadata?.username || currentUser?.email || 'You';
+  const currentUserName = currentUser?.user_metadata?.display_name || 'You';
 
   let activeMode = 'messages';
   let activeFilter = 'all';
@@ -175,8 +175,7 @@ window.registerPageInit('inbox', async function () {
     threadList.innerHTML = conversations.map((conversation) => {
       const isActive = conversation.id === selectedConversationId;
       const unreadCount = Number(conversation.unreadCount || 0);
-      const displayName = conversation.otherUser?.displayName || conversation.otherUser?.username || 'Unknown writer';
-      const handle = conversation.otherUser?.username ? `@${conversation.otherUser.username}` : 'Private conversation';
+      const displayName = conversation.otherUser?.displayName || 'Unknown writer';
       return `
         <button class="inbox-thread-row ${isActive ? 'is-active' : ''} ${unreadCount ? 'is-unread' : ''}" type="button" data-thread-id="${escapeHtml(conversation.id)}">
           <div class="inbox-thread-avatar" style="background:${getAvatarColor(conversation.otherUser?.id || conversation.id)};">${escapeHtml(getInitials(displayName))}</div>
@@ -185,7 +184,7 @@ window.registerPageInit('inbox', async function () {
               <span class="inbox-thread-name">${escapeHtml(displayName)}</span>
               <span class="inbox-thread-time">${escapeHtml(formatThreadTime(conversation.lastMessageAt))}</span>
             </div>
-            <p class="inbox-thread-handle-row">${escapeHtml(handle)}</p>
+            <p class="inbox-thread-handle-row">Private conversation</p>
             <p class="inbox-thread-preview">${escapeHtml(conversation.lastMessagePreview || 'No messages yet')}</p>
           </div>
           ${unreadCount ? `<span class="inbox-thread-badge">${unreadCount}</span>` : ''}
@@ -210,8 +209,8 @@ window.registerPageInit('inbox', async function () {
 
     threadEmpty.style.display = 'none';
     threadView.style.display = 'grid';
-    threadTitle.textContent = conversation.otherUser?.displayName || conversation.otherUser?.username || 'Conversation';
-    threadHandle.textContent = conversation.otherUser?.username ? `@${conversation.otherUser.username}` : 'Private conversation';
+    threadTitle.textContent = conversation.otherUser?.displayName || 'Conversation';
+    threadHandle.textContent = 'Private conversation';
     composerInput.value = draftsByConversation[selectedConversationId] || '';
     sendBtn.disabled = sendingConversationId === selectedConversationId;
     sendBtn.textContent = sendingConversationId === selectedConversationId ? 'Sending...' : 'Send';
@@ -235,7 +234,7 @@ window.registerPageInit('inbox', async function () {
       const isMine = message.senderId === currentUserId;
       const senderName = isMine
         ? currentUserName
-        : (message.sender?.display_name || message.sender?.username || conversation.otherUser?.displayName || 'Writer');
+        : (message.sender?.display_name || conversation.otherUser?.displayName || 'Writer');
       return `
         <article class="inbox-message ${isMine ? 'is-mine' : ''} ${message.isPending ? 'is-pending' : ''}">
           <div class="inbox-message-bubble">
@@ -280,7 +279,7 @@ window.registerPageInit('inbox', async function () {
         <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
-            <span class="inbox-actor">@${escapeHtml(item.author)}</span>
+            <span class="inbox-actor">${escapeHtml(item.author)}</span>
             <span class="inbox-badge inbox-badge-like">Like</span>
             <span class="inbox-time">${timeAgo(item.createdAt)}</span>
           </div>
@@ -331,7 +330,7 @@ window.registerPageInit('inbox', async function () {
         <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
-            <span class="inbox-actor">@${escapeHtml(item.author)}</span>
+            <span class="inbox-actor">${escapeHtml(item.author)}</span>
             <span class="inbox-badge inbox-badge-favorite">Prompt</span>
             <span class="inbox-time">${timeAgo(item.createdAt)}</span>
           </div>
@@ -357,7 +356,7 @@ window.registerPageInit('inbox', async function () {
         <div class="inbox-avatar" style="background:${getAvatarColor(item.userId || item.author)};">${escapeHtml(getInitials(item.author))}</div>
         <div class="inbox-item-body">
           <div class="inbox-meta">
-            <span class="inbox-actor">@${escapeHtml(item.author)}</span>
+            <span class="inbox-actor">${escapeHtml(item.author)}</span>
             <span class="inbox-badge inbox-badge-comment">Comment</span>
             <span class="inbox-time">${timeAgo(item.createdAt)}</span>
           </div>
@@ -378,7 +377,7 @@ window.registerPageInit('inbox', async function () {
         </div>
       ` : `
         <div class="inbox-reply-form">
-          <textarea class="inbox-reply-input" rows="2" placeholder="Reply to @${escapeHtml(item.author)}..." data-reply-input="${escapeHtml(item.id)}">${escapeHtml(replyDrafts[item.id] || '')}</textarea>
+          <textarea class="inbox-reply-input" rows="2" placeholder="Reply to ${escapeHtml(item.author)}..." data-reply-input="${escapeHtml(item.id)}">${escapeHtml(replyDrafts[item.id] || '')}</textarea>
           <div class="inbox-reply-actions">
             <button class="btn btn-save" type="button" data-reply-submit="${escapeHtml(item.id)}" ${isPending ? 'disabled' : ''}>${isPending ? 'Sending...' : 'Send Reply'}</button>
             <button class="btn btn-ghost" type="button" data-reply-cancel="${escapeHtml(item.id)}">Cancel</button>
@@ -594,7 +593,6 @@ window.registerPageInit('inbox', async function () {
       createdAt: timestamp,
       readAt: null,
       sender: {
-        username: currentUser?.user_metadata?.username || '',
         display_name: currentUser?.user_metadata?.display_name || currentUserName,
       },
       isPending: true,

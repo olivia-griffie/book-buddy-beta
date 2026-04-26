@@ -3,15 +3,15 @@
   --ink: #2f3545;
   --ink-soft: #525a6d;
   --ink-muted: #7d8496;
-  --sage: #ff6a5a;
+  --sage: #ff4d95;
   --sage-light: #ff8a3d;
   --sage-deep: #ff4d95;
   --accent-orange: #ff8a3d;
-  --accent-coral: #ff6a5a;
+  --accent-coral: #ff4d95;
   --accent-pink: #ff7eb8;
   --accent-mint: #4ff2c9;
-  --border: #f0cfc3;
-  --border-soft: #f6ddd5;
+  --border: #f7c4dc;
+  --border-soft: #fbd8e8;
   --shadow-card: 0 8px 18px rgba(47, 53, 69, 0.06);
   --shadow-lift: 0 12px 24px rgba(47, 53, 69, 0.12);
   --radius-sm: 6px;
@@ -21,7 +21,7 @@
   --space-lg: 24px;
   --duration: 180ms;
   --ease: ease;
-  --font-display: Georgia, 'Times New Roman', serif;
+  --font-display: 'Pacifico', cursive;
   --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   /* Surface tokens (overridden in dark mode) */

@@ -173,7 +173,7 @@
 
 .rich-text-editor-shell:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
 }
 
 .rich-text-editor-shell p,

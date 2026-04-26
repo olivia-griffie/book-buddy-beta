@@ -38,14 +38,14 @@ async function signOut(accessToken) {
   }).catch(() => {});
 }
 
-async function signUp(email, password, username) {
+async function signUp(email, password, displayName) {
   const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'apikey': SUPABASE_ANON_KEY,
     },
-    body: JSON.stringify({ email, password, data: { username } }),
+    body: JSON.stringify({ email, password, data: { display_name: displayName } }),
   });
 
   const data = await res.json();

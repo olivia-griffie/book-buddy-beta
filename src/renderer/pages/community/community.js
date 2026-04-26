@@ -21,7 +21,7 @@ window.registerPageInit('community', async function () {
   const promptUseBtn = document.getElementById('community-prompt-use-btn');
   const promptFavoriteToggle = document.getElementById('community-prompt-favorite-toggle');
 
-  const avatarColors = ['#ff6a5a', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
+  const avatarColors = ['#ff4d95', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
 
   function getAvatarColor(id) {
     const value = String(id || '');
@@ -82,7 +82,7 @@ window.registerPageInit('community', async function () {
 
   function buildProjectMeta(project, index) {
     const content = project.content || {};
-    const author = project.profiles?.display_name || project.profiles?.username || 'Unknown Author';
+    const author = project.profiles?.display_name || 'Unknown Author';
     const chapters = project.published_chapters || [];
     const latestChapter = chapters[chapters.length - 1] || null;
 
@@ -90,7 +90,6 @@ window.registerPageInit('community', async function () {
       id: project.id,
       authorId: project.owner_id || project.profiles?.id || null,
       author,
-      authorHandle: project.profiles?.username || author.toLowerCase().replace(/\s+/g, '_'),
       title: content.title || 'Untitled',
       genres: content.genres || [],
       tags: content.tags || [],
@@ -106,12 +105,11 @@ window.registerPageInit('community', async function () {
   }
 
   function buildPromptMeta(prompt, index) {
-    const author = prompt.profiles?.display_name || prompt.profiles?.username || 'Unknown Writer';
+    const author = prompt.profiles?.display_name || 'Unknown Writer';
     return {
       id: prompt.id,
       authorId: prompt.user_id,
       author,
-      authorHandle: prompt.profiles?.username || author.toLowerCase().replace(/\s+/g, '_'),
       genre: prompt.genre || '',
       plotPoint: prompt.plot_point || 'Community Prompt',
       prompt: prompt.prompt || '',
@@ -296,7 +294,7 @@ window.registerPageInit('community', async function () {
     list.innerHTML = topLevel.map((c) => `
       <div class="reader-comment" data-comment-id="${escapeHtml(c.id)}">
         <div class="reader-comment-header">
-          <span class="reader-comment-author">${escapeHtml(c.profiles?.display_name || c.profiles?.username || 'Anonymous')}</span>
+          <span class="reader-comment-author">${escapeHtml(c.profiles?.display_name || 'Anonymous')}</span>
           <span class="reader-comment-date">${formatDateTime(c.created_at)}</span>
         </div>
         <p class="reader-comment-body">${escapeHtml(c.content)}</p>
@@ -311,7 +309,7 @@ window.registerPageInit('community', async function () {
         ${(replies[c.id] || []).map((r) => `
           <div class="reader-comment reader-reply">
             <div class="reader-comment-header">
-              <span class="reader-comment-author">${escapeHtml(r.profiles?.display_name || r.profiles?.username || 'Anonymous')}</span>
+              <span class="reader-comment-author">${escapeHtml(r.profiles?.display_name || 'Anonymous')}</span>
               <span class="reader-comment-date">${formatDateTime(r.created_at)}</span>
             </div>
             <p class="reader-comment-body">${escapeHtml(r.content)}</p>
@@ -367,12 +365,12 @@ window.registerPageInit('community', async function () {
     document.getElementById('reader-project-name').textContent = project.content?.title || 'Untitled';
     document.getElementById('reader-chapter-name').textContent = chapter.chapter_title || 'Chapter';
     document.getElementById('reader-chapter-title').textContent = chapter.chapter_title || 'Chapter';
-    document.getElementById('reader-author-name').textContent = project.profiles?.display_name || project.profiles?.username || 'Unknown Author';
+    document.getElementById('reader-author-name').textContent = project.profiles?.display_name || 'Unknown Author';
     document.getElementById('reader-published-at').textContent = `Published ${formatDate(chapter.published_at)}`;
     const messageAuthorBtn = document.getElementById('reader-message-author');
     const authorContactShell = document.getElementById('reader-author-contact');
     const authorContactText = document.getElementById('reader-author-contact-text');
-    const authorName = project.profiles?.display_name || project.profiles?.username || 'this author';
+    const authorName = project.profiles?.display_name || 'this author';
     if (messageAuthorBtn && authorContactShell && authorContactText) {
       const showAuthorContact = shouldShowAuthorContact(project.owner_id);
       authorContactShell.style.display = showAuthorContact ? 'flex' : 'none';
@@ -466,7 +464,7 @@ window.registerPageInit('community', async function () {
             <div class="community-author-avatar" style="background:${projectMeta.avatarColor};">${escapeHtml(projectMeta.initials)}</div>
             <div class="community-author-meta">
               <div class="community-author-line">
-                <p class="community-author-name">@${escapeHtml(projectMeta.authorHandle)}</p>
+                <p class="community-author-name">${escapeHtml(projectMeta.author)}</p>
                 ${authorContactMarkup(projectMeta.authorId)}
               </div>
               <h2 class="community-card-title">${escapeHtml(projectMeta.title)}</h2>
@@ -981,7 +979,6 @@ window.registerPageInit('community', async function () {
           promptMeta.plotPoint,
           promptMeta.prompt,
           promptMeta.author,
-          promptMeta.authorHandle,
         ].join(' ').toLowerCase();
         return !normalizedQuery || haystack.includes(normalizedQuery);
       });
@@ -994,7 +991,6 @@ window.registerPageInit('community', async function () {
       const haystack = [
         projectMeta.title,
         projectMeta.author,
-        projectMeta.authorHandle,
         projectMeta.blurb,
         ...(projectMeta.genres || []),
         ...(projectMeta.tags || []),

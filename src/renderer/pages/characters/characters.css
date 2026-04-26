@@ -183,7 +183,7 @@
 .character-type-tag:hover,
 .character-type-tag:focus-visible {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
   outline: none;
 }
  

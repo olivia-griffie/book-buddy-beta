@@ -215,8 +215,8 @@
 }
 
 .chapter-row-delete:hover {
-  border-color: #c0392b;
-  color: #c0392b;
+  border-color: #c21866;
+  color: #c21866;
 }
 
 .chapter-row-publish {
@@ -225,7 +225,7 @@
   border: 1px solid var(--sage-light, #a8c5a0);
   border-radius: 8px;
   background: transparent;
-  color: var(--sage, #5a8f6a);
+  color: var(--sage, #ff4d95);
   font: inherit;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
@@ -256,7 +256,7 @@
   flex-shrink: 0;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--sage, #5a8f6a);
+  color: var(--sage, #ff4d95);
   white-space: nowrap;
 }
 
@@ -340,16 +340,16 @@
 
 .chapter-publish-status.is-published {
   background: rgba(90, 143, 106, 0.14);
-  color: var(--sage, #5a8f6a);
+  color: var(--sage, #ff4d95);
 }
 
 .chapter-publish-toggle {
   min-height: 42px;
   padding: 0 18px;
   border-color: var(--accent-coral);
-  background: linear-gradient(135deg, #ff8a61 0%, #ff6b5f 100%);
+  background: linear-gradient(135deg, #ff9f63 0%, #ff8a3d 100%);
   color: #fff;
-  box-shadow: 0 10px 22px rgba(255, 107, 95, 0.22);
+  box-shadow: 0 10px 22px rgba(255, 138, 61, 0.22);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -359,16 +359,16 @@
 
 .chapter-publish-toggle:hover,
 .chapter-publish-toggle:focus-visible {
-  border-color: #f05d52;
-  background: linear-gradient(135deg, #ff7d57 0%, #f05d52 100%);
+  border-color: #e66f1f;
+  background: linear-gradient(135deg, #ff9f63 0%, #e66f1f 100%);
   color: #fff;
-  box-shadow: 0 14px 28px rgba(255, 107, 95, 0.28);
+  box-shadow: 0 14px 28px rgba(255, 138, 61, 0.28);
   transform: translateY(-1px);
 }
 
 .chapter-publish-toggle:active {
   transform: translateY(0);
-  box-shadow: 0 8px 18px rgba(255, 107, 95, 0.22);
+  box-shadow: 0 8px 18px rgba(255, 138, 61, 0.22);
 }
 
 .chapter-publish-toggle.is-published {
@@ -752,7 +752,7 @@
 .plot-section-chip-remove {
   border: none;
   background: transparent;
-  color: #a04f3e;
+  color: #a32059;
   font-size: 0;
   cursor: pointer;
   padding: 0;

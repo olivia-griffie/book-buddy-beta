@@ -122,7 +122,10 @@ function renderInboxSidebarBadgeCount(count) {
   const badge = document.createElement('span');
   badge.className = 'sidebar-badge sidebar-badge-inbox';
   badge.setAttribute('aria-label', `${count} unread inbox item${count === 1 ? '' : 's'}`);
-  badge.textContent = count > 9 ? '9+' : String(count);
+  badge.innerHTML = `
+    <img src="../../public/inbox-notification-icon.png" alt="" aria-hidden="true" />
+    <span class="sidebar-badge-count">${count > 9 ? '9+' : String(count)}</span>
+  `;
   icon.appendChild(badge);
 }
 

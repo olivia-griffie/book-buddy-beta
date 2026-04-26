@@ -13,6 +13,9 @@
   <link rel="icon" type="image/png" sizes="16x16" href="../../public/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="../../public/apple-touch-icon.png" />
   <link rel="manifest" href="../../public/site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./styles/global.css" />
   <link rel="stylesheet" href="./styles/login.css" />
 </head>
@@ -44,7 +47,7 @@
       <button id="update-install-btn" style="
         display: none;
         padding: 6px 14px;
-        background: #ff6a5a;
+        background: #ff4d95;
         color: white;
         border: none;
         border-radius: 6px;
@@ -116,8 +119,8 @@
               <input id="auth-signup-email" type="email" autocomplete="email" placeholder="you@example.com" required />
             </div>
             <div class="auth-field">
-              <label for="auth-signup-username">Username</label>
-              <input id="auth-signup-username" type="text" autocomplete="username" placeholder="writerhandle" required />
+              <label for="auth-signup-display-name">Display name</label>
+              <input id="auth-signup-display-name" type="text" autocomplete="name" placeholder="Your pen name" required />
             </div>
             <div class="auth-field">
               <label for="auth-signup-password">Password</label>
@@ -165,9 +168,10 @@
       color: #2f261f;
     ">
       <h2 id="whats-new-headline" style="
-        font-family: 'Lora', Georgia, serif;
+        font-family: 'Pacifico', cursive;
         font-size: 1.35rem;
-        font-weight: 700;
+        font-weight: 400;
+        text-transform: lowercase;
         margin: 0 0 18px;
         color: #2f261f;
       "></h2>
@@ -182,7 +186,7 @@
         display: block;
         width: 100%;
         padding: 10px;
-        background: #ff6a5a;
+        background: #ff4d95;
         color: white;
         border: none;
         border-radius: 8px;

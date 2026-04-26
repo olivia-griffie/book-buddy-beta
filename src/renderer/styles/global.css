@@ -602,8 +602,43 @@ body {
 }
 
 .sidebar-badge-inbox {
-  background: linear-gradient(135deg, #ff6a5a 0%, #ff8a3d 100%);
+  top: -12px;
+  right: -14px;
+  width: 30px;
+  height: 28px;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  line-height: 1;
+}
+
+.sidebar-badge-inbox img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(24, 31, 45, 0.28));
+}
+
+.sidebar-badge-count {
+  position: absolute;
+  right: -4px;
+  top: -4px;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-coral);
+  color: white;
   box-shadow: 0 0 0 2px rgba(24, 31, 45, 0.85);
+  font-size: 0.56rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
 @keyframes badgePop {
@@ -672,22 +707,22 @@ body {
 }
 
 .topbar-save-state.is-neutral {
-  background: rgba(255, 106, 90, 0.1);
+  background: rgba(255, 77, 149, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-warning {
-  background: rgba(255, 106, 90, 0.1);
+  background: rgba(255, 77, 149, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-saving {
-  background: rgba(255, 106, 90, 0.1);
+  background: rgba(255, 77, 149, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-success {
-  background: rgba(255, 106, 90, 0.1);
+  background: rgba(255, 77, 149, 0.1);
   color: var(--sage);
 }
 
@@ -711,6 +746,7 @@ body {
 .topbar-metric-value {
   font-family: var(--font-display);
   font-size: 1.1rem;
+  text-transform: lowercase;
   color: var(--ink);
 }
 
@@ -757,7 +793,7 @@ body {
   padding: 10px 12px;
   border: 1px solid rgba(255, 126, 184, 0.24);
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(255, 106, 90, 0.1), rgba(255, 126, 184, 0.12), rgba(255, 253, 250, 0.95));
+  background: linear-gradient(135deg, rgba(255, 77, 149, 0.1), rgba(255, 126, 184, 0.12), rgba(255, 253, 250, 0.95));
   animation: shellRise 0.36s var(--ease) both;
 }
 
@@ -922,9 +958,17 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-h1, h2, h3, h4 {
+h1 {
   font-family: var(--font-display);
   font-weight: 400;
+  line-height: 1.2;
+  text-transform: lowercase;
+  color: var(--ink);
+}
+
+h2, h3, h4 {
+  font-family: var(--font-body);
+  font-weight: 700;
   line-height: 1.2;
   color: var(--ink);
 }
@@ -1057,7 +1101,7 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-save:hover {
-  background: #ff5b4e;
+  background: #ff4d95;
   transform: translateY(-1px);
   box-shadow: var(--shadow-lift);
 }
@@ -1079,7 +1123,7 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-sage:hover {
-  background: #ff5b4e;
+  background: #ff4d95;
   transform: translateY(-1px);
 }
 
@@ -1110,7 +1154,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
 }
 
 label {
@@ -1413,7 +1457,7 @@ label {
 
 .genre-option:has(input:checked) {
   border-color: var(--sage);
-  background: rgba(255, 106, 90, 0.06);
+  background: rgba(255, 77, 149, 0.06);
 }
 
 .genre-option input {
@@ -1507,7 +1551,7 @@ body.dark-mode .genre-option {
 
 .entity-delete-button,
 .chapter-row-delete {
-  color: #9f4f3d;
+  color: #a32059;
   border-color: rgba(159, 79, 61, 0.22);
   background: rgba(159, 79, 61, 0.06);
 }
@@ -1599,7 +1643,7 @@ body.dark-mode .genre-option {
 .upload-trigger:focus-visible {
   outline: none;
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
 }
 
 .upload-trigger-icon {
@@ -1665,7 +1709,7 @@ body.dark-mode .genre-option {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  border: 2px solid rgba(255, 106, 90, 0.45);
+  border: 2px solid rgba(255, 77, 149, 0.45);
   color: var(--accent-coral);
   background: white;
   font-size: 1rem;
@@ -2174,15 +2218,15 @@ body.dark-mode .btn-sage {
 
 body.dark-mode .btn-save:hover,
 body.dark-mode .btn-sage:hover {
-  background: #ff8360;
+  background: #ff8a3d;
   color: white;
-  box-shadow: 0 0 14px rgba(255, 131, 96, 0.35);
+  box-shadow: 0 0 14px rgba(255, 138, 61, 0.35);
 }
 
 body.dark-mode .project-thumb-actions .upload-trigger {
   background: var(--accent-coral);
   border-color: var(--accent-coral);
-  box-shadow: 0 2px 8px rgba(255, 106, 90, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 77, 149, 0.3);
 }
 
 body.dark-mode .project-thumb-icon-btn-danger {
@@ -2192,14 +2236,14 @@ body.dark-mode .project-thumb-icon-btn-danger {
 }
 
 body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
-  background: rgba(255, 80, 60, 0.12);
-  color: #ff7060;
-  border-color: rgba(255, 80, 60, 0.3);
+  background: rgba(255, 77, 149, 0.12);
+  color: #ff6fab;
+  border-color: rgba(255, 77, 149, 0.3);
 }
 
 body.dark-mode .milestone-toast {
   background: linear-gradient(135deg, rgba(255,131,96,0.12) 0%, rgba(39,65,86,0.6) 100%);
-  border-color: rgba(255, 131, 96, 0.35);
+  border-color: rgba(255, 138, 61, 0.35);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
@@ -2213,8 +2257,8 @@ body.dark-mode .milestone-toast-copy p {
 }
 
 body.dark-mode .milestone-toast-mark {
-  background: #ff8360;
-  box-shadow: 0 0 10px rgba(255, 131, 96, 0.45);
+  background: #ff8a3d;
+  box-shadow: 0 0 10px rgba(255, 138, 61, 0.45);
 }
 
 body.dark-mode .app-text-entry-dialog {

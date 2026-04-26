@@ -197,8 +197,8 @@
 }
 
 .chapter-row-delete:hover {
-  border-color: #c0392b;
-  color: #c0392b;
+  border-color: #c21866;
+  color: #c21866;
 }
 
 .plot-section-add-chapter {
@@ -308,7 +308,7 @@
 .plot-section-chip-remove {
   border: none;
   background: transparent;
-  color: #a04f3e;
+  color: #a32059;
   font-size: 0;
   cursor: pointer;
   padding: 0;
@@ -390,7 +390,7 @@
 .character-type-tag:hover,
 .character-type-tag:focus-visible {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
   outline: none;
 }
 

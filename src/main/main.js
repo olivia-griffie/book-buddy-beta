@@ -671,8 +671,8 @@ ipcMain.handle('auth:logout', async () => {
   store.delete('auth.session');
 });
 
-ipcMain.handle('auth:signup', async (_, { email, password, username }) => {
-  const result = await signUp(email, password, username);
+ipcMain.handle('auth:signup', async (_, { email, password, displayName }) => {
+  const result = await signUp(email, password, displayName);
   if (result.session) {
     store.set('auth.session', result.session);
   }

@@ -70,6 +70,7 @@ body.dark-mode #app-loading-logo {
 .auth-brand-name {
   font-family: var(--font-display);
   font-size: 1.6rem;
+  text-transform: lowercase;
   color: var(--ink);
   margin: 0 0 6px;
 }
@@ -129,8 +130,8 @@ body.dark-mode #app-loading-logo {
   display: none;
   padding: 10px 14px;
   margin-bottom: 14px;
-  background: rgba(255, 106, 90, 0.09);
-  border: 1px solid rgba(255, 106, 90, 0.28);
+  background: rgba(255, 77, 149, 0.09);
+  border: 1px solid rgba(255, 77, 149, 0.28);
   border-radius: var(--radius-md);
   color: var(--accent-coral);
   font-size: 0.875rem;

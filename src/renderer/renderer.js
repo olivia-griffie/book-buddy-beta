@@ -1632,7 +1632,7 @@ function initAuthOverlay() {
       const result = await window.api.auth.signup(
         document.getElementById('auth-signup-email').value.trim(),
         document.getElementById('auth-signup-password').value,
-        document.getElementById('auth-signup-username').value.trim(),
+        document.getElementById('auth-signup-display-name').value.trim(),
       );
       if (result.session) {
         await syncUserPreferencesFromProfile().catch(() => state.userPreferences);
