@@ -69,6 +69,19 @@
   color: var(--ink-soft);
 }
 
+.prompt-score-reason {
+  margin: -4px 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.82rem;
+}
+
+.prompt-chapter-suggestion {
+  margin: -2px 0 0;
+  color: rgba(79, 242, 201, 0.9);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
 .daily-prompt-status.is-error,
 .form-message.is-error {
   color: #a04f3e;

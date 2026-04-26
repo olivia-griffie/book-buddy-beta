@@ -8,6 +8,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   const generateButton = document.getElementById('generate-prompts');
   const countInput = document.getElementById('prompt-count');
   const modeInput = document.getElementById('prompt-mode');
+  const focusInput = document.getElementById('prompt-focus');
   const status = document.getElementById('daily-prompts-status');
   const resultsGrid = document.getElementById('prompt-results-grid');
   const progressCard = document.getElementById('daily-prompts-progress');
@@ -82,6 +83,26 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     return activeProject.chapters || [];
   }
 
+  function getSuggestedChapter(entry, index = 0) {
+    const plotSections = activeProject.plotSections || [];
+    const chapters = getChapters();
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+    const matchedSection = entry?.plotPoint
+      ? plotSections.find((section) => normalize(section.label) === normalize(entry.plotPoint))
+      : null;
+
+    if (!matchedSection) {
+      return null;
+    }
+
+    const sectionChapters = chapters.filter((chapter) => chapter.sectionId === matchedSection.id);
+    if (!sectionChapters.length) {
+      return null;
+    }
+
+    return sectionChapters[index % sectionChapters.length] || sectionChapters[0] || null;
+  }
+
   function getDailyHistory() {
     return activeProject.dailyPromptHistory || [];
   }
@@ -94,56 +115,6 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   function pickRandom(array, count) {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
-  }
-
-  function getActiveSceneTags(proj) {
-    const scenes = proj.scenes || [];
-    const plotSections = proj.plotSections || [];
-    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
-
-    // Find the section that matches the current cursor position
-    const pool = resources.promptPool;
-    const currentEntry = pool[dailyState.cursor % (pool.length || 1)];
-    const matchedSection = currentEntry?.plotPoint
-      ? plotSections.find((s) => normalize(s.label) === normalize(currentEntry.plotPoint))
-      : null;
-
-    const linkedScenes = matchedSection
-      ? scenes.filter((scene) => {
-        const ids = Array.isArray(scene.sectionIds) ? scene.sectionIds : (scene.sectionId ? [scene.sectionId] : []);
-        return ids.includes(matchedSection.id);
-      })
-      : scenes;
-
-    return [...new Set(linkedScenes.flatMap((s) => s.tags || []).map((t) => t.toLowerCase()))];
-  }
-
-  function getCharacterNarrativeTags(proj) {
-    return [...new Set(
-      (proj.characters || []).flatMap((c) => c.narrativeTags || []).map((t) => t.toLowerCase()),
-    )];
-  }
-
-  function scorePromptEntry(entry, proj) {
-    let score = 0;
-    const promptText = (entry.prompt || '').toLowerCase();
-    const plotPointText = (entry.plotPoint || '').toLowerCase();
-
-    const projectTags = (proj.tags || []).map((t) => t.toLowerCase());
-    if (projectTags.some((t) => plotPointText.includes(t))) score += 2;
-    if (projectTags.some((t) => promptText.includes(t))) score += 1;
-
-    const activeSceneTags = getActiveSceneTags(proj);
-    activeSceneTags.forEach((tag) => {
-      if (promptText.includes(tag)) score += 3;
-    });
-
-    const narrativeTags = getCharacterNarrativeTags(proj);
-    narrativeTags.forEach((tag) => {
-      if (promptText.includes(tag)) score += 2;
-    });
-
-    return score;
   }
 
   function getProtagonist(proj) {
@@ -175,36 +146,26 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     const location = getMostRecentLocation(proj);
     const scene = getActiveScene(proj);
 
-    return promptText
+    const replacements = {
+      '{{protagonist}}': protagonist?.name || 'the protagonist',
+      '{{antagonist}}': antagonist?.name || 'the antagonist',
+      '{{loveInterest}}': loveInterest?.name || 'the love interest',
+      '{{location}}': location?.name || 'the location',
+      '{{scene}}': scene?.title || 'the scene',
+    };
+
+    let text = promptText;
+    Object.entries(replacements).forEach(([token, replacement]) => {
+      text = text.split(token).join(replacement);
+    });
+
+    return text
       .replace(/\bthe protagonist\b/gi, protagonist?.name || 'the protagonist')
       .replace(/\bthe antagonist\b/gi, antagonist?.name || 'the antagonist')
       .replace(/\bthe love interest\b/gi, loveInterest?.name || 'the love interest')
       .replace(/\ba key location\b/gi, location?.name || 'a key location')
       .replace(/\bthe location\b/gi, location?.name || 'the location')
       .replace(/\bthe scene\b/gi, scene?.title || 'the scene');
-  }
-
-  function weightedPick(pool, count, proj) {
-    const scored = pool.map((entry) => ({
-      entry,
-      weight: scorePromptEntry(entry, proj) + 1, // +1 so every entry has a non-zero chance
-    }));
-
-    const picked = [];
-    const remaining = [...scored];
-
-    while (remaining.length && picked.length < count) {
-      const total = remaining.reduce((sum, item) => sum + item.weight, 0);
-      let rand = Math.random() * total;
-      const idx = remaining.findIndex((item) => {
-        rand -= item.weight;
-        return rand <= 0;
-      });
-      const chosen = remaining.splice(idx === -1 ? remaining.length - 1 : idx, 1)[0];
-      picked.push(chosen.entry);
-    }
-
-    return picked;
   }
 
   const CHARACTER_ROLE_LABELS = {
@@ -454,12 +415,18 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     resultsGrid.innerHTML = entries.length
       ? entries.map((entry, index) => {
         const sectionDesc = getSectionDescription(entry);
+        const suggestedChapter = getSuggestedChapter(entry, index)
+          || getChapters().find((chapter) => chapter.id === entry.suggestedChapterId)
+          || null;
+        const selectedChapterId = entry.assignedChapterId || suggestedChapter?.id || '';
         return `
         <article class="beat-card daily-prompt-card ui-card ui-card-soft ui-card-stack">
           <h4>${index + 1}. ${entry.plotPoint}${sectionDesc ? `: <span class="prompt-section-desc">${sectionDesc}</span>` : ''}</h4>
           <p class="genre-pill">${entry.genre}</p>
           <p class="prompt-callout">${entry.prompt}</p>
+          ${entry.scoreReason ? `<p class="prompt-score-reason">Chosen because: ${entry.scoreReason}</p>` : ''}
           <p>${entry.context || 'Use this anywhere in the draft.'}</p>
+          ${suggestedChapter ? `<p class="prompt-chapter-suggestion">Suggested chapter: ${suggestedChapter.title || 'Untitled Chapter'}</p>` : ''}
           <p class="daily-prompt-status">Target: ${(Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)) || 0).toLocaleString()} words</p>
           <div class="daily-prompt-answer">
             <label for="prompt-answer-${entry.id}">Your Answer</label>
@@ -471,8 +438,8 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
               <select id="prompt-chapter-${entry.id}" data-prompt-chapter="${entry.id}">
                 <option value="">Choose a chapter</option>
                 ${getChapters().map((chapter) => `
-                  <option value="${chapter.id}" ${entry.assignedChapterId === chapter.id ? 'selected' : ''}>
-                    ${chapter.title || 'Untitled Chapter'}
+                  <option value="${chapter.id}" ${selectedChapterId === chapter.id ? 'selected' : ''}>
+                    ${chapter.title || 'Untitled Chapter'}${suggestedChapter?.id === chapter.id ? ' (Suggested)' : ''}
                   </option>
                 `).join('')}
               </select>
@@ -529,19 +496,22 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     resultsGrid.querySelectorAll('[data-add-prompt]').forEach((button) => {
       button.addEventListener('click', async () => {
         const promptEntry = getDailyHistory().find((entry) => entry.id === button.dataset.addPrompt);
-        if (!promptEntry?.assignedChapterId) {
+        const suggestedChapter = getChapters().find((chapter) => chapter.id === promptEntry?.suggestedChapterId);
+        const targetChapterId = promptEntry?.assignedChapterId || suggestedChapter?.id || '';
+        if (!targetChapterId) {
           setStatusMessage('Choose a chapter before adding this prompt.', 'error');
           return;
         }
 
         const chapters = getChapters().map((chapter) => ({ ...chapter }));
-        const chapterIndex = chapters.findIndex((chapter) => chapter.id === promptEntry.assignedChapterId);
+        const chapterIndex = chapters.findIndex((chapter) => chapter.id === targetChapterId);
         if (chapterIndex < 0) {
           setStatusMessage('That chapter could not be found.', 'error');
           return;
         }
 
         const answerField = resultsGrid.querySelector(`[data-prompt-answer="${promptEntry.id}"]`);
+        promptEntry.assignedChapterId = targetChapterId;
         promptEntry.answer = window.getEditorFieldValue(answerField);
         const requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
         const answerWordCount = window.computeWordCount(promptEntry.answer);
@@ -568,6 +538,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
             ? {
               ...entry,
               assignedChapterId: promptEntry.assignedChapterId,
+              suggestedChapterId: entry.suggestedChapterId || promptEntry.suggestedChapterId || '',
               answer: promptEntry.answer,
               requiredWordCount: Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)),
               insertedWordCount,
@@ -644,6 +615,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   function generatePromptBatch() {
     const count = Number(countInput.value || 1);
     const mode = modeInput.value;
+    const promptType = focusInput?.value || 'scene-drafting';
 
     if (mode === 'sequential') {
       const source = resources.sequentialSource.length ? resources.sequentialSource : resources.promptPool;
@@ -655,12 +627,17 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
 
       return batch.map((entry, index) => {
         const prompt = personalizePrompt(entry.prompt, activeProject);
+        const suggestedChapter = getSuggestedChapter(entry, index);
         return {
           id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
           ...entry,
           prompt,
           context: getContextLabel(index, entry),
-          assignedChapterId: '',
+          promptType,
+          matchedTags: [],
+          scoreReason: 'Sequential order',
+          suggestedChapterId: suggestedChapter?.id || '',
+          assignedChapterId: suggestedChapter?.id || '',
           answer: '',
           answerInsertedAt: '',
           requiredWordCount: extractPromptWordTarget(prompt),
@@ -675,16 +652,20 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       project:       activeProject,
       count,
       recentHistory: activeProject.dailyPromptHistory || [],
+      promptType,
+      promptFocusTags: [promptType],
     });
 
     return selected.map((entry, index) => {
       // eslint-disable-next-line no-unused-vars
       const { _score, ...rest } = entry;
+      const suggestedChapter = getSuggestedChapter(entry, index);
       return {
         id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
         ...rest,
         context: getContextLabel(index, entry),
-        assignedChapterId: '',
+        suggestedChapterId: suggestedChapter?.id || '',
+        assignedChapterId: suggestedChapter?.id || '',
         answer: '',
         answerInsertedAt: '',
         requiredWordCount: extractPromptWordTarget(rest.prompt),
@@ -707,6 +688,8 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         cursor: dailyState.cursor,
         lastMode: modeInput.value,
         lastCount: Number(countInput.value || 1),
+        promptType: focusInput?.value || 'scene-drafting',
+        promptFocusTags: [focusInput?.value || 'scene-drafting'],
         lastGeneratedAt: today.toISOString(),
       },
       dailyPromptHistory: nextHistory,
