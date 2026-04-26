@@ -841,7 +841,7 @@ function syncVisibleProjectLabels(project) {
 
   const titleByPage = {
     'plot-creation': 'Plot',
-    chapters: project.title || 'Chapter Workspace',
+    chapters: 'Chapters',
     characters: 'Characters',
     scenes: 'Scenes',
     locations: `${project.title || 'Project'} Locations`,

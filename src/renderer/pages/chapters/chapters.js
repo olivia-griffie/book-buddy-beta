@@ -69,8 +69,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     localStorage.setItem(chapterEditorCollapseKey, collapsed ? '1' : '0');
   }
 
-  const initialCollapsed = localStorage.getItem(chapterEditorCollapseKey) === '1';
-  setChapterEditorCollapsed(initialCollapsed);
+  setChapterEditorCollapsed(true);
 
   chapterEditorHeadToggle?.addEventListener('click', (e) => {
     if (e.target.closest('select, button, input')) return;
@@ -100,7 +99,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   saveButton.style.display = 'inline-flex';
   saveTopButton.style.display = 'inline-flex';
   exportButton.style.display = 'inline-flex';
-  document.getElementById('chapters-page-title').textContent = activeProject.title || 'Chapter Workspace';
+  document.getElementById('chapters-page-title').textContent = 'Chapters';
   document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
   function getResolvedEditorPreferences(projectOverride = activeProject) {
     return window.resolveEditorPreferences?.(projectOverride) || {
@@ -140,10 +139,11 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const contextState = {
     tab: 'plot',
   };
+  const chapterProjectDirtyFields = ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'publishedChapterIds', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState', 'lastSessionMeta', 'lastEditedChapterId'];
   const autosave = window.createAutosaveController(async () => {
     const updatedProject = buildProjectPayload();
     activeProject = await window.saveProjectData(updatedProject, {
-      dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+      dirtyFields: chapterProjectDirtyFields,
     });
     saveMessage.textContent = 'Chapter changes autosaved.';
   }, {
@@ -165,17 +165,50 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     });
 
     if (plotSectionsPanel) {
-      window.bindPersistentDetailsState?.(plotSectionsPanel, {
+      const plotSectionsPanelKey = window.bindPersistentDetailsState?.(plotSectionsPanel, {
         projectId: activeProject.id,
         sectionId: 'chapters-section-targets-panel',
-        defaultOpen: true,
+        defaultOpen: false,
       });
+      plotSectionsPanel.open = false;
+      if (plotSectionsPanelKey) {
+        localStorage.setItem(plotSectionsPanelKey, '0');
+      }
     }
   }
 
-  let selectedChapterId = (chapterId && chapters.some((c) => c.id === chapterId))
-    ? chapterId
-    : chapters[0]?.id || '';
+  const preferredChapterIds = [
+    chapterId,
+    activeProject.lastEditedChapterId,
+    ...(Array.isArray(activeProject.lastSessionMeta?.chapterIds) ? activeProject.lastSessionMeta.chapterIds : []),
+  ].filter(Boolean);
+  let selectedChapterId = preferredChapterIds.find((id) => chapters.some((chapter) => chapter.id === id))
+    || chapters[0]?.id
+    || '';
+
+  function selectChapter(chapterIdToSelect, { touch = false } = {}) {
+    if (!chapterIdToSelect || !chapters.some((chapter) => chapter.id === chapterIdToSelect)) {
+      return false;
+    }
+
+    selectedChapterId = chapterIdToSelect;
+    activeProject = {
+      ...activeProject,
+      lastEditedChapterId: selectedChapterId,
+      lastSessionMeta: {
+        ...(activeProject.lastSessionMeta || {}),
+        chapterIds: [selectedChapterId],
+        source: 'chapters',
+      },
+    };
+
+    if (touch) {
+      autosave.touch();
+    }
+
+    return true;
+  }
+  selectChapter(selectedChapterId);
 
   function getNextChapterNumber() {
     const explicitNumbers = chapters
@@ -350,7 +383,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       publishedChapterIds: [...publishedChapterIds],
       updatedAt: new Date().toISOString(),
     }, {
-      dirtyFields: ['publishedChapterIds'],
+      dirtyFields: ['publishedChapterIds', 'lastSessionMeta', 'lastEditedChapterId'],
     });
   }
 
@@ -375,7 +408,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         isPublic: true,
         updatedAt: new Date().toISOString(),
       }, {
-        dirtyFields: ['isPublic', 'plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+        dirtyFields: chapterProjectDirtyFields.concat('isPublic'),
       });
       saveMessage.textContent = 'Project is now public. Publishing chapter...';
     }
@@ -688,7 +721,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           ...buildProjectPayload(),
           dailyPromptHistory,
         }, {
-          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+          dirtyFields: chapterProjectDirtyFields,
         });
         chapterPromptMessage.textContent = 'Prompt answer saved.';
         chapterPromptMessage.classList.remove('is-success');
@@ -724,7 +757,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           ...buildProjectPayload(),
           dailyPromptHistory,
         }, {
-          dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+          dirtyFields: chapterProjectDirtyFields,
         });
         chapterPromptMessage.textContent = 'Daily prompt submission has been added to the bottom of the selected chapter.';
         chapterPromptMessage.classList.add('is-success');
@@ -824,7 +857,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
     sectionsList.querySelectorAll('[data-open-chapter]').forEach((button) => {
       button.addEventListener('click', () => {
-        selectedChapterId = button.dataset.openChapter;
+        selectChapter(button.dataset.openChapter, { touch: true });
         renderSections();
         renderEditor();
       });
@@ -888,6 +921,9 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
         if (selectedChapterId === chapterId) {
           selectedChapterId = chapters[Math.max(0, chapterIndex - 1)]?.id || chapters[0]?.id || '';
+          if (selectedChapterId) {
+            selectChapter(selectedChapterId);
+          }
         }
 
         saveMessage.textContent = 'Chapter deleted.';
@@ -909,7 +945,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         };
 
         chapters.push(newChapter);
-        selectedChapterId = newChapter.id;
+        selectChapter(newChapter.id, { touch: true });
         autosave.touch();
         renderSections();
         renderEditor();
@@ -1034,6 +1070,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         chapterIds: selectedChapterId ? [selectedChapterId] : [],
         source: 'chapters',
       },
+      lastEditedChapterId: selectedChapterId || '',
       updatedAt: new Date().toISOString(),
     };
   }
@@ -1065,7 +1102,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   chapterSelectDropdown?.addEventListener('change', () => {
     if (!chapterSelectDropdown.value) return;
-    selectedChapterId = chapterSelectDropdown.value;
+    selectChapter(chapterSelectDropdown.value, { touch: true });
     renderSections();
     renderEditor();
     editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1082,7 +1119,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       content: '',
     };
     chapters.push(newChapter);
-    selectedChapterId = newChapter.id;
+    selectChapter(newChapter.id, { touch: true });
     autosave.touch();
     renderSections();
     renderEditor();
@@ -1138,7 +1175,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     await window.runButtonFeedback(button, async () => {
       const updatedProject = buildProjectPayload();
       activeProject = await window.saveProjectData(updatedProject, {
-        dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState'],
+        dirtyFields: chapterProjectDirtyFields,
       });
       saveMessage.textContent = 'Chapters saved.';
     });
@@ -1176,7 +1213,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
           publishedChapterIds: remoteIds,
           updatedAt: activeProject.updatedAt || new Date().toISOString(),
         }, {
-          dirtyFields: ['publishedChapterIds'],
+          dirtyFields: ['publishedChapterIds', 'lastSessionMeta', 'lastEditedChapterId'],
         });
         window.setCurrentProject(activeProject);
       }

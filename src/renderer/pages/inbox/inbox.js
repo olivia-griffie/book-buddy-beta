@@ -34,7 +34,7 @@ window.registerPageInit('inbox', async function () {
   const currentUserId = currentUser?.id || null;
   const currentUserName = currentUser?.user_metadata?.display_name || 'You';
 
-  let activeMode = 'messages';
+  let activeMode = 'activity';
   let activeFilter = 'all';
 
   let conversations = [];

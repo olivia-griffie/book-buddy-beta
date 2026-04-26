@@ -231,6 +231,7 @@ window.registerPageInit('characters', async function ({ project }) {
           type="button"
           data-gallery-character="${character.id}"
         >
+          <span class="drag-handle character-gallery-drag-handle" title="Drag to reorder" aria-hidden="true"></span>
           <div class="character-gallery-thumb ${character.image ? 'has-image' : ''}">
             ${character.image
               ? `<img src="${character.image}" alt="${escapeHtml(character.name || 'Character')}" />`

@@ -995,6 +995,13 @@ a:hover { color: var(--sage-light); }
   margin-bottom: 28px;
 }
 
+#main-content > section > div > div > p:nth-child(3),
+.page-header > div > p:nth-child(3),
+#plot-page-subtitle,
+#chapters-page-subtitle {
+  padding-top: 20px;
+}
+
 .page-title-editable {
   cursor: pointer;
   display: inline-flex;
@@ -1517,7 +1524,6 @@ body.dark-mode .genre-option {
 
 .entity-list-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
@@ -1525,6 +1531,24 @@ body.dark-mode .genre-option {
   border-radius: 12px;
   background: white;
   cursor: grab;
+}
+
+.drag-handle {
+  width: 14px;
+  height: 22px;
+  flex: 0 0 14px;
+  border-radius: 6px;
+  opacity: 0.55;
+  background-image: radial-gradient(circle, currentColor 1.4px, transparent 1.6px);
+  background-size: 7px 7px;
+  background-position: 0 1px;
+  color: var(--ink-muted);
+  cursor: grab;
+}
+
+.entity-list-item:hover .drag-handle,
+.character-gallery-card:hover .drag-handle {
+  opacity: 0.9;
 }
 
 .entity-list-item.is-dragging {
@@ -1541,6 +1565,7 @@ body.dark-mode .genre-option {
 }
 
 .entity-list-item button {
+  flex: 1;
   border: none;
   background: transparent;
   font: inherit;

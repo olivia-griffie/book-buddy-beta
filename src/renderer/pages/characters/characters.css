@@ -13,7 +13,7 @@
  
 .character-gallery-card {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-columns: 18px 44px minmax(0, 1fr);
   align-items: center;
   gap: 10px;
   padding: 5px 8px;
@@ -39,6 +39,10 @@
 
 .character-gallery-card.drag-below {
   border-bottom: 2px solid var(--accent, #c97b5a);
+}
+
+.character-gallery-drag-handle {
+  justify-self: center;
 }
  
 .character-gallery-thumb {

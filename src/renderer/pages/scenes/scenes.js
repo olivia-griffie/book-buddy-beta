@@ -256,6 +256,7 @@ window.registerPageInit('scenes', async function ({ project }) {
     list.innerHTML = scenes.length
       ? scenes.map((scene) => `
         <div class="entity-list-item" data-scene-id="${scene.id}">
+          <span class="drag-handle" title="Drag to reorder" aria-hidden="true"></span>
           <button type="button" data-open-scene="${scene.id}">
             <strong>${scene.title || 'Untitled Scene'}</strong>
           </button>
