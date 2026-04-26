@@ -707,22 +707,22 @@ body {
 }
 
 .topbar-save-state.is-neutral {
-  background: rgba(255, 77, 149, 0.1);
+  background: rgba(255, 138, 61, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-warning {
-  background: rgba(255, 77, 149, 0.1);
+  background: rgba(255, 138, 61, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-saving {
-  background: rgba(255, 77, 149, 0.1);
+  background: rgba(255, 138, 61, 0.1);
   color: var(--sage);
 }
 
 .topbar-save-state.is-success {
-  background: rgba(255, 77, 149, 0.1);
+  background: rgba(255, 138, 61, 0.1);
   color: var(--sage);
 }
 
@@ -774,8 +774,8 @@ body {
 }
 
 .topbar-actions .btn.is-active {
-  border-color: rgba(255, 126, 184, 0.4);
-  background: rgba(255, 126, 184, 0.08);
+  border-color: rgba(255, 159, 99, 0.4);
+  background: rgba(255, 159, 99, 0.08);
   color: var(--ink);
 }
 
@@ -791,9 +791,9 @@ body {
   gap: 10px;
   min-width: 180px;
   padding: 10px 12px;
-  border: 1px solid rgba(255, 126, 184, 0.24);
+  border: 1px solid rgba(255, 159, 99, 0.24);
   border-radius: 12px;
-  background: linear-gradient(135deg, rgba(255, 77, 149, 0.1), rgba(255, 126, 184, 0.12), rgba(255, 253, 250, 0.95));
+  background: linear-gradient(135deg, rgba(255, 138, 61, 0.1), rgba(255, 159, 99, 0.12), rgba(255, 253, 250, 0.95));
   animation: shellRise 0.36s var(--ease) both;
 }
 
@@ -840,7 +840,7 @@ body {
   padding: 14px 16px;
   border: 1px solid rgba(47, 53, 69, 0.08);
   border-radius: 14px;
-  background: linear-gradient(135deg, rgba(255, 253, 250, 0.98), rgba(255, 126, 184, 0.08), rgba(79, 242, 201, 0.12));
+  background: linear-gradient(135deg, rgba(255, 253, 250, 0.98), rgba(255, 159, 99, 0.08), rgba(79, 242, 201, 0.12));
   animation: shellRise 0.4s var(--ease) both;
 }
 
@@ -903,8 +903,8 @@ body {
 }
 
 .topbar-step.is-active {
-  border-color: rgba(255, 126, 184, 0.38);
-  background: rgba(255, 126, 184, 0.08);
+  border-color: rgba(255, 159, 99, 0.38);
+  background: rgba(255, 159, 99, 0.08);
   color: var(--ink);
 }
 
@@ -1096,12 +1096,12 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-save {
-  background: #91edd6;
-  color: var(--ink);
+  background: var(--sage);
+  color: white;
 }
 
 .btn-save:hover {
-  background: #ff4d95;
+  background: var(--sage-deep);
   transform: translateY(-1px);
   box-shadow: var(--shadow-lift);
 }
@@ -1123,7 +1123,7 @@ a:hover { color: var(--sage-light); }
 }
 
 .btn-sage:hover {
-  background: #ff4d95;
+  background: var(--sage-deep);
   transform: translateY(-1px);
 }
 
@@ -1154,7 +1154,7 @@ input, textarea, select {
 
 input:focus, textarea:focus, select:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.16);
 }
 
 label {
@@ -1273,7 +1273,7 @@ label {
   gap: 12px;
   align-items: start;
   padding: 14px 16px;
-  border: 1px solid rgba(255, 126, 184, 0.28);
+  border: 1px solid rgba(255, 159, 99, 0.28);
   border-radius: 14px;
   background: var(--surface-card);
   box-shadow: var(--shadow-lift);
@@ -1457,7 +1457,7 @@ label {
 
 .genre-option:has(input:checked) {
   border-color: var(--sage);
-  background: rgba(255, 77, 149, 0.06);
+  background: rgba(255, 138, 61, 0.06);
 }
 
 .genre-option input {
@@ -1551,16 +1551,16 @@ body.dark-mode .genre-option {
 
 .entity-delete-button,
 .chapter-row-delete {
-  color: #a32059;
-  border-color: rgba(159, 79, 61, 0.22);
-  background: rgba(159, 79, 61, 0.06);
+  color: var(--danger-pink-deep);
+  border-color: rgba(255, 77, 149, 0.28);
+  background: rgba(255, 77, 149, 0.08);
 }
 
 .entity-delete-button:hover,
 .chapter-row-delete:hover {
-  color: #8b3d2d;
-  border-color: rgba(139, 61, 45, 0.28);
-  background: rgba(159, 79, 61, 0.1);
+  color: #a32059;
+  border-color: rgba(255, 77, 149, 0.42);
+  background: var(--danger-pink-soft);
 }
 
 .entity-form-grid {
@@ -1643,7 +1643,7 @@ body.dark-mode .genre-option {
 .upload-trigger:focus-visible {
   outline: none;
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.16);
 }
 
 .upload-trigger-icon {
@@ -1670,7 +1670,7 @@ body.dark-mode .genre-option {
   width: min(100%, 320px);
   aspect-ratio: 4 / 5;
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(255, 138, 61, 0.22) 0%, rgba(255, 126, 184, 0.22) 100%);
+  background: linear-gradient(135deg, rgba(255, 138, 61, 0.22) 0%, rgba(255, 159, 99, 0.22) 100%);
   border: 1px solid var(--border-soft);
   display: grid;
   place-items: center;
@@ -1709,7 +1709,7 @@ body.dark-mode .genre-option {
   border-radius: 999px;
   display: grid;
   place-items: center;
-  border: 2px solid rgba(255, 77, 149, 0.45);
+  border: 2px solid rgba(255, 138, 61, 0.45);
   color: var(--accent-coral);
   background: white;
   font-size: 1rem;
@@ -1865,8 +1865,8 @@ body.dark-mode .genre-option {
 }
 
 .reference-drawer-tab.is-active {
-  border-color: rgba(255, 126, 184, 0.42);
-  background: rgba(255, 126, 184, 0.08);
+  border-color: rgba(255, 159, 99, 0.42);
+  background: rgba(255, 159, 99, 0.08);
   color: var(--ink);
 }
 
@@ -2140,8 +2140,8 @@ body.dark-mode .topbar-step-index {
 }
 
 body.dark-mode .topbar-step.is-active {
-  background: rgba(255, 126, 184, 0.12);
-  border-color: rgba(255, 126, 184, 0.3);
+  background: rgba(255, 159, 99, 0.12);
+  border-color: rgba(255, 159, 99, 0.3);
   color: var(--ink);
 }
 
@@ -2151,7 +2151,7 @@ body.dark-mode .topbar-badge.is-empty {
 }
 
 body.dark-mode .topbar-next-step {
-  background: linear-gradient(135deg, var(--surface-card), rgba(255, 126, 184, 0.06), rgba(79, 242, 201, 0.08));
+  background: linear-gradient(135deg, var(--surface-card), rgba(255, 159, 99, 0.06), rgba(79, 242, 201, 0.08));
   border-color: var(--border);
 }
 
@@ -2226,7 +2226,7 @@ body.dark-mode .btn-sage:hover {
 body.dark-mode .project-thumb-actions .upload-trigger {
   background: var(--accent-coral);
   border-color: var(--accent-coral);
-  box-shadow: 0 2px 8px rgba(255, 77, 149, 0.3);
+  box-shadow: 0 2px 8px rgba(255, 138, 61, 0.3);
 }
 
 body.dark-mode .project-thumb-icon-btn-danger {
@@ -2236,8 +2236,8 @@ body.dark-mode .project-thumb-icon-btn-danger {
 }
 
 body.dark-mode .project-thumb-icon-btn-danger:hover:not(:disabled) {
-  background: rgba(255, 77, 149, 0.12);
-  color: #ff6fab;
+  background: var(--danger-pink-soft);
+  color: #ff7eb8;
   border-color: rgba(255, 77, 149, 0.3);
 }
 

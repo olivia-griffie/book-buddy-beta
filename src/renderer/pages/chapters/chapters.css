@@ -215,8 +215,8 @@
 }
 
 .chapter-row-delete:hover {
-  border-color: #c21866;
-  color: #c21866;
+  border-color: var(--danger-pink-deep);
+  color: var(--danger-pink-deep);
 }
 
 .chapter-row-publish {
@@ -225,7 +225,7 @@
   border: 1px solid var(--sage-light, #a8c5a0);
   border-radius: 8px;
   background: transparent;
-  color: var(--sage, #ff4d95);
+  color: var(--sage, #ff8a3d);
   font: inherit;
   font-size: 0.75rem;
   letter-spacing: 0.04em;
@@ -256,7 +256,7 @@
   flex-shrink: 0;
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--sage, #ff4d95);
+  color: var(--sage, #ff8a3d);
   white-space: nowrap;
 }
 
@@ -340,7 +340,7 @@
 
 .chapter-publish-status.is-published {
   background: rgba(90, 143, 106, 0.14);
-  color: var(--sage, #ff4d95);
+  color: var(--sage, #ff8a3d);
 }
 
 .chapter-publish-toggle {
@@ -481,7 +481,7 @@
 .chapter-context-tab:hover,
 .chapter-context-tab:focus-visible {
   border-color: var(--sage);
-  background: rgba(255, 126, 184, 0.12);
+  background: rgba(255, 159, 99, 0.12);
   color: var(--sage-deep);
   outline: none;
 }
@@ -752,7 +752,7 @@
 .plot-section-chip-remove {
   border: none;
   background: transparent;
-  color: #a32059;
+  color: #a94f1c;
   font-size: 0;
   cursor: pointer;
   padding: 0;

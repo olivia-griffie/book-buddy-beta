@@ -44,8 +44,8 @@
 }
 
 .tm-count.tm-count-limit {
-  background: rgba(255, 77, 149, 0.12);
-  color: #a32059;
+  background: rgba(255, 138, 61, 0.12);
+  color: #a94f1c;
 }
 
 /* — Input row — */
@@ -175,8 +175,8 @@
 }
 
 .tm-chip-remove:hover {
-  background: rgba(255, 77, 149, 0.12);
-  color: #a32059;
+  background: rgba(255, 138, 61, 0.12);
+  color: #a94f1c;
 }
 
 /* — Suggestion panel — */

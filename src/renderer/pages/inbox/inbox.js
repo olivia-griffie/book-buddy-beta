@@ -26,7 +26,7 @@ window.registerPageInit('inbox', async function () {
   const storageKey = 'bb-inbox-read-items';
   const unreadStateKey = 'bb-inbox-unread-state';
   const openConversationKey = 'bb-inbox-open-conversation';
-  const avatarPalette = ['#ff4d95', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
+  const avatarPalette = ['#ff8a3d', '#ff8a3d', '#4ff2c9', '#ff9f63', '#7eb8ff', '#c9b4ff'];
 
   const session = await window.api.auth.getSession().catch(() => null);
   const currentUser = session?.user || session || null;

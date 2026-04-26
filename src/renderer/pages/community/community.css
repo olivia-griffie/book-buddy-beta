@@ -180,15 +180,15 @@
 .community-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lift);
-  border-color: rgba(255, 126, 184, 0.28);
+  border-color: rgba(255, 159, 99, 0.28);
 }
 
 .community-card:focus-visible {
-  outline: 3px solid rgba(255, 77, 149, 0.18);
+  outline: 3px solid rgba(255, 138, 61, 0.18);
   outline-offset: 3px;
   transform: translateY(-2px);
   box-shadow: var(--shadow-lift);
-  border-color: rgba(255, 126, 184, 0.32);
+  border-color: rgba(255, 159, 99, 0.32);
 }
 
 .community-prompt-card {
@@ -333,12 +333,12 @@
 
 .community-favorite-btn:hover {
   transform: translateY(-1px);
-  background: rgba(255, 77, 149, 0.08);
+  background: rgba(255, 138, 61, 0.08);
   color: var(--accent-coral);
 }
 
 .community-favorite-btn.is-favorited {
-  background: rgba(255, 77, 149, 0.12);
+  background: rgba(255, 138, 61, 0.12);
   color: var(--accent-coral);
 }
 
@@ -458,8 +458,8 @@
 }
 
 .community-chapter-pill:hover {
-  border-color: rgba(255, 126, 184, 0.38);
-  background: rgba(255, 126, 184, 0.08);
+  border-color: rgba(255, 159, 99, 0.38);
+  background: rgba(255, 159, 99, 0.08);
   color: var(--ink);
 }
 
@@ -707,7 +707,7 @@
 .reader-comment-input:focus {
   outline: none;
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.12);
+  box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.12);
 }
 
 .reader-like-btn {
@@ -773,7 +773,7 @@ body.dark-mode .community-tab.is-active {
 
 body.dark-mode .community-favorite-btn.is-favorited,
 body.dark-mode .community-favorite-btn:hover {
-  background: rgba(255, 77, 149, 0.16);
+  background: rgba(255, 138, 61, 0.16);
 }
 
 body.dark-mode .community-card,

@@ -183,12 +183,12 @@
 .character-type-tag:hover,
 .character-type-tag:focus-visible {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 77, 149, 0.16);
+  box-shadow: 0 0 0 3px rgba(255, 138, 61, 0.16);
   outline: none;
 }
  
 .character-type-tag.is-selected {
-  background: rgba(255, 126, 184, 0.14);
+  background: rgba(255, 159, 99, 0.14);
   border-color: var(--sage);
   color: var(--sage-deep);
 }

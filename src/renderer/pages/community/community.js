@@ -21,7 +21,7 @@ window.registerPageInit('community', async function () {
   const promptUseBtn = document.getElementById('community-prompt-use-btn');
   const promptFavoriteToggle = document.getElementById('community-prompt-favorite-toggle');
 
-  const avatarColors = ['#ff4d95', '#ff8a3d', '#4ff2c9', '#ff7eb8', '#7eb8ff', '#c9b4ff'];
+  const avatarColors = ['#ff8a3d', '#ff8a3d', '#4ff2c9', '#ff9f63', '#7eb8ff', '#c9b4ff'];
 
   function getAvatarColor(id) {
     const value = String(id || '');
