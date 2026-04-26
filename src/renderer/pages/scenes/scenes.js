@@ -8,6 +8,13 @@ window.registerPageInit('scenes', async function ({ project }) {
       .replace(/'/g, '&#39;');
   }
 
+  function toPlainText(value = '') {
+    const parsed = window.parseRichTextValue?.(value);
+    const temp = document.createElement('div');
+    temp.innerHTML = parsed?.html || String(value || '');
+    return (temp.textContent || temp.innerText || '').trim().replace(/\s+/g, ' ');
+  }
+
   function normalizeSectionIds(entity) {
     const ids = Array.isArray(entity.sectionIds) ? entity.sectionIds : (entity.sectionId ? [entity.sectionId] : []);
     return { ...entity, sectionIds: ids, sectionId: ids[0] || '' };
@@ -83,6 +90,41 @@ window.registerPageInit('scenes', async function ({ project }) {
       btn.setAttribute('aria-pressed', selected ? 'true' : 'false');
     });
   }
+
+  const sectionTargetTagLabels = [
+    'Setup',
+    'Disruption',
+    'Flashback',
+    'Internal Conflict',
+    'Revelation',
+    'Crisis',
+    'Climax',
+    'Aftermath',
+    'Resolution',
+  ];
+
+  function syncSectionTargetTagTooltips() {
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+    getSceneTagButtons().forEach((button) => {
+      const tagLabel = button.dataset.sceneTag || '';
+      const targetIndex = sectionTargetTagLabels.indexOf(tagLabel);
+      if (targetIndex === -1) {
+        return;
+      }
+
+      const tagKey = normalize(tagLabel);
+      const section = plotSections.find((entry) => normalize(entry.label) === tagKey || normalize(entry.label).includes(tagKey))
+        || plotSections[targetIndex]
+        || null;
+      const description = toPlainText(section?.description || '');
+      const title = description
+        ? `${section?.label || tagLabel}: ${description}`
+        : `${tagLabel}: No section target notes yet.`;
+      button.setAttribute('title', title);
+      button.setAttribute('aria-label', title);
+    });
+  }
+  syncSectionTargetTagTooltips();
   const autosave = window.createAutosaveController(async () => {
     activeProject = await window.saveProjectData(buildProjectPayload(), {
       dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],

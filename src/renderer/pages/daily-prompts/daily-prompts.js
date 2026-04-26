@@ -120,6 +120,13 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       .replace(/"/g, '&quot;');
   }
 
+  function toPlainText(value = '') {
+    const parsed = window.parseRichTextValue?.(value);
+    const temp = document.createElement('div');
+    temp.innerHTML = parsed?.html || String(value || '');
+    return (temp.textContent || temp.innerText || '').trim().replace(/\s+/g, ' ');
+  }
+
   function pickRandom(array, count) {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
@@ -243,7 +250,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         }
         : null,
       location: location?.name || '',
-      stepLabel: matchedSection ? `Step ${(activeProject.plotSections || []).findIndex((section) => section.id === matchedSection.id) + 1}` : '',
+      stepLabel: matchedSection ? `Prompt ${(activeProject.plotSections || []).findIndex((section) => section.id === matchedSection.id) + 1}` : '',
       chapterRange: formatChapterRange(getSectionChapters(sectionId)),
     };
 
@@ -501,7 +508,11 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     const matched = entry?.plotPoint
       ? plotSections.find((s) => normalize(s.label) === normalize(entry.plotPoint))
       : null;
-    return matched?.description ? String(matched.description).trim() : '';
+    return matched?.description ? toPlainText(matched.description) : '';
+  }
+
+  function formatPromptStepLabel(label = '') {
+    return String(label || '').replace(/^Step\b/i, 'Prompt');
   }
 
   function renderPromptCards(entries) {
@@ -518,7 +529,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         return `
         <article class="beat-card daily-prompt-card ui-card ui-card-soft ui-card-stack">
           <div class="prompt-card-meta-row">
-            ${contextDetails.stepLabel ? `<span class="prompt-meta-badge">${escapeHtml(contextDetails.stepLabel)}</span>` : ''}
+            ${contextDetails.stepLabel ? `<span class="prompt-meta-badge">${escapeHtml(formatPromptStepLabel(contextDetails.stepLabel))}</span>` : ''}
             ${contextDetails.chapterRange ? `<span class="prompt-meta-badge prompt-meta-badge-accent">${escapeHtml(contextDetails.chapterRange)}</span>` : ''}
           </div>
           <div class="prompt-card-head">
