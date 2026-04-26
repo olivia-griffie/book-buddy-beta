@@ -86,7 +86,7 @@ window.registerPageInit('characters', async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
-  document.getElementById('characters-page-title').textContent = `${activeProject.title || 'Project'} Characters`;
+  document.getElementById('characters-page-title').textContent = 'Characters';
   window.initializeTextEditor(content);
 
   const characters = (activeProject.characters || []).map((character) => ({ ...character }));

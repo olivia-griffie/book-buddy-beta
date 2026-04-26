@@ -45,7 +45,7 @@ window.registerPageInit('scenes', async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
-  document.getElementById('scenes-page-title').textContent = `${activeProject.title || 'Project'} Scenes`;
+  document.getElementById('scenes-page-title').textContent = 'Scenes';
   window.initializeTextEditor(content);
 
   const promptData = await window.getGenrePromptData();

@@ -30,7 +30,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   generateButton.style.display = 'inline-flex';
-  document.getElementById('daily-prompts-title').textContent = `${activeProject.title || 'Project'} Daily Prompts`;
+  document.getElementById('daily-prompts-title').textContent = 'Challenges';
 
   const promptData = await window.getGenrePromptData();
   const resources = window.getProjectResources(activeProject, promptData);

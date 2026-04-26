@@ -840,12 +840,12 @@ function syncVisibleProjectLabels(project) {
   }
 
   const titleByPage = {
-    'plot-creation': project.title || 'Plot Builder',
+    'plot-creation': 'Plot',
     chapters: project.title || 'Chapter Workspace',
-    characters: `${project.title || 'Project'} Characters`,
-    scenes: `${project.title || 'Project'} Scenes`,
+    characters: 'Characters',
+    scenes: 'Scenes',
     locations: `${project.title || 'Project'} Locations`,
-    'daily-prompts': `${project.title || 'Project'} Daily Prompts`,
+    'daily-prompts': 'Challenges',
   };
 
   const pageTitleElementIds = {
