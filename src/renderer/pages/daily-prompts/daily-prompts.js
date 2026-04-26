@@ -112,6 +112,14 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     status.classList.toggle('is-error', tone === 'error');
   }
 
+  function escapeHtml(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
   function pickRandom(array, count) {
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
@@ -179,13 +187,33 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   };
   const CHARACTER_ROLE_ORDER = ['protagonist', 'love-interest', 'antagonist', 'confidant', 'deuteragonist', 'foil', 'tertiary'];
 
-  function getContextLabel(index, entry) {
+  function getMatchedSection(entry) {
     const plotSections = activeProject.plotSections || [];
     const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
 
-    const matchedSection = entry?.plotPoint
+    return entry?.plotPoint
       ? plotSections.find((s) => normalize(s.label) === normalize(entry.plotPoint))
       : null;
+  }
+
+  function getSectionChapters(sectionId) {
+    if (!sectionId) return [];
+    return getChapters().filter((chapter) => chapter.sectionId === sectionId);
+  }
+
+  function formatChapterRange(chapters) {
+    if (!chapters.length) return '';
+    const chapterNumbers = chapters
+      .map((chapter) => getChapters().findIndex((entry) => entry.id === chapter.id) + 1)
+      .filter((number) => number > 0);
+
+    if (!chapterNumbers.length) return '';
+    if (chapterNumbers.length === 1) return `Chapter ${chapterNumbers[0]}`;
+    return `Chapters ${chapterNumbers.slice(0, 2).join(' & ')}`;
+  }
+
+  function getPromptContext(index, entry) {
+    const matchedSection = getMatchedSection(entry);
     const sectionId = matchedSection?.id || null;
 
     function filterBySection(items, fallback) {
@@ -206,7 +234,18 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
 
     const scene = candidateScenes[index % (candidateScenes.length || 1)];
     const location = candidateLocations[index % (candidateLocations.length || 1)];
-    const pieces = [];
+    const context = {
+      characters: [],
+      scene: scene?.title
+        ? {
+          title: scene.title,
+          traits: (scene.tags || []).filter(Boolean).slice(0, 3),
+        }
+        : null,
+      location: location?.name || '',
+      stepLabel: matchedSection ? `Step ${(activeProject.plotSections || []).findIndex((section) => section.id === matchedSection.id) + 1}` : '',
+      chapterRange: formatChapterRange(getSectionChapters(sectionId)),
+    };
 
     if (allCharacters.length > 0) {
       // Sort by role priority so protagonist always surfaces first
@@ -228,25 +267,79 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       const rest = pickRandom(sorted.slice(1), Math.max(0, characterCount - 1));
       const picked = [...top, ...rest];
 
-      const charParts = picked.map((c) => {
+      context.characters = picked.map((c) => {
         const primaryRole = (c.typeTags || []).find((t) => CHARACTER_ROLE_LABELS[t]);
-        const narrativePart = (c.narrativeTags || []).slice(0, 2).join(', ');
-        const base = primaryRole
-          ? `${CHARACTER_ROLE_LABELS[primaryRole]}: ${c.name}`
-          : `Character: ${c.name}`;
-        return narrativePart ? `${base} (${narrativePart})` : base;
+        return {
+          role: primaryRole ? CHARACTER_ROLE_LABELS[primaryRole] : 'Character',
+          name: c.name,
+          traits: (c.narrativeTags || []).slice(0, 2),
+        };
       });
-      pieces.push(charParts.join(' | '));
     }
 
-    if (scene?.title) {
-      const sceneTags = (scene.tags || []).filter(Boolean).slice(0, 3);
-      pieces.push(sceneTags.length
-        ? `Scene: ${scene.title} [${sceneTags.join(', ')}]`
-        : `Scene: ${scene.title}`);
+    return context;
+  }
+
+  function getContextLabel(index, entry) {
+    const context = getPromptContext(index, entry);
+    const pieces = [];
+
+    if (context.characters.length) {
+      pieces.push(context.characters.map((character) => {
+        const base = `${character.role}: ${character.name}`;
+        return character.traits.length ? `${base} (${character.traits.join(', ')})` : base;
+      }).join(' | '));
     }
-    if (location?.name) pieces.push(`Location: ${location.name}`);
+    if (context.scene?.title) {
+      pieces.push(context.scene.traits.length
+        ? `Scene: ${context.scene.title} [${context.scene.traits.join(', ')}]`
+        : `Scene: ${context.scene.title}`);
+    }
+    if (context.location) pieces.push(`Location: ${context.location}`);
     return pieces.length ? pieces.join(' | ') : 'Use this anywhere in the draft.';
+  }
+
+  function renderPromptMetaGrid(context, fallback = '') {
+    const cards = [];
+    (context?.characters || []).forEach((character) => {
+      cards.push(`
+        <div class="prompt-meta-tile">
+          <span class="prompt-meta-label">${escapeHtml(character.role)}</span>
+          <strong>${escapeHtml(character.name)}</strong>
+          ${character.traits?.length ? `<span class="prompt-meta-traits">${escapeHtml(character.traits.join(' · '))}</span>` : ''}
+        </div>
+      `);
+    });
+
+    if (context?.scene?.title) {
+      cards.push(`
+        <div class="prompt-meta-tile prompt-meta-tile-wide">
+          <span class="prompt-meta-label">Scene</span>
+          <strong>${escapeHtml(context.scene.title)}</strong>
+          ${context.scene.traits?.length ? `<span class="prompt-meta-traits">${escapeHtml(context.scene.traits.join(' · '))}</span>` : ''}
+        </div>
+      `);
+    }
+
+    if (context?.location) {
+      cards.push(`
+        <div class="prompt-meta-tile">
+          <span class="prompt-meta-label">Location</span>
+          <strong>${escapeHtml(context.location)}</strong>
+        </div>
+      `);
+    }
+
+    if (!cards.length && fallback) {
+      cards.push(`
+        <div class="prompt-meta-tile prompt-meta-tile-wide">
+          <span class="prompt-meta-label">Context</span>
+          <strong>${escapeHtml(fallback)}</strong>
+        </div>
+      `);
+    }
+
+    return cards.length ? `<div class="prompt-meta-grid">${cards.join('')}</div>` : '';
   }
 
   function hasPromptBeenCompleted(entry) {
@@ -415,22 +508,34 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     resultsGrid.innerHTML = entries.length
       ? entries.map((entry, index) => {
         const sectionDesc = getSectionDescription(entry);
+        const contextDetails = entry.contextDetails || getPromptContext(index, entry);
         const suggestedChapter = getSuggestedChapter(entry, index)
           || getChapters().find((chapter) => chapter.id === entry.suggestedChapterId)
           || null;
         const selectedChapterId = entry.assignedChapterId || suggestedChapter?.id || '';
+        const targetWordCount = Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)) || 0;
+        const snapshot = buildCompletionSnapshot(entry);
         return `
         <article class="beat-card daily-prompt-card ui-card ui-card-soft ui-card-stack">
-          <h4>${index + 1}. ${entry.plotPoint}${sectionDesc ? `: <span class="prompt-section-desc">${sectionDesc}</span>` : ''}</h4>
-          <p class="genre-pill">${entry.genre}</p>
-          <p class="prompt-callout">${entry.prompt}</p>
-          ${entry.scoreReason ? `<p class="prompt-score-reason">Chosen because: ${entry.scoreReason}</p>` : ''}
-          <p>${entry.context || 'Use this anywhere in the draft.'}</p>
+          <div class="prompt-card-meta-row">
+            ${contextDetails.stepLabel ? `<span class="prompt-meta-badge">${escapeHtml(contextDetails.stepLabel)}</span>` : ''}
+            ${contextDetails.chapterRange ? `<span class="prompt-meta-badge prompt-meta-badge-accent">${escapeHtml(contextDetails.chapterRange)}</span>` : ''}
+          </div>
+          <div class="prompt-card-head">
+            <h4>${escapeHtml(entry.plotPoint || 'Writing prompt')}</h4>
+            ${sectionDesc ? `<p class="prompt-section-desc">${escapeHtml(sectionDesc)}</p>` : ''}
+          </div>
+          <div class="prompt-genre-row">
+            ${String(entry.genre || '').split(/[\/,|]/).map((genre) => genre.trim()).filter(Boolean).slice(0, 3).map((genre) => `<span class="genre-pill">${escapeHtml(genre)}</span>`).join('')}
+          </div>
+          <p class="prompt-callout">${escapeHtml(entry.prompt)}</p>
+          ${entry.scoreReason ? `<p class="prompt-score-reason"><span>Chosen because</span>: ${escapeHtml(entry.scoreReason)}</p>` : ''}
+          ${renderPromptMetaGrid(contextDetails, entry.context || 'Use this anywhere in the draft.')}
           ${suggestedChapter ? `<p class="prompt-chapter-suggestion">Suggested chapter: ${suggestedChapter.title || 'Untitled Chapter'}</p>` : ''}
-          <p class="daily-prompt-status">Target: ${(Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)) || 0).toLocaleString()} words</p>
+          <p class="daily-prompt-status">Target: ${targetWordCount.toLocaleString()} words</p>
           <div class="daily-prompt-answer">
             <label for="prompt-answer-${entry.id}">Your Answer</label>
-            <textarea id="prompt-answer-${entry.id}" data-prompt-answer="${entry.id}" rows="5">${entry.answer || ''}</textarea>
+            <textarea id="prompt-answer-${entry.id}" data-prompt-answer="${entry.id}" rows="5">${escapeHtml(entry.answer || '')}</textarea>
           </div>
           <div class="daily-prompt-actions">
             <div class="field">
@@ -439,7 +544,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
                 <option value="">Choose a chapter</option>
                 ${getChapters().map((chapter) => `
                   <option value="${chapter.id}" ${selectedChapterId === chapter.id ? 'selected' : ''}>
-                    ${chapter.title || 'Untitled Chapter'}${suggestedChapter?.id === chapter.id ? ' (Suggested)' : ''}
+                    ${escapeHtml(chapter.title || 'Untitled Chapter')}${suggestedChapter?.id === chapter.id ? ' (Suggested)' : ''}
                   </option>
                 `).join('')}
               </select>
@@ -453,10 +558,10 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           </div>
           <div class="daily-prompt-progress">
             <div class="goal-progress-track">
-              <div class="goal-progress-fill ${buildCompletionSnapshot(entry).completed ? 'is-complete' : ''}" style="width:${buildCompletionSnapshot(entry).percent}%"></div>
+              <div class="goal-progress-fill ${snapshot.completed ? 'is-complete' : ''}" style="width:${snapshot.percent}%"></div>
             </div>
             <p class="daily-prompt-status">
-              ${buildCompletionSnapshot(entry).state}: ${buildCompletionSnapshot(entry).caption}
+              ${snapshot.state}: ${snapshot.caption}
             </p>
           </div>
         </article>
@@ -633,6 +738,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           ...entry,
           prompt,
           context: getContextLabel(index, entry),
+          contextDetails: getPromptContext(index, entry),
           promptType,
           matchedTags: [],
           scoreReason: 'Sequential order',
@@ -664,6 +770,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         id: `daily-prompt-${Date.now()}-${index}-${Math.random().toString(36).slice(2, 7)}`,
         ...rest,
         context: getContextLabel(index, entry),
+        contextDetails: getPromptContext(index, entry),
         suggestedChapterId: suggestedChapter?.id || '',
         assignedChapterId: suggestedChapter?.id || '',
         answer: '',

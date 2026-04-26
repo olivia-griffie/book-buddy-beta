@@ -70,9 +70,16 @@
 }
 
 .prompt-score-reason {
-  margin: -4px 0 0;
-  color: rgba(255, 255, 255, 0.76);
-  font-size: 0.82rem;
+  margin: -2px 0 2px;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.prompt-score-reason span {
+  color: rgba(255, 255, 255, 0.48);
 }
 
 .prompt-chapter-suggestion {
@@ -101,33 +108,132 @@
 
 /* ── Navy/teal theme for daily prompt cards ── */
 .daily-prompt-card {
-  background: #1a4a6b !important;
-  border-color: rgba(0, 0, 0, 0.15);
+  background: #123647 !important;
+  border-color: rgba(255, 255, 255, 0.16);
   color: white;
+  box-shadow: none;
 }
 
-.daily-prompt-card h4,
+.daily-prompt-card h4 {
+  color: white;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
 .daily-prompt-card > p {
-  color: white;
+  color: rgba(255, 255, 255, 0.6);
 }
 
+.prompt-card-meta-row,
+.prompt-genre-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
 
-.daily-prompt-card h4 .prompt-section-desc {
-  font-weight: 400;
-  opacity: 0.75;
-  font-size: 0.9em;
+.prompt-meta-badge,
+.daily-prompt-card .genre-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.prompt-meta-badge {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+}
+
+.prompt-meta-badge-accent {
+  background: rgba(79, 242, 201, 0.16);
+  color: rgba(79, 242, 201, 0.92);
+}
+
+.prompt-card-head {
+  display: grid;
+  gap: 4px;
+}
+
+.daily-prompt-card .prompt-section-desc {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.daily-prompt-card .genre-pill {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .daily-prompt-card .prompt-callout {
-  background: rgba(79, 242, 201, 0.1);
-  border: 1px solid rgba(79, 242, 201, 0.2);
+  margin: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.95);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.prompt-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.prompt-meta-tile {
+  display: grid;
+  gap: 4px;
+  min-height: 84px;
+  padding: 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.055);
+  align-content: start;
+}
+
+.prompt-meta-tile-wide {
+  grid-column: 1 / -1;
+}
+
+.prompt-meta-label {
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.prompt-meta-tile strong {
   color: rgba(255, 255, 255, 0.92);
-  border-radius: 1rem;
-  padding: .8rem;
+  font-size: 0.84rem;
+  line-height: 1.25;
+}
+
+.prompt-meta-traits {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .daily-prompt-card .daily-prompt-status {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.45);
 }
 
 /* Writing area — white bg + dark text */
@@ -149,7 +255,7 @@
 
 /* Chapter select in actions */
 .daily-prompt-card .daily-prompt-actions .field label {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .daily-prompt-card .daily-prompt-actions .field select {
@@ -160,7 +266,7 @@
 
 /* Progress bar section */
 .daily-prompt-card .daily-prompt-progress .daily-prompt-status {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .daily-prompt-card .goal-progress-track {
@@ -290,4 +396,10 @@ body.dark-mode .daily-prompt-card .daily-prompt-actions .field select {
   background: var(--surface-input);
   color: var(--ink);
   border-color: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 780px) {
+  .prompt-meta-grid {
+    grid-template-columns: 1fr;
+  }
 }
