@@ -14,7 +14,7 @@ window.initPage = async function () {
     betaBanner.style.display = 'block';
     betaBanner.innerHTML = `
       <p class="eyebrow">Beta Limit</p>
-      <p>Book Buddy Beta includes one project slot for now. Delete your current project to start a different one, or buy the full version on release to unlock multiple projects.</p>
+      <p>Inkbug Beta includes one project slot for now. Delete your current project to start a different one, or buy the full version on release to unlock multiple projects.</p>
       <div class="admin-banner-row">
         <div class="field">
           <label for="home-admin-code">Admin Key</label>
@@ -82,7 +82,7 @@ window.initPage = async function () {
     if (!goal || !targetDate) {
       return {
         status: 'Set a completion date to unlock pace tracking.',
-        detail: 'Choose a target date so Book Buddy can tell you whether the project is on track.',
+        detail: 'Choose a target date so Inkbug can tell you whether the project is on track.',
         tone: 'neutral',
       };
     }
@@ -397,7 +397,7 @@ window.initPage = async function () {
         betaBanner.style.display = 'block';
         betaBanner.innerHTML = `
           <p class="eyebrow">Export</p>
-          <p>Export is not available in the current app session. Restart Book Buddy Beta and try again.</p>
+          <p>Export is not available in the current app session. Restart Inkbug Beta and try again.</p>
         `;
         return;
       }

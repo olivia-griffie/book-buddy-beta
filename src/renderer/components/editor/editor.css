@@ -15,7 +15,7 @@
   padding: 10px 12px;
   border: 1px solid var(--border-soft);
   border-radius: 14px;
-  background: #f8f2ea;
+  background: #f2fdfb;
 }
 
 .rich-text-toolbar-main,
@@ -117,7 +117,7 @@
   justify-content: space-between;
   gap: 10px;
   padding: 8px 12px;
-  background: #faf7f2;
+  background: #f7fffd;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -131,7 +131,7 @@
 }
 
 .rich-text-collapse-bar:hover {
-  background: #f0ebe1;
+  background: #e6faf5;
 }
 
 .rich-text-collapse-copy {
@@ -173,7 +173,7 @@
 
 .rich-text-editor-shell:focus {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
+  box-shadow: 0 0 0 3px rgba(79, 242, 201, 0.22);
 }
 
 .rich-text-editor-shell p,

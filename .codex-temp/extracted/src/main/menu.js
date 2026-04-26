@@ -3,7 +3,7 @@ const { Menu, shell } = require('electron');
 function buildMenu() {
   const template = [
     {
-      label: 'Book Buddy Beta',
+      label: 'Inkbug Beta',
       submenu: [
         { role: 'about' },
         { type: 'separator' },
@@ -41,7 +41,7 @@ function buildMenu() {
       submenu: [
         {
           label: 'GitHub',
-          click: () => shell.openExternal('https://github.com/olivia-griffie/book-buddy-beta'),
+          click: () => shell.openExternal('https://github.com/olivia-griffie/inkbug-beta'),
         },
       ],
     },

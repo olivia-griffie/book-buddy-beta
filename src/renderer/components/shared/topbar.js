@@ -321,7 +321,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
         <div class="topbar-summary-left">
           <p class="topbar-kicker">${hasProject ? 'Current Workspace' : 'Welcome'}</p>
           <div class="topbar-title-row">
-            <h2 class="topbar-title">${hasProject ? currentProject.title : 'Book Buddy Beta'}</h2>
+            <h2 class="topbar-title">${hasProject ? currentProject.title : 'Inkbug Beta'}</h2>
             ${hasProject ? `<span class="topbar-save-state is-${saveTone}">${saveText}</span>` : ''}
           </div>
           <p class="topbar-subtitle">

@@ -164,7 +164,7 @@ window.registerPageInit('home', async function () {
     if (!goal || !targetDate) {
       return {
         status: 'Set a completion date to unlock pace tracking.',
-        detail: 'Choose a target date so Book Buddy can tell you whether the project is on track.',
+        detail: 'Choose a target date so Inkbug can tell you whether the project is on track.',
         tone: 'neutral',
       };
     }
@@ -519,7 +519,7 @@ window.registerPageInit('home', async function () {
   document.getElementById('btn-import-project')?.addEventListener('click', async () => {
     if (typeof window.api?.importProjectBackup !== 'function') {
       betaBanner.style.display = 'block';
-      betaBanner.innerHTML = `<p class="eyebrow">Import</p><p>Import is not available in this session. Please restart Book Buddy and try again.</p>`;
+      betaBanner.innerHTML = `<p class="eyebrow">Import</p><p>Import is not available in this session. Please restart Inkbug and try again.</p>`;
       return;
     }
     try {
@@ -534,7 +534,7 @@ window.registerPageInit('home', async function () {
       await window.navigate('home');
     } catch (error) {
       betaBanner.style.display = 'block';
-      betaBanner.innerHTML = `<p class="eyebrow">Import Failed</p><p>${error?.message || 'Could not import the project file. Make sure it was exported from Book Buddy.'}</p>`;
+      betaBanner.innerHTML = `<p class="eyebrow">Import Failed</p><p>${error?.message || 'Could not import the project file. Make sure it was exported from Inkbug.'}</p>`;
     }
   });
 
@@ -774,7 +774,7 @@ window.registerPageInit('home', async function () {
       if (!project) return;
       if (typeof window.api?.exportProjectBackup !== 'function') {
         betaBanner.style.display = 'block';
-        betaBanner.innerHTML = `<p class="eyebrow">Export</p><p>Export is not available in this session. Please restart Book Buddy and try again.</p>`;
+        betaBanner.innerHTML = `<p class="eyebrow">Export</p><p>Export is not available in this session. Please restart Inkbug and try again.</p>`;
         return;
       }
       try {
@@ -802,7 +802,7 @@ window.registerPageInit('home', async function () {
         betaBanner.style.display = 'block';
         betaBanner.innerHTML = `
           <p class="eyebrow">Export</p>
-          <p>Export is not available in the current app session. Restart Book Buddy Beta and try again.</p>
+          <p>Export is not available in the current app session. Restart Inkbug Beta and try again.</p>
         `;
         return;
       }

@@ -3,7 +3,7 @@ const { Menu, shell } = require('electron');
 function buildMenu() {
   const template = [
     {
-      label: 'Book Buddy Beta',
+      label: 'Inkbug Beta',
       submenu: [
         { role: 'about' },
         { type: 'separator' },

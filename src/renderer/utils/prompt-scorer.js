@@ -1,5 +1,5 @@
 /**
- * Book Buddy - Offline Prompt Scoring Engine
+ * Inkbug - Offline Prompt Scoring Engine
  */
 
 const NARRATIVE_TAG_MAP = {

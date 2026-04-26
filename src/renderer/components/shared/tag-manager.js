@@ -1,5 +1,5 @@
 /**
- * Book Buddy — Shared Tag Manager Component
+ * Inkbug — Shared Tag Manager Component
  * src/renderer/components/shared/tag-manager.js
  */
 

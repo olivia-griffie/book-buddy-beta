@@ -1,17 +1,17 @@
 :root {
-  --cream: #fff7f3;
+  --cream: #f2fdfb;
   --ink: #2f3545;
   --ink-soft: #525a6d;
   --ink-muted: #7d8496;
-  --sage: #ff6a5a;
-  --sage-light: #ff8a3d;
-  --sage-deep: #ff4d95;
+  --sage: #4ff2c9;
+  --sage-light: #91edd6;
+  --sage-deep: #2f3545;
   --accent-orange: #ff8a3d;
   --accent-coral: #ff6a5a;
   --accent-pink: #ff7eb8;
   --accent-mint: #4ff2c9;
-  --border: #f0cfc3;
-  --border-soft: #f6ddd5;
+  --border: #bdeee3;
+  --border-soft: #d7f6ef;
   --shadow-card: 0 8px 18px rgba(47, 53, 69, 0.06);
   --shadow-lift: 0 12px 24px rgba(47, 53, 69, 0.12);
   --radius-sm: 6px;
@@ -27,12 +27,12 @@
   /* Surface tokens (overridden in dark mode) */
   --surface-bg: var(--cream);
   --surface-card: #ffffff;
-  --surface-topbar: #fffdfa;
-  --surface-tracker: #fffdfa;
+  --surface-topbar: #f7fffd;
+  --surface-tracker: #f7fffd;
   --surface-step: #ffffff;
   --surface-input: #ffffff;
-  --surface-soft: #fffdfa;
-  --surface-step-index: #f1eadf;
+  --surface-soft: #f7fffd;
+  --surface-step-index: #d7f6ef;
 }
 
 body.dark-mode {
@@ -40,8 +40,8 @@ body.dark-mode {
   --ink: #e4e6f0;
   --ink-soft: #b0b8cc;
   --ink-muted: #7880a0;
-  --border: #2e3348;
-  --border-soft: #252836;
+  --border: #2e4c50;
+  --border-soft: #23383e;
   --shadow-card: 0 8px 18px rgba(0, 0, 0, 0.3);
   --shadow-lift: 0 12px 24px rgba(0, 0, 0, 0.45);
 

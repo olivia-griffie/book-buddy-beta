@@ -711,7 +711,7 @@ window.initPage = async function ({ project }) {
 
   async function exportProjectBook() {
     if (typeof window.api?.exportProjectManuscript !== 'function') {
-      saveMessage.textContent = 'Export is not available in the current app session. Restart Book Buddy Beta and try again.';
+      saveMessage.textContent = 'Export is not available in the current app session. Restart Inkbug Beta and try again.';
       return;
     }
 

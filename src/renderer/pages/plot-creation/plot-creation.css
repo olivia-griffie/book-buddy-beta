@@ -74,7 +74,7 @@
   font-size: 1rem;
   line-height: 1.7;
   color: var(--ink);
-  background: #fffdfa;
+  background: var(--surface-soft);
   border-color: var(--border-soft);
   padding: 14px 16px;
 }
@@ -202,7 +202,7 @@
   margin-top: 12px;
   padding: 12px 14px;
   border-radius: 12px;
-  background: #f5efe6;
+  background: #f2fdfb;
   color: var(--ink);
 }
 
@@ -211,10 +211,10 @@
   width: fit-content;
   margin-top: 10px;
   padding: 5px 10px;
-  border: 1px solid rgba(255, 106, 90, 0.24);
+  border: 1px solid rgba(79, 242, 201, 0.32);
   border-radius: 999px;
-  background: rgba(255, 126, 184, 0.12);
-  color: var(--accent-coral);
+  background: rgba(79, 242, 201, 0.16);
+  color: var(--ink);
   font-size: 0.76rem;
   font-weight: 600;
 }

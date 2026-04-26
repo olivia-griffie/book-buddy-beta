@@ -101,7 +101,7 @@ window.initPage = async function () {
   function syncAdminState() {
     projectSlotNote.textContent = isAdminMode
       ? 'Admin mode is active. You can create multiple projects while testing.'
-      : 'Book Buddy Beta currently supports one active project slot. Delete your current project to start a different one.';
+      : 'Inkbug Beta currently supports one active project slot. Delete your current project to start a different one.';
     adminCodeInput.value = '';
     adminCodeInput.placeholder = isAdminMode ? 'Admin mode unlocked' : 'Enter admin key';
     adminCodeInput.disabled = isAdminMode;
@@ -152,7 +152,7 @@ window.initPage = async function () {
         renderGenreOptions(promptGenres);
       }
     } catch (error) {
-      formMessage.textContent = 'Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.';
+      formMessage.textContent = 'Prompt guidance did not load cleanly, so Inkbug is using a fallback genre list for now.';
     }
 
     try {
@@ -211,7 +211,7 @@ window.initPage = async function () {
     formMessage.textContent = '';
 
     if (projectLimitsReady && !isAdminMode && existingProjects.length >= 1) {
-      formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
+      formMessage.textContent = 'Inkbug Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
       return;
     }
 

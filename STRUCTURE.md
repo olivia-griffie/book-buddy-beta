@@ -1,7 +1,7 @@
-# Book Buddy Beta — Project Structure
+# Inkbug Beta — Project Structure
 
 ```
-book-buddy-beta/
+inkbug-beta/
 │
 ├── package.json                  # Electron + build config
 ├── electron-builder.yml          # (optional override for builder)

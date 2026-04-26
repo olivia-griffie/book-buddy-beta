@@ -338,7 +338,7 @@ window.initPage = async function ({ project }) {
   countInput.addEventListener('change', () => {
     if (!isTester && countInput.value !== '1') {
       countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock larger prompt packs.';
+      status.textContent = 'Inkbug Beta currently includes one prompt per day. Buy the full version on release to unlock larger prompt packs.';
     }
   });
 
@@ -360,7 +360,7 @@ window.initPage = async function ({ project }) {
 
     if (!isTester && Number(countInput.value) !== 1) {
       countInput.value = '1';
-      status.textContent = 'Book Buddy Beta currently includes one prompt per day. Buy the full version on release to unlock 3 and 5 prompt packs.';
+      status.textContent = 'Inkbug Beta currently includes one prompt per day. Buy the full version on release to unlock 3 and 5 prompt packs.';
       return;
     }
 

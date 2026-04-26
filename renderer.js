@@ -839,7 +839,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       if (!settings?.betaTesterUnlocked && allProjects.length >= 1) {
         if (formMessage) {
-          formMessage.textContent = 'Book Buddy Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
+          formMessage.textContent = 'Inkbug Beta currently allows one project slot. Delete your current project now, or unlock admin mode for testing.';
         }
         return;
       }

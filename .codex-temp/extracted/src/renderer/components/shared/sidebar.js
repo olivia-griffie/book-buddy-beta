@@ -79,7 +79,7 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
         <img
           class="sidebar-brand-logo"
           src="../../public/logo-full.png"
-          alt="Book Buddy"
+          alt="Inkbug"
         />
         <p class="sidebar-kicker">Writer's Hub</p>
         <div class="sidebar-project-status">

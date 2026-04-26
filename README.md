@@ -1,4 +1,4 @@
-# Book Buddy Beta
+# Inkbug Beta
 
 A desktop app for aspiring authors to store, organize, and write manuscripts with file organization and daily writing challenges.
 
@@ -38,4 +38,4 @@ Built files will appear in the `/releases` folder.
 See STRUCTURE.md for detailed breakdown.
 
 ## Beta Tier
-This build is "Book Buddy Beta" — unlimited projects, all features unlocked for testing.
+This build is "Inkbug Beta" — unlimited projects, all features unlocked for testing.

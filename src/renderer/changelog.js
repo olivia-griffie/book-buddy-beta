@@ -18,7 +18,7 @@ window.CHANGELOG = {
   '1.3.10': {
     headline: 'Welcome to version 1.3.10!',
     features: [
-      'Auto-updates — Book Buddy now updates silently in the background',
+      'Auto-updates — Inkbug now updates silently in the background',
     ],
   },
 };

@@ -29,7 +29,7 @@ const next = nextVersion(prev);
 pkg.version = next;
 fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2) + '\n');
 
-console.log(`\nBook Buddy Beta — Windows build`);
+console.log(`\nInkbug Beta — Windows build`);
 console.log(`Version: ${prev} → ${next}\n`);
 
 const releasesDir = path.join(__dirname, 'releases');

@@ -172,7 +172,7 @@ window.registerPageInit('create-project', async function () {
         renderGenreOptions(promptGenres);
       }
     } catch (error) {
-      setFormMessage('Prompt guidance did not load cleanly, so Book Buddy is using a fallback genre list for now.');
+      setFormMessage('Prompt guidance did not load cleanly, so Inkbug is using a fallback genre list for now.');
     }
   }
 
