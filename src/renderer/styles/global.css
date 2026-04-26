@@ -477,6 +477,14 @@ body {
   height: auto;
 }
 
+.sidebar-brand-collapsed-logo {
+  display: block;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  margin: 28px auto 0;
+}
+
 .sidebar-kicker {
   text-transform: uppercase;
   letter-spacing: 0.08em;

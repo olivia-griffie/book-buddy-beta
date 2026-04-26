@@ -232,7 +232,13 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
         <span class="sidebar-toggle-icon" aria-hidden="true"></span>
       </button>
       <div class="sidebar-brand">
-        ${isCollapsed ? '' : `
+        ${isCollapsed ? `
+          <img
+            class="sidebar-brand-collapsed-logo"
+            src="../../public/sidebar-icon.png"
+            alt="Inkbug"
+          />
+        ` : `
           <img
             class="sidebar-brand-logo"
             src="../../public/logo-color.png"

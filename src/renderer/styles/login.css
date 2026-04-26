@@ -35,8 +35,7 @@
 }
 
 body.dark-mode #app-loading-logo {
-  content: url('../../public/logo-dark.png');
-  filter: invert(1);
+  content: url('../../public/logo-full.png');
 }
 
 /* ── Auth overlay ── */
@@ -204,8 +203,7 @@ body.dark-mode #app-loading-logo {
 
 /* Dark mode logo swap */
 body.dark-mode #auth-logo {
-  content: url('../../public/logo-dark.png');
-  filter: invert(1);
+  content: url('../../public/logo-full.png');
 }
 
 /* Dark mode */
