@@ -477,7 +477,8 @@
   margin: 0;
   font-size: 1.35rem;
   line-height: 1.2;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
+  font-weight: 700;
   color: #3f3a4a;
 }
 
