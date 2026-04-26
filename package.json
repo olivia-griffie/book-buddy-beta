@@ -27,12 +27,12 @@
     "electron-updater": "^6.3.9"
   },
   "build": {
-    "appId": "com.oliviagriffie.bookbuddybeta",
+    "appId": "com.oliviagriffie.inkbugbeta",
     "productName": "Inkbug Beta",
     "publish": {
       "provider": "github",
       "owner": "olivia-griffie",
-      "repo": "book-buddy-beta",
+      "repo": "inkbug-beta",
       "releaseType": "release"
     },
     "directories": {
@@ -47,6 +47,7 @@
     "mac": {
       "category": "public.app-category.productivity",
       "icon": "public/icon.png",
+      "artifactName": "Inkbug-Beta-${version}-${arch}.${ext}",
       "target": [
         { "target": "dmg", "arch": ["x64", "arm64"] },
         { "target": "zip", "arch": ["x64", "arm64"] }
@@ -54,6 +55,7 @@
     },
     "win": {
       "icon": "public/icon.ico",
+      "artifactName": "Inkbug-Beta-Setup-${version}.${ext}",
       "target": [{ "target": "nsis", "arch": ["x64"] }]
     },
     "nsis": {

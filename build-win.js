@@ -47,15 +47,21 @@ build({
     },
   },
 }).then(() => {
-  // Move the installer (.exe, not the unpacked folder) to releases/
-  const installers = fs.readdirSync(tmpOut).filter((f) => f.endsWith('.exe'));
-  for (const file of installers) {
+  // Move installer and updater metadata assets to releases/. Electron auto-update
+  // needs latest.yml and blockmaps alongside the installer in the GitHub release.
+  const releaseAssets = fs.readdirSync(tmpOut).filter((file) => {
+    const fullPath = path.join(tmpOut, file);
+    return fs.statSync(fullPath).isFile() && /\.(exe|yml|yaml|blockmap)$/i.test(file);
+  });
+  const installers = releaseAssets.filter((f) => f.endsWith('.exe'));
+  for (const file of releaseAssets) {
     const dest = path.join(releasesDir, file);
     if (fs.existsSync(dest)) fs.unlinkSync(dest);
     fs.renameSync(path.join(tmpOut, file), dest);
   }
 
   console.log(`\nBuild complete: v${next}`);
+  console.log(`Updater assets: ${releaseAssets.map((file) => `releases/${file}`).join(', ')}`);
   console.log(`Installer → releases/${installers[0] || '(see releases/)'}`);
 }).catch((err) => {
   console.error(`\nBuild failed: ${err.message}`);

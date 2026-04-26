@@ -558,11 +558,11 @@ ipcMain.handle('projects:delete', async (_, id) => {
 });
 
 ipcMain.handle('projects:exportManuscript', async (_, project) => {
-  const safeTitle = String(project?.title || 'book-buddy-manuscript')
+  const safeTitle = String(project?.title || 'inkbug-manuscript')
     .trim()
     .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '')
     .replace(/\s+/g, ' ')
-    .trim() || 'book-buddy-manuscript';
+    .trim() || 'inkbug-manuscript';
   const defaultPath = path.join(app.getPath('documents'), `${safeTitle}.pdf`);
   const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
     title: 'Export Manuscript',
@@ -592,16 +592,16 @@ ipcMain.handle('projects:exportManuscript', async (_, project) => {
 });
 
 ipcMain.handle('projects:exportBackup', async (_, project) => {
-  const safeTitle = String(project?.title || 'book-buddy-project')
+  const safeTitle = String(project?.title || 'inkbug-project')
     .trim()
     .replace(/[<>:"/\\|?*\u0000-\u001f]/g, '')
     .replace(/\s+/g, '-')
-    .trim() || 'book-buddy-project';
+    .trim() || 'inkbug-project';
   const defaultPath = path.join(app.getPath('documents'), `${safeTitle}.bbproject`);
   const { canceled, filePath } = await dialog.showSaveDialog(mainWindow, {
-    title: 'Export BookBuddy Project for Safe Keeping',
+    title: 'Export Inkbug Project for Safe Keeping',
     defaultPath,
-    filters: [{ name: 'BookBuddy Project', extensions: ['bbproject'] }],
+    filters: [{ name: 'Inkbug Project', extensions: ['bbproject'] }],
   });
   if (canceled || !filePath) return { canceled: true };
   const finalPath = filePath.endsWith('.bbproject') ? filePath : `${filePath}.bbproject`;
@@ -611,9 +611,9 @@ ipcMain.handle('projects:exportBackup', async (_, project) => {
 
 ipcMain.handle('projects:importBackup', async () => {
   const { canceled, filePaths } = await dialog.showOpenDialog(mainWindow, {
-    title: 'Import BookBuddy Project',
+    title: 'Import Inkbug Project',
     filters: [
-      { name: 'BookBuddy Project', extensions: ['bbproject'] },
+      { name: 'Inkbug Project', extensions: ['bbproject'] },
       { name: 'JSON', extensions: ['json'] },
     ],
     properties: ['openFile'],
@@ -624,10 +624,10 @@ ipcMain.handle('projects:importBackup', async () => {
   try {
     project = JSON.parse(raw);
   } catch {
-    throw new Error('Could not read the file — it may be corrupted or not a valid BookBuddy project.');
+    throw new Error('Could not read the file — it may be corrupted or not a valid Inkbug project.');
   }
   if (!project || typeof project !== 'object' || !project.id || !project.title) {
-    throw new Error('This file doesn\'t look like a valid BookBuddy project.');
+    throw new Error('This file doesn\'t look like a valid Inkbug project.');
   }
   return { canceled: false, project };
 });

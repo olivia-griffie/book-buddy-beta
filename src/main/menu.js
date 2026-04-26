@@ -41,7 +41,7 @@ function buildMenu() {
       submenu: [
         {
           label: 'GitHub',
-          click: () => shell.openExternal('https://github.com/olivia-griffie/book-buddy-beta'),
+          click: () => shell.openExternal('https://github.com/olivia-griffie/inkbug-beta'),
         },
       ],
     },
