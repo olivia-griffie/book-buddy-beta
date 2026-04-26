@@ -152,8 +152,8 @@
 }
 
 .inbox-thread-row.is-active {
-  background: rgba(79, 242, 201, 0.16);
-  border-color: rgba(79, 242, 201, 0.18);
+  background: rgba(255, 138, 61, 0.1);
+  border-color: rgba(255, 138, 61, 0.18);
 }
 
 .inbox-thread-row.is-unread .inbox-thread-name {
@@ -179,7 +179,7 @@
 }
 
 .inbox-type-icon {
-  background: rgba(79, 242, 201, 0.18);
+  background: rgba(255, 138, 61, 0.16);
   color: var(--accent-orange);
 }
 
@@ -507,7 +507,7 @@
 }
 
 .inbox-badge-favorite {
-  background: rgba(79, 242, 201, 0.16);
+  background: rgba(255, 138, 61, 0.14);
   color: var(--accent-orange);
 }
 

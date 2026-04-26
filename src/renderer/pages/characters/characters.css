@@ -102,7 +102,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: #f7fffd;
+  background: #faf7f2;
   border: none;
   cursor: pointer;
   font: inherit;
@@ -116,7 +116,7 @@
 }
  
 .field-collapsible .field-collapse-trigger:hover {
-  background: #e6faf5;
+  background: #f0ebe1;
 }
  
 .field-collapsible .field-collapse-body {
@@ -173,7 +173,7 @@
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: var(--surface-soft);
+  background: #fffdfa;
   color: var(--ink);
   font: inherit;
   cursor: pointer;
@@ -183,12 +183,12 @@
 .character-type-tag:hover,
 .character-type-tag:focus-visible {
   border-color: var(--sage);
-  box-shadow: 0 0 0 3px rgba(79, 242, 201, 0.22);
+  box-shadow: 0 0 0 3px rgba(255, 106, 90, 0.16);
   outline: none;
 }
  
 .character-type-tag.is-selected {
-  background: rgba(79, 242, 201, 0.18);
+  background: rgba(255, 126, 184, 0.14);
   border-color: var(--sage);
   color: var(--sage-deep);
 }
@@ -220,7 +220,7 @@
   padding: 3px 7px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #f2fdfb;
+  background: #f8f2ea;
   color: var(--ink-muted);
   font-size: 0.72rem;
   letter-spacing: 0.02em;

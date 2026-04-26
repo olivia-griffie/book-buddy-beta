@@ -36,7 +36,7 @@
   font-weight: 500;
   padding: 4px 10px;
   border-radius: 999px;
-  background: var(--surface-step, #d7f6ef);
+  background: var(--surface-step, #f1eadf);
   color: var(--ink-muted);
   white-space: nowrap;
   flex-shrink: 0;
@@ -99,13 +99,13 @@
 
 .tm-ac-item:hover,
 .tm-ac-item:focus-visible {
-  background: var(--surface-step, #f2fdfb);
+  background: var(--surface-step, #f8f2ea);
   outline: none;
 }
 
 .tm-ac-item strong {
   font-weight: 700;
-  color: var(--sage-deep, #2f3545);
+  color: var(--accent, #ff8a3d);
 }
 
 /* — Active chips — */
@@ -149,7 +149,7 @@
 
 @keyframes tm-chip-flash {
   0%, 100% { border-color: rgba(79, 242, 201, 0.32); background: rgba(79, 242, 201, 0.13); }
-  40%       { border-color: rgba(79, 242, 201, 0.62);  background: rgba(79, 242, 201, 0.2); }
+  40%       { border-color: rgba(255, 138, 61, 0.6);  background: rgba(255, 138, 61, 0.1); }
 }
 
 .tm-chip-text {
@@ -185,7 +185,7 @@
   border: 1px solid var(--border-soft);
   border-radius: 16px;
   padding: 16px;
-  background: var(--surface-step, #f2fdfb);
+  background: var(--surface-step, #faf6f1);
   display: grid;
   gap: 12px;
 }
@@ -210,13 +210,13 @@
 }
 
 .tm-cat-tab:hover {
-  border-color: rgba(79, 242, 201, 0.42);
+  border-color: rgba(255, 138, 61, 0.4);
   color: var(--ink);
 }
 
 .tm-cat-tab.is-active {
-  background: rgba(79, 242, 201, 0.16);
-  border-color: rgba(79, 242, 201, 0.42);
+  background: rgba(255, 138, 61, 0.1);
+  border-color: rgba(255, 138, 61, 0.5);
   color: var(--ink);
   font-weight: 600;
 }

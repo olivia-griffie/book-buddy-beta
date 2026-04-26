@@ -14,7 +14,7 @@
 .thumbnail-preview-card {
   padding: 18px 20px;
   border-radius: 16px;
-  background: #f2fdfb;
+  background: #f8f2ea;
   border: 1px solid var(--border-soft);
 }
 
@@ -93,7 +93,7 @@
 
 .selection-badge {
   border-radius: 999px;
-  background: #d7f6ef;
+  background: #f1eadf;
   color: var(--ink-soft);
   padding: 6px 12px;
   font-size: 0.82rem;
@@ -112,7 +112,7 @@
   padding: 14px 16px;
   border: 1px solid var(--border-soft);
   border-radius: 14px;
-  background: var(--surface-soft);
+  background: #fffdfa;
   cursor: pointer;
 }
 
@@ -228,7 +228,7 @@
   padding: 14px 16px;
   border: 1px solid var(--border-soft);
   border-radius: 16px;
-  background: var(--surface-soft);
+  background: #fffdfa;
   color: var(--ink);
   text-align: left;
   font: inherit;
@@ -238,16 +238,16 @@
 
 .visibility-choice:hover,
 .visibility-choice:focus-visible {
-  border-color: rgba(79, 242, 201, 0.5);
+  border-color: rgba(255, 138, 61, 0.45);
   box-shadow: 0 8px 20px rgba(73, 52, 37, 0.06);
   transform: translateY(-1px);
   outline: none;
 }
 
 .visibility-choice.is-active {
-  border-color: rgba(79, 242, 201, 0.58);
-  background: linear-gradient(180deg, rgba(242, 253, 251, 0.96) 0%, rgba(247, 255, 253, 1) 100%);
-  box-shadow: 0 10px 24px rgba(79, 242, 201, 0.14);
+  border-color: rgba(255, 138, 61, 0.58);
+  background: linear-gradient(180deg, rgba(255, 245, 238, 0.96) 0%, rgba(255, 250, 246, 1) 100%);
+  box-shadow: 0 10px 24px rgba(255, 138, 61, 0.12);
 }
 
 .visibility-choice-title {

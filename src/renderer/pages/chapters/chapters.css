@@ -49,7 +49,7 @@
 .plot-section-item {
   border: 1px solid var(--border-soft);
   border-radius: 22px;
-  background: linear-gradient(180deg, var(--surface-soft) 0%, #f2fdfb 100%);
+  background: linear-gradient(180deg, #fffdfa 0%, #fff8f2 100%);
   overflow: hidden;
   animation: chapterRise 0.32s var(--ease) both;
   align-self: stretch;
@@ -110,8 +110,8 @@
 
 .plot-section-item[open] .plot-section-toggle-indicator {
   transform: rotate(180deg);
-  border-color: rgba(79, 242, 201, 0.35);
-  background: rgba(79, 242, 201, 0.16);
+  border-color: rgba(255, 138, 61, 0.3);
+  background: rgba(255, 138, 61, 0.1);
 }
 
 .plot-section-body {
@@ -330,8 +330,8 @@
   min-height: 32px;
   padding: 0 12px;
   border-radius: 999px;
-  background: rgba(79, 242, 201, 0.16);
-  color: var(--ink);
+  background: rgba(255, 138, 61, 0.14);
+  color: var(--accent-coral);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -339,17 +339,17 @@
 }
 
 .chapter-publish-status.is-published {
-  background: rgba(79, 242, 201, 0.22);
-  color: var(--ink);
+  background: rgba(90, 143, 106, 0.14);
+  color: var(--sage, #5a8f6a);
 }
 
 .chapter-publish-toggle {
   min-height: 42px;
   padding: 0 18px;
-  border-color: var(--accent-mint);
-  background: linear-gradient(135deg, #91edd6 0%, #4ff2c9 100%);
-  color: var(--ink);
-  box-shadow: 0 10px 22px rgba(79, 242, 201, 0.24);
+  border-color: var(--accent-coral);
+  background: linear-gradient(135deg, #ff8a61 0%, #ff6b5f 100%);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(255, 107, 95, 0.22);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -359,30 +359,29 @@
 
 .chapter-publish-toggle:hover,
 .chapter-publish-toggle:focus-visible {
-  border-color: #4ff2c9;
-  background: linear-gradient(135deg, #a6f5e0 0%, #4ff2c9 100%);
-  color: var(--ink);
-  box-shadow: 0 14px 28px rgba(79, 242, 201, 0.3);
+  border-color: #f05d52;
+  background: linear-gradient(135deg, #ff7d57 0%, #f05d52 100%);
+  color: #fff;
+  box-shadow: 0 14px 28px rgba(255, 107, 95, 0.28);
   transform: translateY(-1px);
 }
 
 .chapter-publish-toggle:active {
   transform: translateY(0);
-  box-shadow: 0 8px 18px rgba(79, 242, 201, 0.22);
+  box-shadow: 0 8px 18px rgba(255, 107, 95, 0.22);
 }
 
 .chapter-publish-toggle.is-published {
-  border-color: var(--accent-mint);
-  background: linear-gradient(135deg, #91edd6 0%, #4ff2c9 100%);
-  color: var(--ink);
-  box-shadow: 0 10px 22px rgba(79, 242, 201, 0.22);
+  border-color: #3ab87a;
+  background: linear-gradient(135deg, #4ecf8e 0%, #2fa86d 100%);
+  box-shadow: 0 10px 22px rgba(46, 168, 109, 0.22);
 }
 
 .chapter-publish-toggle.is-published:hover,
 .chapter-publish-toggle.is-published:focus-visible {
-  border-color: #4ff2c9;
-  background: linear-gradient(135deg, #a6f5e0 0%, #4ff2c9 100%);
-  box-shadow: 0 14px 28px rgba(79, 242, 201, 0.3);
+  border-color: #27996a;
+  background: linear-gradient(135deg, #3ec280 0%, #27996a 100%);
+  box-shadow: 0 14px 28px rgba(46, 168, 109, 0.28);
 }
 
 .chapter-editor-note,
@@ -410,8 +409,8 @@
   display: inline-flex;
   padding: 3px 9px;
   border-radius: 999px;
-  background: rgba(79, 242, 201, 0.18);
-  color: var(--ink);
+  background: rgba(255, 138, 61, 0.16);
+  color: var(--accent-coral);
   font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -430,7 +429,7 @@
   padding: 18px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
-  background: var(--surface-soft);
+  background: #fffdfa;
 }
 
 .chapters-layout:has(.plot-sections-card:not([open])) .chapter-writing-workspace {
@@ -482,7 +481,7 @@
 .chapter-context-tab:hover,
 .chapter-context-tab:focus-visible {
   border-color: var(--sage);
-  background: rgba(79, 242, 201, 0.16);
+  background: rgba(255, 126, 184, 0.12);
   color: var(--sage-deep);
   outline: none;
 }
@@ -534,7 +533,7 @@
   padding: 4px 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #f2fdfb;
+  background: #f8f2ea;
   color: var(--ink-muted);
   font-size: 0.74rem;
 }
@@ -562,7 +561,7 @@
 .chapter-prompt-card {
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
-  background: var(--surface-soft);
+  background: #fffdfa;
   overflow: hidden;
   animation: chapterRise 0.34s var(--ease) both;
 }
@@ -736,7 +735,7 @@
   padding: 5px 8px;
   border: 1px solid var(--border);
   border-radius: 6px;
-  background: #f2fdfb;
+  background: #f8f2ea;
   color: var(--ink-soft);
   font-size: 0.74rem;
   min-width: 0;
@@ -803,7 +802,7 @@
   padding: 0 6px;
   border-radius: 999px;
   background: rgba(79, 242, 201, 0.28);
-  color: var(--ink);
+  color: #fff;
   font-size: 0.7rem;
   font-weight: 700;
   vertical-align: middle;

@@ -216,7 +216,7 @@
   padding: 16px 18px;
   border: 1px solid var(--border-soft);
   border-radius: var(--radius-md);
-  background: var(--surface-soft);
+  background: #fffdfa;
   animation: promptHistoryRise 0.3s var(--ease) both;
 }
 
