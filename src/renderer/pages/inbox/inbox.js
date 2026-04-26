@@ -22,6 +22,7 @@ window.registerPageInit('inbox', async function () {
   const backBtn = document.getElementById('inbox-back-to-list');
 
   const feed = document.getElementById('inbox-feed');
+  const activityEmpty = document.getElementById('inbox-activity-empty');
   const markReadBtn = document.getElementById('inbox-mark-read');
   const storageKey = 'bb-inbox-read-items';
   const unreadStateKey = 'bb-inbox-unread-state';
@@ -461,9 +462,10 @@ window.registerPageInit('inbox', async function () {
     if (!filtered.length) {
       feed.style.display = 'none';
       if (activeMode === 'activity') {
-        empty.style.display = 'block';
-        empty.querySelector('h2').textContent = activeFilter === 'all' ? 'All caught up' : `No ${getNotificationTypeLabel(activeFilter).toLowerCase()} activity`;
-        empty.querySelector('p').textContent = activeFilter === 'all'
+        empty.style.display = 'none';
+        activityEmpty.style.display = 'grid';
+        activityEmpty.querySelector('h2').textContent = activeFilter === 'all' ? 'All caught up' : `No ${getNotificationTypeLabel(activeFilter).toLowerCase()} activity`;
+        activityEmpty.querySelector('p').textContent = activeFilter === 'all'
           ? 'New likes, favorites, and comments will appear here.'
           : `When new ${getNotificationTypeLabel(activeFilter).toLowerCase()} activity arrives, it will show up here.`;
       }
@@ -473,6 +475,7 @@ window.registerPageInit('inbox', async function () {
 
     if (activeMode === 'activity') {
       empty.style.display = 'none';
+      activityEmpty.style.display = 'none';
     }
 
     feed.style.display = 'grid';
@@ -501,8 +504,8 @@ window.registerPageInit('inbox', async function () {
         ? 'Use the Message button on a writer card in Community to start a conversation.'
         : 'Direct messages and private activity are available after you sign in.';
     } else {
-      empty.querySelector('h2').textContent = 'All caught up';
-      empty.querySelector('p').textContent = 'New likes, favorites, and comments will appear here.';
+      activityEmpty.querySelector('h2').textContent = 'All caught up';
+      activityEmpty.querySelector('p').textContent = 'New likes, favorites, and comments will appear here.';
     }
   }
 
@@ -513,6 +516,7 @@ window.registerPageInit('inbox', async function () {
 
     messagesPane.style.display = activeMode === 'messages' ? 'block' : 'none';
     activityPane.style.display = activeMode === 'activity' ? 'block' : 'none';
+    activityEmpty.style.display = 'none';
     heroCopy.textContent = activeMode === 'messages'
       ? 'Private conversations with other writers live here.'
       : 'Likes, comments, and favorites on your published writing show up here.';
@@ -520,6 +524,7 @@ window.registerPageInit('inbox', async function () {
     if (activeMode === 'messages') {
       if (!currentUserId || !conversations.length) {
         empty.style.display = 'block';
+        activityEmpty.style.display = 'none';
         messagesPane.style.display = 'none';
         renderEmptyForCurrentMode();
       } else {
@@ -533,6 +538,7 @@ window.registerPageInit('inbox', async function () {
         renderEmptyForCurrentMode();
       } else {
         empty.style.display = 'none';
+        activityEmpty.style.display = 'none';
       }
     }
 

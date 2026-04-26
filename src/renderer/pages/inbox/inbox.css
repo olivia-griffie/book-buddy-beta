@@ -20,6 +20,9 @@
 
 .inbox-title-row h1 {
   margin: 0;
+  font-family: var(--font-body);
+  font-weight: 800;
+  text-transform: none;
 }
 
 .inbox-hero-copy {
@@ -28,19 +31,21 @@
 
 .inbox-mode-tabs {
   display: flex;
-  gap: 10px;
+  gap: 22px;
   flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-soft);
 }
 
 .inbox-mode-tab {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 10px;
   min-height: 42px;
-  padding: 0 16px;
-  border: 1px solid var(--border-soft);
-  border-radius: 999px;
-  background: var(--surface-card);
+  padding: 0 2px 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
   color: var(--ink-soft);
   font-family: var(--font-body);
   font-size: 0.86rem;
@@ -50,13 +55,24 @@
 }
 
 .inbox-mode-tab:hover {
-  transform: translateY(-1px);
+  color: var(--ink);
+  transform: none;
 }
 
 .inbox-mode-tab.is-active {
+  background: transparent;
+  color: var(--ink);
+}
+
+.inbox-mode-tab.is-active::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 3px;
+  border-radius: 999px 999px 0 0;
   background: var(--ink);
-  border-color: var(--ink);
-  color: var(--cream);
 }
 
 .inbox-unread-badge {
@@ -422,20 +438,23 @@
 }
 
 .inbox-activity-head {
-  align-items: start;
+  align-items: center;
+  padding: 14px 0 4px;
+  border-bottom: 0;
 }
 
 .inbox-filters {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  padding-left: 16px;
 }
 
 .inbox-filter {
-  padding: 7px 14px;
-  border: none;
-  border-radius: 999px;
-  background: var(--surface-soft);
+  padding: 6px 13px;
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  background: var(--surface-card);
   color: var(--ink-soft);
   font-family: var(--font-body);
   font-size: 0.82rem;
@@ -446,6 +465,32 @@
 .inbox-filter.is-active {
   background: var(--ink);
   color: var(--cream);
+  border-color: var(--ink);
+}
+
+.inbox-activity-empty {
+  place-items: center;
+  min-height: 112px;
+  padding: 26px;
+  border-radius: 8px;
+  background: var(--surface-step);
+  text-align: center;
+}
+
+.inbox-activity-empty h2,
+.inbox-activity-empty p {
+  margin: 0;
+}
+
+.inbox-activity-empty h2 {
+  font-size: 1rem;
+  font-family: var(--font-body);
+}
+
+.inbox-activity-empty p {
+  margin-top: 6px;
+  max-width: 320px;
+  font-size: 0.9rem;
 }
 
 .inbox-feed {
@@ -596,6 +641,10 @@
 body.dark-mode .inbox-mode-tab.is-active,
 body.dark-mode .inbox-filter.is-active {
   color: var(--surface-bg);
+}
+
+body.dark-mode .inbox-mode-tab.is-active {
+  color: var(--ink);
 }
 
 body.dark-mode .inbox-sidebar,

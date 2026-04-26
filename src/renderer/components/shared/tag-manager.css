@@ -6,14 +6,14 @@
 
 .tm-root {
   display: grid;
-  gap: 16px;
+  gap: 14px;
 }
 
 /* — Header — */
 
 .tm-header {
   display: flex;
-  align-items: flex-end;
+  align-items: start;
   justify-content: space-between;
   gap: 16px;
 }
@@ -28,7 +28,11 @@
 .tm-hint {
   font-size: 0.82rem;
   color: var(--ink-muted);
-  margin: 4px 0 0;
+  margin: 0;
+}
+
+.tm-label + .tm-hint {
+  margin-top: 4px;
 }
 
 .tm-count {
@@ -129,8 +133,8 @@
   gap: 5px;
   padding: 5px 8px 5px 12px;
   border-radius: 999px;
-  background: rgba(79, 242, 201, 0.13);
-  border: 1px solid rgba(79, 242, 201, 0.32);
+  background: rgba(79, 242, 201, 0.18);
+  border: 1px solid rgba(31, 168, 135, 0.42);
   font-size: 0.82rem;
   font-weight: 500;
   color: var(--ink);
@@ -182,12 +186,11 @@
 /* — Suggestion panel — */
 
 .tm-suggestions-panel {
-  border: 1px solid var(--border-soft);
-  border-radius: 16px;
-  padding: 16px;
-  background: var(--surface-step, #faf6f1);
+  border-top: 1px solid var(--border-soft);
+  padding-top: 14px;
+  background: transparent;
   display: grid;
-  gap: 12px;
+  gap: 10px;
 }
 
 .tm-suggestions-categories {
@@ -197,11 +200,11 @@
 }
 
 .tm-cat-tab {
-  padding: 6px 14px;
-  border-radius: 999px;
+  padding: 7px 14px;
+  border-radius: 8px;
   border: 1px solid var(--border-soft);
   background: var(--surface, #fff);
-  color: var(--ink-muted);
+  color: var(--ink-soft);
   font: inherit;
   font-size: 0.8rem;
   font-weight: 500;
@@ -215,10 +218,19 @@
 }
 
 .tm-cat-tab.is-active {
-  background: rgba(255, 138, 61, 0.1);
-  border-color: rgba(255, 138, 61, 0.5);
+  background: rgba(255, 138, 61, 0.12);
+  border-color: rgba(255, 138, 61, 0.58);
   color: var(--ink);
   font-weight: 600;
+}
+
+.tm-suggestions-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
 }
 
 .tm-suggestions-list {
@@ -233,8 +245,8 @@
   gap: 4px;
   padding: 5px 12px;
   border-radius: 999px;
-  border: 1px solid var(--border-soft);
-  background: var(--surface, #fff);
+  border: 1px solid rgba(47, 53, 69, 0.16);
+  background: rgba(255, 255, 255, 0.62);
   color: var(--ink-soft, #6b5b4e);
   font: inherit;
   font-size: 0.82rem;
@@ -243,15 +255,15 @@
 }
 
 .tm-sugg-chip:hover {
-  border-color: rgba(79, 242, 201, 0.5);
-  background: rgba(79, 242, 201, 0.07);
+  border-color: rgba(255, 138, 61, 0.46);
+  background: rgba(255, 138, 61, 0.07);
   color: var(--ink);
   transform: translateY(-1px);
 }
 
 .tm-sugg-chip.is-active {
-  background: rgba(79, 242, 201, 0.16);
-  border-color: rgba(79, 242, 201, 0.45);
+  background: rgba(79, 242, 201, 0.18);
+  border-color: rgba(31, 168, 135, 0.46);
   color: var(--ink);
   font-weight: 600;
 }
@@ -272,7 +284,7 @@
 /* — Dark mode — */
 
 body.dark-mode .tm-suggestions-panel {
-  background: var(--surface-input);
+  background: transparent;
   border-color: var(--border);
 }
 

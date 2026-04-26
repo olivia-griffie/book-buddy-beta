@@ -101,7 +101,7 @@ window.createTagManager = function createTagManager(options = {}) {
     <div class="tm-root">
       <div class="tm-header">
         <div class="tm-label-group">
-          <label class="tm-label">${label}</label>
+          ${label ? `<label class="tm-label">${label}</label>` : ''}
           <p class="tm-hint">${hint}</p>
         </div>
         <span class="tm-count">0 tags</span>
@@ -131,6 +131,7 @@ window.createTagManager = function createTagManager(options = {}) {
       ${suggestions ? `
         <div class="tm-suggestions-panel">
           <div class="tm-suggestions-categories"></div>
+          <p class="tm-suggestions-label">Suggestions</p>
           <div class="tm-suggestions-list"></div>
         </div>
       ` : ''}

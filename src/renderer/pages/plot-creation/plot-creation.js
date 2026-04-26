@@ -72,7 +72,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     plotTagManager = window.createTagManager({
       container: tagManagerContainer,
       initialTags: activeProject.tags || [],
-      label: 'Story Tags',
+      label: '',
       hint: 'Tags help readers find your story in the community. Free-form — type anything.',
       onChange: () => autosave.touch(),
     });
