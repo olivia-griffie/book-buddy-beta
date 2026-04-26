@@ -50,6 +50,7 @@ const storyCompletionPhases = [
   {
     id: 'setup',
     label: 'Project setup',
+    color: '#378ADD',
     items: [
       { id: 's1', title: 'Create a new project', hint: 'Home -> New Project', page: 'create-project', isDone: (project) => Boolean(project?.id) },
       { id: 's2', title: 'Set a title and subtitle or hook', hint: 'Your subtitle is the one-line sell for the story.', page: 'create-project', isDone: (project) => Boolean(project?.title && project?.subtitle) },
@@ -64,6 +65,7 @@ const storyCompletionPhases = [
   {
     id: 'plot',
     label: 'Plot & structure',
+    color: '#1D9E75',
     items: [
       { id: 'p1', title: 'Write your premise', hint: 'Who wants what, and what stands in the way?', page: 'plot-creation', isDone: (project) => hasText(project?.plotWorkbook?.premise) },
       { id: 'p2', title: 'Define the stakes', hint: 'What does your protagonist lose if they fail?', page: 'plot-creation', isDone: (project) => hasText(project?.plotWorkbook?.stakes) },
@@ -76,6 +78,7 @@ const storyCompletionPhases = [
   {
     id: 'characters',
     label: 'Characters',
+    color: '#D4537E',
     items: [
       { id: 'c1', title: 'Create your protagonist', hint: 'Name them and assign the Protagonist type tag.', page: 'characters', isDone: (project) => Boolean(getPrimaryCharacter(project, 'protagonist')) },
       { id: 'c2', title: 'Set protagonist character type tags', hint: 'Protagonist, love interest, antagonist, foil, and more.', page: 'characters', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.typeTags || []).length > 0 },
@@ -91,6 +94,7 @@ const storyCompletionPhases = [
   {
     id: 'world',
     label: 'World & locations',
+    color: '#BA7517',
     items: [
       { id: 'w1', title: 'Create your primary setting as a location', hint: 'Locations page -> New Location.', page: 'locations', isDone: (project) => (project?.locations || []).length > 0 },
       { id: 'w2', title: 'Set location type', hint: 'Country, city, planet, space, water, or general area.', page: 'locations', isDone: (project) => (project?.locations || []).some((location) => Boolean(location.type)) },
@@ -103,11 +107,12 @@ const storyCompletionPhases = [
   {
     id: 'scenes',
     label: 'Scenes',
+    color: '#7F77DD',
     items: [
       { id: 'sc1', title: 'Map out your key scenes before writing', hint: 'Start with the scenes you can see clearly.', page: 'scenes', isDone: (project) => (project?.scenes || []).length > 0 },
       { id: 'sc2', title: 'Give each scene a title', hint: 'Even a working title helps navigation.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => scene.title && !/^scene\s+\d+$/i.test(scene.title)) },
       { id: 'sc3', title: 'Link each scene to a chapter', hint: 'Connect your scene map to the writing editor.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.linkedChapterId)) },
-      { id: 'sc4', title: 'Assign section target tags to each scene', hint: 'Setup, Crisis, Climax, Revelation, and more.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution'].includes(tag))) },
+      { id: 'sc4', title: 'Assign story beat tags to each scene', hint: 'Setup, Crisis, Climax, Revelation, and more.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution'].includes(tag))) },
       { id: 'sc5', title: 'Assign mood, atmosphere, and scene type tags', hint: 'Tense, Intimate, Confrontation, Dream Sequence, etc.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).length >= 2) },
       { id: 'sc6', title: 'Write a scene summary', hint: 'What needs to happen for the story to move forward?', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => hasText(scene.summary)) },
       { id: 'sc7', title: 'Add narration style and pacing tags', hint: 'Close POV, Slow Burn, Cliffhanger, and more.', page: 'scenes', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Close POV', 'Distant Narrator', 'Multiple POV', 'Unreliable', 'Stream of Thought', 'Epistolary', 'In Medias Res', 'Retrospective', 'Fast-Paced', 'Slow Burn', 'Cliffhanger', 'Breathless', 'Languid'].includes(tag))) },
@@ -118,6 +123,7 @@ const storyCompletionPhases = [
   {
     id: 'chapters',
     label: 'Chapters & writing',
+    color: '#E24B4A',
     items: [
       { id: 'ch1', title: 'Create your first chapter', hint: 'Chapters page -> New Chapter.', page: 'chapters', isDone: (project) => (project?.chapters || []).length > 0 },
       { id: 'ch2', title: 'Set a chapter title', hint: 'Working titles are fine.', page: 'chapters', isDone: (project) => (project?.chapters || []).some((chapter) => chapter.title && !/^chapter\s+\d+$/i.test(chapter.title)) },
@@ -131,6 +137,7 @@ const storyCompletionPhases = [
   {
     id: 'prompts',
     label: 'Daily prompts',
+    color: '#888780',
     items: [
       { id: 'dp1', title: 'Generate your first daily prompt', hint: 'Prompts are scored from your project data.', page: 'daily-prompts', isDone: (project) => (project?.dailyPromptHistory || []).length > 0 },
       { id: 'dp2', title: 'Choose a prompt mode', hint: 'Sequential follows beats; Wild picks freely.', page: 'daily-prompts', isDone: (project) => Boolean(project?.dailyPromptState?.mode || (project?.dailyPromptHistory || []).length) },
@@ -142,9 +149,10 @@ const storyCompletionPhases = [
   {
     id: 'community',
     label: 'Community & sharing',
+    color: '#5DCAA5',
     items: [
-      { id: 'cm1', title: 'Sign in to your Inkbug account', hint: 'Required to share to the community feed.', page: 'settings', isDone: () => Boolean(window.__inkbugHasSession) },
-      { id: 'cm2', title: 'Share your project to the community', hint: 'Tags make your story discoverable.', page: 'sharing', isDone: (project) => Boolean(project?.isPublic) },
+      { id: 'cm1', title: 'Sign in to your Inkbug account', hint: 'Required to share to the community feed.', page: 'community', isDone: () => Boolean(window.__inkbugHasSession) },
+      { id: 'cm2', title: 'Share your project to the community', hint: 'Tags make your story discoverable.', page: 'community', isDone: (project) => Boolean(project?.isPublic) },
       { id: 'cm3', title: 'Browse other writers projects', hint: 'Filter by tags to find stories in your lane.', page: 'community', optional: true, isDone: () => false },
       { id: 'cm4', title: 'Collaborate on a shared project', hint: 'Use collaboration features when you are ready.', page: 'community', optional: true, isDone: () => false },
     ],
@@ -424,16 +432,63 @@ function getNextStepRecommendation(project) {
   };
 }
 
+const CHECKLIST_STORAGE_KEY = 'inkbug_checklist_v1';
+const CHECKLIST_COLLAPSED_KEY = 'inkbug_checklist_collapsed';
+const PROJECT_REQUIRED_PAGES = new Set([
+  'plot-creation',
+  'characters',
+  'locations',
+  'scenes',
+  'chapters',
+  'daily-prompts',
+  'community',
+  'sharing',
+]);
+
+function getChecklistProjectKey(project) {
+  return project?.id || 'global';
+}
+
+function loadChecklistState() {
+  try {
+    return JSON.parse(localStorage.getItem(CHECKLIST_STORAGE_KEY) || '{}') || {};
+  } catch {
+    return {};
+  }
+}
+
+function saveChecklistState(state) {
+  localStorage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(state || {}));
+}
+
+function getProjectChecklistState(project) {
+  const state = loadChecklistState();
+  const projectKey = getChecklistProjectKey(project);
+  return state[projectKey] || {};
+}
+
+function setProjectChecklistItem(project, itemId, done) {
+  const state = loadChecklistState();
+  const projectKey = getChecklistProjectKey(project);
+  const projectState = { ...(state[projectKey] || {}) };
+  if (done) {
+    projectState[itemId] = true;
+  } else {
+    delete projectState[itemId];
+  }
+  state[projectKey] = projectState;
+  saveChecklistState(state);
+}
+
+function resetProjectChecklist(project) {
+  localStorage.removeItem(CHECKLIST_STORAGE_KEY);
+}
+
 function getStoryChecklistSnapshot(project) {
+  const checklistState = getProjectChecklistState(project);
   const phases = storyCompletionPhases.map((phase) => {
     const items = phase.items.map((item) => {
-      let done = false;
-      try {
-        done = Boolean(item.isDone(project));
-      } catch {
-        done = false;
-      }
-
+      const done = Boolean(checklistState[item.id]);
       return { ...item, done };
     });
 
@@ -441,6 +496,7 @@ function getStoryChecklistSnapshot(project) {
       ...phase,
       items,
       doneCount: items.filter((item) => item.done).length,
+      percent: items.length ? Math.round((items.filter((item) => item.done).length / items.length) * 100) : 0,
     };
   });
   const allItems = phases.flatMap((phase) => phase.items);
@@ -454,43 +510,77 @@ function getStoryChecklistSnapshot(project) {
   };
 }
 
+function projectHasChecklistProgress(project) {
+  return storyCompletionPhases.some((phase) => phase.items.some((item) => {
+    try {
+      return Boolean(item.isDone?.(project));
+    } catch {
+      return false;
+    }
+  }));
+}
+
 function renderTopbarNextSteps(project) {
   const snapshot = getStoryChecklistSnapshot(project);
+  const storedCollapsed = localStorage.getItem(CHECKLIST_COLLAPSED_KEY);
+  const isCollapsed = storedCollapsed == null ? projectHasChecklistProgress(project) : storedCollapsed === '1';
 
   return `
-    <section class="topbar-next-steps" aria-label="Next Steps">
-      <div class="topbar-next-steps-head">
-        <div>
-          <p class="topbar-next-steps-kicker">Next Steps</p>
-          <h3 class="topbar-next-steps-title">${snapshot.doneCount} of ${snapshot.totalCount} complete</h3>
-        </div>
+    <section class="topbar-next-steps ${isCollapsed ? 'is-collapsed' : 'is-expanded'}" aria-label="Next Steps">
+      <button class="topbar-next-steps-trigger" type="button" data-checklist-toggle aria-expanded="${isCollapsed ? 'false' : 'true'}">
+        <span class="topbar-next-steps-chevron" aria-hidden="true">${isCollapsed ? '&#9656;' : '&#9662;'}</span>
+        <span class="topbar-next-steps-trigger-title">Next Steps - ${snapshot.doneCount} of ${snapshot.totalCount}</span>
         <span class="topbar-next-steps-percent">${snapshot.percent}%</span>
-      </div>
-      <div class="topbar-next-steps-list">
+        <span class="topbar-next-steps-trigger-bar" style="--checklist-progress:${snapshot.percent}%"></span>
+      </button>
+      <div class="topbar-next-steps-body">
+        <div class="topbar-next-steps-head">
+          <h3 class="topbar-next-steps-title">${snapshot.doneCount} of ${snapshot.totalCount} complete</h3>
+          <div class="topbar-next-steps-head-actions">
+            <span class="topbar-next-steps-percent">${snapshot.percent}%</span>
+            <button class="topbar-next-steps-reset" type="button" data-checklist-reset>Reset</button>
+          </div>
+        </div>
+        <div class="topbar-next-steps-progress">
+          <span style="width:${snapshot.percent}%"></span>
+        </div>
+        <div class="topbar-next-steps-list">
         ${snapshot.phases.map((phase) => `
-          <div class="topbar-next-step-phase">
+          <div class="topbar-next-step-phase" style="--phase-color:${phase.color}">
             <div class="topbar-next-step-phase-head">
-              <span class="topbar-next-step-phase-label">${escapeHtml(phase.label)}</span>
+              <span class="topbar-next-step-phase-label"><span class="topbar-next-step-phase-dot" aria-hidden="true"></span>${escapeHtml(phase.label)}</span>
               <span class="topbar-next-step-phase-count">${phase.doneCount}/${phase.items.length}</span>
             </div>
+            <div class="topbar-next-step-phase-progress"><span style="width:${phase.percent}%;"></span></div>
             <div class="topbar-next-step-items">
               ${phase.items.map((item) => `
-                <button
-                  class="topbar-next-step-chip ${item.done ? 'is-done' : 'is-todo'}"
-                  type="button"
+                <div
+                  class="topbar-next-step-row ${item.done ? 'is-done' : 'is-todo'}"
                   data-topbar-next-page="${escapeHtml(item.page || 'home')}"
-                  title="${escapeHtml(item.hint || item.title)}"
+                  data-checklist-item="${escapeHtml(item.id)}"
+                  role="button"
+                  tabindex="0"
                 >
-                  <span class="topbar-next-step-check" aria-hidden="true">${item.done ? '&#10003;' : ''}</span>
-                  <span class="topbar-next-step-copy">
-                    <span class="topbar-next-step-label">${escapeHtml(item.title)}</span>
-                    ${item.optional ? '<span class="topbar-next-step-optional">optional</span>' : ''}
+                  <button
+                    class="topbar-next-step-check"
+                    type="button"
+                    data-checklist-toggle-item="${escapeHtml(item.id)}"
+                    aria-pressed="${item.done ? 'true' : 'false'}"
+                    aria-label="${item.done ? 'Mark incomplete' : 'Mark complete'}: ${escapeHtml(item.title)}"
+                  >${item.done ? '&#10003;' : ''}</button>
+                  <span class="topbar-next-step-copy" data-topbar-next-copy>
+                    <span class="topbar-next-step-title-line">
+                      <span class="topbar-next-step-label">${escapeHtml(item.title)}</span>
+                      ${item.optional ? '<span class="topbar-next-step-optional">optional</span>' : ''}
+                    </span>
+                    <span class="topbar-next-step-hint">${escapeHtml(item.hint || '')}</span>
                   </span>
-                </button>
+                </div>
               `).join('')}
             </div>
           </div>
         `).join('')}
+        </div>
       </div>
     </section>
   `;
@@ -689,17 +779,59 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
       window.navigate(topbarStep);
     });
   });
-  container.querySelectorAll('[data-topbar-next-page]').forEach((button) => {
-    button.addEventListener('click', () => {
-      const page = button.dataset.topbarNextPage;
-      if (page === 'create-project') {
-        window.navigate('create-project', { project: null });
+  container.querySelector('[data-checklist-toggle]')?.addEventListener('click', () => {
+    const nextCollapsed = !container.querySelector('.topbar-next-steps')?.classList.contains('is-collapsed');
+    localStorage.setItem(CHECKLIST_COLLAPSED_KEY, nextCollapsed ? '1' : '0');
+    window.renderTopBar?.(currentPage, currentProject, saveStatus);
+  });
+
+  container.querySelector('[data-checklist-reset]')?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    resetProjectChecklist(currentProject);
+    window.renderTopBar?.(currentPage, currentProject, saveStatus);
+  });
+
+  container.querySelectorAll('[data-checklist-toggle-item]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const itemId = button.dataset.checklistToggleItem;
+      setProjectChecklistItem(currentProject, itemId, button.getAttribute('aria-pressed') !== 'true');
+      window.renderTopBar?.(currentPage, currentProject, saveStatus);
+    });
+  });
+
+  function navigateFromChecklist(page) {
+    if (page === 'create-project') {
+      window.navigate(hasProject ? 'home' : 'create-project', { project: hasProject ? currentProject : null });
+      return;
+    }
+
+    if (!hasProject && PROJECT_REQUIRED_PAGES.has(page)) {
+      window.navigate('home');
+      window.updateTopBarSaveState?.({
+        tone: 'warning',
+        text: 'Select or create a project first',
+      });
+      return;
+    }
+
+    if (page) {
+      window.navigate(page);
+    }
+  }
+
+  container.querySelectorAll('[data-topbar-next-page]').forEach((row) => {
+    row.addEventListener('click', () => {
+      const page = row.dataset.topbarNextPage;
+      navigateFromChecklist(page);
+    });
+    row.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') {
         return;
       }
-
-      if (page) {
-        window.navigate(page);
-      }
+      event.preventDefault();
+      const page = row.dataset.topbarNextPage;
+      navigateFromChecklist(page);
     });
   });
 };
