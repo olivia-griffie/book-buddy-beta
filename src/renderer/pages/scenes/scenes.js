@@ -35,6 +35,9 @@ window.registerPageInit('scenes', async function ({ project }) {
   const sectionTargetsPanel = document.getElementById('scene-section-targets-panel');
   const sectionTargetsList = document.getElementById('scene-section-targets-list');
   const sectionTargetsMessage = document.getElementById('scenes-targets-save-message');
+  const customSymbolInput = document.getElementById('scene-custom-symbol');
+  const addCustomSymbolButton = document.getElementById('scene-add-custom-symbol');
+  const customSymbolTags = document.getElementById('scene-custom-symbol-tags');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -76,6 +79,12 @@ window.registerPageInit('scenes', async function ({ project }) {
     return [...document.querySelectorAll('[data-scene-tag]')];
   }
 
+  function getBuiltInSceneTags() {
+    return new Set(getSceneTagButtons()
+      .filter((button) => button.dataset.customSceneTag !== 'true')
+      .map((button) => button.dataset.sceneTag));
+  }
+
   function readSceneTags() {
     return getSceneTagButtons()
       .filter((btn) => btn.getAttribute('aria-pressed') === 'true')
@@ -91,6 +100,103 @@ window.registerPageInit('scenes', async function ({ project }) {
     });
   }
 
+  function renderCustomSymbolTags(scene) {
+    if (!customSymbolTags) {
+      return;
+    }
+
+    const builtInTags = getBuiltInSceneTags();
+    const customTags = [...new Set((scene?.tags || [])
+      .filter(Boolean)
+      .map((tag) => String(tag).trim())
+      .filter((tag) => tag && !builtInTags.has(tag)))];
+
+    customSymbolTags.innerHTML = customTags.map((tag) => `
+      <button
+        class="character-type-tag scene-custom-symbol-tag is-selected"
+        type="button"
+        data-scene-tag="${escapeHtml(tag)}"
+        data-custom-scene-tag="true"
+        aria-pressed="true"
+      >
+        ${escapeHtml(tag)}
+      </button>
+    `).join('');
+    syncSceneTagTooltips();
+  }
+
+  const sceneTagDescriptions = {
+    Setup: 'A section target for establishing the story world, important relationships, baseline stakes, and the normal before disruption.',
+    Disruption: 'A section target for the event or pressure that unsettles the existing order and pushes the story into motion.',
+    Flashback: 'A section target or technique that returns to earlier events to reveal context, memory, trauma, or hidden cause.',
+    'Internal Conflict': 'A section target for a character private struggle, contradiction, fear, desire, guilt, or difficult choice.',
+    Revelation: 'A section target where new information changes the meaning of events, relationships, plans, or identity.',
+    Crisis: 'A section target where pressure peaks into a decisive problem, failure, danger, or impossible choice.',
+    Climax: 'A section target for the major confrontation or highest-intensity turning point of the story arc.',
+    Aftermath: 'A section target for consequences, emotional fallout, recovery, damage, or changed relationships after a major event.',
+    Resolution: 'A section target for closure, repair, final choices, new stability, or the story ending state.',
+    Tense: 'A scene with sustained pressure, uncertainty, or emotional strain that keeps readers waiting for release.',
+    Eerie: 'A scene with an unsettling, uncanny, or quietly disturbing atmosphere.',
+    Melancholic: 'A scene shaped by sadness, longing, regret, or reflective emotional weight.',
+    Hopeful: 'A scene that gives the characters or reader a sense that things can improve.',
+    Dread: 'A scene that builds fear around something dangerous, painful, or inevitable.',
+    Bittersweet: 'A scene that mixes emotional warmth or success with loss, cost, or sadness.',
+    Peaceful: 'A calm scene that lets characters rest, recover, or experience quiet stability.',
+    Chaotic: 'A scene where disorder, confusion, or overlapping pressures disrupt control.',
+    Intimate: 'A close, private scene centered on vulnerability, trust, attraction, or emotional honesty.',
+    Ominous: 'A scene that hints something bad, dangerous, or consequential is approaching.',
+    Triumphant: 'A scene where a character experiences victory, vindication, or earned power.',
+    Desperate: 'A scene where characters act under urgent pressure with few good options left.',
+    Confrontation: 'A scene where characters directly face each other, a truth, a threat, or a conflict.',
+    Chase: 'A pursuit scene driven by escape, capture, urgency, and motion.',
+    Discovery: 'A scene where a character finds information, an object, a place, or a truth that changes what they know.',
+    Reunion: 'A scene where separated characters meet again, often carrying relief, tension, or unresolved history.',
+    Betrayal: 'A scene where trust is broken by deception, abandonment, exposed secrets, or changed allegiance.',
+    Farewell: 'A scene of parting, goodbye, release, or final contact between characters.',
+    Negotiation: 'A scene where characters bargain, trade leverage, set terms, or try to avoid direct conflict.',
+    Seduction: 'A scene built around attraction, persuasion, temptation, or deliberate emotional influence.',
+    Battle: 'A combat or large-scale conflict scene where opposing forces clash directly.',
+    Escape: 'A scene where characters try to flee confinement, pursuit, danger, or a narrowing situation.',
+    Interrogation: 'A scene where one character pressures another for answers, confession, or hidden information.',
+    'Quiet Moment': 'A low-action scene that gives characters room for reflection, bonding, grief, or emotional recalibration.',
+    Monologue: 'A scene centered on an extended speech that reveals motive, worldview, memory, or confession.',
+    'Dream Sequence': 'A storytelling technique used to represent a character dream, fantasy, vision, or subconscious, often set apart from the main narrative.',
+    'Close POV': 'Narration that stays tightly inside one character perspective, filtering the scene through their thoughts and senses.',
+    'Distant Narrator': 'Narration that observes from farther away, giving less immediate access to character interiority.',
+    'Multiple POV': 'A scene or sequence that uses more than one viewpoint or shifts perspective between characters.',
+    Unreliable: 'Narration where the perspective may be incomplete, biased, deceptive, mistaken, or unstable.',
+    'Stream of Thought': 'A narration style that follows a character inner flow of impressions, associations, and immediate thoughts.',
+    Epistolary: 'A scene presented through letters, messages, documents, recordings, or other in-world text forms.',
+    'In Medias Res': 'A scene that begins in the middle of action or conflict before explaining how events got there.',
+    Retrospective: 'A scene narrated with hindsight, memory, or later understanding shaping how events are presented.',
+    'Fast-Paced': 'A scene that moves quickly through action, dialogue, decisions, or escalating consequences.',
+    'Slow Burn': 'A scene that develops tension, emotion, attraction, or dread gradually over time.',
+    Cliffhanger: 'A scene ending that withholds resolution at a sharp moment of danger, discovery, or decision.',
+    Breathless: 'A scene with compressed urgency, little pause, and a sense of racing momentum.',
+    Languid: 'A scene with a slower, more lingering rhythm that invites atmosphere, sensation, or contemplation.',
+    'Enclosed Space': 'A scene set somewhere confined, boxed-in, private, or physically limiting.',
+    'Open Wilderness': 'A scene set in untamed, expansive, remote, or natural surroundings.',
+    Urban: 'A scene shaped by a city, town, street, neighborhood, or built public environment.',
+    Night: 'A scene where darkness, secrecy, quiet, danger, or altered perception matters.',
+    Storm: 'A scene involving severe weather that heightens mood, conflict, danger, or symbolism.',
+    Silence: 'A scene where absence of sound, withheld speech, or quiet tension carries meaning.',
+    Crowd: 'A scene involving many people, public pressure, anonymity, spectacle, or social chaos.',
+    Ruin: 'A scene set among decay, wreckage, aftermath, abandoned places, or broken structures.',
+    'Sacred Space': 'A scene set somewhere holy, ritualized, revered, forbidden, or emotionally consecrated.',
+    Weapon: 'An object used or threatened as a tool of violence, leverage, defense, or symbolism.',
+    Letter: 'A written message that can reveal information, emotion, warning, confession, or connection.',
+    Artifact: 'An important object from the past, a culture, a mystery, or a magical or symbolic system.',
+    Mirror: 'An object that can reflect identity, truth, vanity, doubling, illusion, or self-recognition.',
+    Door: 'A threshold object that can represent entry, escape, secrecy, transition, or forbidden access.',
+    Blood: 'A symbol or physical trace tied to injury, violence, kinship, sacrifice, guilt, or mortality.',
+    Fire: 'A force or symbol of destruction, purification, passion, danger, warmth, or transformation.',
+    Photo: 'An image that preserves memory, exposes evidence, evokes loss, or anchors a past relationship.',
+    Map: 'A guide or symbol of direction, territory, discovery, strategy, or the unknown.',
+    Key: 'An object that grants access, unlocks secrets, marks trust, or symbolizes permission and power.',
+    Poison: 'A substance or symbol tied to harm, betrayal, secrecy, corruption, or slow danger.',
+    'Ritual Object': 'An item used in ceremony, magic, tradition, worship, or repeated symbolic action.',
+  };
+
   const sectionTargetTagLabels = [
     'Setup',
     'Disruption',
@@ -103,28 +209,24 @@ window.registerPageInit('scenes', async function ({ project }) {
     'Resolution',
   ];
 
-  function syncSectionTargetTagTooltips() {
+  function syncSceneTagTooltips() {
     const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
     getSceneTagButtons().forEach((button) => {
       const tagLabel = button.dataset.sceneTag || '';
       const targetIndex = sectionTargetTagLabels.indexOf(tagLabel);
-      if (targetIndex === -1) {
-        return;
-      }
-
-      const tagKey = normalize(tagLabel);
-      const section = plotSections.find((entry) => normalize(entry.label) === tagKey || normalize(entry.label).includes(tagKey))
-        || plotSections[targetIndex]
-        || null;
-      const description = toPlainText(section?.description || '');
-      const title = description
-        ? `${section?.label || tagLabel}: ${description}`
-        : `${tagLabel}: No section target notes yet.`;
+      const section = targetIndex === -1
+        ? null
+        : plotSections.find((entry) => normalize(entry.label) === normalize(tagLabel) || normalize(entry.label).includes(normalize(tagLabel)))
+          || plotSections[targetIndex]
+          || null;
+      const sectionDescription = toPlainText(section?.description || '');
+      const description = sectionDescription || sceneTagDescriptions[tagLabel] || `A custom key item or symbol named ${tagLabel}.`;
+      const title = sectionDescription ? `${section?.label || tagLabel}: ${description}` : `${tagLabel}: ${description}`;
       button.setAttribute('title', title);
       button.setAttribute('aria-label', title);
     });
   }
-  syncSectionTargetTagTooltips();
+  syncSceneTagTooltips();
   const autosave = window.createAutosaveController(async () => {
     activeProject = await window.saveProjectData(buildProjectPayload(), {
       dirtyFields: ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'currentWordCount'],
@@ -332,6 +434,7 @@ window.registerPageInit('scenes', async function ({ project }) {
         deleteButton.style.display = 'none';
       }
       renderImagePreview('');
+      renderCustomSymbolTags(null);
       return;
     }
 
@@ -342,6 +445,7 @@ window.registerPageInit('scenes', async function ({ project }) {
       deleteButton.style.display = 'inline-flex';
     }
     fields.title.value = scene.title || '';
+    renderCustomSymbolTags(scene);
     applySceneTags(scene.tags || []);
     fields.linkedChapterId.value = scene.linkedChapterId || '';
     fields.summary.value = scene.summary || '';
@@ -630,6 +734,37 @@ window.registerPageInit('scenes', async function ({ project }) {
     btn.setAttribute('aria-pressed', pressed ? 'false' : 'true');
     btn.classList.toggle('is-selected', !pressed);
     syncScene();
+    if (btn.dataset.customSceneTag === 'true') {
+      renderCustomSymbolTags(getSelectedScene());
+      applySceneTags(getSelectedScene()?.tags || []);
+    }
+  });
+
+  function addCustomSymbolTag() {
+    const scene = getSelectedScene();
+    const value = customSymbolInput?.value.trim();
+    if (!scene || !value) {
+      return;
+    }
+
+    const existingTags = scene.tags || [];
+    const duplicate = existingTags.some((tag) => tag.toLowerCase() === value.toLowerCase());
+    if (!duplicate) {
+      scene.tags = [...existingTags, value];
+    }
+
+    customSymbolInput.value = '';
+    renderCustomSymbolTags(scene);
+    applySceneTags(scene.tags || []);
+    syncScene();
+  }
+
+  addCustomSymbolButton?.addEventListener('click', addCustomSymbolTag);
+  customSymbolInput?.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      addCustomSymbolTag();
+    }
   });
 
   imageInput.addEventListener('change', async (event) => {

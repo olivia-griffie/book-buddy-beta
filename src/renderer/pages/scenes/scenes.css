@@ -376,6 +376,27 @@
   gap: 8px;
 }
 
+.scene-custom-symbol-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.scene-custom-symbol-row input {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.scene-custom-symbol-tags {
+  margin-top: 2px;
+}
+
+.scene-custom-symbol-tag::after {
+  content: ' x';
+  opacity: 0.65;
+}
+
 .character-type-tag {
   padding: 8px 12px;
   border: 1px solid var(--border);

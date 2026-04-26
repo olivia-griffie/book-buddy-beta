@@ -7,6 +7,160 @@ const workflowSteps = [
   { id: 'daily-prompts', label: 'Challenges' },
 ];
 
+function escapeHtml(value = '') {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getPlainText(value = '') {
+  const parsed = window.parseRichTextValue?.(value);
+  const temp = document.createElement('div');
+  temp.innerHTML = parsed?.html || String(value || '');
+  return (temp.textContent || temp.innerText || '').trim().replace(/\s+/g, ' ');
+}
+
+function hasText(value = '') {
+  return getPlainText(value).length > 0;
+}
+
+function hasAnyText(...values) {
+  return values.some((value) => hasText(value));
+}
+
+function getPrimaryCharacter(project, typeTag = 'protagonist') {
+  return (project?.characters || []).find((character) => (character.typeTags || []).includes(typeTag)) || null;
+}
+
+function hasCharacterNotes(character) {
+  return hasAnyText(character?.appearance, character?.background, character?.secrets, character?.desires, character?.other);
+}
+
+function hasSectionNotes(project) {
+  return (project?.plotSections || []).some((section) => (
+    Number(section.targetWords || 0) > 0
+    || hasAnyText(section.description, section.notes)
+  ));
+}
+
+const storyCompletionPhases = [
+  {
+    id: 'setup',
+    label: 'Project setup',
+    items: [
+      { id: 's1', title: 'Create a new project', hint: 'Home -> New Project', page: 'create-project', isDone: (project) => Boolean(project?.id) },
+      { id: 's2', title: 'Set a title and subtitle or hook', hint: 'Your subtitle is the one-line sell for the story.', page: 'create-project', isDone: (project) => Boolean(project?.title && project?.subtitle) },
+      { id: 's3', title: 'Enter your author name', hint: 'Used on community and exports.', page: 'create-project', isDone: (project) => Boolean(project?.authorName) },
+      { id: 's4', title: 'Set a word count goal', hint: 'Adjust to your genre and draft size.', page: 'create-project', isDone: (project) => Number(project?.wordCountGoal || 0) > 0 },
+      { id: 's5', title: 'Set a target completion date', hint: 'Even a rough deadline helps.', page: 'create-project', isDone: (project) => Boolean(project?.targetCompletionDate) },
+      { id: 's6', title: 'Select up to two genres', hint: 'Unlocks genre guidance on the plot page.', page: 'create-project', isDone: (project) => (project?.genres || []).length > 0 },
+      { id: 's7', title: 'Add story tags', hint: 'Tropes, tone, fandom, and discovery tags.', page: 'create-project', optional: true, isDone: (project) => (project?.tags || []).length > 0 },
+      { id: 's8', title: 'Upload a cover thumbnail', hint: 'Shows on your project card and community page.', page: 'create-project', optional: true, isDone: (project) => Boolean(project?.thumbnail) },
+    ],
+  },
+  {
+    id: 'plot',
+    label: 'Plot & structure',
+    items: [
+      { id: 'p1', title: 'Write your premise', hint: 'Who wants what, and what stands in the way?', page: 'plot-creation', isDone: (project) => hasText(project?.plotWorkbook?.premise) },
+      { id: 'p2', title: 'Define the stakes', hint: 'What does your protagonist lose if they fail?', page: 'plot-creation', isDone: (project) => hasText(project?.plotWorkbook?.stakes) },
+      { id: 'p3', title: 'Write a story outline', hint: 'A broad beat-by-beat map can stay rough.', page: 'plot-creation', isDone: (project) => hasText(project?.plotWorkbook?.outline) },
+      { id: 'p4', title: 'Fill in plot section notes', hint: 'Use section targets to shape each story area.', page: 'plot-creation', isDone: hasSectionNotes },
+      { id: 'p5', title: 'Add general plot notes', hint: 'Themes, loose threads, and reminders.', page: 'plot-creation', optional: true, isDone: (project) => hasText(project?.plotWorkbook?.notes) },
+      { id: 'p6', title: 'Add story tags on the plot page', hint: 'Edit tags as the story evolves.', page: 'plot-creation', optional: true, isDone: (project) => (project?.tags || []).length > 0 },
+    ],
+  },
+  {
+    id: 'characters',
+    label: 'Characters',
+    items: [
+      { id: 'c1', title: 'Create your protagonist', hint: 'Name them and assign the Protagonist type tag.', page: 'characters', isDone: (project) => Boolean(getPrimaryCharacter(project, 'protagonist')) },
+      { id: 'c2', title: 'Set protagonist character type tags', hint: 'Protagonist, love interest, antagonist, foil, and more.', page: 'characters', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.typeTags || []).length > 0 },
+      { id: 'c3', title: 'Set protagonist narrative tags', hint: 'These directly influence prompt generation.', page: 'characters', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.narrativeTags || []).length > 0 },
+      { id: 'c4', title: 'Write protagonist appearance notes', hint: 'Helps you stay consistent across chapters.', page: 'characters', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.appearance) },
+      { id: 'c5', title: 'Write protagonist background', hint: 'What shaped them before the story starts.', page: 'characters', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.background) },
+      { id: 'c6', title: 'Write protagonist secrets', hint: 'What they hide from others and themselves.', page: 'characters', optional: true, isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.secrets) },
+      { id: 'c7', title: 'Create your antagonist or opposing force', hint: 'Assign the Antagonist type tag.', page: 'characters', isDone: (project) => Boolean(getPrimaryCharacter(project, 'antagonist')) },
+      { id: 'c8', title: 'Tag and document supporting characters', hint: 'Give supporting cast names, tags, and notes.', page: 'characters', optional: true, isDone: (project) => (project?.characters || []).filter((character) => !(character.typeTags || []).includes('protagonist')).some((character) => character.name && ((character.typeTags || []).length || (character.narrativeTags || []).length) && hasCharacterNotes(character)) },
+      { id: 'c9', title: 'Upload character images', hint: 'Reference images help with visualization.', page: 'characters', optional: true, isDone: (project) => (project?.characters || []).some((character) => Boolean(character.image)) },
+    ],
+  },
+  {
+    id: 'world',
+    label: 'World & locations',
+    items: [
+      { id: 'w1', title: 'Create your primary setting as a location', hint: 'Locations page -> New Location.', page: 'locations', isDone: (project) => (project?.locations || []).length > 0 },
+      { id: 'w2', title: 'Set location type', hint: 'Country, city, planet, space, water, or general area.', page: 'locations', isDone: (project) => (project?.locations || []).some((location) => Boolean(location.type)) },
+      { id: 'w3', title: 'Fill in climate, temperature, and season', hint: 'Set the physical world your characters inhabit.', page: 'locations', isDone: (project) => (project?.locations || []).some((location) => location.climate && location.temperature && location.season) },
+      { id: 'w4', title: 'Add time of day and social dynamic', hint: 'Especially useful for fantasy and sci-fi world building.', page: 'locations', isDone: (project) => (project?.locations || []).some((location) => location.timeOfDay && location.socialDynamic) },
+      { id: 'w5', title: 'Write location notes in Other', hint: 'Culture, history, rules, or anything that matters.', page: 'locations', optional: true, isDone: (project) => (project?.locations || []).some((location) => hasText(location.other)) },
+      { id: 'w6', title: 'Create secondary locations', hint: 'Any recurring place deserves its own entry.', page: 'locations', optional: true, isDone: (project) => (project?.locations || []).length > 1 },
+    ],
+  },
+  {
+    id: 'scenes',
+    label: 'Scenes',
+    items: [
+      { id: 'sc1', title: 'Map out your key scenes before writing', hint: 'Start with the scenes you can see clearly.', page: 'scenes', isDone: (project) => (project?.scenes || []).length > 0 },
+      { id: 'sc2', title: 'Give each scene a title', hint: 'Even a working title helps navigation.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => scene.title && !/^scene\s+\d+$/i.test(scene.title)) },
+      { id: 'sc3', title: 'Link each scene to a chapter', hint: 'Connect your scene map to the writing editor.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.linkedChapterId)) },
+      { id: 'sc4', title: 'Assign section target tags to each scene', hint: 'Setup, Crisis, Climax, Revelation, and more.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution'].includes(tag))) },
+      { id: 'sc5', title: 'Assign mood, atmosphere, and scene type tags', hint: 'Tense, Intimate, Confrontation, Dream Sequence, etc.', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).length >= 2) },
+      { id: 'sc6', title: 'Write a scene summary', hint: 'What needs to happen for the story to move forward?', page: 'scenes', isDone: (project) => (project?.scenes || []).some((scene) => hasText(scene.summary)) },
+      { id: 'sc7', title: 'Add narration style and pacing tags', hint: 'Close POV, Slow Burn, Cliffhanger, and more.', page: 'scenes', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Close POV', 'Distant Narrator', 'Multiple POV', 'Unreliable', 'Stream of Thought', 'Epistolary', 'In Medias Res', 'Retrospective', 'Fast-Paced', 'Slow Burn', 'Cliffhanger', 'Breathless', 'Languid'].includes(tag))) },
+      { id: 'sc8', title: 'Tag key items and symbols', hint: 'Weapon, Letter, Mirror, Fire, or a custom symbol.', page: 'scenes', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Weapon', 'Letter', 'Artifact', 'Mirror', 'Door', 'Blood', 'Fire', 'Photo', 'Map', 'Key', 'Poison', 'Ritual Object'].includes(tag) || !storyBuiltInSceneTags.has(tag))) },
+      { id: 'sc9', title: 'Upload scene reference images', hint: 'Mood boards, locations, or visual inspiration.', page: 'scenes', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.image)) },
+    ],
+  },
+  {
+    id: 'chapters',
+    label: 'Chapters & writing',
+    items: [
+      { id: 'ch1', title: 'Create your first chapter', hint: 'Chapters page -> New Chapter.', page: 'chapters', isDone: (project) => (project?.chapters || []).length > 0 },
+      { id: 'ch2', title: 'Set a chapter title', hint: 'Working titles are fine.', page: 'chapters', isDone: (project) => (project?.chapters || []).some((chapter) => chapter.title && !/^chapter\s+\d+$/i.test(chapter.title)) },
+      { id: 'ch3', title: 'Assign a plot section', hint: 'Keeps your structure visible.', page: 'chapters', isDone: (project) => (project?.chapters || []).some((chapter) => Boolean(chapter.sectionId)) },
+      { id: 'ch4', title: 'Set a chapter word count target', hint: 'Pace chapters against the overall goal.', page: 'chapters', isDone: (project) => (project?.chapters || []).some((chapter) => Number(chapter.targetWords || 0) > 0) },
+      { id: 'ch5', title: 'Write your draft in the chapter editor', hint: 'Use the editor controls to write comfortably.', page: 'chapters', isDone: (project) => (project?.chapters || []).some((chapter) => hasText(chapter.content)) },
+      { id: 'ch6', title: 'Create all remaining chapters', hint: 'Add chapters as you go.', page: 'chapters', isDone: (project) => (project?.chapters || []).length >= Math.max(2, (project?.plotSections || []).length || 2) },
+      { id: 'ch7', title: 'Reach your project word count goal', hint: 'Track progress from the home dashboard.', page: 'home', isDone: (project) => Number(project?.wordCountGoal || 0) > 0 && Number(project?.currentWordCount || 0) >= Number(project?.wordCountGoal || 0) },
+    ],
+  },
+  {
+    id: 'prompts',
+    label: 'Daily prompts',
+    items: [
+      { id: 'dp1', title: 'Generate your first daily prompt', hint: 'Prompts are scored from your project data.', page: 'daily-prompts', isDone: (project) => (project?.dailyPromptHistory || []).length > 0 },
+      { id: 'dp2', title: 'Choose a prompt mode', hint: 'Sequential follows beats; Wild picks freely.', page: 'daily-prompts', isDone: (project) => Boolean(project?.dailyPromptState?.mode || (project?.dailyPromptHistory || []).length) },
+      { id: 'dp3', title: 'Write a response to the prompt', hint: 'Aim for the word count shown on the card.', page: 'daily-prompts', isDone: (project) => (project?.dailyPromptHistory || []).some((entry) => hasText(entry.answer)) },
+      { id: 'dp4', title: 'Insert completed prompt responses into a chapter', hint: 'Insert activates after the response is ready.', page: 'daily-prompts', isDone: (project) => (project?.dailyPromptHistory || []).some((entry) => Boolean(entry.answerInsertedAt)) },
+      { id: 'dp5', title: 'Build a daily writing habit with prompts', hint: 'Fresh prompts adapt as your draft evolves.', page: 'daily-prompts', optional: true, isDone: (project) => (project?.dailyPromptHistory || []).filter((entry) => entry.answerInsertedAt).length >= 5 },
+    ],
+  },
+  {
+    id: 'community',
+    label: 'Community & sharing',
+    items: [
+      { id: 'cm1', title: 'Sign in to your Inkbug account', hint: 'Required to share to the community feed.', page: 'settings', isDone: () => Boolean(window.__inkbugHasSession) },
+      { id: 'cm2', title: 'Share your project to the community', hint: 'Tags make your story discoverable.', page: 'sharing', isDone: (project) => Boolean(project?.isPublic) },
+      { id: 'cm3', title: 'Browse other writers projects', hint: 'Filter by tags to find stories in your lane.', page: 'community', optional: true, isDone: () => false },
+      { id: 'cm4', title: 'Collaborate on a shared project', hint: 'Use collaboration features when you are ready.', page: 'community', optional: true, isDone: () => false },
+    ],
+  },
+];
+
+const storyBuiltInSceneTags = new Set([
+  'Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution',
+  'Tense', 'Eerie', 'Melancholic', 'Hopeful', 'Dread', 'Bittersweet', 'Peaceful', 'Chaotic', 'Intimate', 'Ominous', 'Triumphant', 'Desperate',
+  'Confrontation', 'Chase', 'Discovery', 'Reunion', 'Betrayal', 'Farewell', 'Negotiation', 'Seduction', 'Battle', 'Escape', 'Interrogation', 'Quiet Moment', 'Monologue', 'Dream Sequence',
+  'Close POV', 'Distant Narrator', 'Multiple POV', 'Unreliable', 'Stream of Thought', 'Epistolary', 'In Medias Res', 'Retrospective',
+  'Fast-Paced', 'Slow Burn', 'Cliffhanger', 'Breathless', 'Languid',
+  'Enclosed Space', 'Open Wilderness', 'Urban', 'Night', 'Storm', 'Silence', 'Crowd', 'Ruin', 'Sacred Space',
+  'Weapon', 'Letter', 'Artifact', 'Mirror', 'Door', 'Blood', 'Fire', 'Photo', 'Map', 'Key', 'Poison', 'Ritual Object',
+]);
+
 const milestoneDefinitions = [
   {
     id: 'first-chapter',
@@ -270,6 +424,78 @@ function getNextStepRecommendation(project) {
   };
 }
 
+function getStoryChecklistSnapshot(project) {
+  const phases = storyCompletionPhases.map((phase) => {
+    const items = phase.items.map((item) => {
+      let done = false;
+      try {
+        done = Boolean(item.isDone(project));
+      } catch {
+        done = false;
+      }
+
+      return { ...item, done };
+    });
+
+    return {
+      ...phase,
+      items,
+      doneCount: items.filter((item) => item.done).length,
+    };
+  });
+  const allItems = phases.flatMap((phase) => phase.items);
+  const doneCount = allItems.filter((item) => item.done).length;
+
+  return {
+    phases,
+    doneCount,
+    totalCount: allItems.length,
+    percent: allItems.length ? Math.round((doneCount / allItems.length) * 100) : 0,
+  };
+}
+
+function renderTopbarNextSteps(project) {
+  const snapshot = getStoryChecklistSnapshot(project);
+
+  return `
+    <section class="topbar-next-steps" aria-label="Next Steps">
+      <div class="topbar-next-steps-head">
+        <div>
+          <p class="topbar-next-steps-kicker">Next Steps</p>
+          <h3 class="topbar-next-steps-title">${snapshot.doneCount} of ${snapshot.totalCount} complete</h3>
+        </div>
+        <span class="topbar-next-steps-percent">${snapshot.percent}%</span>
+      </div>
+      <div class="topbar-next-steps-list">
+        ${snapshot.phases.map((phase) => `
+          <div class="topbar-next-step-phase">
+            <div class="topbar-next-step-phase-head">
+              <span class="topbar-next-step-phase-label">${escapeHtml(phase.label)}</span>
+              <span class="topbar-next-step-phase-count">${phase.doneCount}/${phase.items.length}</span>
+            </div>
+            <div class="topbar-next-step-items">
+              ${phase.items.map((item) => `
+                <button
+                  class="topbar-next-step-chip ${item.done ? 'is-done' : 'is-todo'}"
+                  type="button"
+                  data-topbar-next-page="${escapeHtml(item.page || 'home')}"
+                  title="${escapeHtml(item.hint || item.title)}"
+                >
+                  <span class="topbar-next-step-check" aria-hidden="true">${item.done ? '&#10003;' : ''}</span>
+                  <span class="topbar-next-step-copy">
+                    <span class="topbar-next-step-label">${escapeHtml(item.title)}</span>
+                    ${item.optional ? '<span class="topbar-next-step-optional">optional</span>' : ''}
+                  </span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </section>
+  `;
+}
+
 window.getProjectMilestoneSnapshot = getProjectMilestoneSnapshot;
 window.getProjectMilestoneDefinitions = function getProjectMilestoneDefinitions() {
   return milestoneDefinitions.map((milestone) => ({ ...milestone }));
@@ -299,6 +525,21 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     return;
   }
 
+  if (typeof window.__inkbugHasSession === 'undefined') {
+    window.__inkbugHasSession = false;
+    window.api?.auth?.getSession?.()
+      .then((session) => {
+        const hasSession = Boolean(session?.user || session?.id || session?.access_token);
+        if (window.__inkbugHasSession !== hasSession) {
+          window.__inkbugHasSession = hasSession;
+          window.renderTopBar?.(currentPage, currentProject, saveStatus);
+        }
+      })
+      .catch(() => {
+        window.__inkbugHasSession = false;
+      });
+  }
+
   const hasProject = Boolean(currentProject);
   const goal = Number(currentProject?.wordCountGoal || 0);
   const words = Number(currentProject?.currentWordCount || 0);
@@ -307,11 +548,9 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     .filter((entry) => entry.answerInsertedAt)
     .length;
   const streak = Number(currentProject?.streakState?.current || 0);
-  const milestoneSnapshot = getProjectMilestoneSnapshot(currentProject);
   const activeStepIndex = workflowSteps.findIndex((step) => step.id === currentPage);
   const saveTone = saveStatus.tone || 'neutral';
   const saveText = saveStatus.text || 'Ready to write';
-  const showBadges = hasProject && window.shouldShowTopbarBadges?.();
 
   const isTopbarOpen = localStorage.getItem('topbarCollapsed') !== '1';
 
@@ -383,28 +622,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
             <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
           </div>
         </div>
-        ${showBadges ? `
-          <div class="topbar-badges">
-            ${milestoneSnapshot.visibleBadges.length
-      ? milestoneSnapshot.visibleBadges.slice(0, 4).map((milestone) => `
-                  <div class="topbar-badge" title="${milestone.description}">
-                    <span class="topbar-badge-mark" aria-hidden="true">+</span>
-                    <div class="topbar-badge-copy">
-                      <span class="topbar-badge-label">${milestone.label}</span>
-                      <span class="topbar-badge-description">${milestone.description}</span>
-                    </div>
-                  </div>
-                `).join('')
-      : `
-                <div class="topbar-badge is-empty">
-                  <div class="topbar-badge-copy">
-                    <span class="topbar-badge-label">First milestone waiting</span>
-                    <span class="topbar-badge-description">Start plotting or drafting to unlock progress badges.</span>
-                  </div>
-                </div>
-              `}
-          </div>
-        ` : ''}
+        ${hasProject ? renderTopbarNextSteps(currentProject) : ''}
       </div>
     </details>
     <div class="topbar-tracker">
@@ -469,6 +687,19 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
       }
 
       window.navigate(topbarStep);
+    });
+  });
+  container.querySelectorAll('[data-topbar-next-page]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const page = button.dataset.topbarNextPage;
+      if (page === 'create-project') {
+        window.navigate('create-project', { project: null });
+        return;
+      }
+
+      if (page) {
+        window.navigate(page);
+      }
     });
   });
 };
