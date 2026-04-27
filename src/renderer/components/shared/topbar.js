@@ -888,11 +888,26 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     el.addEventListener('animationend', () => el.classList.remove('topbar-nav-flash'), { once: true });
   }
 
+  function collapseChecklistPanel() {
+    localStorage.setItem(CHECKLIST_COLLAPSED_KEY, '1');
+    const panel = document.querySelector('.topbar-next-steps');
+    if (!panel) return;
+    panel.classList.remove('is-expanded');
+    panel.classList.add('is-collapsed');
+    const trigger = panel.querySelector('[data-checklist-toggle]');
+    if (trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+      const chevron = trigger.querySelector('.topbar-next-steps-chevron');
+      if (chevron) chevron.innerHTML = '&#9656;';
+    }
+  }
+
   async function navigateFromChecklist(page, target) {
     if (page === 'create-project') {
       if (page !== currentPage) {
         await window.navigate('create-project', { project: currentProject ?? null });
       }
+      collapseChecklistPanel();
       if (target) scrollToTarget(target);
       return;
     }
@@ -909,11 +924,9 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     if (page) {
       if (page !== currentPage) {
         await window.navigate(page);
-        if (target) scrollToTarget(target);
-      } else {
-        // Already on the right page — just scroll and flash the target
-        if (target) scrollToTarget(target);
       }
+      collapseChecklistPanel();
+      if (target) scrollToTarget(target);
     }
   }
 
