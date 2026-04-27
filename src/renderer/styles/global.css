@@ -929,7 +929,14 @@ body {
 
 .topbar-next-step-phase {
   display: grid;
-  gap: 8px;
+  gap: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: background var(--duration) var(--ease);
+}
+
+.topbar-next-step-phase.is-all-done {
+  background: color-mix(in srgb, var(--phase-color) 8%, transparent);
 }
 
 .topbar-next-step-phase-head {
@@ -937,6 +944,18 @@ body {
   justify-content: space-between;
   gap: 10px;
   align-items: center;
+  padding: 6px 4px;
+  cursor: pointer;
+  list-style: none;
+  border-radius: 8px;
+  transition: background var(--duration) var(--ease);
+  user-select: none;
+}
+
+.topbar-next-step-phase-head::-webkit-details-marker { display: none; }
+
+.topbar-next-step-phase-head:hover {
+  background: color-mix(in srgb, var(--phase-color) 12%, transparent);
 }
 
 .topbar-next-step-phase-label,
@@ -954,11 +973,53 @@ body {
   gap: 8px;
 }
 
+.topbar-next-step-phase-head-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.topbar-next-step-phase-chevron {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  transition: transform 200ms var(--ease);
+  line-height: 1;
+}
+
+details.topbar-next-step-phase:not([open]) .topbar-next-step-phase-chevron {
+  transform: rotate(-90deg);
+}
+
+.topbar-next-step-phase-done-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--phase-color) 22%, transparent);
+  color: var(--phase-color);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
 .topbar-next-step-phase-dot {
   width: 9px;
   height: 9px;
   border-radius: 999px;
   background: var(--phase-color);
+  flex-shrink: 0;
+}
+
+.topbar-next-step-phase-body {
+  display: grid;
+  gap: 8px;
+  padding: 4px 4px 8px;
+  overflow: hidden;
+}
+
+details.topbar-next-step-phase:not([open]) .topbar-next-step-phase-body {
+  display: none;
 }
 
 .topbar-next-step-phase-progress span {
@@ -1022,6 +1083,17 @@ body {
   border-color: var(--phase-color);
   background: var(--phase-color);
   color: white;
+}
+
+@keyframes topbar-nav-flash {
+  0%   { box-shadow: 0 0 0 0 rgba(99, 179, 237, 0.7); outline: 2px solid rgba(99, 179, 237, 0.8); }
+  60%  { box-shadow: 0 0 0 8px rgba(99, 179, 237, 0); outline: 2px solid rgba(99, 179, 237, 0); }
+  100% { box-shadow: none; outline: none; }
+}
+
+.topbar-nav-flash {
+  animation: topbar-nav-flash 700ms ease-out forwards;
+  border-radius: inherit;
 }
 
 .topbar-next-step-copy {

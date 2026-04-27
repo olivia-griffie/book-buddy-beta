@@ -81,14 +81,14 @@ const storyCompletionPhases = [
     color: '#D4537E',
     items: [
       { id: 'c1', title: 'Create your protagonist', hint: 'Name them and assign the Protagonist type tag.', page: 'characters', target: '#add-character', isDone: (project) => Boolean(getPrimaryCharacter(project, 'protagonist')) },
-      { id: 'c2', title: 'Set protagonist character type tags', hint: 'Protagonist, love interest, antagonist, foil, and more.', page: 'characters', target: '#character-editor-shell', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.typeTags || []).length > 0 },
-      { id: 'c3', title: 'Set protagonist narrative tags', hint: 'These directly influence prompt generation.', page: 'characters', target: '#character-editor-shell', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.narrativeTags || []).length > 0 },
-      { id: 'c4', title: 'Write protagonist appearance notes', hint: 'Helps you stay consistent across chapters.', page: 'characters', target: '#character-editor-shell', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.appearance) },
-      { id: 'c5', title: 'Write protagonist background', hint: 'What shaped them before the story starts.', page: 'characters', target: '#character-editor-shell', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.background) },
-      { id: 'c6', title: 'Write protagonist secrets', hint: 'What they hide from others and themselves.', page: 'characters', target: '#character-editor-shell', optional: true, isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.secrets) },
+      { id: 'c2', title: 'Set protagonist character type tags', hint: 'Protagonist, love interest, antagonist, foil, and more.', page: 'characters', target: '.entity-editor-card', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.typeTags || []).length > 0 },
+      { id: 'c3', title: 'Set protagonist narrative tags', hint: 'These directly influence prompt generation.', page: 'characters', target: '.entity-editor-card', isDone: (project) => (getPrimaryCharacter(project, 'protagonist')?.narrativeTags || []).length > 0 },
+      { id: 'c4', title: 'Write protagonist appearance notes', hint: 'Helps you stay consistent across chapters.', page: 'characters', target: '.entity-editor-card', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.appearance) },
+      { id: 'c5', title: 'Write protagonist background', hint: 'What shaped them before the story starts.', page: 'characters', target: '.entity-editor-card', isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.background) },
+      { id: 'c6', title: 'Write protagonist secrets', hint: 'What they hide from others and themselves.', page: 'characters', target: '.entity-editor-card', optional: true, isDone: (project) => hasText(getPrimaryCharacter(project, 'protagonist')?.secrets) },
       { id: 'c7', title: 'Create your antagonist or opposing force', hint: 'Assign the Antagonist type tag.', page: 'characters', target: '#add-character', isDone: (project) => Boolean(getPrimaryCharacter(project, 'antagonist')) },
-      { id: 'c8', title: 'Tag and document supporting characters', hint: 'Give supporting cast names, tags, and notes.', page: 'characters', target: '#character-editor-shell', optional: true, isDone: (project) => (project?.characters || []).filter((character) => !(character.typeTags || []).includes('protagonist')).some((character) => character.name && ((character.typeTags || []).length || (character.narrativeTags || []).length) && hasCharacterNotes(character)) },
-      { id: 'c9', title: 'Upload character images', hint: 'Reference images help with visualization.', page: 'characters', target: '#character-image-trigger', optional: true, isDone: (project) => (project?.characters || []).some((character) => Boolean(character.image)) },
+      { id: 'c8', title: 'Tag and document supporting characters', hint: 'Give supporting cast names, tags, and notes.', page: 'characters', target: '.entity-editor-card', optional: true, isDone: (project) => (project?.characters || []).filter((character) => !(character.typeTags || []).includes('protagonist')).some((character) => character.name && ((character.typeTags || []).length || (character.narrativeTags || []).length) && hasCharacterNotes(character)) },
+      { id: 'c9', title: 'Upload character images', hint: 'Reference images help with visualization.', page: 'characters', target: '.entity-editor-card', optional: true, isDone: (project) => (project?.characters || []).some((character) => Boolean(character.image)) },
     ],
   },
   {
@@ -110,14 +110,14 @@ const storyCompletionPhases = [
     color: '#7F77DD',
     items: [
       { id: 'sc1', title: 'Map out your key scenes before writing', hint: 'Start with the scenes you can see clearly.', page: 'scenes', target: '#add-scene', isDone: (project) => (project?.scenes || []).length > 0 },
-      { id: 'sc2', title: 'Give each scene a title', hint: 'Even a working title helps navigation.', page: 'scenes', target: '#scene-title', isDone: (project) => (project?.scenes || []).some((scene) => scene.title && !/^scene\s+\d+$/i.test(scene.title)) },
-      { id: 'sc3', title: 'Link each scene to a chapter', hint: 'Connect your scene map to the writing editor.', page: 'scenes', target: '#scene-linked-chapter', isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.linkedChapterId)) },
-      { id: 'sc4', title: 'Assign story beat tags to each scene', hint: 'Setup, Crisis, Climax, Revelation, and more.', page: 'scenes', target: '[aria-label="Section target tags"]', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution'].includes(tag))) },
-      { id: 'sc5', title: 'Assign mood, atmosphere, and scene type tags', hint: 'Tense, Intimate, Confrontation, Dream Sequence, etc.', page: 'scenes', target: '[aria-label="Mood and atmosphere tags"]', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).length >= 2) },
-      { id: 'sc6', title: 'Write a scene summary', hint: 'What needs to happen for the story to move forward?', page: 'scenes', target: '#scene-summary', isDone: (project) => (project?.scenes || []).some((scene) => hasText(scene.summary)) },
-      { id: 'sc7', title: 'Add narration style and pacing tags', hint: 'Close POV, Slow Burn, Cliffhanger, and more.', page: 'scenes', target: '[aria-label="Narration style tags"]', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Close POV', 'Distant Narrator', 'Multiple POV', 'Unreliable', 'Stream of Thought', 'Epistolary', 'In Medias Res', 'Retrospective', 'Fast-Paced', 'Slow Burn', 'Cliffhanger', 'Breathless', 'Languid'].includes(tag))) },
-      { id: 'sc8', title: 'Tag key items and symbols', hint: 'Weapon, Letter, Mirror, Fire, or a custom symbol.', page: 'scenes', target: '[aria-label="Key items and symbols tags"]', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Weapon', 'Letter', 'Artifact', 'Mirror', 'Door', 'Blood', 'Fire', 'Photo', 'Map', 'Key', 'Poison', 'Ritual Object'].includes(tag) || !storyBuiltInSceneTags.has(tag))) },
-      { id: 'sc9', title: 'Upload scene reference images', hint: 'Mood boards, locations, or visual inspiration.', page: 'scenes', target: '#scene-image-trigger', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.image)) },
+      { id: 'sc2', title: 'Give each scene a title', hint: 'Even a working title helps navigation.', page: 'scenes', target: '.entity-editor-card', isDone: (project) => (project?.scenes || []).some((scene) => scene.title && !/^scene\s+\d+$/i.test(scene.title)) },
+      { id: 'sc3', title: 'Link each scene to a chapter', hint: 'Connect your scene map to the writing editor.', page: 'scenes', target: '.entity-editor-card', isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.linkedChapterId)) },
+      { id: 'sc4', title: 'Assign story beat tags to each scene', hint: 'Setup, Crisis, Climax, Revelation, and more.', page: 'scenes', target: '.entity-editor-card', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Setup', 'Disruption', 'Flashback', 'Internal Conflict', 'Revelation', 'Crisis', 'Climax', 'Aftermath', 'Resolution'].includes(tag))) },
+      { id: 'sc5', title: 'Assign mood, atmosphere, and scene type tags', hint: 'Tense, Intimate, Confrontation, Dream Sequence, etc.', page: 'scenes', target: '.entity-editor-card', isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).length >= 2) },
+      { id: 'sc6', title: 'Write a scene summary', hint: 'What needs to happen for the story to move forward?', page: 'scenes', target: '.entity-editor-card', isDone: (project) => (project?.scenes || []).some((scene) => hasText(scene.summary)) },
+      { id: 'sc7', title: 'Add narration style and pacing tags', hint: 'Close POV, Slow Burn, Cliffhanger, and more.', page: 'scenes', target: '.entity-editor-card', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Close POV', 'Distant Narrator', 'Multiple POV', 'Unreliable', 'Stream of Thought', 'Epistolary', 'In Medias Res', 'Retrospective', 'Fast-Paced', 'Slow Burn', 'Cliffhanger', 'Breathless', 'Languid'].includes(tag))) },
+      { id: 'sc8', title: 'Tag key items and symbols', hint: 'Weapon, Letter, Mirror, Fire, or a custom symbol.', page: 'scenes', target: '.entity-editor-card', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => (scene.tags || []).some((tag) => ['Weapon', 'Letter', 'Artifact', 'Mirror', 'Door', 'Blood', 'Fire', 'Photo', 'Map', 'Key', 'Poison', 'Ritual Object'].includes(tag) || !storyBuiltInSceneTags.has(tag))) },
+      { id: 'sc9', title: 'Upload scene reference images', hint: 'Mood boards, locations, or visual inspiration.', page: 'scenes', target: '.entity-editor-card', optional: true, isDone: (project) => (project?.scenes || []).some((scene) => Boolean(scene.image)) },
     ],
   },
   {
@@ -126,10 +126,10 @@ const storyCompletionPhases = [
     color: '#E24B4A',
     items: [
       { id: 'ch1', title: 'Create your first chapter', hint: 'Chapters page -> New Chapter.', page: 'chapters', target: '#chapter-add-quick', isDone: (project) => (project?.chapters || []).length > 0 },
-      { id: 'ch2', title: 'Set a chapter title', hint: 'Working titles are fine.', page: 'chapters', target: '#chapter-title', isDone: (project) => (project?.chapters || []).some((chapter) => chapter.title && !/^chapter\s+\d+$/i.test(chapter.title)) },
-      { id: 'ch3', title: 'Assign a plot section', hint: 'Keeps your structure visible.', page: 'chapters', target: '#chapter-section', isDone: (project) => (project?.chapters || []).some((chapter) => Boolean(chapter.sectionId)) },
-      { id: 'ch4', title: 'Set a chapter word count target', hint: 'Pace chapters against the overall goal.', page: 'chapters', target: '#chapter-target-words', isDone: (project) => (project?.chapters || []).some((chapter) => Number(chapter.targetWords || 0) > 0) },
-      { id: 'ch5', title: 'Write your draft in the chapter editor', hint: 'Use the editor controls to write comfortably.', page: 'chapters', target: '#chapter-content', isDone: (project) => (project?.chapters || []).some((chapter) => hasText(chapter.content)) },
+      { id: 'ch2', title: 'Set a chapter title', hint: 'Working titles are fine.', page: 'chapters', target: '.chapter-writing-workspace', isDone: (project) => (project?.chapters || []).some((chapter) => chapter.title && !/^chapter\s+\d+$/i.test(chapter.title)) },
+      { id: 'ch3', title: 'Assign a plot section', hint: 'Keeps your structure visible.', page: 'chapters', target: '.chapter-writing-workspace', isDone: (project) => (project?.chapters || []).some((chapter) => Boolean(chapter.sectionId)) },
+      { id: 'ch4', title: 'Set a chapter word count target', hint: 'Pace chapters against the overall goal.', page: 'chapters', target: '.chapter-writing-workspace', isDone: (project) => (project?.chapters || []).some((chapter) => Number(chapter.targetWords || 0) > 0) },
+      { id: 'ch5', title: 'Write your draft in the chapter editor', hint: 'Use the editor controls to write comfortably.', page: 'chapters', target: '.chapter-writing-workspace', isDone: (project) => (project?.chapters || []).some((chapter) => hasText(chapter.content)) },
       { id: 'ch6', title: 'Create all remaining chapters', hint: 'Add chapters as you go.', page: 'chapters', target: '#plot-sections-panel', isDone: (project) => (project?.chapters || []).length >= Math.max(2, (project?.plotSections || []).length || 2) },
       { id: 'ch7', title: 'Reach your project word count goal', hint: 'Track progress from the home dashboard.', page: 'home', isDone: (project) => Number(project?.wordCountGoal || 0) > 0 && Number(project?.currentWordCount || 0) >= Number(project?.wordCountGoal || 0) },
     ],
@@ -434,6 +434,21 @@ function getNextStepRecommendation(project) {
 
 const CHECKLIST_STORAGE_KEY = 'inkbug_checklist_v1';
 const CHECKLIST_COLLAPSED_KEY = 'inkbug_checklist_collapsed';
+const PHASE_COLLAPSED_PREFIX = 'inkbug_phase_collapsed_v1_';
+
+function getPhaseCollapsedState(phaseId) {
+  const val = localStorage.getItem(PHASE_COLLAPSED_PREFIX + phaseId);
+  if (val === null) return null; // no override
+  return val === '1';
+}
+
+function setPhaseCollapsedState(phaseId, collapsed) {
+  localStorage.setItem(PHASE_COLLAPSED_PREFIX + phaseId, collapsed ? '1' : '0');
+}
+
+function clearPhaseCollapsedState(phaseId) {
+  localStorage.removeItem(PHASE_COLLAPSED_PREFIX + phaseId);
+}
 const PROJECT_REQUIRED_PAGES = new Set([
   'plot-creation',
   'characters',
@@ -498,11 +513,18 @@ function getStoryChecklistSnapshot(project) {
       return { ...item, done };
     });
 
+    const doneItems = items.filter((item) => item.done);
+    const allDone = items.length > 0 && doneItems.length === items.length;
+    const userOverride = getPhaseCollapsedState(phase.id);
+    // Auto-collapse when all done unless user explicitly reopened it
+    const isOpen = userOverride !== null ? !userOverride : !allDone;
     return {
       ...phase,
       items,
-      doneCount: items.filter((item) => item.done).length,
-      percent: items.length ? Math.round((items.filter((item) => item.done).length / items.length) * 100) : 0,
+      doneCount: doneItems.length,
+      percent: items.length ? Math.round((doneItems.length / items.length) * 100) : 0,
+      allDone,
+      isOpen,
     };
   });
   const allItems = phases.flatMap((phase) => phase.items);
@@ -552,40 +574,54 @@ function renderTopbarNextSteps(project) {
         </div>
         <div class="topbar-next-steps-list">
         ${snapshot.phases.map((phase) => `
-          <div class="topbar-next-step-phase" style="--phase-color:${phase.color}">
-            <div class="topbar-next-step-phase-head">
-              <span class="topbar-next-step-phase-label"><span class="topbar-next-step-phase-dot" aria-hidden="true"></span>${escapeHtml(phase.label)}</span>
-              <span class="topbar-next-step-phase-count">${phase.doneCount}/${phase.items.length}</span>
-            </div>
-            <div class="topbar-next-step-phase-progress"><span style="width:${phase.percent}%;"></span></div>
-            <div class="topbar-next-step-items">
-              ${phase.items.map((item) => `
-                <div
-                  class="topbar-next-step-row ${item.done ? 'is-done' : 'is-todo'}"
-                  data-topbar-next-page="${escapeHtml(item.page || 'home')}"
-                  data-topbar-next-target="${escapeHtml(item.target || '')}"
-                  data-checklist-item="${escapeHtml(item.id)}"
-                  role="button"
-                  tabindex="0"
-                >
-                  <button
-                    class="topbar-next-step-check"
-                    type="button"
-                    data-checklist-toggle-item="${escapeHtml(item.id)}"
-                    aria-pressed="${item.done ? 'true' : 'false'}"
-                    aria-label="${item.done ? 'Mark incomplete' : 'Mark complete'}: ${escapeHtml(item.title)}"
-                  >${item.done ? '&#10003;' : ''}</button>
-                  <span class="topbar-next-step-copy" data-topbar-next-copy>
-                    <span class="topbar-next-step-title-line">
-                      <span class="topbar-next-step-label">${escapeHtml(item.title)}</span>
-                      ${item.optional ? '<span class="topbar-next-step-optional">optional</span>' : ''}
+          <details
+            class="topbar-next-step-phase ${phase.allDone ? 'is-all-done' : ''}"
+            style="--phase-color:${phase.color}"
+            data-phase-id="${escapeHtml(phase.id)}"
+            ${phase.isOpen ? 'open' : ''}
+          >
+            <summary class="topbar-next-step-phase-head">
+              <span class="topbar-next-step-phase-label">
+                <span class="topbar-next-step-phase-dot" aria-hidden="true"></span>
+                ${escapeHtml(phase.label)}
+                ${phase.allDone ? '<span class="topbar-next-step-phase-done-badge">Done</span>' : ''}
+              </span>
+              <span class="topbar-next-step-phase-head-right">
+                <span class="topbar-next-step-phase-count">${phase.doneCount}/${phase.items.length}</span>
+                <span class="topbar-next-step-phase-chevron" aria-hidden="true">&#9662;</span>
+              </span>
+            </summary>
+            <div class="topbar-next-step-phase-body">
+              <div class="topbar-next-step-phase-progress"><span style="width:${phase.percent}%;"></span></div>
+              <div class="topbar-next-step-items">
+                ${phase.items.map((item) => `
+                  <div
+                    class="topbar-next-step-row ${item.done ? 'is-done' : 'is-todo'}"
+                    data-topbar-next-page="${escapeHtml(item.page || 'home')}"
+                    data-topbar-next-target="${escapeHtml(item.target || '')}"
+                    data-checklist-item="${escapeHtml(item.id)}"
+                    role="button"
+                    tabindex="0"
+                  >
+                    <button
+                      class="topbar-next-step-check"
+                      type="button"
+                      data-checklist-toggle-item="${escapeHtml(item.id)}"
+                      aria-pressed="${item.done ? 'true' : 'false'}"
+                      aria-label="${item.done ? 'Mark incomplete' : 'Mark complete'}: ${escapeHtml(item.title)}"
+                    >${item.done ? '&#10003;' : ''}</button>
+                    <span class="topbar-next-step-copy" data-topbar-next-copy>
+                      <span class="topbar-next-step-title-line">
+                        <span class="topbar-next-step-label">${escapeHtml(item.title)}</span>
+                        ${item.optional ? '<span class="topbar-next-step-optional">optional</span>' : ''}
+                      </span>
+                      <span class="topbar-next-step-hint">${escapeHtml(item.hint || '')}</span>
                     </span>
-                    <span class="topbar-next-step-hint">${escapeHtml(item.hint || '')}</span>
-                  </span>
-                </div>
-              `).join('')}
+                  </div>
+                `).join('')}
+              </div>
             </div>
-          </div>
+          </details>
         `).join('')}
         </div>
       </div>
@@ -794,6 +830,7 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
 
   container.querySelector('[data-checklist-reset]')?.addEventListener('click', (event) => {
     event.stopPropagation();
+    storyCompletionPhases.forEach((phase) => clearPhaseCollapsedState(phase.id));
     resetProjectChecklist(currentProject);
     window.renderTopBar?.(currentPage, currentProject, saveStatus);
   });
@@ -807,23 +844,56 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     });
   });
 
+  container.querySelectorAll('[data-phase-id]').forEach((details) => {
+    details.addEventListener('toggle', () => {
+      const phaseId = details.dataset.phaseId;
+      setPhaseCollapsedState(phaseId, !details.open);
+    });
+  });
+
   function scrollToTarget(selector) {
     if (!selector) return;
     const el = document.querySelector(selector);
     if (!el) return;
+
+    // Open any closed <details> ancestors
     let node = el.parentElement;
     while (node && node !== document.body) {
-      if (node.tagName === 'DETAILS') node.open = true;
+      if (node.tagName === 'DETAILS' && !node.open) node.open = true;
       node = node.parentElement;
     }
-    if (el.tagName === 'DETAILS') el.open = true;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (el.tagName === 'DETAILS' && !el.open) el.open = true;
+
+    // Walk up to nearest visible ancestor (offsetParent===null means hidden via display:none)
+    let scrollTarget = el;
+    while (scrollTarget && scrollTarget !== document.body && scrollTarget.offsetParent === null) {
+      scrollTarget = scrollTarget.parentElement;
+    }
+    if (!scrollTarget || scrollTarget === document.body) return;
+
+    // Scroll the workspace to top first so movement is always visible, then scroll to target
+    const workspace = document.getElementById('app-workspace');
+    if (workspace) workspace.scrollTop = 0;
+
+    requestAnimationFrame(() => {
+      scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      flashTarget(scrollTarget);
+    });
   }
 
-  function navigateFromChecklist(page, target) {
+  function flashTarget(el) {
+    el.classList.remove('topbar-nav-flash');
+    void el.offsetWidth; // force reflow to restart animation
+    el.classList.add('topbar-nav-flash');
+    el.addEventListener('animationend', () => el.classList.remove('topbar-nav-flash'), { once: true });
+  }
+
+  async function navigateFromChecklist(page, target) {
     if (page === 'create-project') {
-      window.navigate(hasProject ? 'home' : 'create-project', { project: hasProject ? currentProject : null });
-      if (target) setTimeout(() => scrollToTarget(target), 200);
+      if (page !== currentPage) {
+        await window.navigate('create-project', { project: currentProject ?? null });
+      }
+      if (target) scrollToTarget(target);
       return;
     }
 
@@ -837,10 +907,12 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     }
 
     if (page) {
-      window.navigate(page);
-      if (target) {
-        setTimeout(() => scrollToTarget(target), 150);
-        setTimeout(() => scrollToTarget(target), 400);
+      if (page !== currentPage) {
+        await window.navigate(page);
+        if (target) scrollToTarget(target);
+      } else {
+        // Already on the right page — just scroll and flash the target
+        if (target) scrollToTarget(target);
       }
     }
   }
