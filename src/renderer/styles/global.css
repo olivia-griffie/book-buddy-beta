@@ -1038,9 +1038,9 @@ details.topbar-next-step-phase:not([open]) .topbar-next-step-phase-body {
   gap: 8px;
   width: 100%;
   padding: 9px 10px;
-  border: 1px solid rgba(255, 138, 61, 0.28);
+  border: 1px solid var(--border-soft);
   border-radius: 12px;
-  background: rgba(255, 138, 61, 0.12);
+  background: var(--surface-step);
   color: var(--ink);
   text-align: left;
   cursor: pointer;
@@ -1049,8 +1049,8 @@ details.topbar-next-step-phase:not([open]) .topbar-next-step-phase-body {
 
 .topbar-next-step-row:hover {
   transform: translateY(-1px);
-  border-color: rgba(255, 138, 61, 0.48);
-  background: rgba(255, 138, 61, 0.18);
+  border-color: var(--border);
+  background: var(--surface-step-index);
 }
 
 .topbar-next-step-row.is-done {
@@ -2441,11 +2441,6 @@ body.dark-mode .topbar-next-steps {
 
 body.dark-mode .topbar-next-steps-trigger {
   background: var(--surface-card);
-}
-
-body.dark-mode .topbar-next-step-row {
-  border-color: rgba(255, 138, 61, 0.34);
-  background: rgba(255, 138, 61, 0.14);
 }
 
 body.dark-mode .topbar-next-step-row.is-done {
