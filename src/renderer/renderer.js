@@ -252,7 +252,7 @@ function getDefaultUserPreferences() {
     appearance: 'light',
     saveMode: 'autosave',
     editorFontFamily: 'serif',
-    editorFontSize: 18,
+    editorFontSize: 16,
     editorLineHeight: 1.7,
   };
 }

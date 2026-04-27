@@ -105,7 +105,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     return window.resolveEditorPreferences?.(projectOverride) || {
       saveMode: 'autosave',
       fontFamily: 'serif',
-      fontSize: 18,
+      fontSize: 16,
       lineHeight: 1.7,
     };
   }
