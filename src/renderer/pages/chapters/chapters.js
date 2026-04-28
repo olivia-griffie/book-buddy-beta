@@ -57,32 +57,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const contextContent = document.getElementById('chapter-context-content');
   const contextTabs = [...document.querySelectorAll('[data-context-tab]')];
 
-  const chapterEditorCard = document.querySelector('#chapters-content > section');
-  const chapterEditorHeadToggle = document.getElementById('chapter-editor-head-toggle');
-  const chapterEditorCollapseKey = 'collapse:chapters:editor-card';
-
-  function setChapterEditorCollapsed(collapsed) {
-    chapterEditorCard.classList.toggle('is-collapsed', collapsed);
-    chapterEditorHeadToggle.setAttribute('aria-expanded', String(!collapsed));
-    const chevron = chapterEditorHeadToggle.querySelector('.chapter-editor-collapse-chevron');
-    if (chevron) chevron.textContent = collapsed ? '▸' : '▾';
-    localStorage.setItem(chapterEditorCollapseKey, collapsed ? '1' : '0');
-  }
-
-  setChapterEditorCollapsed(true);
-
-  chapterEditorHeadToggle?.addEventListener('click', (e) => {
-    if (e.target.closest('select, button, input')) return;
-    setChapterEditorCollapsed(!chapterEditorCard.classList.contains('is-collapsed'));
-  });
-
-  chapterEditorHeadToggle?.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      setChapterEditorCollapsed(!chapterEditorCard.classList.contains('is-collapsed'));
-    }
-  });
-
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
   if (!activeProject) {
@@ -163,18 +137,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
         defaultOpen: details.dataset.chapterPanel === 'context',
       });
     });
-
-    if (plotSectionsPanel) {
-      const plotSectionsPanelKey = window.bindPersistentDetailsState?.(plotSectionsPanel, {
-        projectId: activeProject.id,
-        sectionId: 'chapters-section-targets-panel',
-        defaultOpen: false,
-      });
-      plotSectionsPanel.open = false;
-      if (plotSectionsPanelKey) {
-        localStorage.setItem(plotSectionsPanelKey, '0');
-      }
-    }
   }
 
   const preferredChapterIds = [
@@ -475,6 +437,24 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   function renderContextPanel() {
     const chapter = getSelectedChapter();
+    const promptsPanel = document.getElementById('chapter-prompts-panel');
+
+    contextTabs.forEach((tab) => {
+      const isActive = tab.dataset.contextTab === contextState.tab;
+      tab.classList.toggle('is-active', isActive);
+      tab.setAttribute('aria-selected', String(isActive));
+    });
+
+    if (contextState.tab === 'prompts') {
+      contextContent.style.display = 'none';
+      if (promptsPanel) promptsPanel.style.removeProperty('display');
+      renderPromptPanel();
+      return;
+    }
+
+    contextContent.style.display = '';
+    if (promptsPanel) promptsPanel.style.display = 'none';
+
     const currentSection = plotSections.find((section) => section.id === chapter?.sectionId);
     const workbook = activeProject.plotWorkbook || {};
     const visibleCharacters = (characters.filter((character) => !currentSection?.id || (character.sectionIds || []).includes(currentSection.id)).length
@@ -492,12 +472,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const visibleLocations = locations.filter((location) => !currentSection?.id || (location.sectionIds || []).includes(currentSection.id)).length
       ? locations.filter((location) => (location.sectionIds || []).includes(currentSection?.id))
       : locations;
-
-    contextTabs.forEach((tab) => {
-      const isActive = tab.dataset.contextTab === contextState.tab;
-      tab.classList.toggle('is-active', isActive);
-      tab.setAttribute('aria-selected', String(isActive));
-    });
 
     if (contextState.tab === 'plot') {
       contextContent.innerHTML = `
@@ -1036,7 +1010,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const currentWords = window.computeWordCount(chapter.content);
     currentWordsInput.value = currentWords.toLocaleString();
     setProgress(currentWords, chapter.targetWords);
-    document.getElementById('chapter-editor-title').textContent = chapter.title || 'Untitled Chapter';
     const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
     chapterSelectedSection.textContent = currentSection?.label || '';
     applyEditorStyles();
@@ -1166,6 +1139,25 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
       renderContextPanel();
     });
   });
+
+  const editorSettingsBtn = document.getElementById('editor-settings-btn');
+  const editorSettingsPopover = document.getElementById('editor-settings-popover');
+
+  if (editorSettingsBtn && editorSettingsPopover) {
+    editorSettingsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = !editorSettingsPopover.hidden;
+      editorSettingsPopover.hidden = isOpen;
+      editorSettingsBtn.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!editorSettingsPopover.hidden && !editorSettingsPopover.contains(e.target) && e.target !== editorSettingsBtn) {
+        editorSettingsPopover.hidden = true;
+        editorSettingsBtn.setAttribute('aria-expanded', 'false');
+      }
+    }, { capture: true });
+  }
 
   [titleInput, sectionSelect, targetWordsInput, fontFamilyInput, fontSizeInput, lineHeightInput, contentInput].forEach((field) => {
     field.addEventListener('input', syncSelectedChapter);
