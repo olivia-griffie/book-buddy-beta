@@ -3,7 +3,6 @@
     <div>
       <p class="eyebrow">Plot Creation</p>
       <h1 id="plot-page-title">Plot</h1>
-      <p id="plot-page-subtitle">Shape your story with genre-specific beats and prompts.</p>
     </div>
     <button id="save-plot-workbook" class="btn btn-save" type="button">Save</button>
   </div>
@@ -26,7 +25,7 @@
           <span class="plot-block-indicator" aria-hidden="true">⌄</span>
         </summary>
         <div class="plot-block-body plot-block-body-section-targets">
-          <div class="plot-section-targets-toolbar">
+          <div class="plot-section-targets-toolbar" style="margin-top: 16px;">
             <button id="generate-outline-btn" class="btn btn-save generate-outline-btn" type="button">Generate Outline</button>
             <p id="generate-outline-message" class="generate-outline-message" aria-live="polite" hidden></p>
           </div>
@@ -34,70 +33,79 @@
         </div>
       </details>
 
-      <details class="plot-block bb-collapse" data-plot-block="outline">
+      <details class="plot-block bb-collapse" data-plot-block="story-notes">
         <summary class="plot-block-summary">
           <div class="ui-card-copy">
-            <p class="eyebrow">Story Spine</p>
-            <h2>Outline</h2>
+            <p class="eyebrow">Story Notes</p>
+            <h2>Outline, Premise & Notes</h2>
           </div>
           <span class="plot-block-indicator" aria-hidden="true">⌄</span>
         </summary>
-        <div class="plot-block-body">
-          <div class="field field-full plot-outline-field">
-            <label for="plot-outline">Outline</label>
-            <textarea id="plot-outline" rows="6"></textarea>
-          </div>
-        </div>
-      </details>
+        <div class="plot-block-body plot-block-body-story-notes">
 
-      <details class="plot-block bb-collapse" data-plot-block="premise-stakes">
-        <summary class="plot-block-summary">
-          <div class="ui-card-copy">
-            <p class="eyebrow">Story Foundation</p>
-            <h2>Premise And Stakes</h2>
-          </div>
-          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="plot-block-body">
-          <div class="workbook-grid">
-            <div class="field">
-              <label for="plot-premise">Premise</label>
-              <textarea id="plot-premise" rows="4"></textarea>
+          <details class="plot-block plot-sublock bb-collapse" data-plot-block="outline">
+            <summary class="plot-block-summary">
+              <div class="ui-card-copy">
+                <h3>Outline</h3>
+              </div>
+              <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="plot-block-body">
+              <div class="field field-full plot-outline-field">
+                <label for="plot-outline">Outline</label>
+                <textarea id="plot-outline" rows="6"></textarea>
+              </div>
             </div>
-            <div class="field">
-              <label for="plot-stakes">Stakes</label>
-              <textarea id="plot-stakes" rows="4"></textarea>
+          </details>
+
+          <details class="plot-block plot-sublock bb-collapse" data-plot-block="premise-stakes">
+            <summary class="plot-block-summary">
+              <div class="ui-card-copy">
+                <h3>Premise &amp; Stakes</h3>
+              </div>
+              <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="plot-block-body">
+              <div class="workbook-grid">
+                <div class="field">
+                  <label for="plot-premise">Premise</label>
+                  <textarea id="plot-premise" rows="4"></textarea>
+                </div>
+                <div class="field">
+                  <label for="plot-stakes">Stakes</label>
+                  <textarea id="plot-stakes" rows="4"></textarea>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </details>
+          </details>
 
-      <details class="plot-block bb-collapse" data-plot-block="plot-notes">
-        <summary class="plot-block-summary">
-          <div class="ui-card-copy">
-            <p class="eyebrow">Big Picture</p>
-            <h2>Plot Notes</h2>
-          </div>
-          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="plot-block-body">
-          <div class="field field-full">
-            <label for="plot-notes">Plot Notes</label>
-            <textarea id="plot-notes" rows="5"></textarea>
-          </div>
-        </div>
-      </details>
+          <details class="plot-block plot-sublock bb-collapse" data-plot-block="plot-notes">
+            <summary class="plot-block-summary">
+              <div class="ui-card-copy">
+                <h3>Plot Notes</h3>
+              </div>
+              <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="plot-block-body">
+              <div class="field field-full">
+                <label for="plot-notes">Notes</label>
+                <textarea id="plot-notes" rows="5"></textarea>
+              </div>
+            </div>
+          </details>
 
-      <details class="plot-block bb-collapse" data-plot-block="project-tags">
-        <summary class="plot-block-summary">
-          <div class="ui-card-copy">
-            <p class="eyebrow">Discovery</p>
-            <h2>Story Tags</h2>
-          </div>
-          <span class="plot-block-indicator" aria-hidden="true">⌄</span>
-        </summary>
-        <div class="plot-block-body">
-          <div id="plot-tag-manager"></div>
+          <details class="plot-block plot-sublock bb-collapse" data-plot-block="project-tags">
+            <summary class="plot-block-summary">
+              <div class="ui-card-copy">
+                <h3>Story Tags</h3>
+              </div>
+              <span class="plot-block-indicator" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="plot-block-body">
+              <div id="plot-tag-manager"></div>
+            </div>
+          </details>
+
         </div>
       </details>
 
