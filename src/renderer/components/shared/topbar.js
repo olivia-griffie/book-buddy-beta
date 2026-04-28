@@ -743,7 +743,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
               </button>
             ` : ''}
             ${hasProject ? '<button id="topbar-quick-prompt" class="btn btn-ghost" type="button" title="Jump to Writing Challenges">Quick Prompt</button>' : ''}
-            <button id="topbar-new-project" class="btn btn-save" type="button">New Project</button>
           </div>
         </div>
         ${hasProject ? renderTopbarNextSteps(currentProject) : ''}
@@ -769,9 +768,6 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
     </div>
   `;
 
-  container.querySelector('#topbar-new-project')?.addEventListener('click', () => {
-    window.navigate('create-project', { project: null });
-  });
   container.querySelector('#topbar-quick-prompt')?.addEventListener('click', () => {
     window.navigate('daily-prompts');
   });
