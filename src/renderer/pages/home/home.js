@@ -6,8 +6,6 @@ window.registerPageInit('home', async function () {
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
   const dashboard = document.getElementById('daily-dashboard');
-  const continueCta = document.getElementById('home-continue-cta');
-
   async function readImage(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -65,54 +63,6 @@ window.registerPageInit('home', async function () {
     return { label: 'Continue writing', type: 'open-chapters' };
   }
 
-  function getContinueTarget() {
-    if (!visibleProjects.length) return null;
-    const project = [...visibleProjects].sort(
-      (a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime(),
-    )[0];
-    if (!project) return null;
-    const chapters = project.chapters || [];
-    if (!chapters.length) return { project, chapterId: null };
-    const chapterId = project.lastEditedChapterId
-      || (project.lastSessionMeta?.chapterIds || [])[0]
-      || chapters[0]?.id
-      || null;
-    return { project, chapterId };
-  }
-
-  function renderContinueCta() {
-    if (!continueCta) return;
-    const target = getContinueTarget();
-    if (!target) {
-      continueCta.style.display = 'none';
-      return;
-    }
-    const { project, chapterId } = target;
-    const edited = formatRelativeDate(project.updatedAt);
-    const chapterLabel = chapterId
-      ? (project.chapters || []).find((ch) => ch.id === chapterId)?.title || 'Last chapter'
-      : null;
-    const meta = [
-      chapterLabel,
-      edited ? `Edited ${edited}` : null,
-    ].filter(Boolean).join(' · ');
-
-    continueCta.style.display = 'flex';
-    continueCta.innerHTML = `
-      <div class="home-continue-copy">
-        <p class="eyebrow">Pick up where you left off</p>
-        <h2 class="home-continue-title">${project.title}</h2>
-        ${meta ? `<p class="home-continue-meta">${meta}</p>` : ''}
-      </div>
-      <button class="btn home-continue-btn" type="button" id="home-continue-btn">Continue Writing →</button>
-    `;
-
-    continueCta.querySelector('#home-continue-btn')?.addEventListener('click', () => {
-      window.showProjectNav(true);
-      window.navigate('chapters', { project, chapterId: chapterId || undefined });
-    });
-  }
-
   function buildProjectCardMarkup({ project, pct, completed, genres, tags, thumb }) {
     return `
       <article class="project-card" data-id="${project.id}">
@@ -134,10 +84,6 @@ window.registerPageInit('home', async function () {
           <div class="project-card__header">
             <div class="project-card__header-copy">
               <h3 class="project-card__title" data-project-title="${project.id}">${project.title}</h3>
-              <div class="project-card__tags">
-                ${genres || '<span class="project-tag project-tag--empty">No genre set</span>'}
-                ${tags}
-              </div>
             </div>
             <button class="project-card__edit-title-btn" type="button" data-edit-project-title="${project.id}" title="Edit title">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11.5 2.5a1.414 1.414 0 0 1 2 2L5 13H3v-2L11.5 2.5Z"/></svg>
@@ -160,11 +106,6 @@ window.registerPageInit('home', async function () {
               <span>${formatRelativeDate(project.updatedAt) ? `Edited ${formatRelativeDate(project.updatedAt)}` : formatShortDate(project.targetCompletionDate) !== 'Not set' ? `Due ${formatShortDate(project.targetCompletionDate)}` : 'No target date'}</span>
             </div>
           </section>
-
-          <div class="project-card__next-step">
-            <span class="project-card__next-step-arrow">→</span>
-            <button class="project-card__next-step-btn" type="button" data-next-action="${project.id}" data-next-action-type="${getSuggestedAction(project).type}" data-next-action-chapter="${project.lastEditedChapterId || ''}">${getSuggestedAction(project).label}</button>
-          </div>
 
           <div class="project-card__settings">
             <button class="project-card__text-btn" type="button" data-edit-genres="${project.id}">Change Genre</button>
@@ -632,13 +573,11 @@ window.registerPageInit('home', async function () {
     empty.style.display = 'block';
     dashboard.style.display = 'none';
     betaBanner.style.display = 'none';
-    if (continueCta) continueCta.style.display = 'none';
     return;
   }
 
   empty.style.display = 'none';
   betaBanner.style.display = 'none';
-  renderContinueCta();
 
   grid.innerHTML = visibleProjects
     .map((project) => {
@@ -773,22 +712,6 @@ window.registerPageInit('home', async function () {
       const project = allProjects.find((entry) => entry.id === button.dataset.openProject);
       window.showProjectNav(true);
       window.navigate('plot-creation', { project });
-    });
-  });
-
-  grid.querySelectorAll('[data-next-action]').forEach((button) => {
-    button.addEventListener('click', (event) => {
-      event.stopPropagation();
-      const project = allProjects.find((entry) => entry.id === button.dataset.nextAction);
-      if (!project) return;
-      const type = button.dataset.nextActionType;
-      window.showProjectNav(true);
-      if (type === 'edit-genres') {
-        grid.querySelector(`[data-edit-genres="${project.id}"]`)?.click();
-      } else {
-        const chapterId = button.dataset.nextActionChapter || undefined;
-        window.navigate('chapters', { project, chapterId: chapterId || undefined });
-      }
     });
   });
 
