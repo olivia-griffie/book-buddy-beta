@@ -1248,6 +1248,23 @@ p { color: var(--ink-soft); }
 a { color: var(--sage); text-decoration: none; }
 a:hover { color: var(--sage-light); }
 
+h1, h2, h3, h4, p, label, button, .ui-card-title, .ui-card-description {
+  overflow-wrap: anywhere;
+}
+
+.page-header p,
+.ui-card-description,
+.helper-text {
+  max-width: 70ch;
+}
+
+.btn,
+.character-type-tag,
+.scene-tag-button,
+.tag-pill {
+  line-height: 1.25;
+}
+
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -1306,15 +1323,16 @@ a:hover { color: var(--sage-light); }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
-  padding: 10px 20px;
+  gap: var(--space-xs);
+  padding: 8px 14px;
+  min-height: 38px;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   font-family: var(--font-body);
   font-size: 0.85rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  line-height: 1.25;
+  white-space: nowrap;
   cursor: pointer;
   transition: all var(--duration) var(--ease);
 }
@@ -1358,9 +1376,11 @@ a:hover { color: var(--sage-light); }
   to { transform: rotate(360deg); }
 }
 
+/* ── Primary (dark) ── */
 .btn-primary {
   background: var(--ink);
   color: var(--cream);
+  border: none;
 }
 
 .btn-primary:hover {
@@ -1369,17 +1389,22 @@ a:hover { color: var(--sage-light); }
   box-shadow: var(--shadow-lift);
 }
 
-.btn-save {
+/* ── Orange primary (save / sage are identical) ── */
+.btn-save,
+.btn-sage {
   background: var(--sage);
   color: white;
+  border: none;
 }
 
-.btn-save:hover {
+.btn-save:hover,
+.btn-sage:hover {
   background: var(--sage-deep);
   transform: translateY(-1px);
   box-shadow: var(--shadow-lift);
 }
 
+/* ── Ghost / tertiary ── */
 .btn-ghost {
   background: transparent;
   color: var(--ink-soft);
@@ -1391,14 +1416,43 @@ a:hover { color: var(--sage-light); }
   color: var(--ink);
 }
 
-.btn-sage {
-  background: var(--sage);
-  color: white;
+/* ── Secondary (bordered, no fill) ── */
+.btn-secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
 }
 
-.btn-sage:hover {
-  background: var(--sage-deep);
+.btn-secondary:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+
+/* ── Danger ── */
+.btn-danger {
+  background: var(--danger-pink);
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: var(--danger-pink-deep);
   transform: translateY(-1px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* ── Icon (square, no padding offset) ── */
+.btn-icon {
+  padding: 8px;
+  min-width: 38px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--border);
+}
+
+.btn-icon:hover {
+  color: var(--ink);
+  border-color: var(--ink-muted);
 }
 
 input, textarea, select {
@@ -2480,6 +2534,7 @@ body.dark-mode .btn-ghost {
 }
 
 body.dark-mode .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.06);
   border-color: var(--ink-muted);
   color: var(--ink);
 }
@@ -2487,17 +2542,11 @@ body.dark-mode .btn-ghost:hover {
 body.dark-mode .btn-primary {
   background: var(--surface-step);
   color: var(--ink);
-  border-color: var(--border);
+  border: 1px solid var(--border);
 }
 
 body.dark-mode .btn-primary:hover {
   background: var(--border);
-  color: var(--ink);
-}
-
-body.dark-mode .btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: var(--ink-muted);
   color: var(--ink);
 }
 
@@ -2513,6 +2562,27 @@ body.dark-mode .btn-sage:hover {
   background: #ff8a3d;
   color: white;
   box-shadow: 0 0 14px rgba(255, 138, 61, 0.35);
+}
+
+body.dark-mode .btn-secondary {
+  color: var(--ink);
+  border-color: var(--border);
+}
+
+body.dark-mode .btn-secondary:hover {
+  background: var(--surface-step);
+  border-color: var(--ink-muted);
+}
+
+body.dark-mode .btn-icon {
+  border-color: var(--border);
+  color: var(--ink-soft);
+}
+
+body.dark-mode .btn-icon:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--ink-muted);
+  color: var(--ink);
 }
 
 body.dark-mode .project-thumb-actions .upload-trigger {

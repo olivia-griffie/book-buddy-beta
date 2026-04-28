@@ -25,7 +25,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   const emptyState = document.getElementById('chapters-empty-state');
   const content = document.getElementById('chapters-content');
   const saveButton = document.getElementById('save-chapters');
-  const saveTopButton = document.getElementById('save-chapters-top');
   const exportButton = document.getElementById('export-chapters');
   const createButton = document.getElementById('chapters-create-project');
   const plotSectionsPanel = document.getElementById('plot-sections-panel');
@@ -63,7 +62,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     emptyState.style.display = 'grid';
     content.style.display = 'none';
     saveButton.style.display = 'none';
-    saveTopButton.style.display = 'none';
     exportButton.style.display = 'none';
     return;
   }
@@ -71,7 +69,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   emptyState.style.display = 'none';
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
-  saveTopButton.style.display = 'inline-flex';
   exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = 'Chapters';
   document.getElementById('chapters-page-subtitle').textContent = 'Link plot points, add chapters, and draft in a simple focused editor.';
@@ -658,7 +655,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
               </p>
               <div class="chapter-prompt-actions">
                 <button class="btn btn-save" type="button" data-prompt-save-answer="${entry.id}">Save Answer</button>
-                <button class="btn btn-primary" type="button" data-insert-prompt-answer="${entry.id}">Insert Answer Into Draft</button>
+                <button class="btn btn-primary" type="button" data-insert-prompt-answer="${entry.id}">Insert</button>
               </div>
             </div>
           </div>
@@ -1167,10 +1164,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
 
   saveButton.addEventListener('click', async () => {
     await handleSaveChapters(saveButton);
-  });
-
-  saveTopButton?.addEventListener('click', async () => {
-    await handleSaveChapters(saveTopButton);
   });
 
   exportButton.addEventListener('click', async () => {
