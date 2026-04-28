@@ -810,8 +810,8 @@ body {
 .topbar-next-steps {
   display: grid;
   border: 1px solid var(--border-soft);
-  border-radius: 14px;
-  background: var(--surface-card);
+  border-radius: 10px;
+  background: var(--surface-soft);
   overflow: hidden;
   animation: shellRise 0.4s var(--ease) both;
 }
@@ -841,8 +841,9 @@ body {
 .topbar-next-steps-trigger-title {
   flex: 1;
   min-width: 0;
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink-soft);
 }
 
 .topbar-next-steps-trigger-bar {
