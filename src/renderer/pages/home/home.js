@@ -6,6 +6,7 @@ window.registerPageInit('home', async function () {
   const newProjectButton = document.getElementById('btn-new-project');
   const betaBanner = document.getElementById('beta-project-banner');
   const dashboard = document.getElementById('daily-dashboard');
+  const continueCta = document.getElementById('home-continue-cta');
 
   async function readImage(file) {
     return new Promise((resolve, reject) => {
@@ -30,6 +31,85 @@ window.registerPageInit('home', async function () {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
+    });
+  }
+
+  function formatRelativeDate(isoString) {
+    if (!isoString) return null;
+    const date = new Date(isoString);
+    if (Number.isNaN(date.getTime())) return null;
+    const diffDays = Math.floor((Date.now() - date.getTime()) / 86400000);
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+  }
+
+  function getSuggestedAction(project) {
+    if (!(project.genres || []).length) {
+      return { label: 'Set a genre', type: 'edit-genres' };
+    }
+    const chapters = project.chapters || [];
+    if (!chapters.length) {
+      return { label: 'Add your first chapter', type: 'open-chapters' };
+    }
+    const hasContent = chapters.some((ch) => (ch.content || '').length > 50);
+    if (!hasContent) {
+      return { label: 'Start writing', type: 'open-chapters' };
+    }
+    const goal = Number(project.wordCountGoal || 0);
+    const current = Number(project.currentWordCount || 0);
+    if (goal > 0 && current >= goal) {
+      return { label: 'Review for publishing', type: 'open-chapters' };
+    }
+    return { label: 'Continue writing', type: 'open-chapters' };
+  }
+
+  function getContinueTarget() {
+    if (!visibleProjects.length) return null;
+    const project = [...visibleProjects].sort(
+      (a, b) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime(),
+    )[0];
+    if (!project) return null;
+    const chapters = project.chapters || [];
+    if (!chapters.length) return { project, chapterId: null };
+    const chapterId = project.lastEditedChapterId
+      || (project.lastSessionMeta?.chapterIds || [])[0]
+      || chapters[0]?.id
+      || null;
+    return { project, chapterId };
+  }
+
+  function renderContinueCta() {
+    if (!continueCta) return;
+    const target = getContinueTarget();
+    if (!target) {
+      continueCta.style.display = 'none';
+      return;
+    }
+    const { project, chapterId } = target;
+    const edited = formatRelativeDate(project.updatedAt);
+    const chapterLabel = chapterId
+      ? (project.chapters || []).find((ch) => ch.id === chapterId)?.title || 'Last chapter'
+      : null;
+    const meta = [
+      chapterLabel,
+      edited ? `Edited ${edited}` : null,
+    ].filter(Boolean).join(' · ');
+
+    continueCta.style.display = 'flex';
+    continueCta.innerHTML = `
+      <div class="home-continue-copy">
+        <p class="eyebrow">Pick up where you left off</p>
+        <h2 class="home-continue-title">${project.title}</h2>
+        ${meta ? `<p class="home-continue-meta">${meta}</p>` : ''}
+      </div>
+      <button class="btn home-continue-btn" type="button" id="home-continue-btn">Continue Writing →</button>
+    `;
+
+    continueCta.querySelector('#home-continue-btn')?.addEventListener('click', () => {
+      window.showProjectNav(true);
+      window.navigate('chapters', { project, chapterId: chapterId || undefined });
     });
   }
 
@@ -77,9 +157,14 @@ window.registerPageInit('home', async function () {
             </div>
             <div class="project-progress__footer">
               <span>Goal: ${(project.wordCountGoal || 0).toLocaleString()} words</span>
-              <span>Due: ${formatShortDate(project.targetCompletionDate)}</span>
+              <span>${formatRelativeDate(project.updatedAt) ? `Edited ${formatRelativeDate(project.updatedAt)}` : formatShortDate(project.targetCompletionDate) !== 'Not set' ? `Due ${formatShortDate(project.targetCompletionDate)}` : 'No target date'}</span>
             </div>
           </section>
+
+          <div class="project-card__next-step">
+            <span class="project-card__next-step-arrow">→</span>
+            <button class="project-card__next-step-btn" type="button" data-next-action="${project.id}" data-next-action-type="${getSuggestedAction(project).type}" data-next-action-chapter="${project.lastEditedChapterId || ''}">${getSuggestedAction(project).label}</button>
+          </div>
 
           <div class="project-card__settings">
             <button class="project-card__text-btn" type="button" data-edit-genres="${project.id}">Change Genre</button>
@@ -547,11 +632,13 @@ window.registerPageInit('home', async function () {
     empty.style.display = 'block';
     dashboard.style.display = 'none';
     betaBanner.style.display = 'none';
+    if (continueCta) continueCta.style.display = 'none';
     return;
   }
 
   empty.style.display = 'none';
   betaBanner.style.display = 'none';
+  renderContinueCta();
 
   grid.innerHTML = visibleProjects
     .map((project) => {
@@ -686,6 +773,22 @@ window.registerPageInit('home', async function () {
       const project = allProjects.find((entry) => entry.id === button.dataset.openProject);
       window.showProjectNav(true);
       window.navigate('plot-creation', { project });
+    });
+  });
+
+  grid.querySelectorAll('[data-next-action]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const project = allProjects.find((entry) => entry.id === button.dataset.nextAction);
+      if (!project) return;
+      const type = button.dataset.nextActionType;
+      window.showProjectNav(true);
+      if (type === 'edit-genres') {
+        grid.querySelector(`[data-edit-genres="${project.id}"]`)?.click();
+      } else {
+        const chapterId = button.dataset.nextActionChapter || undefined;
+        window.navigate('chapters', { project, chapterId: chapterId || undefined });
+      }
     });
   });
 

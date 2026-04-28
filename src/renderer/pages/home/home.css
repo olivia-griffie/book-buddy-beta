@@ -757,6 +757,102 @@
   border-color: rgba(255, 77, 149, 0.24);
 }
 
+/* ── Continue Writing CTA ── */
+.home-continue-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 20px 24px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #fff5ee 0%, #fff9f5 100%);
+  border: 1px solid rgba(255, 138, 61, 0.28);
+  box-shadow: 0 4px 16px rgba(255, 138, 61, 0.08);
+}
+
+.home-continue-copy {
+  display: grid;
+  gap: 4px;
+}
+
+.home-continue-copy .eyebrow {
+  margin: 0;
+}
+
+.home-continue-title {
+  margin: 0;
+  font-size: 1.4rem;
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+.home-continue-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--ink-muted);
+}
+
+.home-continue-btn {
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ff9f63 0%, #ff8a3d 100%);
+  border-color: #ff8a3d;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+  box-shadow: 0 6px 18px rgba(255, 138, 61, 0.28);
+  white-space: nowrap;
+  transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), background var(--duration) var(--ease);
+}
+
+.home-continue-btn:hover {
+  background: linear-gradient(135deg, #ff9f63 0%, #e66f1f 100%);
+  border-color: #e66f1f;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(255, 138, 61, 0.34);
+}
+
+/* ── Next suggested action on cards ── */
+.project-card__next-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 138, 61, 0.06);
+  border: 1px solid rgba(255, 138, 61, 0.18);
+}
+
+.project-card__next-step-arrow {
+  color: var(--accent-coral);
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.project-card__next-step-btn {
+  appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent-coral);
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: color var(--duration) var(--ease);
+}
+
+.project-card__next-step-btn:hover {
+  color: #c9551a;
+}
+
 .daily-dashboard {
   display: grid;
   gap: 20px;
@@ -1074,4 +1170,14 @@ body.dark-mode .btn-sage-soft {
 body.dark-mode .btn-sage-soft:hover {
   background: rgba(79, 242, 201, 0.18);
   color: var(--ink);
+}
+
+body.dark-mode .home-continue-cta {
+  background: linear-gradient(135deg, var(--surface-card) 0%, var(--surface-bg) 100%);
+  border-color: rgba(255, 138, 61, 0.22);
+}
+
+body.dark-mode .project-card__next-step {
+  background: rgba(255, 138, 61, 0.08);
+  border-color: rgba(255, 138, 61, 0.14);
 }
