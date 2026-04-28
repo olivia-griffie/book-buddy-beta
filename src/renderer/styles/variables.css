@@ -19,9 +19,26 @@
   --shadow-lift: 0 12px 24px rgba(47, 53, 69, 0.12);
   --radius-sm: 6px;
   --radius-md: 12px;
-  --space-sm: 8px;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
   --space-md: 16px;
   --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.85rem;
+  --text-base: 0.95rem;
+  --text-md: 1rem;
+  --text-lg: 1.15rem;
+  --text-xl: 1.45rem;
+  --text-2xl: 1.9rem;
+
+  --line-tight: 1.25;
+  --line-normal: 1.5;
+  --line-relaxed: 1.65;
+
   --duration: 180ms;
   --ease: ease;
   --font-display: 'Pacifico', cursive;

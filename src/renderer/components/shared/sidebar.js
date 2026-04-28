@@ -143,14 +143,10 @@ async function performInboxSidebarBadgeRefresh({ force = false } = {}) {
     const session = await window.api?.auth?.getSession?.();
 
     if (!session) {
-      const clearedState = writeCachedInboxUnreadState({
-        activityUnread: 0,
-        messageUnread: 0,
-        totalUnread: 0,
-        updatedAt: new Date().toISOString(),
-      });
-      renderInboxSidebarBadgeCount(0);
-      return clearedState;
+      // Session not ready yet — show cached count without updating the cache.
+      // Writing 0 here would poison the cache and block a real fetch for 15s.
+      renderInboxSidebarBadgeCount(cachedState.totalUnread);
+      return cachedState;
     }
 
     const [notificationsResult, conversationsResult] = await Promise.allSettled([
@@ -171,7 +167,16 @@ async function performInboxSidebarBadgeRefresh({ force = false } = {}) {
       readIds = new Set(JSON.parse(localStorage.getItem('bb-inbox-read-items') || '[]'));
     } catch {}
 
-    const activityUnread = (notifications || []).filter((item) => !readIds.has(item.id)).length;
+    let milestoneNotifications = [];
+    try {
+      milestoneNotifications = JSON.parse(localStorage.getItem('bb-milestone-notifications') || '[]');
+    } catch {}
+
+    const allActivityItems = [
+      ...milestoneNotifications,
+      ...(notifications || []),
+    ];
+    const activityUnread = allActivityItems.filter((item) => item.id && !readIds.has(item.id)).length;
     const messageUnread = (conversations || []).reduce((sum, conversation) => sum + Number(conversation.unreadCount || 0), 0);
     const totalUnread = activityUnread + messageUnread;
     const nextState = writeCachedInboxUnreadState({
