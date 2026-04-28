@@ -297,11 +297,11 @@ window.registerPageInit('home', async function () {
     const streakSecured = Boolean(todayEntry?.streakQualified);
     const sessionCount = Number(todayEntry?.sessionCount || 0);
     const touchedCount = Number(todayEntry?.chaptersTouched?.length || 0);
-    const streakTone = streakSecured ? 'success' : 'warning';
-    const streakLabel = streakSecured ? 'Streak secured today' : 'Not secured yet';
+    const streakTone = streakSecured ? 'success' : '';
+    const streakLabel = streakSecured ? 'Streak secured today' : "Today's Goal";
     const streakDetail = streakSecured
       ? `${wordsToday.toLocaleString()} words logged today.`
-      : `${remainingToday.toLocaleString()} more words to count today.`;
+      : `Write ${remainingToday.toLocaleString()} more words to hit today's goal.`;
     const streak = computePromptStreak(project);
     const activePrompts = (project.dailyPromptHistory || []).filter((entry) => !entry.answerInsertedAt);
     const todayKey = new Date().toISOString().slice(0, 10);
@@ -310,14 +310,13 @@ window.registerPageInit('home', async function () {
     dashboard.style.display = 'grid';
     dashboard.innerHTML = `
       <div class="daily-dashboard-head">
-        <div>
+        <div class="daily-dashboard-head-copy">
           <p class="eyebrow">Daily Dashboard</p>
           <h2>${project.title} Progress</h2>
-          <p>See your recent writing rhythm and whether you are pacing toward your target finish date.</p>
         </div>
-        <div class="daily-dashboard-meta">
-          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact">
-            <span class="daily-dashboard-stat-label">Date To Complete</span>
+        <div class="daily-dashboard-head-right">
+          <label class="daily-dashboard-date-label">
+            Target date
             <input
               type="date"
               class="daily-dashboard-date-input"
@@ -325,35 +324,40 @@ window.registerPageInit('home', async function () {
               value="${project.targetCompletionDate || ''}"
               aria-label="Target completion date"
             />
-          </div>
-          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${pace.tone}">
-            <span class="daily-dashboard-stat-label">${pace.status}</span>
-            <strong>${pace.detail}</strong>
-          </div>
-          <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${streakTone}">
-            <span class="daily-dashboard-stat-label">${streakLabel}</span>
-            <strong>${streakDetail}</strong>
+          </label>
+          <div class="daily-dashboard-meta">
+            <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact is-${pace.tone}">
+              <span class="daily-dashboard-stat-label">${pace.status}</span>
+              <strong>${pace.detail}</strong>
+            </div>
+            <div class="daily-dashboard-stat ui-card ui-card-soft ui-card-compact ${streakTone ? `is-${streakTone}` : ''}">
+              <span class="daily-dashboard-stat-label">${streakLabel}</span>
+              <strong>${streakDetail}</strong>
+            </div>
           </div>
         </div>
       </div>
       <div class="daily-dashboard-grid">
         <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
-          <h3>Today</h3>
-          <div class="daily-dashboard-stat">
+          <p class="eyebrow">Today</p>
+          <div class="daily-dashboard-stat daily-dashboard-stat--hero">
             <span class="daily-dashboard-stat-label">Words written</span>
-            <strong>${wordsToday.toLocaleString()} / ${goal.toLocaleString()}</strong>
+            <strong class="daily-dashboard-stat-hero-value">${wordsToday.toLocaleString()} / ${goal.toLocaleString()}</strong>
+            <div class="daily-dashboard-stat-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.min(100, goal > 0 ? Math.round((wordsToday / goal) * 100) : 0)}">
+              <span class="daily-dashboard-stat-bar-fill" style="width:${Math.min(100, goal > 0 ? Math.round((wordsToday / goal) * 100) : 0)}%"></span>
+            </div>
           </div>
-          <div class="daily-dashboard-stat">
+          <div class="daily-dashboard-stat daily-dashboard-stat--secondary">
             <span class="daily-dashboard-stat-label">Sessions logged</span>
-            <strong>${sessionCount.toLocaleString()}</strong>
+            <span>${sessionCount.toLocaleString()}</span>
           </div>
-          <div class="daily-dashboard-stat">
+          <div class="daily-dashboard-stat daily-dashboard-stat--secondary">
             <span class="daily-dashboard-stat-label">Chapters touched</span>
-            <strong>${touchedCount.toLocaleString()}</strong>
+            <span>${touchedCount.toLocaleString()}</span>
           </div>
         </section>
         <section class="daily-dashboard-panel ui-card ui-card-soft ui-card-stack">
-          <h3>Writing Streak</h3>
+          <p class="eyebrow">Writing Streak</p>
           <div class="daily-dashboard-stat">
             <span class="daily-dashboard-stat-label">Current streak</span>
             <strong>${writingStreak.toLocaleString()} day${writingStreak === 1 ? '' : 's'}</strong>

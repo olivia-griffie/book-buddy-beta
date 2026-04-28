@@ -870,9 +870,35 @@
   flex-wrap: wrap;
 }
 
+.daily-dashboard-head-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.daily-dashboard-date-label {
+  font-size: 12px;
+  color: var(--ink-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.daily-dashboard-date-label input[type="date"] {
+  font-size: 12px;
+  padding: 3px 6px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--surface-input);
+  color: var(--ink);
+  width: auto;
+}
+
 .daily-dashboard-meta {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   min-width: min(100%, 340px);
 }
 
@@ -887,8 +913,53 @@
 }
 
 .daily-dashboard-stat.is-warning {
-  border-color: rgba(166, 124, 43, 0.24);
-  background: rgba(245, 232, 200, 0.55);
+  border-color: var(--color-warning-border, #d97706);
+  background: var(--color-warning-bg, #fef3c7);
+}
+
+.daily-dashboard-stat.is-warning .daily-dashboard-stat-label {
+  color: var(--color-warning, #b45309);
+}
+
+.daily-dashboard-stat--hero strong,
+.daily-dashboard-stat-hero-value {
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+.daily-dashboard-stat-bar {
+  height: 3px;
+  border-radius: 999px;
+  background: var(--border-soft);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.daily-dashboard-stat-bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--sage);
+  transition: width 300ms ease;
+}
+
+.daily-dashboard-stat--secondary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+}
+
+.daily-dashboard-stat--secondary .daily-dashboard-stat-label {
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 400;
+  color: var(--ink-muted);
 }
 
 .daily-dashboard-stat-label {
