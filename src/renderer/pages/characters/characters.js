@@ -72,6 +72,7 @@ window.registerPageInit('characters', async function ({ project }) {
   const typeTags = document.getElementById('character-type-tags');
   const typeSummary = document.getElementById('character-type-summary');
   const deleteButton = document.getElementById('delete-character');
+  const nameDisplay = document.getElementById('character-name-display');
 
   createButton?.addEventListener('click', () => window.navigate('create-project', { project: null }));
 
@@ -321,6 +322,11 @@ window.registerPageInit('characters', async function ({ project }) {
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
+    if (nameDisplay) {
+      nameDisplay.firstChild.textContent = character.name || 'Unnamed Character ';
+      nameDisplay.style.display = '';
+      textFields.name.style.display = 'none';
+    }
     if (deleteButton) {
       deleteButton.style.display = 'inline-flex';
     }
@@ -411,6 +417,7 @@ window.registerPageInit('characters', async function ({ project }) {
     character.romanceScenes = linkFields.romanceScenes.value;
 
     document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
+    if (nameDisplay) nameDisplay.firstChild.textContent = character.name || 'Unnamed Character ';
     renderList();
     autosave.touch();
   }
@@ -452,6 +459,21 @@ window.registerPageInit('characters', async function ({ project }) {
   Object.values(linkFields).forEach((field) => {
     field.addEventListener('input', syncCharacter);
     field.addEventListener('change', syncCharacter);
+  });
+
+  const nameInput = textFields.name;
+  nameDisplay?.addEventListener('click', () => {
+    nameDisplay.style.display = 'none';
+    nameInput.style.display = '';
+    nameInput.focus();
+    nameInput.select();
+  });
+  nameInput?.addEventListener('blur', () => {
+    nameInput.style.display = 'none';
+    nameDisplay.style.display = '';
+  });
+  nameInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') nameInput.blur();
   });
 
   document.getElementById('character-editor-shell').addEventListener('click', (e) => {

@@ -202,6 +202,78 @@
   margin: 10px 0 0;
   color: var(--ink-muted);
 }
+
+/* ── Character name inline-edit heading ── */
+.character-name-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.character-name-display {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.2;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  border-radius: 6px;
+  padding: 4px 6px;
+  margin: -4px -6px;
+  transition: background var(--duration) var(--ease);
+}
+
+.character-name-display:hover {
+  background: rgba(255, 138, 61, 0.08);
+}
+
+.character-name-edit-hint {
+  font-size: 0.65em;
+  opacity: 0;
+  color: var(--ink-muted);
+  transition: opacity var(--duration) var(--ease);
+  font-style: normal;
+}
+
+.character-name-display:hover .character-name-edit-hint {
+  opacity: 1;
+}
+
+.character-name-input {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--ink);
+  padding: 4px 6px;
+  border-radius: 6px;
+}
+
+/* ── Role type tags (filled colored pills) ── */
+#character-type-tags .character-type-tag {
+  background: var(--surface-step-index);
+  border-color: transparent;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+#character-type-tags .character-type-tag.is-selected {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: white;
+}
+
+#character-type-tags .character-type-tag:hover {
+  background: rgba(255, 138, 61, 0.18);
+  border-color: var(--sage-light);
+  box-shadow: none;
+}
+
+#character-type-tags .character-type-tag.is-selected:hover {
+  background: var(--sage-deep);
+  border-color: var(--sage-deep);
+  box-shadow: none;
+}
  
 .character-type-summary {
   display: grid;
@@ -267,4 +339,20 @@ body.dark-mode .character-type-tag {
 body.dark-mode .character-type-badge {
   background: var(--surface-input);
   color: var(--ink-soft);
+}
+
+body.dark-mode .character-name-display:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode #character-type-tags .character-type-tag {
+  background: var(--surface-step);
+  border-color: transparent;
+  color: var(--ink-soft);
+}
+
+body.dark-mode #character-type-tags .character-type-tag.is-selected {
+  background: var(--sage);
+  border-color: var(--sage);
+  color: white;
 }

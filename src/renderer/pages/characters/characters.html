@@ -39,9 +39,9 @@
       </div>
       <div id="character-editor-shell" style="display: none;">
         <div class="entity-form-grid">
-          <div class="field">
-            <label for="character-name">Name</label>
-            <input id="character-name" type="text" />
+          <div class="field field-full character-name-field">
+            <h2 class="character-name-display" id="character-name-display" title="Click to edit name">Unnamed Character <span class="character-name-edit-hint" aria-hidden="true">✎</span></h2>
+            <input id="character-name" class="character-name-input" type="text" aria-label="Character name" placeholder="Character name" style="display:none;" />
           </div>
 
           <div class="field">
@@ -69,8 +69,12 @@
             <div id="character-type-summary" class="character-type-summary"></div>
           </div>
 
-          <div class="field field-full">
-            <label>Narrative Tags</label>
+          <details class="field field-full field-collapsible bb-collapse character-tags-collapse">
+            <summary class="field-collapse-trigger">
+              <span>Character Tags</span>
+              <span class="collapse-chevron bb-collapse__chevron" aria-hidden="true">⌄</span>
+            </summary>
+            <div class="field-collapse-body bb-collapse__body">
             <div class="scene-tag-groups">
               <div class="scene-tag-group">
                 <p class="scene-tag-group-label">Character Role</p>
@@ -252,7 +256,8 @@
               </div>
             </div>
             <p class="character-type-help">Select narrative tags to shape how this character appears in prompt generation.</p>
-          </div>
+            </div>
+          </details>
 
           <details class="field field-collapsible bb-collapse" data-character-section="appearance" open>
             <summary class="field-collapse-trigger">
