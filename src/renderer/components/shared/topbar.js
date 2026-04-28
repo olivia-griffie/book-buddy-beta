@@ -559,19 +559,10 @@ function renderTopbarNextSteps(project) {
         <span class="topbar-next-steps-chevron" aria-hidden="true">${isCollapsed ? '&#9656;' : '&#9662;'}</span>
         <span class="topbar-next-steps-trigger-title">Next Steps - ${snapshot.doneCount} of ${snapshot.totalCount}</span>
         <span class="topbar-next-steps-percent">${snapshot.percent}%</span>
+        <button class="topbar-next-steps-reset" type="button" data-checklist-reset>Reset</button>
         <span class="topbar-next-steps-trigger-bar" style="--checklist-progress:${snapshot.percent}%"></span>
       </button>
       <div class="topbar-next-steps-body">
-        <div class="topbar-next-steps-head">
-          <h3 class="topbar-next-steps-title">${snapshot.doneCount} of ${snapshot.totalCount} complete</h3>
-          <div class="topbar-next-steps-head-actions">
-            <span class="topbar-next-steps-percent">${snapshot.percent}%</span>
-            <button class="topbar-next-steps-reset" type="button" data-checklist-reset>Reset</button>
-          </div>
-        </div>
-        <div class="topbar-next-steps-progress">
-          <span style="width:${snapshot.percent}%"></span>
-        </div>
         <div class="topbar-next-steps-list">
         ${snapshot.phases.map((phase) => `
           <details

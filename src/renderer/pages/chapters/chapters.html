@@ -71,41 +71,28 @@
           </div>
         </div>
 
-        <div class="chapter-editor-settings-bar">
-          <div class="field">
-            <label for="chapter-font-family">Style</label>
-            <select id="chapter-font-family">
-              <option value="serif">Serif</option>
-              <option value="sans">Sans Serif</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-font-size">Size</label>
-            <select id="chapter-font-size">
-              <option value="10">10</option>
-              <option value="12">12</option>
-              <option value="14">14</option>
-              <option value="16">16</option>
-              <option value="18">18</option>
-              <option value="20">20</option>
-              <option value="22">22</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-line-height">Spacing</label>
-            <select id="chapter-line-height">
-              <option value="1.2">1.2</option>
-              <option value="1.4">1.4</option>
-              <option value="1.6" selected>1.6</option>
-              <option value="1.8">1.8</option>
-              <option value="2">2.0</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="chapter-target-words">Target</label>
-            <input id="chapter-target-words" type="number" min="0" step="100" placeholder="0" />
-          </div>
-        </div>
+        <!-- hidden: JS reads/writes editor preferences -->
+        <select id="chapter-font-family" aria-hidden="true" style="display:none;">
+          <option value="serif">Serif</option>
+          <option value="sans">Sans Serif</option>
+        </select>
+        <select id="chapter-font-size" aria-hidden="true" style="display:none;">
+          <option value="10">10</option>
+          <option value="12">12</option>
+          <option value="14">14</option>
+          <option value="16">16</option>
+          <option value="18">18</option>
+          <option value="20">20</option>
+          <option value="22">22</option>
+        </select>
+        <select id="chapter-line-height" aria-hidden="true" style="display:none;">
+          <option value="1.2">1.2</option>
+          <option value="1.4">1.4</option>
+          <option value="1.6" selected>1.6</option>
+          <option value="1.8">1.8</option>
+          <option value="2">2.0</option>
+        </select>
+        <input id="chapter-target-words" type="number" min="0" step="100" aria-hidden="true" style="display:none;" />
 
         <div class="chapter-draft-wrap">
           <textarea id="chapter-content" data-editor-mode="full"></textarea>
