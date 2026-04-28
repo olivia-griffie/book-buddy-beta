@@ -25,7 +25,6 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   content.style.display = 'grid';
   saveButton.style.display = 'inline-flex';
   document.getElementById('plot-page-title').textContent = 'Plot';
-  document.getElementById('plot-page-subtitle').textContent = (activeProject.genres || []).join(' + ');
   const resolvedEditorPreferences = window.resolveEditorPreferences?.(activeProject) || { saveMode: 'autosave' };
 
   const workbook = activeProject.plotWorkbook || {};
