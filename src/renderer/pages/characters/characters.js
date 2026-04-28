@@ -100,6 +100,7 @@ window.registerPageInit('characters', async function ({ project }) {
     background: document.getElementById('character-background'),
     secrets: document.getElementById('character-secrets'),
     desires: document.getElementById('character-desires'),
+    keyPlotPoints: document.getElementById('character-key-plot-points'),
     other: document.getElementById('character-other'),
   };
   const linkFields = {

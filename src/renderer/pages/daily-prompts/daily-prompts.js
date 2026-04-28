@@ -9,6 +9,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   const countInput = document.getElementById('prompt-count');
   const modeInput = document.getElementById('prompt-mode');
   const focusInput = document.getElementById('prompt-focus');
+  const plotPointInput = document.getElementById('prompt-plot-point');
   const status = document.getElementById('daily-prompts-status');
   const resultsGrid = document.getElementById('prompt-results-grid');
   const progressCard = document.getElementById('daily-prompts-progress');
@@ -37,6 +38,15 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
   const dailyState = {
     cursor: Number(activeProject.dailyPromptState?.cursor || 0),
   };
+
+  if (plotPointInput && resources.plotSections?.length) {
+    resources.plotSections.forEach((section) => {
+      const option = document.createElement('option');
+      option.value = section.label;
+      option.textContent = section.label;
+      plotPointInput.appendChild(option);
+    });
+  }
 
   function extractPromptWordTarget(prompt = '') {
     const normalizedPrompt = String(prompt || '').replace(/,/g, '');
@@ -732,12 +742,18 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
     const count = Number(countInput.value || 1);
     const mode = modeInput.value;
     const promptType = focusInput?.value || 'scene-drafting';
+    const selectedPlotPoint = plotPointInput?.value || '';
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
 
     if (mode === 'sequential') {
-      const source = resources.sequentialSource.length ? resources.sequentialSource : resources.promptPool;
+      const baseSource = resources.sequentialSource.length ? resources.sequentialSource : resources.promptPool;
+      const source = selectedPlotPoint
+        ? baseSource.filter((entry) => entry.plotPoint && normalize(entry.plotPoint) === normalize(selectedPlotPoint))
+        : baseSource;
+      const effectiveSource = source.length ? source : baseSource;
       const batch = Array.from(
         { length: count },
-        (_, offset) => source[(dailyState.cursor + offset) % source.length],
+        (_, offset) => effectiveSource[(dailyState.cursor + offset) % effectiveSource.length],
       ).filter(Boolean);
       dailyState.cursor += count;
 

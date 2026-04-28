@@ -153,10 +153,10 @@ window.registerPageInit('plot-creation', async function ({ project }) {
                 class="plot-section-label-edit btn btn-ghost"
                 data-section-label-edit="${section.id}"
                 title="Rename this section"
-              >Rename Section</button>
+              >Rename Plot Point</button>
             </div>
             <div class="field">
-              <label for="plot-section-desc-${section.id}">Section Guidance</label>
+              <label for="plot-section-desc-${section.id}">Plot Point Guidance</label>
               <textarea
                 id="plot-section-desc-${section.id}"
                 class="plot-section-description-input"
@@ -258,8 +258,8 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         if (!section) return;
 
         const nextLabel = await window.requestTextEntry?.({
-          title: 'Rename Section',
-          label: 'Section name',
+          title: 'Rename Plot Point',
+          label: 'Plot point name',
           value: section.label,
           confirmLabel: 'Save name',
           placeholder: 'e.g. Act One, Rising Tension…',
@@ -269,7 +269,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         const trimmed = nextLabel.trim();
         const duplicate = resources.plotSections.some((s) => s.id !== section.id && s.label.toLowerCase() === trimmed.toLowerCase());
         if (duplicate) {
-          window.requestTextEntry?.({ title: 'Name already used', label: 'A section with that name already exists. Choose a different name.', value: trimmed, confirmLabel: 'OK', placeholder: '' });
+          window.requestTextEntry?.({ title: 'Name already used', label: 'A plot point with that name already exists. Choose a different name.', value: trimmed, confirmLabel: 'OK', placeholder: '' });
           return;
         }
 

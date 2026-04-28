@@ -74,7 +74,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   saveTopButton.style.display = 'inline-flex';
   exportButton.style.display = 'inline-flex';
   document.getElementById('chapters-page-title').textContent = 'Chapters';
-  document.getElementById('chapters-page-subtitle').textContent = 'Set section targets, add chapters, and draft in a simple focused editor.';
+  document.getElementById('chapters-page-subtitle').textContent = 'Link plot points, add chapters, and draft in a simple focused editor.';
   function getResolvedEditorPreferences(projectOverride = activeProject) {
     return window.resolveEditorPreferences?.(projectOverride) || {
       saveMode: 'autosave',
@@ -111,7 +111,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     ...entry,
   }));
   const contextState = {
-    tab: 'plot',
+    tab: 'outline',
   };
   const chapterProjectDirtyFields = ['plotSections', 'chapters', 'characters', 'scenes', 'locations', 'dailyPromptHistory', 'publishedChapterIds', 'currentWordCount', 'dailyWordHistory', 'dailySessionHistory', 'streakState', 'lastSessionMeta', 'lastEditedChapterId'];
   const autosave = window.createAutosaveController(async () => {
@@ -472,6 +472,16 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const visibleLocations = locations.filter((location) => !currentSection?.id || (location.sectionIds || []).includes(currentSection.id)).length
       ? locations.filter((location) => (location.sectionIds || []).includes(currentSection?.id))
       : locations;
+
+    if (contextState.tab === 'outline') {
+      const outlineHtml = window.parseRichTextValue?.(workbook.outline || '')?.html || '';
+      contextContent.innerHTML = `
+        <div class="chapter-context-outline">
+          ${outlineHtml || '<p class="chapter-context-empty-text">No outline yet. Add one in Plot Creation to keep it visible while drafting.</p>'}
+        </div>
+      `;
+      return;
+    }
 
     if (contextState.tab === 'plot') {
       contextContent.innerHTML = `
@@ -1140,24 +1150,6 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     });
   });
 
-  const editorSettingsBtn = document.getElementById('editor-settings-btn');
-  const editorSettingsPopover = document.getElementById('editor-settings-popover');
-
-  if (editorSettingsBtn && editorSettingsPopover) {
-    editorSettingsBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const isOpen = !editorSettingsPopover.hidden;
-      editorSettingsPopover.hidden = isOpen;
-      editorSettingsBtn.setAttribute('aria-expanded', String(!isOpen));
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!editorSettingsPopover.hidden && !editorSettingsPopover.contains(e.target) && e.target !== editorSettingsBtn) {
-        editorSettingsPopover.hidden = true;
-        editorSettingsBtn.setAttribute('aria-expanded', 'false');
-      }
-    }, { capture: true });
-  }
 
   [titleInput, sectionSelect, targetWordsInput, fontFamilyInput, fontSizeInput, lineHeightInput, contentInput].forEach((field) => {
     field.addEventListener('input', syncSelectedChapter);

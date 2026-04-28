@@ -70,7 +70,7 @@ const storyCompletionPhases = [
       { id: 'p1', title: 'Write your premise', hint: 'Who wants what, and what stands in the way?', page: 'plot-creation', target: 'details[data-plot-block="premise-stakes"]', isDone: (project) => hasText(project?.plotWorkbook?.premise) },
       { id: 'p2', title: 'Define the stakes', hint: 'What does your protagonist lose if they fail?', page: 'plot-creation', target: 'details[data-plot-block="premise-stakes"]', isDone: (project) => hasText(project?.plotWorkbook?.stakes) },
       { id: 'p3', title: 'Write a story outline', hint: 'A broad beat-by-beat map can stay rough.', page: 'plot-creation', target: 'details[data-plot-block="outline"]', isDone: (project) => hasText(project?.plotWorkbook?.outline) },
-      { id: 'p4', title: 'Fill in plot section notes', hint: 'Use section targets to shape each story area.', page: 'plot-creation', target: 'details[data-plot-block="section-targets"]', isDone: hasSectionNotes },
+      { id: 'p4', title: 'Fill in plot point notes', hint: 'Use plot points to shape each story area.', page: 'plot-creation', target: 'details[data-plot-block="section-targets"]', isDone: hasSectionNotes },
       { id: 'p5', title: 'Add general plot notes', hint: 'Themes, loose threads, and reminders.', page: 'plot-creation', target: 'details[data-plot-block="plot-notes"]', optional: true, isDone: (project) => hasText(project?.plotWorkbook?.notes) },
       { id: 'p6', title: 'Add story tags on the plot page', hint: 'Edit tags as the story evolves.', page: 'plot-creation', target: 'details[data-plot-block="project-tags"]', optional: true, isDone: (project) => (project?.tags || []).length > 0 },
     ],

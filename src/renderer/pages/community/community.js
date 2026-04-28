@@ -709,7 +709,7 @@ window.registerPageInit('community', async function () {
 
     promptPlotPointInput.innerHTML = plotPoints.length
       ? plotPoints.map((plotPoint) => `<option value="${escapeHtml(plotPoint)}">${escapeHtml(plotPoint)}</option>`).join('')
-      : '<option value="">No section targets available</option>';
+      : '<option value="">No plot points available</option>';
 
     promptPlotPointInput.disabled = !plotPoints.length;
   }
@@ -763,7 +763,7 @@ window.registerPageInit('community', async function () {
     };
 
     if (!payload.genre || !payload.plotPoint || !payload.prompt) {
-      promptFormMessage.textContent = 'Add a genre, section target, and prompt callout before saving.';
+      promptFormMessage.textContent = 'Add a genre, plot point, and prompt callout before saving.';
       return;
     }
 
@@ -922,7 +922,7 @@ window.registerPageInit('community', async function () {
       grid.style.display = 'none';
       empty.style.display = 'block';
       empty.querySelector('h2').textContent = 'No prompts match that search';
-      empty.querySelector('p').textContent = 'Try another author, genre, section target, or prompt phrase.';
+      empty.querySelector('p').textContent = 'Try another author, genre, plot point, or prompt phrase.';
       return;
     }
 

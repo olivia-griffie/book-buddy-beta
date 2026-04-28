@@ -50,49 +50,22 @@
             <select id="chapter-section" style="display:none;"></select>
           </div>
           <div class="chapter-editor-topbar-actions">
-            <div class="editor-settings-wrap">
-              <button id="editor-settings-btn" class="btn btn-ghost editor-settings-btn" type="button" aria-expanded="false" aria-controls="editor-settings-popover">
-                <svg class="editor-settings-icon" width="14" height="14" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M10 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path d="M16.2 12.5a1.38 1.38 0 0 0 .28 1.52l.05.05a1.67 1.67 0 1 1-2.36 2.36l-.05-.05a1.38 1.38 0 0 0-1.52-.28 1.38 1.38 0 0 0-.84 1.26V17.5a1.667 1.667 0 1 1-3.333 0v-.08A1.38 1.38 0 0 0 7.5 16.2a1.38 1.38 0 0 0-1.52.28l-.05.05a1.667 1.667 0 1 1-2.358-2.358l.05-.05A1.38 1.38 0 0 0 3.9 12.6a1.38 1.38 0 0 0-1.26-.84H2.5a1.667 1.667 0 1 1 0-3.333h.08A1.38 1.38 0 0 0 3.8 7.5a1.38 1.38 0 0 0-.28-1.52l-.05-.05A1.667 1.667 0 1 1 5.83 3.57l.05.05A1.38 1.38 0 0 0 7.4 3.9a1.38 1.38 0 0 0 .84-1.26V2.5a1.667 1.667 0 1 1 3.333 0v.08a1.38 1.38 0 0 0 .84 1.26 1.38 1.38 0 0 0 1.52-.28l.05-.05a1.667 1.667 0 1 1 2.358 2.358l-.05.05A1.38 1.38 0 0 0 16.1 7.4a1.38 1.38 0 0 0 1.26.84H17.5a1.667 1.667 0 1 1 0 3.333h-.08a1.38 1.38 0 0 0-1.22.93Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Editor
-              </button>
-              <div id="editor-settings-popover" class="editor-settings-popover" role="dialog" aria-label="Editor settings" hidden>
-                <div class="editor-settings-grid">
-                  <div class="field">
-                    <label for="chapter-font-family">Font Style</label>
-                    <select id="chapter-font-family">
-                      <option value="serif">Serif</option>
-                      <option value="sans">Sans Serif</option>
-                    </select>
+            <div class="chapter-foot-meta">
+              <span class="chapter-foot-label">Words</span>
+              <input id="chapter-current-words" class="chapter-words-display" type="text" readonly />
+              <div class="goal-progress-card chapter-progress-card" style="display: none;">
+                <div class="goal-progress-head">
+                  <div id="chapter-progress-icon" class="progress-status-icon" aria-hidden="true">•</div>
+                  <div>
+                    <div class="goal-progress-meta">
+                      <span id="chapter-progress-percent" class="goal-progress-percent">0%</span>
+                      <span id="chapter-progress-state" class="goal-progress-state">done</span>
+                    </div>
+                    <p id="chapter-progress-caption" class="goal-progress-caption">0 of 0 words</p>
                   </div>
-                  <div class="field">
-                    <label for="chapter-font-size">Font Size</label>
-                    <select id="chapter-font-size">
-                      <option value="10">10</option>
-                      <option value="12">12</option>
-                      <option value="14">14</option>
-                      <option value="16">16</option>
-                      <option value="18">18</option>
-                      <option value="20">20</option>
-                      <option value="22">22</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="chapter-line-height">Line Spacing</label>
-                    <select id="chapter-line-height">
-                      <option value="1.2">1.2</option>
-                      <option value="1.4">1.4</option>
-                      <option value="1.6" selected>1.6</option>
-                      <option value="1.8">1.8</option>
-                      <option value="2">2.0</option>
-                    </select>
-                  </div>
-                  <div class="field">
-                    <label for="chapter-target-words">Target Words</label>
-                    <input id="chapter-target-words" type="number" min="0" step="100" />
-                  </div>
+                </div>
+                <div class="goal-progress-track">
+                  <div id="chapter-progress-fill" class="goal-progress-fill"></div>
                 </div>
               </div>
             </div>
@@ -101,30 +74,47 @@
           </div>
         </div>
 
+        <div class="chapter-editor-settings-bar">
+          <div class="field">
+            <label for="chapter-font-family">Style</label>
+            <select id="chapter-font-family">
+              <option value="serif">Serif</option>
+              <option value="sans">Sans Serif</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-font-size">Size</label>
+            <select id="chapter-font-size">
+              <option value="10">10</option>
+              <option value="12">12</option>
+              <option value="14">14</option>
+              <option value="16">16</option>
+              <option value="18">18</option>
+              <option value="20">20</option>
+              <option value="22">22</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-line-height">Spacing</label>
+            <select id="chapter-line-height">
+              <option value="1.2">1.2</option>
+              <option value="1.4">1.4</option>
+              <option value="1.6" selected>1.6</option>
+              <option value="1.8">1.8</option>
+              <option value="2">2.0</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="chapter-target-words">Target</label>
+            <input id="chapter-target-words" type="number" min="0" step="100" placeholder="0" />
+          </div>
+        </div>
+
         <div class="chapter-draft-wrap">
           <textarea id="chapter-content" data-editor-mode="full"></textarea>
         </div>
 
         <div class="chapter-editor-foot">
-          <div class="chapter-foot-meta">
-            <span class="chapter-foot-label">Words</span>
-            <input id="chapter-current-words" class="chapter-words-display" type="text" readonly />
-            <div class="goal-progress-card chapter-progress-card" style="display: none;">
-              <div class="goal-progress-head">
-                <div id="chapter-progress-icon" class="progress-status-icon" aria-hidden="true">•</div>
-                <div>
-                  <div class="goal-progress-meta">
-                    <span id="chapter-progress-percent" class="goal-progress-percent">0%</span>
-                    <span id="chapter-progress-state" class="goal-progress-state">done</span>
-                  </div>
-                  <p id="chapter-progress-caption" class="goal-progress-caption">0 of 0 words</p>
-                </div>
-              </div>
-              <div class="goal-progress-track">
-                <div id="chapter-progress-fill" class="goal-progress-fill"></div>
-              </div>
-            </div>
-          </div>
           <button id="save-chapters" class="btn btn-save" type="button">Save Chapter</button>
         </div>
       </div>
@@ -136,7 +126,8 @@
         <p class="eyebrow">Story Context</p>
       </div>
       <div class="chapter-context-tabs" role="tablist" aria-label="Chapter reference tabs">
-        <button class="chapter-context-tab is-active" type="button" role="tab" aria-selected="true" data-context-tab="plot">Plot</button>
+        <button class="chapter-context-tab is-active" type="button" role="tab" aria-selected="true" data-context-tab="outline">Outline</button>
+        <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="plot">Plot</button>
         <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="characters">Characters</button>
         <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="scenes">Scenes</button>
         <button class="chapter-context-tab" type="button" role="tab" aria-selected="false" data-context-tab="locations">Locations</button>

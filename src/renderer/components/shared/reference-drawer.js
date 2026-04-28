@@ -184,7 +184,7 @@ window.renderReferenceDrawer = function renderReferenceDrawer(currentProject, op
     <div class="reference-drawer">
       <div class="reference-drawer-header">
         <div class="reference-drawer-copy">
-          <p class="reference-drawer-kicker">Writing Context</p>
+          <p class="reference-drawer-kicker">Story Context</p>
           <h3>${currentProject.title || 'Current Project'}</h3>
           <p>Keep your story notes nearby without leaving the page.</p>
         </div>

@@ -1253,14 +1253,13 @@ a:hover { color: var(--sage-light); }
   justify-content: space-between;
   gap: 24px;
   align-items: end;
-  margin-bottom: 28px;
 }
 
 #main-content > section > div > div > p:nth-child(3),
 .page-header > div > p:nth-child(3),
 #plot-page-subtitle,
 #chapters-page-subtitle {
-  padding-top: 20px;
+  padding-top: 10px;
 }
 
 .page-title-editable {
