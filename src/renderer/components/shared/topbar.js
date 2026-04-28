@@ -677,8 +677,10 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
   const saveText = saveStatus.text || 'Ready to write';
 
   const isTopbarOpen = localStorage.getItem('topbarCollapsed') !== '1';
+  const isHome = currentPage === 'home';
 
   container.innerHTML = `
+    ${isHome ? `
     <details class="topbar-details"${isTopbarOpen ? ' open' : ''}>
       <summary class="topbar-summary">
         <div class="topbar-summary-left">
@@ -748,6 +750,14 @@ window.renderTopBar = function renderTopBar(currentPage, currentProject, saveSta
         ${hasProject ? renderTopbarNextSteps(currentProject) : ''}
       </div>
     </details>
+    ` : `
+    <div class="topbar-condensed">
+      <div class="topbar-condensed-left">
+        <h2 class="topbar-title">${hasProject ? escapeHtml(currentProject.title) : 'Inkbug Beta'}</h2>
+        ${hasProject ? `<span class="topbar-save-state is-${saveTone}">${saveText}</span>` : ''}
+      </div>
+    </div>
+    `}
     <div class="topbar-tracker">
       ${workflowSteps.map((step, index) => {
     const isLocked = !hasProject && step.id !== 'create-project';

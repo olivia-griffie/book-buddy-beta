@@ -653,6 +653,27 @@ body {
   to { transform: scale(1); opacity: 1; }
 }
 
+.topbar-condensed {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+}
+
+.topbar-condensed-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.topbar-condensed .topbar-title {
+  font-size: 1rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--ink);
+}
+
 .topbar-shell {
   display: grid;
   gap: 18px;
