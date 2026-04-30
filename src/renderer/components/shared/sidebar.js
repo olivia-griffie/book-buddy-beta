@@ -1,4 +1,5 @@
 const icons = {
+  help: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>`,
   settings: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>`,
   account: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`,
   community: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="15" height="15" aria-hidden="true"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>`,
@@ -304,6 +305,15 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
           <span class="sidebar-link-icon" aria-hidden="true">${icons.settings}</span>
           ${isCollapsed ? '' : `<span class="sidebar-link-label">Settings</span>`}
         </button>
+        <button
+          type="button"
+          class="sidebar-link"
+          id="sidebar-help-trigger"
+          aria-label="Help"
+        >
+          <span class="sidebar-link-icon" aria-hidden="true">${icons.help}</span>
+          ${isCollapsed ? '' : `<span class="sidebar-link-label">Help</span>`}
+        </button>
       </div>
     </div>
   `;
@@ -319,10 +329,169 @@ window.renderSidebar = function renderSidebar(currentPage, currentProject) {
     });
   });
 
+  document.getElementById('sidebar-help-trigger')?.addEventListener('click', openHelpModal);
+
   ensureInboxBadgeAutoRefresh();
   renderInboxSidebarBadgeCount(readCachedInboxUnreadState().totalUnread);
   performInboxSidebarBadgeRefresh().catch(() => {});
 };
+
+// ── Help modal ────────────────────────────────────────────────────────────────
+
+const BUG_TYPES = ['UI / Visual', 'Data / Save Issue', 'Performance', 'Crash', 'Navigation', 'Other'];
+const PAGES = ['Home', 'Create Project', 'Plot', 'Characters', 'Scenes', 'Locations', 'Chapters', 'Daily Prompts', 'Community', 'Inbox', 'Sharing', 'Account', 'Settings'];
+const FORMSPREE_URL = 'https://formspree.io/f/mgodewod';
+
+function buildHelpModalHTML() {
+  return `
+    <div class="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-modal-title">
+      <div class="help-modal-head">
+        <h2 id="help-modal-title">Help &amp; Feedback</h2>
+        <button type="button" class="help-modal-close" id="help-modal-close-btn" aria-label="Close help panel">&#x2715;</button>
+      </div>
+      <div class="help-modal-body">
+
+        <section>
+          <p class="help-section-title">Report a Bug</p>
+          <form class="help-form" id="help-bug-form" novalidate>
+            <div class="help-form-field">
+              <label for="help-bug-type">Bug Type</label>
+              <select id="help-bug-type" name="bug_type" required>
+                <option value="">Select type…</option>
+                ${BUG_TYPES.map((t) => `<option value="${t}">${t}</option>`).join('')}
+              </select>
+            </div>
+            <div class="help-form-field">
+              <label for="help-bug-description">Bug Description</label>
+              <textarea id="help-bug-description" name="bug_description" placeholder="What happened? What did you expect?" required></textarea>
+            </div>
+            <div class="help-form-field">
+              <label for="help-bug-page">Page</label>
+              <select id="help-bug-page" name="page">
+                <option value="">Select page…</option>
+                ${PAGES.map((p) => `<option value="${p}">${p}</option>`).join('')}
+              </select>
+            </div>
+            <div class="help-form-field">
+              <label for="help-tester-name">Tester Name</label>
+              <input type="text" id="help-tester-name" name="tester_name" placeholder="Your name" />
+            </div>
+            <div class="help-form-field">
+              <label>Screenshot (optional)</label>
+              <label class="help-file-label" for="help-screenshot">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                <span id="help-screenshot-name">Choose a screenshot…</span>
+              </label>
+              <input type="file" id="help-screenshot" name="screenshot" accept="image/*" class="file-input-hidden" />
+            </div>
+            <div class="help-form-feedback" id="help-form-feedback" aria-live="polite"></div>
+            <div class="help-form-submit">
+              <button type="submit" class="btn btn-primary" id="help-submit-btn">Submit Report</button>
+            </div>
+          </form>
+        </section>
+
+        <section>
+          <p class="help-section-title">Contact</p>
+          <div class="help-contact-block">
+            <p>For comments or questions, please contact the developer:</p>
+            <p><strong>Olivia Griffie</strong> — <a href="mailto:oewheless@gmail.com">oewheless@gmail.com</a></p>
+          </div>
+        </section>
+
+        <section>
+          <p class="help-section-title">Follow Us</p>
+          <div class="help-social-row">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M7.75 2h8.5A5.75 5.75 0 0 1 22 7.75v8.5A5.75 5.75 0 0 1 16.25 22h-8.5A5.75 5.75 0 0 1 2 16.25v-8.5A5.75 5.75 0 0 1 7.75 2zm0 1.5A4.25 4.25 0 0 0 3.5 7.75v8.5A4.25 4.25 0 0 0 7.75 20.5h8.5a4.25 4.25 0 0 0 4.25-4.25v-8.5A4.25 4.25 0 0 0 16.25 3.5h-8.5zM12 7a5 5 0 1 1 0 10A5 5 0 0 1 12 7zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zm5.25-.88a.87.87 0 1 1 0 1.74.87.87 0 0 1 0-1.74z"/></svg>
+            <span>Follow us on Instagram <a href="https://instagram.com/inkbugbeta" target="_blank" rel="noopener noreferrer">@inkbugbeta</a></span>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  `;
+}
+
+function closeHelpModal() {
+  const overlay = document.getElementById('help-overlay');
+  if (!overlay) return;
+  overlay.classList.add('is-closing');
+  overlay.addEventListener('animationend', () => overlay.remove(), { once: true });
+}
+
+function openHelpModal() {
+  if (document.getElementById('help-overlay')) return;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'help-overlay';
+  overlay.id = 'help-overlay';
+  overlay.innerHTML = buildHelpModalHTML();
+  document.body.appendChild(overlay);
+
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) closeHelpModal();
+  });
+
+  document.getElementById('help-modal-close-btn')?.addEventListener('click', closeHelpModal);
+
+  document.addEventListener('keydown', function escHandler(e) {
+    if (e.key === 'Escape') {
+      closeHelpModal();
+      document.removeEventListener('keydown', escHandler);
+    }
+  });
+
+  document.getElementById('help-screenshot')?.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    document.getElementById('help-screenshot-name').textContent = file ? file.name : 'Choose a screenshot…';
+  });
+
+  document.getElementById('help-bug-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const submitBtn = document.getElementById('help-submit-btn');
+    const feedback = document.getElementById('help-form-feedback');
+
+    const bugType = document.getElementById('help-bug-type').value;
+    const bugDesc = document.getElementById('help-bug-description').value.trim();
+    if (!bugType || !bugDesc) {
+      feedback.className = 'help-form-feedback is-error';
+      feedback.textContent = 'Please fill in Bug Type and Bug Description.';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    feedback.className = 'help-form-feedback';
+    feedback.textContent = '';
+
+    try {
+      const data = new FormData(form);
+      const res = await fetch(FORMSPREE_URL, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (res.ok) {
+        feedback.className = 'help-form-feedback is-success';
+        feedback.textContent = 'Report sent — thank you!';
+        form.reset();
+        document.getElementById('help-screenshot-name').textContent = 'Choose a screenshot…';
+      } else {
+        throw new Error('Server error');
+      }
+    } catch {
+      feedback.className = 'help-form-feedback is-error';
+      feedback.textContent = 'Something went wrong. Please try again or email oewheless@gmail.com.';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Report';
+    }
+  });
+}
+
+// ── Inbox badge bridge ────────────────────────────────────────────────────────
 
 window.refreshInboxSidebarBadge = function refreshInboxSidebarBadgeBridge() {
   return performInboxSidebarBadgeRefresh({ force: true });
