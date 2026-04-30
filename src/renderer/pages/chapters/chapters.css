@@ -1167,6 +1167,7 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 12px;
   padding: 10px 16px;
   border-top: 1px solid var(--border-soft);
   background: #fffdfa;
@@ -1275,6 +1276,11 @@
 .chapter-context-outline p,
 .chapter-context-outline li {
   margin: 0 0 0.5em;
+}
+
+.chapter-context-outline ul,
+.chapter-context-outline ol {
+  padding-left: 1.25em;
 }
 
 .chapter-context-outline h1,

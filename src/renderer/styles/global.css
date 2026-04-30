@@ -1292,6 +1292,7 @@ h1, h2, h3, h4, p, label, button, .ui-card-title, .ui-card-description {
   justify-content: space-between;
   gap: 24px;
   align-items: end;
+  padding-bottom: 20px;
 }
 
 #main-content > section > div > div > p:nth-child(3),
