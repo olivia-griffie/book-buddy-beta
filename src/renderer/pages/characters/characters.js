@@ -309,7 +309,6 @@ window.registerPageInit('characters', async function ({ project }) {
     if (!character) {
       editorShell.style.display = 'none';
       editorEmpty.style.display = 'block';
-      document.getElementById('character-editor-title').textContent = 'Select a character';
       if (deleteButton) {
         deleteButton.style.display = 'none';
       }
@@ -321,7 +320,6 @@ window.registerPageInit('characters', async function ({ project }) {
 
     editorShell.style.display = 'block';
     editorEmpty.style.display = 'none';
-    document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
     if (nameDisplay) {
       nameDisplay.firstChild.textContent = character.name || 'Unnamed Character ';
       nameDisplay.style.display = '';
@@ -416,7 +414,6 @@ window.registerPageInit('characters', async function ({ project }) {
     character.deathScene = linkFields.deathScene.value;
     character.romanceScenes = linkFields.romanceScenes.value;
 
-    document.getElementById('character-editor-title').textContent = character.name || 'Character Profile';
     if (nameDisplay) nameDisplay.firstChild.textContent = character.name || 'Unnamed Character ';
     renderList();
     autosave.touch();

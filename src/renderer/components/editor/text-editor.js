@@ -484,9 +484,11 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
       setValue(nextValue) {
         const parsed = parseRichTextValue(nextValue);
         editor.innerHTML = parsed.html || '<p><br></p>';
-        state.fontFamily = parsed.settings.fontFamily || '';
-        state.fontSize = parsed.settings.fontSize || '';
-        state.lineHeight = parsed.settings.lineHeight || '';
+        // Font/size/lineHeight are driven by user profile (experienceState) — don't restore
+        // per-content overrides from old saved data so profile settings always win.
+        state.fontFamily = '';
+        state.fontSize = '';
+        state.lineHeight = '';
         state.textAlign = parsed.settings.textAlign || state.textAlign;
         applyState();
         normalizeEditorContent();
@@ -500,9 +502,10 @@ window.initializeTextEditor = function initializeTextEditor(root = document) {
           if (preferences.lineHeight) state.lineHeight = String(preferences.lineHeight);
           if (preferences.textAlign !== undefined) state.textAlign = preferences.textAlign;
         } else {
-          if (preferences.fontFamily) experienceState.fontFamily = preferences.fontFamily;
-          if (preferences.fontSize) experienceState.fontSize = String(preferences.fontSize);
-          if (preferences.lineHeight) experienceState.lineHeight = String(preferences.lineHeight);
+          // Clear content-stored values so experienceState (user profile) wins.
+          if (preferences.fontFamily) { state.fontFamily = ''; experienceState.fontFamily = preferences.fontFamily; }
+          if (preferences.fontSize) { state.fontSize = ''; experienceState.fontSize = String(preferences.fontSize); }
+          if (preferences.lineHeight) { state.lineHeight = ''; experienceState.lineHeight = String(preferences.lineHeight); }
         }
         applyState();
         if (persist) {
