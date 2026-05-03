@@ -32,6 +32,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
   premiseInput.value = workbook.premise || '';
   stakesInput.value = workbook.stakes || '';
   notesInput.value = workbook.notes || '';
+  let timeline = Array.isArray(workbook.timeline) ? workbook.timeline : [];
   window.initializeTextEditor(content);
   [outlineInput, premiseInput, stakesInput, notesInput].forEach((field) => window.refreshTextEditor(field, field.value));
 
@@ -89,6 +90,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
         premise: window.getEditorFieldValue(premiseInput),
         stakes: window.getEditorFieldValue(stakesInput),
         notes: window.getEditorFieldValue(notesInput),
+        timeline,
       },
       updatedAt: new Date().toISOString(),
     };
@@ -367,6 +369,106 @@ window.registerPageInit('plot-creation', async function ({ project }) {
     hybridPromptSection.style.display = 'none';
   }
 
+  function generateTimelineId() {
+    return 'tl_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function renderTimeline() {
+    const container = document.getElementById('plot-timeline');
+    if (!container) return;
+
+    if (!timeline.length) {
+      container.innerHTML = '<p class="plot-timeline-empty">No events yet. Add your first timeline event below.</p>';
+      return;
+    }
+
+    container.innerHTML = timeline.map((event, index) => `
+      <div class="plot-timeline-event" data-timeline-id="${event.id}">
+        <div class="plot-timeline-marker" aria-hidden="true"></div>
+        <div class="plot-timeline-card">
+          <div class="plot-timeline-card-head">
+            <div class="plot-timeline-fields">
+              <input
+                class="plot-timeline-title"
+                type="text"
+                placeholder="Event title"
+                value="${escapeHtml(event.title || '')}"
+                data-timeline-field="title"
+                data-timeline-id="${event.id}"
+              />
+              <input
+                class="plot-timeline-period"
+                type="text"
+                placeholder="Time reference (e.g. Act 1, Year 500, Before the story)"
+                value="${escapeHtml(event.period || '')}"
+                data-timeline-field="period"
+                data-timeline-id="${event.id}"
+              />
+            </div>
+            <div class="plot-timeline-actions">
+              <button type="button" class="btn btn-icon plot-timeline-move-btn" data-timeline-move-up="${event.id}" ${index === 0 ? 'disabled' : ''} title="Move up" aria-label="Move event up">↑</button>
+              <button type="button" class="btn btn-icon plot-timeline-move-btn" data-timeline-move-down="${event.id}" ${index === timeline.length - 1 ? 'disabled' : ''} title="Move down" aria-label="Move event down">↓</button>
+              <button type="button" class="btn btn-icon btn-danger plot-timeline-delete-btn" data-timeline-delete="${event.id}" title="Delete event" aria-label="Delete event">&times;</button>
+            </div>
+          </div>
+          <textarea
+            class="plot-timeline-description"
+            placeholder="Describe what happened..."
+            rows="2"
+            data-timeline-field="description"
+            data-timeline-id="${event.id}"
+          >${escapeHtml(event.description || '')}</textarea>
+        </div>
+      </div>
+    `).join('');
+
+    container.querySelectorAll('[data-timeline-field]').forEach((input) => {
+      input.addEventListener('input', () => {
+        const ev = timeline.find((e) => e.id === input.dataset.timelineId);
+        if (!ev) return;
+        ev[input.dataset.timelineField] = input.value;
+        autosave.touch();
+      });
+    });
+
+    container.querySelectorAll('[data-timeline-move-up]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = timeline.findIndex((e) => e.id === btn.dataset.timelineMoveUp);
+        if (idx <= 0) return;
+        [timeline[idx - 1], timeline[idx]] = [timeline[idx], timeline[idx - 1]];
+        renderTimeline();
+        autosave.touch();
+      });
+    });
+
+    container.querySelectorAll('[data-timeline-move-down]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const idx = timeline.findIndex((e) => e.id === btn.dataset.timelineMoveDown);
+        if (idx < 0 || idx >= timeline.length - 1) return;
+        [timeline[idx], timeline[idx + 1]] = [timeline[idx + 1], timeline[idx]];
+        renderTimeline();
+        autosave.touch();
+      });
+    });
+
+    container.querySelectorAll('[data-timeline-delete]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        timeline = timeline.filter((e) => e.id !== btn.dataset.timelineDelete);
+        renderTimeline();
+        autosave.touch();
+      });
+    });
+  }
+
+  document.getElementById('add-timeline-event')?.addEventListener('click', () => {
+    timeline.push({ id: generateTimelineId(), title: '', period: '', description: '' });
+    renderTimeline();
+    autosave.touch();
+    const titles = document.querySelectorAll('.plot-timeline-title');
+    titles[titles.length - 1]?.focus();
+  });
+
+  renderTimeline();
   renderSectionTargets();
 
   function escapeHtml(value = '') {
