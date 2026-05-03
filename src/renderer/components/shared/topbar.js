@@ -3,6 +3,7 @@ const workflowSteps = [
   { id: 'plot-creation', label: 'Plot' },
   { id: 'characters', label: 'Characters' },
   { id: 'scenes', label: 'Scenes' },
+  { id: 'locations', label: 'Locations' },
   { id: 'chapters', label: 'Chapters' },
   { id: 'daily-prompts', label: 'Challenges' },
 ];
