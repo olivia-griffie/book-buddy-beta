@@ -599,6 +599,7 @@ window.registerPageInit('plot-creation', async function ({ project }) {
           premise: window.getEditorFieldValue(premiseInput),
           stakes: window.getEditorFieldValue(stakesInput),
           notes: window.getEditorFieldValue(notesInput),
+          timeline,
         },
         updatedAt: new Date().toISOString(),
       };
