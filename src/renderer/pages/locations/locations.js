@@ -30,6 +30,40 @@ window.registerPageInit('locations', async function ({ project }) {
   const locations = (activeProject.locations || []).map((location) => ({ ...location }));
   let selectedId = locations[0]?.id || '';
 
+  // ── World map state (wired after autosave is defined below) ──────────────
+  let worldMap = { image: '', notes: '', ...(activeProject.worldMap || {}) };
+  const worldMapInput = document.getElementById('world-map-input');
+  const worldMapTrigger = document.getElementById('world-map-trigger');
+  const worldMapPreview = document.getElementById('world-map-preview');
+  const worldMapClear = document.getElementById('world-map-clear');
+  const worldMapNotes = document.getElementById('world-map-notes');
+
+  worldMapNotes.value = worldMap.notes || '';
+
+  function renderWorldMapPreview() {
+    if (worldMap.image) {
+      worldMapPreview.innerHTML = `
+        <img src="${worldMap.image}" alt="World map" class="world-map-img" />
+        <button type="button" class="world-map-img-change" id="world-map-img-change-btn" aria-label="Change world map image">Change image</button>
+      `;
+      worldMapClear.style.display = 'inline-flex';
+      document.getElementById('world-map-img-change-btn')?.addEventListener('click', () => worldMapInput.click());
+    } else {
+      worldMapPreview.innerHTML = `
+        <button type="button" id="world-map-trigger-inner" class="world-map-upload-area" aria-label="Upload world map image">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="32" height="32" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Click to upload world map</span>
+          <span class="world-map-upload-hint">PNG, JPG, or any image format</span>
+        </button>
+      `;
+      worldMapClear.style.display = 'none';
+      document.getElementById('world-map-trigger-inner')?.addEventListener('click', () => worldMapInput.click());
+    }
+  }
+
+  renderWorldMapPreview();
+  worldMapTrigger?.addEventListener('click', () => worldMapInput.click());
+
   const fields = {
     name: document.getElementById('location-name'),
     type: document.getElementById('location-type'),
@@ -44,9 +78,10 @@ window.registerPageInit('locations', async function ({ project }) {
     activeProject = await window.saveProjectData({
       ...activeProject,
       locations,
+      worldMap,
       updatedAt: new Date().toISOString(),
     }, {
-      dirtyFields: ['locations'],
+      dirtyFields: ['locations', 'worldMap'],
     });
     saveMessage.textContent = 'Locations autosaved.';
   }, {
@@ -55,6 +90,30 @@ window.registerPageInit('locations', async function ({ project }) {
   });
   window.registerBeforeNavigate(async () => {
     await autosave.flush();
+  });
+
+  worldMapInput?.addEventListener('change', () => {
+    const file = worldMapInput.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      worldMap.image = e.target.result;
+      renderWorldMapPreview();
+      autosave.touch();
+    };
+    reader.readAsDataURL(file);
+    worldMapInput.value = '';
+  });
+
+  worldMapClear?.addEventListener('click', () => {
+    worldMap.image = '';
+    renderWorldMapPreview();
+    autosave.touch();
+  });
+
+  worldMapNotes?.addEventListener('input', () => {
+    worldMap.notes = worldMapNotes.value;
+    autosave.touch();
   });
 
   function getSelectedLocation() {
@@ -150,6 +209,7 @@ window.registerPageInit('locations', async function ({ project }) {
       const updatedProject = {
         ...activeProject,
         locations,
+        worldMap,
         updatedAt: new Date().toISOString(),
       };
 
