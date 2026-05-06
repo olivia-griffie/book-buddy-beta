@@ -52,6 +52,8 @@
             <div class="chapter-foot-meta">
               <span class="chapter-foot-label">Words</span>
               <input id="chapter-current-words" class="chapter-words-display" type="text" readonly />
+              <span class="chapter-foot-label chapter-foot-label-goal">/ Goal</span>
+              <input id="chapter-target-words" class="chapter-words-goal" type="number" min="0" step="100" placeholder="—" title="Chapter word count goal" />
               <div class="goal-progress-card chapter-progress-card" style="display: none;">
                 <div class="goal-progress-head">
                   <div id="chapter-progress-icon" class="progress-status-icon" aria-hidden="true">•</div>
@@ -92,8 +94,6 @@
           <option value="1.8">1.8</option>
           <option value="2">2.0</option>
         </select>
-        <input id="chapter-target-words" type="number" min="0" step="100" aria-hidden="true" style="display:none;" />
-
         <div class="chapter-draft-wrap">
           <textarea id="chapter-content" data-editor-mode="full"></textarea>
         </div>
