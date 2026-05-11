@@ -414,7 +414,34 @@
 .scene-draft-actions {
   display: grid;
   gap: 8px;
-  justify-items: start;
+}
+
+.scene-draft-insert-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scene-draft-chapter-field {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.scene-draft-chapter-field label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.scene-draft-insert-btn {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+.scene-draft-insert-note {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  margin: 0;
 }
 
 .character-type-tag {

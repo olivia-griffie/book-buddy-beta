@@ -705,6 +705,10 @@ window.registerPageInit('home', async function () {
         return;
       }
 
+      if (card.querySelector('.project-card__cover.is-adjusting')) {
+        return;
+      }
+
       const project = allProjects.find((entry) => entry.id === card.dataset.id);
       if (!project) {
         return;
@@ -925,17 +929,22 @@ window.registerPageInit('home', async function () {
         coverEl.classList.remove('is-adjusting');
       };
 
+      overlay.querySelectorAll('button').forEach((btn) => {
+        btn.addEventListener('pointerdown', (e) => e.stopPropagation());
+      });
+
       overlay.querySelector('.cover-adjust-cancel').addEventListener('click', (e) => {
         e.stopPropagation();
         pos = { ...savedPos };
         img.style.objectPosition = `${savedPos.x}% ${savedPos.y}%`;
-        cleanup();
+        setTimeout(cleanup, 0);
       });
 
       overlay.querySelector('.cover-adjust-apply').addEventListener('click', async (e) => {
         e.stopPropagation();
-        cleanup();
-        project.thumbnailPosition = { x: Math.round(pos.x), y: Math.round(pos.y) };
+        const posSnapshot = { ...pos };
+        setTimeout(cleanup, 0);
+        project.thumbnailPosition = { x: Math.round(posSnapshot.x), y: Math.round(posSnapshot.y) };
         await window.saveProjectData({
           ...project,
           updatedAt: new Date().toISOString(),

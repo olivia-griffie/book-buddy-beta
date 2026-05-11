@@ -179,7 +179,16 @@
             <textarea id="scene-content" rows="8" placeholder="Write your scene here..."></textarea>
           </div>
           <div class="field field-full scene-draft-actions">
-            <button id="scene-insert-chapter" class="btn btn-primary" type="button">Insert Into Chapter</button>
+            <div class="scene-draft-insert-row">
+              <div class="field scene-draft-chapter-field">
+                <label for="scene-insert-chapter-select">Insert Into Chapter</label>
+                <select id="scene-insert-chapter-select">
+                  <option value="">Choose a chapter</option>
+                </select>
+              </div>
+              <button id="scene-insert-chapter" class="btn btn-primary scene-draft-insert-btn" type="button">Insert</button>
+            </div>
+            <p class="scene-draft-insert-note">Scene draft will be added to the bottom of the selected chapter.</p>
             <p id="scene-insert-message" class="form-message" aria-live="polite"></p>
           </div>
         </div>

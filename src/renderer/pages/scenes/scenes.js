@@ -76,6 +76,7 @@ window.registerPageInit('scenes', async function ({ project }) {
     content: document.getElementById('scene-content'),
   };
   const insertButton = document.getElementById('scene-insert-chapter');
+  const insertChapterSelect = document.getElementById('scene-insert-chapter-select');
   const insertMessage = document.getElementById('scene-insert-message');
   const contentWordCountEl = document.getElementById('scene-content-word-count');
 
@@ -343,6 +344,17 @@ window.registerPageInit('scenes', async function ({ project }) {
       ${chapters.map((chapter) => `<option value="${chapter.id}">${escapeHtml(chapter.title || 'Untitled Chapter')}</option>`).join('')}
     `;
     fields.linkedChapterId.value = chapters.some((chapter) => chapter.id === currentValue) ? currentValue : '';
+    populateInsertChapterSelect();
+  }
+
+  function populateInsertChapterSelect(preferredChapterId) {
+    if (!insertChapterSelect) return;
+    const currentValue = preferredChapterId !== undefined ? preferredChapterId : insertChapterSelect.value;
+    insertChapterSelect.innerHTML = `
+      <option value="">Choose a chapter</option>
+      ${chapters.map((chapter) => `<option value="${chapter.id}">${escapeHtml(chapter.title || 'Untitled Chapter')}</option>`).join('')}
+    `;
+    insertChapterSelect.value = chapters.some((chapter) => chapter.id === currentValue) ? currentValue : '';
   }
 
   function renderImagePreview(image) {
@@ -461,6 +473,7 @@ window.registerPageInit('scenes', async function ({ project }) {
     imageInput.value = '';
     renderImagePreview(scene.image || '');
     updateContentWordCount();
+    populateInsertChapterSelect(scene.linkedChapterId || '');
   }
 
   function syncScene() {
@@ -735,9 +748,9 @@ window.registerPageInit('scenes', async function ({ project }) {
     const scene = getSelectedScene();
     if (!scene) return;
 
-    const targetChapterId = fields.linkedChapterId.value;
+    const targetChapterId = insertChapterSelect?.value || '';
     if (!targetChapterId) {
-      insertMessage.textContent = 'Link this scene to a chapter using the Linked Chapter dropdown first.';
+      insertMessage.textContent = 'Choose a chapter from the dropdown above before inserting.';
       insertMessage.className = 'form-message is-error';
       return;
     }
