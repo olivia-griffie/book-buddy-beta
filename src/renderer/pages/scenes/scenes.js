@@ -73,7 +73,11 @@ window.registerPageInit('scenes', async function ({ project }) {
     linkedChapterId: document.getElementById('scene-linked-chapter'),
     summary: document.getElementById('scene-summary'),
     other: document.getElementById('scene-other'),
+    content: document.getElementById('scene-content'),
   };
+  const insertButton = document.getElementById('scene-insert-chapter');
+  const insertMessage = document.getElementById('scene-insert-message');
+  const contentWordCountEl = document.getElementById('scene-content-word-count');
 
   function getSceneTagButtons() {
     return [...document.querySelectorAll('[data-scene-tag]')];
@@ -450,10 +454,13 @@ window.registerPageInit('scenes', async function ({ project }) {
     fields.linkedChapterId.value = scene.linkedChapterId || '';
     fields.summary.value = scene.summary || '';
     fields.other.value = scene.other || '';
+    fields.content.value = scene.content || '';
     window.refreshTextEditor(fields.summary, fields.summary.value);
     window.refreshTextEditor(fields.other, fields.other.value);
+    window.refreshTextEditor(fields.content, fields.content.value);
     imageInput.value = '';
     renderImagePreview(scene.image || '');
+    updateContentWordCount();
   }
 
   function syncScene() {
@@ -467,7 +474,9 @@ window.registerPageInit('scenes', async function ({ project }) {
     scene.linkedChapterId = fields.linkedChapterId.value;
     scene.summary = String(window.getEditorFieldValue(fields.summary) || '').trim();
     scene.other = String(window.getEditorFieldValue(fields.other) || '').trim();
+    scene.content = String(window.getEditorFieldValue(fields.content) || '').trim();
     document.getElementById('scene-editor-title').textContent = scene.title || 'Scene Details';
+    updateContentWordCount();
     renderList();
     renderSectionTargets();
     autosave.touch();
@@ -702,6 +711,79 @@ window.registerPageInit('scenes', async function ({ project }) {
     });
   }
 
+  function updateContentWordCount() {
+    if (!contentWordCountEl) return;
+    const count = window.computeWordCount(window.getEditorFieldValue(fields.content) || '');
+    contentWordCountEl.textContent = `${count.toLocaleString()} word${count === 1 ? '' : 's'}`;
+  }
+
+  function appendHtmlToChapter(chapter, valueToAppend) {
+    const parsedChapter = window.parseRichTextValue(chapter.content || '');
+    const parsedAnswer = window.parseRichTextValue(valueToAppend || '');
+    const textOnly = (() => {
+      const temp = document.createElement('div');
+      temp.innerHTML = parsedAnswer.html || '';
+      return (temp.textContent || temp.innerText || '').trim();
+    })();
+    if (!textOnly) return false;
+    const nextHtml = `${parsedChapter.html || '<p><br></p>'}${parsedAnswer.html || ''}`;
+    chapter.content = window.serializeRichTextValue(nextHtml, parsedChapter.settings || {});
+    return true;
+  }
+
+  insertButton?.addEventListener('click', async () => {
+    const scene = getSelectedScene();
+    if (!scene) return;
+
+    const targetChapterId = fields.linkedChapterId.value;
+    if (!targetChapterId) {
+      insertMessage.textContent = 'Link this scene to a chapter using the Linked Chapter dropdown first.';
+      insertMessage.className = 'form-message is-error';
+      return;
+    }
+
+    const chapterIndex = chapters.findIndex((chapter) => chapter.id === targetChapterId);
+    if (chapterIndex < 0) {
+      insertMessage.textContent = 'That chapter could not be found.';
+      insertMessage.className = 'form-message is-error';
+      return;
+    }
+
+    scene.content = String(window.getEditorFieldValue(fields.content) || '').trim();
+    if (!window.computeWordCount(scene.content)) {
+      insertMessage.textContent = 'Write something in Scene Draft before inserting.';
+      insertMessage.className = 'form-message is-error';
+      return;
+    }
+
+    const inserted = appendHtmlToChapter(chapters[chapterIndex], scene.content);
+    if (!inserted) {
+      insertMessage.textContent = 'Write something in Scene Draft before inserting.';
+      insertMessage.className = 'form-message is-error';
+      return;
+    }
+
+    scene.insertedIntoChapterId = targetChapterId;
+    scene.insertedAt = new Date().toISOString();
+
+    activeProject = await window.saveProjectData({
+      ...buildProjectPayload(),
+      currentWordCount: chapters.reduce(
+        (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
+        0,
+      ),
+    }, {
+      dirtyFields: ['chapters', 'scenes', 'currentWordCount'],
+    });
+
+    const chapterTitle = chapters[chapterIndex]?.title || 'the chapter';
+    insertMessage.textContent = `Scene draft inserted into "${chapterTitle}".`;
+    insertMessage.className = 'form-message';
+    setTimeout(() => {
+      window.navigate('chapters', { chapterId: targetChapterId });
+    }, 900);
+  });
+
   addButton.addEventListener('click', () => {
     const scene = {
       id: `scene-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
@@ -713,6 +795,9 @@ window.registerPageInit('scenes', async function ({ project }) {
       sectionId: '',
       summary: '',
       other: '',
+      content: '',
+      insertedIntoChapterId: '',
+      insertedAt: '',
     };
 
     scenes.push(scene);

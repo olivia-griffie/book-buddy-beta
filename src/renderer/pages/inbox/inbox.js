@@ -401,11 +401,21 @@ window.registerPageInit('inbox', async function () {
       <article class="inbox-item ${unread ? 'is-unread' : ''}" data-item-id="${escapeHtml(item.id)}">
         ${unread ? '<span class="inbox-item-unread-dot" aria-hidden="true"></span>' : ''}
         ${content}
+        ${unread ? `<div class="inbox-item-actions"><button class="inbox-mark-item-read-btn" type="button" data-mark-read="${escapeHtml(item.id)}">Mark as read</button></div>` : ''}
       </article>
     `;
   }
 
   function bindActivityEvents() {
+    feed.querySelectorAll('[data-mark-read]').forEach((button) => {
+      button.addEventListener('click', () => {
+        readIds.add(button.dataset.markRead);
+        saveReadState(readIds);
+        renderActivityFeed();
+        window.refreshInboxSidebarBadge?.().catch(() => {});
+      });
+    });
+
     feed.querySelectorAll('[data-reply-open]').forEach((button) => {
       button.addEventListener('click', () => {
         replyOpen[button.dataset.replyOpen] = true;

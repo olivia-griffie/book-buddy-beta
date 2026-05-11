@@ -100,6 +100,24 @@
   gap: 8px;
 }
 
+.daily-prompt-answer-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.daily-prompt-word-count {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.daily-prompt-word-count.is-at-goal {
+  color: #4ff2c9;
+  font-weight: 600;
+}
+
 .daily-prompt-editor-actions {
   display: flex;
   flex-wrap: wrap;
@@ -133,6 +151,22 @@
   flex-wrap: wrap;
   gap: 8px;
   align-items: center;
+}
+
+.prompt-card-meta-row {
+  justify-content: space-between;
+}
+
+.prompt-refresh-btn {
+  margin-left: auto;
+  font-size: 0.76rem;
+  padding: 3px 10px;
+  min-height: 26px;
+  opacity: 0.7;
+}
+
+.prompt-refresh-btn:hover {
+  opacity: 1;
 }
 
 .prompt-meta-badge,

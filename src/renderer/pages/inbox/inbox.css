@@ -615,8 +615,28 @@
 }
 
 .inbox-action-row,
+.inbox-item-actions,
 .inbox-reply-form {
   margin-left: 54px;
+}
+
+.inbox-mark-item-read-btn {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.inbox-mark-item-read-btn:hover {
+  border-color: var(--sage);
+  color: var(--sage-deep);
 }
 
 .inbox-reply-form {

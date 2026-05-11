@@ -73,6 +73,10 @@ window.registerPageInit('home', async function () {
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13V4m0 0L6.5 7.5M10 4l3.5 3.5"/><path d="M3 14v1.5A1.5 1.5 0 0 0 4.5 17h11A1.5 1.5 0 0 0 17 15.5V14"/></svg>
               <span>${project.thumbnail ? 'Change Cover' : 'Add Cover'}</span>
             </button>
+            ${project.thumbnail ? `<button class="project-card__cover-btn project-card__cover-btn--adjust" type="button" data-adjust-thumbnail="${project.id}" aria-label="Adjust cover position">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v14M3 10h14"/><path d="M7.5 5.5 10 3l2.5 2.5M7.5 14.5 10 17l2.5-2.5M5.5 7.5 3 10l2.5 2.5M14.5 7.5 17 10l-2.5 2.5"/></svg>
+              <span>Adjust</span>
+            </button>` : ''}
             ${project.thumbnail ? `<button class="project-card__cover-btn project-card__cover-btn--remove" type="button" data-remove-thumbnail="${project.id}" aria-label="Remove cover image">
               <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h12M8 5V3.5A.5.5 0 0 1 8.5 3h3a.5.5 0 0 1 .5.5V5M6 5l1 10h6l1-10"/></svg>
               <span>Remove</span>
@@ -595,8 +599,9 @@ window.registerPageInit('home', async function () {
       const tags = (project.tags || [])
         .map((tag) => `<span class="project-tag-chip project-tag-chip-display">${tag}</span>`)
         .join('');
+      const pos = project.thumbnailPosition || { x: 50, y: 50 };
       const thumb = project.thumbnail
-        ? `<img src="${project.thumbnail}" alt="${project.title}" />`
+        ? `<img src="${project.thumbnail}" alt="${escapeHtml(project.title)}" style="object-position:${pos.x}% ${pos.y}%" />`
         : '<span class="placeholder-icon"></span>';
 
       return buildProjectCardMarkup({ project, pct, completed, genres, tags, thumb });
@@ -856,6 +861,86 @@ window.registerPageInit('home', async function () {
           <p>${error?.message || 'Please restart the app and try again.'}</p>
         `;
       }
+    });
+  });
+
+  grid.querySelectorAll('[data-adjust-thumbnail]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
+      const projectId = button.dataset.adjustThumbnail;
+      const project = allProjects.find((p) => p.id === projectId);
+      if (!project || !project.thumbnail) return;
+
+      const coverEl = button.closest('.project-card__cover-wrap').querySelector('.project-card__cover');
+      const img = coverEl.querySelector('img');
+      if (!img) return;
+
+      const savedPos = { ...(project.thumbnailPosition || { x: 50, y: 50 }) };
+      let pos = { ...savedPos };
+
+      coverEl.classList.add('is-adjusting');
+      const overlay = document.createElement('div');
+      overlay.className = 'cover-adjust-overlay';
+      overlay.innerHTML = `
+        <p class="cover-adjust-hint">Drag to reposition</p>
+        <div class="cover-adjust-actions">
+          <button class="cover-adjust-apply" type="button">Apply</button>
+          <button class="cover-adjust-cancel" type="button">Cancel</button>
+        </div>
+      `;
+      coverEl.appendChild(overlay);
+
+      let dragging = false;
+      let startX, startY, startPosX, startPosY;
+
+      const onPointerDown = (e) => {
+        if (e.target.closest('.cover-adjust-actions')) return;
+        e.preventDefault();
+        dragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        startPosX = pos.x;
+        startPosY = pos.y;
+      };
+
+      const onPointerMove = (e) => {
+        if (!dragging) return;
+        const rect = coverEl.getBoundingClientRect();
+        pos.x = Math.max(0, Math.min(100, startPosX - (e.clientX - startX) / rect.width * 100));
+        pos.y = Math.max(0, Math.min(100, startPosY - (e.clientY - startY) / rect.height * 100));
+        img.style.objectPosition = `${pos.x}% ${pos.y}%`;
+      };
+
+      const onPointerUp = () => { dragging = false; };
+
+      coverEl.addEventListener('pointerdown', onPointerDown);
+      document.addEventListener('pointermove', onPointerMove);
+      document.addEventListener('pointerup', onPointerUp);
+
+      const cleanup = () => {
+        coverEl.removeEventListener('pointerdown', onPointerDown);
+        document.removeEventListener('pointermove', onPointerMove);
+        document.removeEventListener('pointerup', onPointerUp);
+        overlay.remove();
+        coverEl.classList.remove('is-adjusting');
+      };
+
+      overlay.querySelector('.cover-adjust-cancel').addEventListener('click', (e) => {
+        e.stopPropagation();
+        pos = { ...savedPos };
+        img.style.objectPosition = `${savedPos.x}% ${savedPos.y}%`;
+        cleanup();
+      });
+
+      overlay.querySelector('.cover-adjust-apply').addEventListener('click', async (e) => {
+        e.stopPropagation();
+        cleanup();
+        project.thumbnailPosition = { x: Math.round(pos.x), y: Math.round(pos.y) };
+        await window.saveProjectData({
+          ...project,
+          updatedAt: new Date().toISOString(),
+        }, { dirtyFields: ['thumbnailPosition'] });
+      });
     });
   });
 

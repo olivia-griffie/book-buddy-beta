@@ -171,6 +171,17 @@
           </div>
           <div class="field field-full"><label for="scene-summary">Summary</label><textarea id="scene-summary" rows="4"></textarea></div>
           <div class="field field-full"><label for="scene-other">Other</label><textarea id="scene-other" rows="4"></textarea></div>
+          <div class="field field-full">
+            <div class="scene-draft-head">
+              <label for="scene-content">Scene Draft</label>
+              <span id="scene-content-word-count" class="scene-draft-word-count">0 words</span>
+            </div>
+            <textarea id="scene-content" rows="8" placeholder="Write your scene here..."></textarea>
+          </div>
+          <div class="field field-full scene-draft-actions">
+            <button id="scene-insert-chapter" class="btn btn-primary" type="button">Insert Into Chapter</button>
+            <p id="scene-insert-message" class="form-message" aria-live="polite"></p>
+          </div>
         </div>
       </div>
       <div id="scene-editor-empty" class="editor-empty">Pick a scene from the left, or add a new one.</div>

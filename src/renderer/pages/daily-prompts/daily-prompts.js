@@ -541,6 +541,7 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           <div class="prompt-card-meta-row">
             ${contextDetails.stepLabel ? `<span class="prompt-meta-badge">${escapeHtml(formatPromptStepLabel(contextDetails.stepLabel))}</span>` : ''}
             ${contextDetails.chapterRange ? `<span class="prompt-meta-badge prompt-meta-badge-accent">${escapeHtml(contextDetails.chapterRange)}</span>` : ''}
+            <button class="btn btn-ghost prompt-refresh-btn" type="button" data-refresh-prompt="${entry.id}" title="Get a different prompt">↺ New Prompt</button>
           </div>
           <div class="prompt-card-head">
             <h4>${escapeHtml(entry.plotPoint || 'Writing prompt')}</h4>
@@ -553,9 +554,11 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           ${entry.scoreReason ? `<p class="prompt-score-reason"><span>Chosen because</span>: ${escapeHtml(entry.scoreReason)}</p>` : ''}
           ${renderPromptMetaGrid(contextDetails, entry.context || 'Use this anywhere in the draft.')}
           ${suggestedChapter ? `<p class="prompt-chapter-suggestion">Suggested chapter: ${suggestedChapter.title || 'Untitled Chapter'}</p>` : ''}
-          <p class="daily-prompt-status">Target: ${targetWordCount.toLocaleString()} words</p>
           <div class="daily-prompt-answer">
-            <label for="prompt-answer-${entry.id}">Your Answer</label>
+            <div class="daily-prompt-answer-head">
+              <label for="prompt-answer-${entry.id}">Your Answer</label>
+              <span class="daily-prompt-word-count" data-word-count="${entry.id}">${getPromptAnswerWordCount(entry).toLocaleString()} / ${targetWordCount.toLocaleString()} words</span>
+            </div>
             <textarea id="prompt-answer-${entry.id}" data-prompt-answer="${entry.id}" rows="5">${escapeHtml(entry.answer || '')}</textarea>
           </div>
           <div class="daily-prompt-actions">
@@ -596,6 +599,21 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
       if (answerField) {
         window.refreshTextEditor(answerField, entry.answer || '');
       }
+
+      const wordCountEl = resultsGrid.querySelector(`[data-word-count="${entry.id}"]`);
+      const targetWords = Number(entry.requiredWordCount || extractPromptWordTarget(entry.prompt)) || 0;
+      if (answerField && wordCountEl) {
+        const updateWordCount = () => {
+          const count = window.computeWordCount(window.getEditorFieldValue(answerField));
+          wordCountEl.textContent = `${count.toLocaleString()} / ${targetWords.toLocaleString()} words`;
+          wordCountEl.classList.toggle('is-at-goal', targetWords > 0 && count >= targetWords);
+        };
+        answerField.addEventListener('input', updateWordCount);
+        const editorRoot = answerField.closest('[data-editor-root]') || answerField.parentElement;
+        if (editorRoot && editorRoot !== answerField) {
+          editorRoot.addEventListener('input', updateWordCount);
+        }
+      }
     });
 
     renderBatchProgress(entries);
@@ -607,6 +625,10 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
           return;
         }
 
+        const answerField = resultsGrid.querySelector(`[data-prompt-answer="${promptEntry.id}"]`);
+        if (answerField) {
+          promptEntry.answer = window.getEditorFieldValue(answerField);
+        }
         promptEntry.assignedChapterId = input.value;
         activeProject = await window.saveProjectData({
           ...activeProject,
@@ -642,13 +664,8 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         const requiredWordCount = Number(promptEntry.requiredWordCount || extractPromptWordTarget(promptEntry.prompt));
         const answerWordCount = window.computeWordCount(promptEntry.answer);
 
-        if (!answerWordCount || (requiredWordCount > 0 && answerWordCount < requiredWordCount)) {
-          setStatusMessage(
-            requiredWordCount > 0
-              ? `Write an answer before inserting it into a chapter. ${requiredWordCount.toLocaleString()} words are required.`
-              : 'Write an answer before inserting it into a chapter.',
-            'error',
-          );
+        if (!answerWordCount) {
+          setStatusMessage('Write an answer before inserting it into a chapter.', 'error');
           return;
         }
 
@@ -735,6 +752,107 @@ window.registerPageInit('daily-prompts', async function ({ project }) {
         setStatusMessage('Prompt answer saved.');
         renderCurrentTab();
       });
+    });
+
+    resultsGrid.querySelectorAll('[data-refresh-prompt]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const entryId = button.dataset.refreshPrompt;
+        const promptEntry = getDailyHistory().find((entry) => entry.id === entryId);
+        if (!promptEntry) return;
+
+        const answerField = resultsGrid.querySelector(`[data-prompt-answer="${entryId}"]`);
+        const currentAnswer = answerField ? window.getEditorFieldValue(answerField) : '';
+        const hasContent = window.computeWordCount(currentAnswer) > 0;
+
+        if (hasContent && !window.confirm('You have written text for this prompt. Replace it with a new prompt?')) {
+          return;
+        }
+
+        const [replacement] = generateSinglePrompt();
+        if (!replacement) {
+          setStatusMessage('No replacement prompt available.', 'error');
+          return;
+        }
+
+        const nextHistory = getDailyHistory().map((entry) => (
+          entry.id === entryId ? { ...replacement, assignedChapterId: entry.assignedChapterId } : entry
+        ));
+
+        activeProject = await window.saveProjectData({
+          ...activeProject,
+          dailyPromptState: { ...activeProject.dailyPromptState, cursor: dailyState.cursor },
+          dailyPromptHistory: nextHistory,
+          updatedAt: new Date().toISOString(),
+        }, {
+          dirtyFields: ['dailyPromptState', 'dailyPromptHistory'],
+        });
+
+        renderCurrentTab();
+        setStatusMessage('Prompt refreshed.');
+      });
+    });
+  }
+
+  function generateSinglePrompt() {
+    const mode = modeInput.value;
+    const promptType = focusInput?.value || 'scene-drafting';
+    const selectedPlotPoint = plotPointInput?.value || '';
+    const normalize = window.normalizeGenreKey || ((s) => s.toLowerCase().trim());
+
+    if (mode === 'sequential') {
+      const baseSource = resources.sequentialSource.length ? resources.sequentialSource : resources.promptPool;
+      const source = selectedPlotPoint
+        ? baseSource.filter((entry) => entry.plotPoint && normalize(entry.plotPoint) === normalize(selectedPlotPoint))
+        : baseSource;
+      const effectiveSource = source.length ? source : baseSource;
+      const entry = effectiveSource[dailyState.cursor % effectiveSource.length];
+      dailyState.cursor += 1;
+      if (!entry) return [];
+      const prompt = personalizePrompt(entry.prompt, activeProject);
+      const suggestedChapter = getSuggestedChapter(entry, 0);
+      return [{
+        id: `daily-prompt-${Date.now()}-0-${Math.random().toString(36).slice(2, 7)}`,
+        ...entry,
+        prompt,
+        context: getContextLabel(0, entry),
+        contextDetails: getPromptContext(0, entry),
+        promptType,
+        matchedTags: [],
+        scoreReason: 'Sequential order',
+        suggestedChapterId: suggestedChapter?.id || '',
+        assignedChapterId: suggestedChapter?.id || '',
+        answer: '',
+        answerInsertedAt: '',
+        requiredWordCount: extractPromptWordTarget(prompt),
+        insertedWordCount: 0,
+      }];
+    }
+
+    const selected = window.selectScoredPrompts({
+      taggedPool: resources.taggedPrompts,
+      fallbackPool: resources.promptPool,
+      project: activeProject,
+      count: 1,
+      recentHistory: activeProject.dailyPromptHistory || [],
+      promptType,
+      promptFocusTags: [promptType],
+    });
+
+    return selected.map((entry) => {
+      const { _score, ...rest } = entry;
+      const suggestedChapter = getSuggestedChapter(entry, 0);
+      return {
+        id: `daily-prompt-${Date.now()}-0-${Math.random().toString(36).slice(2, 7)}`,
+        ...rest,
+        context: getContextLabel(0, entry),
+        contextDetails: getPromptContext(0, entry),
+        suggestedChapterId: suggestedChapter?.id || '',
+        assignedChapterId: suggestedChapter?.id || '',
+        answer: '',
+        answerInsertedAt: '',
+        requiredWordCount: extractPromptWordTarget(rest.prompt),
+        insertedWordCount: 0,
+      };
     });
   }
 

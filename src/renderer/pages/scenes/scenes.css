@@ -397,6 +397,26 @@
   opacity: 0.65;
 }
 
+.scene-draft-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.scene-draft-word-count {
+  font-size: 0.8rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.scene-draft-actions {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
 .character-type-tag {
   padding: 8px 12px;
   border: 1px solid var(--border);

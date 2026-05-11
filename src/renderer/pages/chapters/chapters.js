@@ -747,6 +747,27 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     });
   }
 
+  function updateSectionWordCounts() {
+    sectionsList.querySelectorAll('[data-open-chapter]').forEach((row) => {
+      const chapter = chapters.find((c) => c.id === row.dataset.openChapter);
+      if (!chapter) return;
+      const span = row.querySelector('.chapter-row-word-count');
+      if (span) span.textContent = `${window.computeWordCount(chapter.content || '').toLocaleString()} words`;
+    });
+
+    sectionsList.querySelectorAll('[data-section-id]').forEach((details) => {
+      const sectionChapters = chapters.filter((c) => c.sectionId === details.dataset.sectionId);
+      const sectionWords = sectionChapters.reduce(
+        (sum, c) => sum + window.computeWordCount(c.content || ''),
+        0,
+      );
+      const summary = details.querySelector('.plot-section-toggle-copy p');
+      if (summary) {
+        summary.textContent = `${sectionWords.toLocaleString()} words across ${sectionChapters.length} chapter${sectionChapters.length === 1 ? '' : 's'}`;
+      }
+    });
+  }
+
   function renderSections() {
     sectionsList.innerHTML = plotSections
       .map((section) => {
@@ -1020,7 +1041,7 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     const currentSection = plotSections.find((section) => section.id === chapter.sectionId);
     chapterSelectedSection.textContent = currentSection?.label || '';
     applyEditorStyles();
-    renderSections();
+    updateSectionWordCounts();
     renderContextPanel();
     autosave.touch();
   }

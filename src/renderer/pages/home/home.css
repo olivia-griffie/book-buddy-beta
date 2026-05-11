@@ -452,6 +452,80 @@
   color: var(--ink-muted);
 }
 
+.project-card__cover-btn--adjust {
+  background: #fff;
+  color: var(--ink-muted);
+}
+
+.project-card__cover.is-adjusting {
+  position: relative;
+  cursor: grab;
+  user-select: none;
+}
+
+.project-card__cover.is-adjusting:active {
+  cursor: grabbing;
+}
+
+.cover-adjust-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.38);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.cover-adjust-hint {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 4px 10px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.cover-adjust-actions {
+  display: flex;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.cover-adjust-apply,
+.cover-adjust-cancel {
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.76rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+
+.cover-adjust-apply {
+  background: #ff9f63;
+  color: #fff;
+}
+
+.cover-adjust-apply:hover {
+  background: #ff8a3d;
+}
+
+.cover-adjust-cancel {
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink-muted);
+}
+
+.cover-adjust-cancel:hover {
+  background: #fff;
+}
+
 .project-card__body {
   display: flex;
   flex-direction: column;
