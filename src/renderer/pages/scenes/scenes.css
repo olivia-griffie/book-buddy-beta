@@ -161,14 +161,28 @@
   flex: 1;
   min-width: 0;
   border: none;
+  border-bottom: 1px solid transparent;
   background: transparent;
-  padding: 0;
+  padding: 0 0 1px;
   font: inherit;
   color: var(--ink);
+  transition: border-color var(--duration) var(--ease);
+}
+
+.chapter-title-inline:hover {
+  border-bottom-color: var(--border);
 }
 
 .chapter-title-inline:focus {
   outline: none;
+  border-bottom-color: var(--sage);
+}
+
+.plot-sections-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .chapter-row-word-count {

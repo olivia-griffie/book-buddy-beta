@@ -174,14 +174,21 @@
   flex: 1;
   min-width: 0;
   border: none;
+  border-bottom: 1px solid transparent;
   background: transparent;
-  padding: 0;
+  padding: 0 0 1px;
   font: inherit;
   color: var(--ink);
+  transition: border-color var(--duration) var(--ease);
+}
+
+.chapter-title-inline:hover {
+  border-bottom-color: var(--border);
 }
 
 .chapter-title-inline:focus {
   outline: none;
+  border-bottom-color: var(--sage);
 }
 
 .chapter-row-word-count {
@@ -1013,7 +1020,14 @@
   margin: 0;
 }
 
-.chapter-outline-add {
+.chapter-outline-head-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.chapter-outline-add,
+.chapter-outline-renumber {
   padding: 4px 10px;
   font-size: 0.78rem;
 }

@@ -170,16 +170,29 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
   selectChapter(selectedChapterId);
 
   function getNextChapterNumber() {
-    const explicitNumbers = chapters
-      .map((chapter) => {
-        const match = String(chapter.title || '').match(/chapter\s+(\d+)/i);
-        return match ? Number(match[1]) : 0;
-      })
-      .filter(Boolean);
+    const used = new Set(
+      chapters
+        .map((c) => {
+          const m = String(c.title || '').match(/^chapter\s+(\d+)$/i);
+          return m ? Number(m[1]) : null;
+        })
+        .filter(Boolean),
+    );
+    let n = 1;
+    while (used.has(n)) n++;
+    return n;
+  }
 
-    return explicitNumbers.length
-      ? Math.max(...explicitNumbers) + 1
-      : chapters.length + 1;
+  function renumberAllChapters() {
+    let counter = 1;
+    plotSections.forEach((section) => {
+      chapters.filter((c) => c.sectionId === section.id).forEach((chapter) => {
+        chapter.title = `Chapter ${counter++}`;
+      });
+    });
+    chapters.filter((c) => !plotSections.some((s) => s.id === c.sectionId)).forEach((chapter) => {
+      chapter.title = `Chapter ${counter++}`;
+    });
   }
 
   function getSelectedChapter() {
@@ -1107,6 +1120,16 @@ window.registerPageInit('chapters', async function ({ project, chapterId }) {
     renderSections();
     renderEditor();
     editorShell.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  document.getElementById('chapter-renumber-all')?.addEventListener('click', () => {
+    if (!chapters.length) return;
+    const confirmed = window.confirm('Renumber all chapters in order? This renames every chapter to Chapter 1, 2, 3… sequentially and cannot be undone.');
+    if (!confirmed) return;
+    renumberAllChapters();
+    autosave.touch();
+    renderSections();
+    renderEditor();
   });
 
   document.getElementById('chapter-add-quick')?.addEventListener('click', () => {
