@@ -515,7 +515,12 @@ window.registerPageInit('scenes', async function ({ project }) {
 
     sectionTargetsList.innerHTML = plotSections
       .map((section) => {
-        const sectionChapters = chapters.filter((chapter) => chapter.sectionId === section.id);
+        const sectionChapters = chapters
+          .filter((chapter) => chapter.sectionId === section.id)
+          .sort((a, b) => {
+            const n = (t) => parseInt(String(t || '').match(/\d+/)?.[0] || '999999', 10);
+            return n(a.title) - n(b.title);
+          });
         const sectionWords = sectionChapters.reduce(
           (sum, chapter) => sum + window.computeWordCount(chapter.content || ''),
           0,
